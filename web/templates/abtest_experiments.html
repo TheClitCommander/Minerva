@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A/B Testing Experiments</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1, h2 {
+            color: #2c3e50;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+        
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+        
+        .status-indicator {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .status-enabled {
+            color: #28a745;
+        }
+        
+        .status-disabled {
+            color: #dc3545;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        thead {
+            background-color: #343a40;
+            color: white;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        canvas {
+            margin-top: 30px;
+            max-height: 400px;
+        }
+        
+        .summary-box {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .summary-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .summary-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #0275d8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>A/B Testing Experiments</h1>
+        
+        <div class="controls">
+            <div class="status-indicator">
+                <span>Status: </span>
+                <span id="status-text" class="{% if experiment_mode %}status-enabled{% else %}status-disabled{% endif %}">
+                    {% if experiment_mode %}Enabled{% else %}Disabled{% endif %}
+                </span>
+            </div>
+            <button id="toggle-ab-test" class="{% if experiment_mode %}btn-danger{% else %}btn-success{% endif %}" onclick="toggleABTesting()">
+                {% if experiment_mode %}Disable{% else %}Enable{% endif %} A/B Testing
+            </button>
+        </div>
+
+        <div class="row" style="display: flex; justify-content: space-between; flex-wrap: wrap;">
+            <div class="summary-box" style="flex: 1; margin: 0 10px;">
+                <div class="summary-title">Active Experiments</div>
+                <div class="summary-value" id="active-experiments-count">0</div>
+            </div>
+            <div class="summary-box" style="flex: 1; margin: 0 10px;">
+                <div class="summary-title">Total Queries</div>
+                <div class="summary-value" id="total-queries-count">0</div>
+            </div>
+            <div class="summary-box" style="flex: 1; margin: 0 10px;">
+                <div class="summary-title">User Feedback Rate</div>
+                <div class="summary-value" id="feedback-rate">0%</div>
+            </div>
+        </div>
+        
+        <h2>Ongoing Experiments</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Experiment ID</th>
+                    <th>Model A</th>
+                    <th>Model B</th>
+                    <th>Query</th>
+                    <th>Feedback</th>
+                    <th>Win Rate A</th>
+                    <th>Win Rate B</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="experiment-list">
+                <!-- Experiment Data Will Load Here -->
+            </tbody>
+        </table>
+
+        <h2>Performance Metrics</h2>
+        <canvas id="abTestChart"></canvas>
+    </div>
+
+    <script>
+        async function fetchExperiments() {
+            const response = await fetch('/api/abtest/results');
+            const data = await response.json();
+            const tbody = document.getElementById('experiment-list');
+            tbody.innerHTML = '';
+            
+            // Update summary metrics
+            updateSummaryMetrics(data);
+
+            if (data.results && data.results.length > 0) {
+                data.results.forEach(exp => {
+                    const row = document.createElement('tr');
+                    const modelNames = Object.keys(exp.responses || {});
+                    
+                    // Calculate win rates
+                    let winRateA = 0;
+                    let winRateB = 0;
+                    if (data.model_wins) {
+                        const totalFeedback = Object.values(data.model_wins).reduce((a, b) => a + b, 0) || 1;
+                        winRateA = data.model_wins[modelNames[0]] ? ((data.model_wins[modelNames[0]] / totalFeedback) * 100).toFixed(1) : 0;
+                        winRateB = data.model_wins[modelNames[1]] ? ((data.model_wins[modelNames[1]] / totalFeedback) * 100).toFixed(1) : 0;
+                    }
+                    
+                    row.innerHTML = `
+                        <td>${exp.experiment_id}</td>
+                        <td>${modelNames[0] || 'N/A'}</td>
+                        <td>${modelNames[1] || 'N/A'}</td>
+                        <td>${exp.query ? exp.query.substring(0, 30) + (exp.query.length > 30 ? '...' : '') : 'Unknown'}</td>
+                        <td>${exp.user_feedback ? '<span style="color: green;">✓</span>' : '<span style="color: orange;">Pending</span>'}</td>
+                        <td>${winRateA}%</td>
+                        <td>${winRateB}%</td>
+                        <td>
+                            <button style="padding: 5px 10px; font-size: 12px; background-color: #17a2b8; color: white;" 
+                                    onclick="viewExperimentDetails('${exp.experiment_id}')">View</button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            } else {
+                const row = document.createElement('tr');
+                row.innerHTML = '<td colspan="8">No experiments found</td>';
+                tbody.appendChild(row);
+            }
+
+            updateChart(data);
+        }
+        
+        function updateSummaryMetrics(data) {
+            // Update active experiment count
+            document.getElementById('active-experiments-count').textContent = data.results ? data.results.length : 0;
+            
+            // Calculate total queries
+            let totalQueries = 0;
+            if (data.results) {
+                totalQueries = data.results.length;
+            }
+            document.getElementById('total-queries-count').textContent = totalQueries;
+            
+            // Calculate feedback rate
+            let feedbackCount = 0;
+            if (data.results) {
+                feedbackCount = data.results.filter(exp => exp.user_feedback).length;
+            }
+            const feedbackRate = totalQueries > 0 ? ((feedbackCount / totalQueries) * 100).toFixed(1) : 0;
+            document.getElementById('feedback-rate').textContent = `${feedbackRate}%`;
+        }
+        
+        function viewExperimentDetails(experimentId) {
+            // Implementation for viewing detailed experiment data
+            alert(`Viewing details for experiment: ${experimentId}`);
+            // You could also open a modal or navigate to a detailed view page
+        }
+
+        function updateChart(data) {
+            if (!data.model_wins || Object.keys(data.model_wins).length === 0) {
+                return; // No data to display
+            }
+            
+            const ctx = document.getElementById('abTestChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(data.model_wins),
+                    datasets: [{
+                        label: 'Wins',
+                        data: Object.values(data.model_wins),
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Number of Wins'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'AI Models'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        async function toggleABTesting() {
+            const button = document.getElementById('toggle-ab-test');
+            const statusText = document.getElementById('status-text');
+            button.disabled = true;
+            
+            try {
+                // Get current experiment mode status
+                const statusResponse = await fetch('/api/abtest/results');
+                const statusData = await statusResponse.json();
+                const isCurrentlyEnabled = statusData.experiment_mode === true;
+                
+                // Toggle the mode
+                const response = await fetch('/api/abtest/toggle', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        enabled: !isCurrentlyEnabled
+                    })
+                });
+                
+                const data = await response.json();
+                if (data.status === 'success') {
+                    // Update the UI
+                    const newStatus = data.enabled;
+                    
+                    // Update status text
+                    statusText.textContent = newStatus ? 'Enabled' : 'Disabled';
+                    
+                    // Update button text
+                    button.textContent = newStatus ? 'Disable A/B Testing' : 'Enable A/B Testing';
+                    
+                    // Update classes for styling
+                    if (newStatus) {
+                        button.classList.remove('btn-success');
+                        button.classList.add('btn-danger');
+                        statusText.classList.remove('status-disabled');
+                        statusText.classList.add('status-enabled');
+                    } else {
+                        button.classList.remove('btn-danger');
+                        button.classList.add('btn-success');
+                        statusText.classList.remove('status-enabled');
+                        statusText.classList.add('status-disabled');
+                    }
+                    
+                    // Show toast notification instead of alert
+                    showNotification(`A/B Testing ${newStatus ? 'enabled' : 'disabled'} successfully!`, 'success');
+                } else {
+                    showNotification('Error changing A/B Testing mode: ' + data.message, 'error');
+                }
+            } catch (error) {
+                showNotification('Error: ' + error.message, 'error');
+            } finally {
+                button.disabled = false;
+                fetchExperiments();
+            }
+        }
+        
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.textContent = message;
+            notification.style.position = 'fixed';
+            notification.style.top = '20px';
+            notification.style.right = '20px';
+            notification.style.padding = '10px 20px';
+            notification.style.borderRadius = '4px';
+            notification.style.zIndex = '1000';
+            notification.style.minWidth = '200px';
+            notification.style.textAlign = 'center';
+            notification.style.boxShadow = '0 2px 4px rgba(0,0,0,0.2)';
+            
+            // Set color based on type
+            if (type === 'success') {
+                notification.style.backgroundColor = '#28a745';
+                notification.style.color = 'white';
+            } else if (type === 'error') {
+                notification.style.backgroundColor = '#dc3545';
+                notification.style.color = 'white';
+            } else {
+                notification.style.backgroundColor = '#17a2b8';
+                notification.style.color = 'white';
+            }
+            
+            // Add to body
+            document.body.appendChild(notification);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transition = 'opacity 0.5s';
+                setTimeout(() => document.body.removeChild(notification), 500);
+            }, 3000);
+        }
+
+        window.onload = fetchExperiments;
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Minerva Direct Connection Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+            margin-top: 0;
+        }
+        .test-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        input[type="text"] {
+            width: calc(100% - 140px);
+            padding: 10px;
+            margin: 10px 0;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        #debug-output {
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            padding: 10px;
+            height: 300px;
+            overflow-y: auto;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .message-container {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        .user-message {
+            background-color: #dcf8c6;
+            padding: 10px;
+            border-radius: 10px;
+            margin-left: auto;
+            max-width: 70%;
+        }
+        .assistant-message {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 10px;
+            margin-right: auto;
+            max-width: 70%;
+        }
+        #chat-container {
+            height: 300px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Minerva Direct Connection Test</h1>
+        <p>This tool tests the direct connection between the Minerva UI and the ThinkTank API without using a bridge server.</p>
+        
+        <div class="test-section">
+            <h2>Test Chat</h2>
+            <div id="chat-container"></div>
+            <div style="display: flex;">
+                <input type="text" id="message-input" placeholder="Type a message...">
+                <button onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Debug Log</h2>
+            <div id="debug-output"></div>
+        </div>
+    </div>
+
+    <script>
+        // Debug logger
+        function log(message, data) {
+            const timestamp = new Date().toLocaleTimeString();
+            let logMessage = `[${timestamp}] ${message}`;
+            
+            if (data) {
+                if (typeof data === 'object') {
+                    logMessage += ': ' + JSON.stringify(data, null, 2);
+                } else {
+                    logMessage += ': ' + data;
+                }
+            }
+            
+            const debugOutput = document.getElementById('debug-output');
+            debugOutput.innerHTML += logMessage + '\n';
+            debugOutput.scrollTop = debugOutput.scrollHeight;
+            console.log(logMessage);
+        }
+
+        // Add a message to the chat
+        function addMessage(message, isUser = false) {
+            const chatContainer = document.getElementById('chat-container');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message-container';
+            
+            const messageContent = document.createElement('div');
+            messageContent.className = isUser ? 'user-message' : 'assistant-message';
+            messageContent.textContent = message;
+            
+            messageDiv.appendChild(messageContent);
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // Send a message directly to the Think Tank API
+        function sendMessage() {
+            const messageInput = document.getElementById('message-input');
+            const message = messageInput.value.trim();
+            
+            if (!message) return;
+            
+            addMessage(message, true);
+            messageInput.value = '';
+            
+            log('Sending message', message);
+            
+            // Prepare the request payload
+            const payload = {
+                message: message,
+                conversation_id: localStorage.getItem('conversation_id') || null,
+                store_in_memory: true,
+                client_version: '1.0.0',
+                user_id: localStorage.getItem('user_id') || `user-${Date.now()}`
+            };
+            
+            // If this is the first message, generate and store user ID
+            if (!localStorage.getItem('user_id')) {
+                const userId = `user-${Date.now()}`;
+                localStorage.setItem('user_id', userId);
+                payload.user_id = userId;
+            }
+            
+            // Send request directly to the API endpoint - no bridge server needed
+            fetch('/api/think-tank', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => {
+                log('Response status', response.status);
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                log('Received response', data);
+                
+                // Store conversation ID for continuity
+                if (data.conversation_id) {
+                    localStorage.setItem('conversation_id', data.conversation_id);
+                }
+                
+                // Display the response
+                addMessage(data.response || 'No response from API');
+            })
+            .catch(error => {
+                log('Error', error.message);
+                addMessage('Error: ' + error.message);
+            });
+        }
+
+        // Allow sending messages with Enter key
+        document.getElementById('message-input').addEventListener('keyup', function(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            log('Test tool initialized');
+            log('User ID', localStorage.getItem('user_id') || 'Not set');
+            log('Conversation ID', localStorage.getItem('conversation_id') || 'Not set');
+        });
+    </script>
+</body>
+</html>

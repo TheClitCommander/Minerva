@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Minerva Chat Interface Test</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Socket.IO for real-time communication with the AI models -->
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+    <!-- Socket.IO library -->
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+            color: #e2e8f0;
+        }
+        
+        /* Chat Interface Container */
+        #chat-interface {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 320px;
+            height: 400px;
+            background-color: rgba(15, 23, 42, 0.92);
+            border: 1px solid rgba(100, 116, 139, 0.5);
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: all 0.3s ease-in-out;
+            backdrop-filter: blur(10px);
+            resize: none;
+        }
+        
+        /* Minimized state */
+        #chat-interface.minimized {
+            height: 40px;
+            overflow: hidden;
+        }
+        
+        /* Chat controls and header */
+        #chat-header {
+            padding: 10px 15px;
+            color: #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(30, 41, 59, 0.8);
+            border-bottom: 1px solid rgba(100, 116, 139, 0.3);
+            cursor: move; /* Entire header is draggable */
+            user-select: none;
+        }
+        
+        #chat-title {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+        
+        #chat-controls {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .chat-control-btn {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+        
+        .chat-control-btn:hover {
+            color: #e2e8f0;
+            background-color: rgba(100, 116, 139, 0.2);
+        }
+        
+        /* Chat messages container */
+        #chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            scroll-behavior: smooth;
+            color: #e2e8f0;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        /* Chat input area */
+        #chat-input-container {
+            display: flex;
+            padding: 12px;
+            background-color: rgba(30, 41, 59, 0.5);
+            border-top: 1px solid rgba(100, 116, 139, 0.3);
+            gap: 8px;
+        }
+        
+        #chat-input {
+            flex: 1;
+            min-height: 40px;
+            max-height: 120px;
+            padding: 10px 15px;
+            border-radius: 20px;
+            border: 1px solid rgba(100, 116, 139, 0.5);
+            background-color: rgba(15, 23, 42, 0.6);
+            color: #e2e8f0;
+            resize: none;
+            overflow-y: auto;
+            outline: none;
+            transition: border-color 0.2s;
+            font-family: inherit;
+            font-size: 14px;
+        }
+        
+        #chat-input:focus {
+            border-color: #3b82f6;
+        }
+        
+        #send-message {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            padding: 0;
+            font-size: 16px;
+        }
+        
+        #send-message:hover {
+            background-color: #2563eb;
+        }
+        
+        /* Message styles */
+        .user-message {
+            background-color: rgba(59, 130, 246, 0.15);
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin: 8px 0;
+            align-self: flex-end;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+        
+        .ai-message {
+            background-color: rgba(30, 41, 59, 0.4);
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin: 8px 0;
+            align-self: flex-start;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+        
+        .system-message {
+            color: #94a3b8;
+            font-style: italic;
+            text-align: center;
+            margin: 8px 0;
+            font-size: 12px;
+        }
+        
+        /* Loading indicator */
+        .loading-indicator {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            background-color: rgba(30, 41, 59, 0.4);
+            border-radius: 8px;
+            margin: 8px 0;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+        
+        /* Model metrics panel */
+        #model-metrics-panel {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            width: 400px;
+            background-color: rgba(15, 23, 42, 0.92);
+            border: 1px solid rgba(100, 116, 139, 0.5);
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            z-index: 2000;
+            padding: 15px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        #model-metrics-panel.hidden {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-20px);
+        }
+        
+        /* Simple chart */
+        .simple-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .chart-bar {
+            height: 24px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            color: white;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .metrics-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .metrics-header h5 {
+            margin: 0;
+            font-size: 16px;
+            color: #e2e8f0;
+        }
+        
+        .close-button {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .close-button:hover {
+            color: #e2e8f0;
+        }
+        
+        .think-tank-metrics {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .metric-card {
+            background-color: rgba(30, 41, 59, 0.4);
+            border-radius: 8px;
+            padding: 12px;
+            flex: 1;
+            text-align: center;
+        }
+        
+        .metric-card h6 {
+            margin: 0 0 8px 0;
+            font-size: 14px;
+            color: #94a3b8;
+        }
+        
+        .metric-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+        
+        .model-visualization-section h6 {
+            margin: 5px 0 10px 0;
+            font-size: 14px;
+            color: #94a3b8;
+        }
+        
+        .model-info {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+    <!-- Chat Interface (Think Tank) -->
+    <div id="chat-interface">
+        <!-- Chat header with controls -->
+        <div id="chat-header">
+            <div id="chat-title">Minerva Think Tank</div>
+            <div id="chat-controls">
+                <button class="chat-control-btn" id="minimize-chat" title="Minimize chat"><i class="fas fa-minus"></i></button>
+                <button class="chat-control-btn" id="toggle-metrics" title="Show AI Metrics"><i class="fas fa-chart-bar"></i></button>
+            </div>
+        </div>
+        
+        <!-- Model metrics panel (initially hidden) -->
+        <div id="model-metrics-panel" class="hidden">
+            <div class="metrics-header">
+                <h5>Think Tank AI Metrics</h5>
+                <button id="close-metrics" class="close-button"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="think-tank-metrics">
+                <div class="metric-card">
+                    <h6>Blending</h6>
+                    <div class="metric-value" id="blending-percentage">85.2%</div>
+                </div>
+                <div class="metric-card">
+                    <h6>Rank Accuracy</h6>
+                    <div class="metric-value" id="rank-accuracy">92.5%</div>
+                </div>
+                <div class="metric-card">
+                    <h6>Routing Efficiency</h6>
+                    <div class="metric-value" id="routing-efficiency">88.7%</div>
+                </div>
+            </div>
+            
+            <!-- Model Usage Visualization -->
+            <div class="model-visualization-section">
+                <h6>Model Usage Distribution</h6>
+                <div id="model-usage-chart" class="visualization-container"></div>
+            </div>
+        </div>
+        
+        <div id="chat-messages">
+            <div class="system-message">Welcome to Minerva's Think Tank. How can I assist you today?</div>
+        </div>
+        <div id="chat-input-container">
+            <textarea id="chat-input" placeholder="Ask Minerva anything..."></textarea>
+            <button id="send-message"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <script>
+        // Wait for the DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log(`Minerva Think Tank Test initialized at ${new Date().toLocaleTimeString()}`);
+            initChatInterface();
+        });
+        
+        // Initialize the chat interface
+        function initChatInterface() {
+            // Get DOM elements
+            const chatInterface = document.getElementById('chat-interface');
+            const chatHeader = document.getElementById('chat-header');
+            const chatMessages = document.getElementById('chat-messages');
+            const chatInput = document.getElementById('chat-input');
+            const sendButton = document.getElementById('send-message');
+            const minimizeBtn = document.getElementById('minimize-chat');
+            const toggleMetricsBtn = document.getElementById('toggle-metrics');
+            const metricsPanel = document.getElementById('model-metrics-panel');
+            const closeMetricsBtn = document.getElementById('close-metrics');
+            
+            // Setup Socket.IO connection for real AI model integration
+            let socket;
+            let isSocketConnected = false;
+            
+            // Try to connect to the Socket.IO server
+            try {
+                console.log('Attempting to connect to Socket.IO server...');
+                socket = io();
+                
+                socket.on('connect', function() {
+                    console.log('✅ Connected to Socket.IO server');
+                    isSocketConnected = true;
+                    
+                    // Show connection status
+                    const statusElement = document.createElement('div');
+                    statusElement.id = 'socket-status';
+                    statusElement.innerHTML = 'Connected to AI models';
+                    statusElement.style.position = 'fixed';
+                    statusElement.style.top = '10px';
+                    statusElement.style.right = '10px';
+                    statusElement.style.backgroundColor = 'rgba(16, 185, 129, 0.8)';
+                    statusElement.style.color = 'white';
+                    statusElement.style.padding = '5px 10px';
+                    statusElement.style.borderRadius = '5px';
+                    statusElement.style.zIndex = '5000';
+                    document.body.appendChild(statusElement);
+                });
+                
+                socket.on('system_message', function(data) {
+                    console.log('System message received:', data);
+                    const msgElement = document.createElement('div');
+                    msgElement.className = 'system-message';
+                    msgElement.innerHTML = data.message;
+                    chatMessages.appendChild(msgElement);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                });
+                
+                socket.on('ai_response', function(data) {
+                    console.log('AI response received:', data);
+                    
+                    // Remove any loading indicators
+                    const loadingIndicators = document.querySelectorAll('.loading-indicator');
+                    if (loadingIndicators.length > 0) {
+                        loadingIndicators.forEach(indicator => {
+                            if (chatMessages.contains(indicator)) {
+                                chatMessages.removeChild(indicator);
+                            }
+                        });
+                    }
+                    
+                    // Handle the AI response
+                    let modelNames = [];
+                    if (data.model_info) {
+                        // Extract model names from model_info
+                        if (data.model_info.models_used && Array.isArray(data.model_info.models_used)) {
+                            modelNames = data.model_info.models_used;
+                        } else if (data.model_info.top_model) {
+                            modelNames = [data.model_info.top_model];
+                        } else if (data.model_info.rankings && Array.isArray(data.model_info.rankings)) {
+                            modelNames = data.model_info.rankings.map(r => r.model_name || r.model);
+                        }
+                        
+                        // Update the metrics visualization
+                        updateModelUsageChart(modelNames);
+                    }
+                    
+                    // Add the AI response to chat
+                    addAIMessage(data.message, modelNames);
+                });
+                
+                socket.on('disconnect', function() {
+                    console.log('❌ Disconnected from Socket.IO server');
+                    isSocketConnected = false;
+                    
+                    // Update connection status
+                    const statusElement = document.getElementById('socket-status');
+                    if (statusElement) {
+                        statusElement.innerHTML = 'Disconnected from AI models';
+                        statusElement.style.backgroundColor = 'rgba(239, 68, 68, 0.8)';
+                    }
+                });
+                
+                socket.on('connect_error', function(error) {
+                    console.error('Socket.IO connection error:', error);
+                    isSocketConnected = false;
+                    
+                    // Show connection error
+                    const statusElement = document.getElementById('socket-status');
+                    if (!statusElement) {
+                        const newStatus = document.createElement('div');
+                        newStatus.id = 'socket-status';
+                        newStatus.innerHTML = 'Using simulated responses (no server connection)';
+                        newStatus.style.position = 'fixed';
+                        newStatus.style.top = '10px';
+                        newStatus.style.right = '10px';
+                        newStatus.style.backgroundColor = 'rgba(245, 158, 11, 0.8)';
+                        newStatus.style.color = 'white';
+                        newStatus.style.padding = '5px 10px';
+                        newStatus.style.borderRadius = '5px';
+                        newStatus.style.zIndex = '5000';
+                        document.body.appendChild(newStatus);
+                    }
+                });
+            } catch (error) {
+                console.error('Error initializing Socket.IO:', error);
+                isSocketConnected = false;
+            }
+            
+            // Make chat interface draggable
+            makeDraggable(chatInterface, chatHeader);
+            
+            // Set up minimize button
+            if (minimizeBtn) {
+                minimizeBtn.addEventListener('click', function() {
+                    chatInterface.classList.toggle('minimized');
+                    const icon = this.querySelector('i');
+                    if (icon) {
+                        if (chatInterface.classList.contains('minimized')) {
+                            icon.classList.remove('fa-minus');
+                            icon.classList.add('fa-expand');
+                            this.setAttribute('title', 'Expand chat');
+                        } else {
+                            icon.classList.remove('fa-expand');
+                            icon.classList.add('fa-minus');
+                            this.setAttribute('title', 'Minimize chat');
+                        }
+                    }
+                });
+            }
+            
+            // Set up metrics toggle and close buttons
+            if (toggleMetricsBtn && metricsPanel) {
+                toggleMetricsBtn.addEventListener('click', function() {
+                    metricsPanel.classList.toggle('hidden');
+                });
+            }
+            
+            if (closeMetricsBtn && metricsPanel) {
+                closeMetricsBtn.addEventListener('click', function() {
+                    metricsPanel.classList.add('hidden');
+                });
+            }
+            
+            // Set up model usage chart
+            setupModelUsageChart();
+            
+            // Set up chat input and send button
+            if (sendButton && chatInput) {
+                sendButton.addEventListener('click', sendMessage);
+                chatInput.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        sendMessage();
+                    }
+                });
+            }
+            
+            // Function to send a message
+            function sendMessage() {
+                const message = chatInput.value.trim();
+                if (!message) return;
+                
+                // Add user message to chat
+                addUserMessage(message);
+                chatInput.value = '';
+                
+                // Add loading indicator
+                const loadingIndicator = document.createElement('div');
+                loadingIndicator.className = 'loading-indicator';
+                loadingIndicator.innerHTML = `<div class="loading-dots"><span>.</span><span>.</span><span>.</span></div>`;
+                chatMessages.appendChild(loadingIndicator);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // Try to use Socket.IO if connected
+                if (socket && isSocketConnected) {
+                    console.log('Sending message to real AI models via Socket.IO:', message);
+                    socket.emit('user_message', { message: message });
+                    
+                    // The response will be handled by the socket.on('ai_response') handler
+                } else {
+                    console.log('Socket.IO not connected, using simulated response');
+                    // Fallback to simulation if Socket.IO is not available
+                    setTimeout(() => {
+                        // Remove loading indicator
+                        if (chatMessages.contains(loadingIndicator)) {
+                            chatMessages.removeChild(loadingIndicator);
+                        }
+                        
+                        // Generate a simulated response
+                        simulateAIResponse(message);
+                    }, 1500);
+                }
+            }
+            
+            // Function to add a user message to the chat
+            function addUserMessage(message) {
+                const msgElement = document.createElement('div');
+                msgElement.className = 'user-message';
+                msgElement.textContent = message;
+                chatMessages.appendChild(msgElement);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Function to add an AI message to the chat
+            function addAIMessage(message, modelInfo = null) {
+                const msgElement = document.createElement('div');
+                msgElement.className = 'ai-message';
+                msgElement.innerHTML = message.replace(/\n/g, '<br>');
+                
+                // Add model info if provided
+                if (modelInfo) {
+                    const infoElement = document.createElement('div');
+                    infoElement.className = 'model-info';
+                    infoElement.innerHTML = `<small>Powered by multiple AI models: ${modelInfo.join(', ')}</small>`;
+                    msgElement.appendChild(infoElement);
+                }
+                
+                chatMessages.appendChild(msgElement);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Function to simulate an AI response based on the user's message
+            function simulateAIResponse(userMessage) {
+                let response = '';
+                let modelInfo = ['GPT-4', 'Claude-3', 'Gemini'];
+                
+                // Simple response generation based on user input
+                const lowerMessage = userMessage.toLowerCase();
+                
+                if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('hey')) {
+                    response = 'Hello! I\'m Minerva\'s Think Tank AI system. How can I assist you today?';
+                }
+                else if (lowerMessage.includes('who are you') || lowerMessage.includes('what are you')) {
+                    response = 'I am Minerva\'s Think Tank, a sophisticated AI system that combines insights from multiple AI models to provide comprehensive responses. I leverage the strengths of different models like GPT-4, Claude-3, and Gemini to deliver the most accurate and helpful information.';
+                    modelInfo = ['GPT-4', 'Claude-3', 'Gemini', 'Mistral'];
+                }
+                else if (lowerMessage.includes('how') && lowerMessage.includes('work')) {
+                    response = 'I work by routing your query to multiple AI models simultaneously, then comparing and analyzing their responses. I rank each model based on relevance, accuracy, and helpfulness, then blend the best insights to create a comprehensive answer. This multi-model approach helps overcome limitations of any single AI system.';
+                }
+                else if (lowerMessage.includes('thank')) {
+                    response = 'You\'re welcome! If you have any more questions, feel free to ask.';
+                }
+                else {
+                    response = 'I\'ve analyzed your question using multiple AI models. Based on my analysis, I can provide insights from different perspectives. However, as this is just a test interface, I\'m providing a simulated response. In the full system, you would receive a comprehensive answer that combines the strengths of multiple AI models like GPT-4, Claude-3, and Gemini.';
+                }
+                
+                // Add the AI response to the chat
+                addAIMessage(response, modelInfo);
+                
+                // Update metrics after response
+                updateMetricsAfterResponse(lowerMessage);
+            }
+            
+            // Update metrics based on the query type
+            function updateMetricsAfterResponse(message) {
+                // Simulate different metrics based on query type
+                let blendingScore, rankAccuracy, routingEfficiency;
+                
+                if (message.includes('technical') || message.includes('code') || message.includes('how')) {
+                    blendingScore = 87.3;
+                    rankAccuracy = 94.1;
+                    routingEfficiency = 91.5;
+                } else if (message.includes('creative') || message.includes('imagine')) {
+                    blendingScore = 92.8;
+                    rankAccuracy = 89.6;
+                    routingEfficiency = 86.2;
+                } else if (message.includes('explain') || message.includes('why')) {
+                    blendingScore = 90.5;
+                    rankAccuracy = 93.4;
+                    routingEfficiency = 89.8;
+                } else {
+                    blendingScore = 85.2;
+                    rankAccuracy = 92.5;
+                    routingEfficiency = 88.7;
+                }
+                
+                // Update the metrics display
+                document.getElementById('blending-percentage').textContent = blendingScore.toFixed(1) + '%';
+                document.getElementById('rank-accuracy').textContent = rankAccuracy.toFixed(1) + '%';
+                document.getElementById('routing-efficiency').textContent = routingEfficiency.toFixed(1) + '%';
+                
+                // Update model usage chart
+                setupModelUsageChart(message);
+            }
+        }
+        
+        // Make an element draggable
+        function makeDraggable(element, handle) {
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            
+            if (handle) {
+                // If a handle is provided, use it
+                handle.onmousedown = dragMouseDown;
+            } else {
+                // Otherwise use the entire element as handle
+                element.onmousedown = dragMouseDown;
+            }
+            
+            function dragMouseDown(e) {
+                e = e || window.event;
+                
+                // Don't start dragging if clicked on a button or input
+                if (e.target.tagName === 'BUTTON' || e.target.tagName === 'TEXTAREA' || 
+                    e.target.tagName === 'INPUT' || e.target.tagName === 'I') {
+                    return;
+                }
+                
+                e.preventDefault();
+                
+                // Get the mouse cursor position at startup
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                
+                // Store the element's current position
+                const rect = element.getBoundingClientRect();
+                const rightOffset = window.innerWidth - rect.right;
+                const bottomOffset = window.innerHeight - rect.bottom;
+                
+                // Update CSS to use all positions so we can maintain the correct layout
+                // during and after dragging
+                element.style.right = `${rightOffset}px`;
+                element.style.bottom = `${bottomOffset}px`;
+                element.style.left = 'auto';
+                element.style.top = 'auto';
+                
+                // Add dragging class
+                element.classList.add('dragging');
+                
+                // Stop animations during drag
+                element.style.transition = 'none';
+                
+                document.onmouseup = closeDragElement;
+                document.onmousemove = elementDrag;
+            }
+            
+            function elementDrag(e) {
+                e = e || window.event;
+                e.preventDefault();
+                
+                // Calculate the new cursor position
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                
+                // Get current positions
+                const rect = element.getBoundingClientRect();
+                let rightOffset = parseInt(element.style.right) + pos1;
+                let bottomOffset = parseInt(element.style.bottom) + pos2;
+                
+                // Ensure the element stays within the viewport
+                if (rightOffset < 0) rightOffset = 0;
+                if (bottomOffset < 0) bottomOffset = 0;
+                if (rightOffset > window.innerWidth - 100) rightOffset = window.innerWidth - 100;
+                if (bottomOffset > window.innerHeight - 100) bottomOffset = window.innerHeight - 100;
+                
+                // Set the element's new position
+                element.style.right = `${rightOffset}px`;
+                element.style.bottom = `${bottomOffset}px`;
+            }
+            
+            function closeDragElement() {
+                // Stop moving when mouse button is released
+                document.onmouseup = null;
+                document.onmousemove = null;
+                
+                // Remove dragging class
+                element.classList.remove('dragging');
+                
+                // Restore animations
+                element.style.transition = '';
+            }
+        }
+        
+        // Setup model usage chart
+        function setupModelUsageChart(message) {
+            const chartElement = document.getElementById('model-usage-chart');
+            if (!chartElement) return;
+            
+            // Adjust model usage percentages based on query type
+            let gpt4Percent = 65;
+            let claudePercent = 48;
+            let geminiPercent = 32;
+            let mistralPercent = 25;
+            
+            if (message) {
+                if (message.includes('technical') || message.includes('code')) {
+                    gpt4Percent = 78;
+                    claudePercent = 42;
+                    geminiPercent = 28;
+                    mistralPercent = 18;
+                } else if (message.includes('creative') || message.includes('imagine')) {
+                    gpt4Percent = 52;
+                    claudePercent = 72;
+                    geminiPercent = 36;
+                    mistralPercent = 22;
+                } else if (message.includes('explain') || message.includes('why')) {
+                    gpt4Percent = 68;
+                    claudePercent = 65;
+                    geminiPercent = 42;
+                    mistralPercent = 26;
+                }
+            }
+            
+            // Create a simple chart visualization
+            chartElement.innerHTML = `
+                <div class="simple-chart">
+                    <div class="chart-bar" style="width: ${gpt4Percent}%; background-color: #19c37d;" title="GPT-4: ${gpt4Percent}%">GPT-4</div>
+                    <div class="chart-bar" style="width: ${claudePercent}%; background-color: #9c5ddb;" title="Claude-3: ${claudePercent}%">Claude-3</div>
+                    <div class="chart-bar" style="width: ${geminiPercent}%; background-color: #4285f4;" title="Gemini: ${geminiPercent}%">Gemini</div>
+                    <div class="chart-bar" style="width: ${mistralPercent}%; background-color: #00a3bf;" title="Mistral: ${mistralPercent}%">Mistral</div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

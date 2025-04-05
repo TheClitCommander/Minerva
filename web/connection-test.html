@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bridge Server Connection Test</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f5f5f5;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        button {
+            background: #6f42c1;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #5a32a3;
+        }
+        pre {
+            background: #f8f8f8;
+            padding: 10px;
+            overflow: auto;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>Minerva Bridge Server Connection Test</h1>
+    
+    <div class="card">
+        <h2>1. Test Basic Connection</h2>
+        <p>This will test if the browser can reach the bridge server at all.</p>
+        <button id="testBasicConnection">Test Basic Connection</button>
+        <div id="basicResult"></div>
+    </div>
+    
+    <div class="card">
+        <h2>2. Test CORS Configuration</h2>
+        <p>This will test if the bridge server is properly configured for CORS.</p>
+        <button id="testCors">Test CORS Config</button>
+        <div id="corsResult"></div>
+    </div>
+    
+    <div class="card">
+        <h2>3. Send Test Message</h2>
+        <p>This will send a full test message to the bridge server.</p>
+        <button id="sendMessage">Send Test Message</button>
+        <div id="messageResult"></div>
+        <pre id="responseData"></pre>
+    </div>
+    
+    <script>
+        // Test basic connection
+        document.getElementById('testBasicConnection').addEventListener('click', function() {
+            const resultDiv = document.getElementById('basicResult');
+            resultDiv.innerHTML = "Testing connection to http://localhost:8090/...";
+            
+            fetch('http://localhost:8090/', { 
+                method: 'GET',
+                mode: 'cors'
+            })
+            .then(response => {
+                if (response.ok) {
+                    resultDiv.innerHTML = '<span class="success">✓ Success! Bridge server is reachable.</span>';
+                    return response.text();
+                } else {
+                    throw new Error(`Server responded with status: ${response.status}`);
+                }
+            })
+            .catch(error => {
+                resultDiv.innerHTML = `<span class="error">✗ Error: ${error.message}</span>`;
+                console.error('Connection error:', error);
+            });
+        });
+        
+        // Test CORS configuration
+        document.getElementById('testCors').addEventListener('click', function() {
+            const resultDiv = document.getElementById('corsResult');
+            resultDiv.innerHTML = "Testing CORS configuration...";
+            
+            fetch('http://localhost:8090/api/think-tank', {
+                method: 'OPTIONS',
+                mode: 'cors'
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Check the CORS headers
+                    const corsHeader = response.headers.get('Access-Control-Allow-Origin');
+                    const methodsHeader = response.headers.get('Access-Control-Allow-Methods');
+                    
+                    if (corsHeader && methodsHeader) {
+                        resultDiv.innerHTML = `<span class="success">✓ CORS properly configured!</span><br>
+                            Access-Control-Allow-Origin: ${corsHeader}<br>
+                            Access-Control-Allow-Methods: ${methodsHeader}`;
+                    } else {
+                        resultDiv.innerHTML = `<span class="error">✗ CORS headers missing or incomplete</span>`;
+                    }
+                } else {
+                    throw new Error(`Server responded with status: ${response.status}`);
+                }
+            })
+            .catch(error => {
+                resultDiv.innerHTML = `<span class="error">✗ Error: ${error.message}</span>`;
+                console.error('CORS test error:', error);
+            });
+        });
+        
+        // Send test message
+        document.getElementById('sendMessage').addEventListener('click', function() {
+            const resultDiv = document.getElementById('messageResult');
+            const responseDataEl = document.getElementById('responseData');
+            
+            resultDiv.innerHTML = "Sending test message to bridge server...";
+            responseDataEl.textContent = "";
+            
+            const testMessage = {
+                message: "Test message from connection test tool",
+                conversation_id: "connection-test-" + Date.now(),
+                project_id: "test-project-1"
+            };
+            
+            fetch('http://localhost:8090/api/think-tank', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                mode: 'cors',
+                body: JSON.stringify(testMessage)
+            })
+            .then(response => {
+                if (response.ok) {
+                    resultDiv.innerHTML = '<span class="success">✓ Message sent successfully!</span>';
+                    return response.json();
+                } else {
+                    throw new Error(`Server responded with status: ${response.status}`);
+                }
+            })
+            .then(data => {
+                console.log('Response data:', data);
+                responseDataEl.textContent = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                resultDiv.innerHTML = `<span class="error">✗ Error: ${error.message}</span>`;
+                console.error('Message send error:', error);
+            });
+        });
+    </script>
+</body>
+</html>

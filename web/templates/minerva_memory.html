@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minerva Memory System - Conversation History</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            font-family: 'Arial', sans-serif;
+            color: #fff;
+            background-color: #000;
+            overflow-x: hidden;
+        }
+        
+        /* Space Background */
+        #space-bg-container {
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            z-index: -1;
+            background-color: black;
+            overflow: hidden;
+        }
+        
+        .galaxy-arm {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            border-radius: 50%;
+            opacity: 0.7;
+            background: radial-gradient(ellipse at center, rgba(100, 149, 237, 0.1) 0%, rgba(100, 149, 237, 0) 70%);
+        }
+        
+        /* Portal Button */
+        .nav-portal-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+        }
+        
+        .portal-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 15px;
+            background: rgba(30, 50, 100, 0.4);
+            border: 1px solid rgba(100, 149, 237, 0.5);
+            border-radius: 20px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(100, 149, 237, 0.2);
+        }
+        
+        .portal-link:hover {
+            background: rgba(40, 70, 130, 0.6);
+            border-color: rgba(100, 149, 237, 0.8);
+            box-shadow: 0 0 15px rgba(100, 149, 237, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .portal-icon {
+            font-size: 16px;
+            margin-right: 8px;
+        }
+        
+        /* Memory System Container */
+        .memory-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            min-height: 100vh;
+            padding-top: 80px;
+            box-sizing: border-box;
+        }
+        
+        .memory-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 0 20px;
+        }
+        
+        .memory-title {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #64a5ff, #b2d6ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(100, 149, 237, 0.5);
+        }
+        
+        .memory-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* Memory Interface */
+        .memory-interface {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto 40px;
+            padding: 0 20px;
+            height: calc(100vh - 200px);
+            min-height: 500px;
+        }
+        
+        /* Left Panel - Conversation List */
+        .conversations-panel {
+            flex: 0 0 300px;
+            background: rgba(20, 30, 60, 0.4);
+            border: 1px solid rgba(100, 149, 237, 0.3);
+            border-radius: 10px;
+            margin-right: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .panel-header {
+            padding: 15px;
+            border-bottom: 1px solid rgba(100, 149, 237, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .panel-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+        
+        .panel-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .panel-action-btn {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: color 0.2s ease;
+            font-size: 14px;
+        }
+        
+        .panel-action-btn:hover {
+            color: white;
+        }
+        
+        .search-filter {
+            padding: 10px 15px;
+            background: rgba(30, 40, 70, 0.4);
+        }
+        
+        .search-filter input {
+            width: 100%;
+            padding: 8px 10px;
+            background: rgba(20, 30, 60, 0.7);
+            border: 1px solid rgba(100, 149, 237, 0.3);
+            border-radius: 5px;
+            color: white;
+            font-size: 14px;
+        }
+        
+        .conversation-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 0;
+        }
+        
+        .conversation-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(100, 149, 237, 0.1);
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        
+        .conversation-item:hover {
+            background: rgba(40, 60, 120, 0.3);
+        }
+        
+        .conversation-item.active {
+            background: rgba(60, 80, 150, 0.4);
+            border-left: 3px solid rgba(100, 149, 237, 0.8);
+        }
+        
+        .conversation-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .conversation-preview {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .conversation-date {
+            font-size: 0.7rem;
+            opacity: 0.5;
+            margin-top: 5px;
+        }
+        
+        /* Right Panel - Conversation Content */
+        .conversation-panel {
+            flex: 1;
+            background: rgba(20, 30, 60, 0.4);
+            border: 1px solid rgba(100, 149, 237, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .conversation-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        .no-conversation-selected {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .no-conversation-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+        
+        /* Message Styles */
+        .message {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .message-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        
+        .message-sender {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .message-time {
+            font-size: 0.8rem;
+            opacity: 0.6;
+        }
+        
+        .message-content {
+            padding: 12px 15px;
+            border-radius: 10px;
+            line-height: 1.5;
+            font-size: 0.95rem;
+            max-width: 80%;
+        }
+        
+        .message.user {
+            align-items: flex-end;
+        }
+        
+        .message.user .message-content {
+            background: rgba(60, 80, 150, 0.4);
+            border: 1px solid rgba(100, 149, 237, 0.4);
+            align-self: flex-end;
+        }
+        
+        .message.assistant {
+            align-items: flex-start;
+        }
+        
+        .message.assistant .message-content {
+            background: rgba(40, 60, 90, 0.4);
+            border: 1px solid rgba(80, 120, 200, 0.4);
+            align-self: flex-start;
+        }
+        
+        /* Visualization Panel */
+        .visualization-panel {
+            padding: 15px;
+            background: rgba(20, 30, 55, 0.7);
+            border-top: 1px solid rgba(100, 149, 237, 0.2);
+        }
+        
+        .visualization-title {
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .memory-graph {
+            height: 100px;
+            background: rgba(30, 40, 80, 0.3);
+            border: 1px solid rgba(100, 149, 237, 0.2);
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+        
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+        
+        .empty-state-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .empty-state-subtitle {
+            font-size: 0.9rem;
+            text-align: center;
+            max-width: 400px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Space Background -->
+    <div id="space-bg-container">
+        <!-- Radial gradient overlay -->
+        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            background: radial-gradient(circle at center, 
+                rgba(50, 50, 120, 0.3) 0%, 
+                rgba(20, 20, 60, 0.2) 40%, 
+                rgba(5, 5, 30, 0.1) 70%, 
+                rgba(0, 0, 10, 0) 100%);"></div>
+                
+        <!-- Galaxy arms -->
+        <div class="galaxy-arm" style="width: 1000px; height: 400px; transform: translate(-50%, -50%) rotate(0deg);"></div>
+        <div class="galaxy-arm" style="width: 1000px; height: 350px; transform: translate(-50%, -50%) rotate(72deg);"></div>
+        <div class="galaxy-arm" style="width: 900px; height: 300px; transform: translate(-50%, -50%) rotate(144deg);"></div>
+        <div class="galaxy-arm" style="width: 950px; height: 320px; transform: translate(-50%, -50%) rotate(216deg);"></div>
+        <div class="galaxy-arm" style="width: 1000px; height: 380px; transform: translate(-50%, -50%) rotate(288deg);"></div>
+    </div>
+    
+    <!-- Portal Button -->
+    <div class="nav-portal-button">
+        <a href="/minerva-portal" class="portal-link" title="Return to Minerva Portal">
+            <span class="portal-icon">🏠</span>
+            <span class="portal-text">Portal</span>
+        </a>
+    </div>
+    
+    <!-- Memory System Container -->
+    <div class="memory-container">
+        <div class="memory-header">
+            <h1 class="memory-title">Memory System</h1>
+            <p class="memory-subtitle">Explore your conversation history with Minerva. Access past interactions, track context across multiple sessions, and continue your conversations seamlessly.</p>
+        </div>
+        
+        <div class="memory-interface">
+            <!-- Left Panel - Conversation List -->
+            <div class="conversations-panel">
+                <div class="panel-header">
+                    <div class="panel-title">Conversations</div>
+                    <div class="panel-actions">
+                        <button class="panel-action-btn" title="Sort conversations">🔄</button>
+                        <button class="panel-action-btn" title="Filter options">⚙️</button>
+                    </div>
+                </div>
+                
+                <div class="search-filter">
+                    <input type="text" placeholder="Search conversations..." id="conversation-search">
+                </div>
+                
+                <div class="conversation-list" id="conversation-list">
+                    <!-- Sample conversation items (will be populated by JavaScript) -->
+                </div>
+            </div>
+            
+            <!-- Right Panel - Conversation Content -->
+            <div class="conversation-panel">
+                <div class="panel-header">
+                    <div class="panel-title" id="conversation-title">Conversation Details</div>
+                    <div class="panel-actions">
+                        <button class="panel-action-btn" title="Export conversation">📤</button>
+                        <button class="panel-action-btn" title="Continue conversation">🔄</button>
+                    </div>
+                </div>
+                
+                <div class="conversation-content" id="conversation-content">
+                    <div class="no-conversation-selected" id="empty-conversation">
+                        <div class="no-conversation-icon">💬</div>
+                        <div>Select a conversation to view its contents</div>
+                    </div>
+                    
+                    <!-- Conversation messages will be loaded here -->
+                </div>
+                
+                <div class="visualization-panel">
+                    <div class="visualization-title">Memory Connections</div>
+                    <div class="memory-graph">
+                        Memory visualization coming soon
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sample conversation data (in real app, this would come from the backend)
+            const conversations = [
+                {
+                    id: 1,
+                    title: "Quantum Computing Research",
+                    preview: "Discussion about quantum entanglement and its applications in computing",
+                    date: "March 12, 2025",
+                    messages: [
+                        {
+                            sender: "User",
+                            content: "Can you explain quantum entanglement in simple terms?",
+                            time: "10:23 AM"
+                        },
+                        {
+                            sender: "Minerva",
+                            content: "Quantum entanglement is when two particles become linked so that the quantum state of each cannot be described independently of the other. It's like having two coins that always land on opposite sides when flipped, no matter how far apart they are.",
+                            time: "10:24 AM"
+                        },
+                        {
+                            sender: "User",
+                            content: "That's interesting. How is this applied in quantum computing?",
+                            time: "10:26 AM"
+                        },
+                        {
+                            sender: "Minerva",
+                            content: "In quantum computing, entanglement allows for quantum bits (qubits) to be correlated in ways that classical bits cannot. This enables quantum computers to perform certain calculations much faster than classical computers. For example, Shor's algorithm for factoring large numbers relies on quantum entanglement to achieve exponential speedup over classical methods.",
+                            time: "10:27 AM"
+                        }
+                    ]
+                },
+                {
+                    id: 2,
+                    title: "Milky Way Visualization Project",
+                    preview: "Planning the interactive space visualization for Minerva",
+                    date: "March 13, 2025",
+                    messages: [
+                        {
+                            sender: "User",
+                            content: "I want to create a deep space visualization with the Minerva orb at the center",
+                            time: "3:15 PM"
+                        },
+                        {
+                            sender: "Minerva",
+                            content: "That's an excellent idea. We could create a canvas-based visualization with a Milky Way background and the glowing Minerva orb at the center. Users could zoom in and out and pan around the space.",
+                            time: "3:17 PM"
+                        },
+                        {
+                            sender: "User",
+                            content: "Can we make the orb clickable to navigate to different parts of the application?",
+                            time: "3:19 PM"
+                        },
+                        {
+                            sender: "Minerva",
+                            content: "Absolutely. We can implement that functionality to make the orb an interactive portal to different sections of Minerva. When users click on it, they could be taken to a portal page with cards for different features like Conversations, Projects, and Settings.",
+                            time: "3:21 PM"
+                        }
+                    ]
+                },
+                {
+                    id: 3,
+                    title: "Machine Learning Model Training",
+                    preview: "Discussion about neural network architecture for NLP tasks",
+                    date: "March 14, 2025",
+                    messages: [
+                        {
+                            sender: "User",
+                            content: "What architecture would you recommend for a sentiment analysis model?",
+                            time: "11:05 AM"
+                        },
+                        {
+                            sender: "Minerva",
+                            content: "For sentiment analysis, transformer-based models like BERT or RoBERTa tend to perform very well. They can capture contextual information better than traditional approaches. If you need something lighter, a bi-directional LSTM with attention might be sufficient.",
+                            time: "11:07 AM"
+                        }
+                    ]
+                }
+            ];
+            
+            // DOM elements
+            const conversationList = document.getElementById('conversation-list');
+            const conversationTitle = document.getElementById('conversation-title');
+            const conversationContent = document.getElementById('conversation-content');
+            const emptyConversation = document.getElementById('empty-conversation');
+            const conversationSearch = document.getElementById('conversation-search');
+            
+            // Function to render conversation list
+            function renderConversationList(conversations) {
+                conversationList.innerHTML = '';
+                
+                if (conversations.length === 0) {
+                    const emptyState = document.createElement('div');
+                    emptyState.className = 'empty-state';
+                    emptyState.innerHTML = `
+                        <div class="empty-state-icon">🧠</div>
+                        <div class="empty-state-title">No conversations yet</div>
+                        <div class="empty-state-subtitle">Start a conversation with Minerva to begin building your memory history</div>
+                    `;
+                    conversationList.appendChild(emptyState);
+                    return;
+                }
+                
+                conversations.forEach(convo => {
+                    const item = document.createElement('div');
+                    item.className = 'conversation-item';
+                    item.dataset.id = convo.id;
+                    
+                    item.innerHTML = `
+                        <div class="conversation-title">${convo.title}</div>
+                        <div class="conversation-preview">${convo.preview}</div>
+                        <div class="conversation-date">${convo.date}</div>
+                    `;
+                    
+                    item.addEventListener('click', () => {
+                        // Remove active class from all items
+                        document.querySelectorAll('.conversation-item').forEach(el => {
+                            el.classList.remove('active');
+                        });
+                        
+                        // Add active class to clicked item
+                        item.classList.add('active');
+                        
+                        // Load conversation content
+                        loadConversation(convo);
+                    });
+                    
+                    conversationList.appendChild(item);
+                });
+            }
+            
+            // Function to load conversation content
+            function loadConversation(conversation) {
+                // Update conversation title
+                conversationTitle.textContent = conversation.title;
+                
+                // Hide empty state
+                emptyConversation.style.display = 'none';
+                
+                // Clear previous content
+                const existingMessages = conversationContent.querySelectorAll('.message');
+                existingMessages.forEach(msg => msg.remove());
+                
+                // Add messages
+                conversation.messages.forEach(msg => {
+                    const messageEl = document.createElement('div');
+                    messageEl.className = `message ${msg.sender.toLowerCase() === 'user' ? 'user' : 'assistant'}`;
+                    
+                    messageEl.innerHTML = `
+                        <div class="message-header">
+                            <div class="message-sender">${msg.sender}</div>
+                            <div class="message-time">${msg.time}</div>
+                        </div>
+                        <div class="message-content">${msg.content}</div>
+                    `;
+                    
+                    conversationContent.appendChild(messageEl);
+                });
+                
+                // Scroll to bottom of conversation
+                conversationContent.scrollTop = conversationContent.scrollHeight;
+            }
+            
+            // Search functionality
+            conversationSearch.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                
+                const filteredConversations = conversations.filter(convo => 
+                    convo.title.toLowerCase().includes(searchTerm) || 
+                    convo.preview.toLowerCase().includes(searchTerm)
+                );
+                
+                renderConversationList(filteredConversations);
+            });
+            
+            // Initial rendering
+            renderConversationList(conversations);
+            
+            // Select first conversation by default
+            if (conversations.length > 0) {
+                const firstItem = conversationList.querySelector('.conversation-item');
+                if (firstItem) {
+                    firstItem.click();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

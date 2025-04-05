@@ -1,0 +1,75 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Environment and local configuration
+.env
+.env.*
+.venv
+venv/
+ENV/
+.coverage
+flask_session/
+*.log
+
+# OS specific
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Data and large files
+*.webp
+data/usage_tracking.db
+hf_token.txt
+
+# IDE specific
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Backup files
+*.bak
+*.backup
+*_backup*
+*.save
+
+# Embedded git repositories
+Gpt ai codes/
+evals/
+
+# Minerva specific excludes
+gpt4all-installer-*
+
+# Large directories to exclude
+archive/
+backups/
+MinervaClean/
+
+# Cache and temp files
+__pycache__/
+.cache/
+tmp/
+temp/

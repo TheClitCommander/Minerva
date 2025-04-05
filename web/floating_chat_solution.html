@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Floating Chat Solution</title>
+    <style>
+        /* Base styles */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #0a192f;
+            color: #e6f1ff;
+        }
+        
+        /* Floating chat container */
+        #floating-chat {
+            position: fixed;
+            bottom: 80px;
+            right: 30px;
+            width: 380px;
+            max-height: 500px;
+            background-color: rgba(13, 25, 50, 0.85);
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        
+        /* Chat header */
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            background-color: rgba(23, 42, 69, 0.8);
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+        }
+        
+        .chat-title {
+            font-weight: 600;
+            font-size: 16px;
+            color: #e6f1ff;
+        }
+        
+        .chat-controls {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .chat-control {
+            background: none;
+            border: none;
+            color: #8892b0;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 0;
+            transition: color 0.2s;
+        }
+        
+        .chat-control:hover {
+            color: #64ffda;
+        }
+        
+        /* Messages container */
+        .chat-messages {
+            padding: 15px;
+            overflow-y: auto;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 350px;
+        }
+        
+        /* Message styles */
+        .message {
+            padding: 10px 15px;
+            border-radius: 15px;
+            max-width: 85%;
+            word-break: break-word;
+            line-height: 1.4;
+        }
+        
+        .user-message {
+            background-color: #4285f4;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+        
+        .bot-message {
+            background-color: #233554;
+            color: #e6f1ff;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+        
+        /* Input area */
+        .chat-input {
+            display: flex;
+            padding: 10px;
+            background-color: rgba(23, 42, 69, 0.8);
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+        }
+        
+        .chat-input input {
+            flex-grow: 1;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 20px;
+            background-color: #233554;
+            color: #e6f1ff;
+            font-size: 14px;
+        }
+        
+        .chat-input input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(100, 255, 218, 0.3);
+        }
+        
+        .chat-input button {
+            background-color: #64ffda;
+            color: #0a192f;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 15px;
+            margin-left: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .chat-input button:hover {
+            background-color: #72efdd;
+        }
+        
+        /* Chat toggle button */
+        #chat-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #4285f4;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            transition: all 0.3s ease;
+        }
+        
+        #chat-toggle:hover {
+            transform: scale(1.05);
+            background-color: #5294ff;
+        }
+        
+        /* Loading indicator */
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            align-self: flex-start;
+            background-color: #233554;
+            padding: 10px 15px;
+            border-radius: 15px;
+            border-bottom-left-radius: 4px;
+            margin-bottom: 10px;
+        }
+        
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #64ffda;
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+        
+        .typing-dot:nth-child(1) { animation-delay: 0s; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-5px); }
+        }
+        
+        /* Minimized state */
+        #floating-chat.minimized {
+            height: 0;
+            padding: 0;
+            min-height: 0;
+            border-radius: 15px;
+        }
+        
+        #floating-chat.minimized .chat-messages,
+        #floating-chat.minimized .chat-input {
+            display: none;
+        }
+        
+        #floating-chat.minimized .chat-header {
+            border-radius: 15px;
+        }
+        
+        /* Main content for demo */
+        .content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        h1 {
+            color: #64ffda;
+            margin-bottom: 20px;
+        }
+        
+        p {
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: #8892b0;
+        }
+        
+        .feature-section {
+            margin-bottom: 40px;
+        }
+        
+        .feature-section h2 {
+            color: #ccd6f6;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h1>Minerva Project Space</h1>
+        <div class="feature-section">
+            <h2>Welcome to Your Workspace</h2>
+            <p>This is a demo page to show the floating chat feature. The chat component is connected to the Think Tank API and maintains conversation memory.</p>
+        </div>
+    </div>
+    
+    <!-- Chat toggle button -->
+    <div id="chat-toggle">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+    </div>
+    
+    <!-- Floating chat -->
+    <div id="floating-chat" class="minimized">
+        <div class="chat-header">
+            <div class="chat-title">Minerva Think Tank</div>
+            <div class="chat-controls">
+                <button class="chat-control" id="chat-minimize">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+            <!-- Messages will appear here -->
+        </div>
+        <div class="chat-input">
+            <input type="text" id="chat-input-field" placeholder="Type your message...">
+            <button id="chat-send">Send</button>
+        </div>
+    </div>
+    
+    <script>
+        // Chat functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM elements
+            const chatToggle = document.getElementById('chat-toggle');
+            const floatingChat = document.getElementById('floating-chat');
+            const chatMinimize = document.getElementById('chat-minimize');
+            const chatMessages = document.getElementById('chat-messages');
+            const chatInput = document.getElementById('chat-input-field');
+            const chatSend = document.getElementById('chat-send');
+            
+            // Chat state
+            let conversationId = localStorage.getItem('minerva_conversation_id') || null;
+            let chatOpen = false;
+            
+            // Utility to get URL parameters
+            function getUrlParameter(name) {
+                name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+                var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+                var results = regex.exec(location.search);
+                return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+            }
+            
+            // Get project context if available
+            const projectId = getUrlParameter('id');
+            
+            // Toggle chat open/closed
+            function toggleChat() {
+                chatOpen = !chatOpen;
+                if (chatOpen) {
+                    floatingChat.classList.remove('minimized');
+                    chatInput.focus();
+                    // Add welcome message if chat is empty
+                    if (chatMessages.children.length === 0) {
+                        addBotMessage("Hello! I'm the Minerva Think Tank assistant. How can I help you today?");
+                    }
+                } else {
+                    floatingChat.classList.add('minimized');
+                }
+            }
+            
+            // Event listeners
+            chatToggle.addEventListener('click', toggleChat);
+            chatMinimize.addEventListener('click', toggleChat);
+            
+            // Add a user message to the chat
+            function addUserMessage(text) {
+                const messageElement = document.createElement('div');
+                messageElement.className = 'message user-message';
+                messageElement.textContent = text;
+                chatMessages.appendChild(messageElement);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Add a bot message to the chat
+            function addBotMessage(text) {
+                const messageElement = document.createElement('div');
+                messageElement.className = 'message bot-message';
+                
+                // Ensure text is a string
+                if (typeof text !== 'string') {
+                    try {
+                        if (text === null) {
+                            text = "No response received";
+                        } else if (typeof text === 'object') {
+                            text = JSON.stringify(text);
+                        } else {
+                            text = String(text);
+                        }
+                    } catch (e) {
+                        text = "Error displaying response";
+                        console.error("Error processing bot message:", e);
+                    }
+                }
+                
+                messageElement.textContent = text;
+                chatMessages.appendChild(messageElement);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Add typing indicator
+            function addTypingIndicator() {
+                const indicator = document.createElement('div');
+                indicator.className = 'typing-indicator';
+                indicator.id = 'typing-indicator';
+                indicator.innerHTML = `
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                `;
+                chatMessages.appendChild(indicator);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Remove typing indicator
+            function removeTypingIndicator() {
+                const indicator = document.getElementById('typing-indicator');
+                if (indicator) {
+                    chatMessages.removeChild(indicator);
+                }
+            }
+            
+            // Send message to API
+            function sendMessage() {
+                const messageText = chatInput.value.trim();
+                if (!messageText) return;
+                
+                // Clear input
+                chatInput.value = '';
+                
+                // Add user message
+                addUserMessage(messageText);
+                
+                // Show typing indicator
+                addTypingIndicator();
+                
+                // Prepare payload
+                const payload = {
+                    query: messageText,
+                    conversation_id: conversationId,
+                    store_in_memory: true
+                };
+                
+                // Add project context if available
+                if (projectId) {
+                    payload.project_id = projectId;
+                }
+                
+                // Send to API using XMLHttpRequest for better reliability
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', '/api/think-tank', true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.timeout = 30000; // 30 second timeout
+                
+                xhr.onload = function() {
+                    removeTypingIndicator();
+                    
+                    if (xhr.status === 200) {
+                        try {
+                            const response = JSON.parse(xhr.responseText);
+                            
+                            // Save conversation ID
+                            if (response.conversation_id) {
+                                conversationId = response.conversation_id;
+                                localStorage.setItem('minerva_conversation_id', conversationId);
+                            }
+                            
+                            // Handle response safely
+                            let responseText;
+                            if (typeof response.response === 'string') {
+                                responseText = response.response;
+                            } else if (response.response) {
+                                // If response is an object, stringify it
+                                try {
+                                    responseText = JSON.stringify(response.response);
+                                } catch (e) {
+                                    console.error("Error stringifying response:", e);
+                                    responseText = "Received response in an unexpected format";
+                                }
+                            } else {
+                                responseText = "No response text received";
+                            }
+                            
+                            // Add bot message
+                            addBotMessage(responseText);
+                            
+                            // Log the full response for debugging
+                            console.log("Full API response:", response);
+                            
+                        } catch (e) {
+                            console.error("Error parsing API response:", e, "Raw response:", xhr.responseText);
+                            addBotMessage("Sorry, I couldn't process the response correctly");
+                        }
+                    } else {
+                        console.error("API Error:", xhr.status, xhr.statusText);
+                        addBotMessage("Sorry, there was an error communicating with the server");
+                    }
+                };
+                
+                xhr.ontimeout = function() {
+                    removeTypingIndicator();
+                    addBotMessage("Sorry, the request timed out. Please try again.");
+                };
+                
+                xhr.onerror = function() {
+                    removeTypingIndicator();
+                    addBotMessage("Sorry, there was an error connecting to the server");
+                };
+                
+                xhr.send(JSON.stringify(payload));
+            }
+            
+            // Event listener for send button
+            chatSend.addEventListener('click', sendMessage);
+            
+            // Event listener for enter key
+            chatInput.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    sendMessage();
+                }
+            });
+            
+            // Make chat draggable
+            let isDragging = false;
+            let dragOffsetX, dragOffsetY;
+            
+            chatHeader = document.querySelector('.chat-header');
+            
+            chatHeader.addEventListener('mousedown', function(e) {
+                if (e.target.closest('.chat-control')) return;
+                
+                isDragging = true;
+                dragOffsetX = e.clientX - floatingChat.getBoundingClientRect().left;
+                dragOffsetY = e.clientY - floatingChat.getBoundingClientRect().top;
+                
+                document.addEventListener('mousemove', onMouseMove);
+                document.addEventListener('mouseup', onMouseUp);
+            });
+            
+            function onMouseMove(e) {
+                if (!isDragging) return;
+                
+                const x = e.clientX - dragOffsetX;
+                const y = e.clientY - dragOffsetY;
+                
+                floatingChat.style.right = null;
+                floatingChat.style.bottom = null;
+                floatingChat.style.left = x + 'px';
+                floatingChat.style.top = y + 'px';
+            }
+            
+            function onMouseUp() {
+                isDragging = false;
+                document.removeEventListener('mousemove', onMouseMove);
+                document.removeEventListener('mouseup', onMouseUp);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minerva Projects</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f7;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background-color: #000;
+            color: #fff;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header h1 {
+            margin: 0;
+            font-weight: 500;
+        }
+        .main-content {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+        }
+        .sidebar {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .content {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .project-list, .conversation-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .project-item {
+            padding: 12px 15px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+        }
+        .project-item:hover {
+            background-color: #f0f0f0;
+        }
+        .project-item.active {
+            background-color: #e0f2ff;
+            font-weight: 500;
+        }
+        .conversation-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border: 1px solid #eee;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .conversation-item:hover {
+            border-color: #ddd;
+            background-color: #fafafa;
+        }
+        .conversation-title {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        .conversation-timestamp {
+            font-size: 0.8rem;
+            color: #888;
+        }
+        button {
+            background-color: #0071e3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #0062c3;
+        }
+        button.secondary {
+            background-color: #f5f5f7;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+        button.secondary:hover {
+            background-color: #e5e5e7;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            width: 500px;
+            max-width: 90%;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .modal-header h2 {
+            margin: 0;
+        }
+        .close-button {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #888;
+        }
+        .actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #0071e3;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .empty-state {
+            text-align: center;
+            padding: 50px 0;
+            color: #888;
+        }
+        #conversationDetail {
+            white-space: pre-wrap;
+            font-family: monospace;
+            background-color: #f5f5f7;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-left: 5px;
+        }
+        .badge-blue {
+            background-color: #e0f2ff;
+            color: #0062c3;
+        }
+        .badge-count {
+            background-color: #eee;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Minerva Projects</h1>
+            <div>
+                <button id="newProjectBtn">New Project</button>
+                <button class="secondary" onclick="window.location.href='/'">Back to Chat</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="main-content">
+            <!-- Projects Sidebar -->
+            <div class="sidebar">
+                <h2>Your Projects</h2>
+                <div id="projectsLoading" class="loading">
+                    <div class="spinner"></div>
+                </div>
+                <ul id="projectList" class="project-list"></ul>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="content">
+                <div id="projectDetailSection" style="display: none;">
+                    <div id="projectHeader">
+                        <h2 id="projectName"></h2>
+                        <p id="projectDescription"></p>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button id="addConversationBtn">Add Conversation</button>
+                        <button id="editProjectBtn">Edit Project</button>
+                        <button id="deleteProjectBtn" class="secondary">Delete Project</button>
+                    </div>
+
+                    <h3>Conversations</h3>
+                    <div id="conversationsLoading" class="loading" style="display: none;">
+                        <div class="spinner"></div>
+                    </div>
+                    <div id="projectConversations"></div>
+                </div>
+
+                <div id="noProjectSelected" class="empty-state">
+                    <h2>No Project Selected</h2>
+                    <p>Select a project from the sidebar or create a new one to get started.</p>
+                </div>
+
+                <div id="conversationDetailSection" style="display: none;">
+                    <div class="button-group">
+                        <button id="backToProjectBtn">Back to Project</button>
+                    </div>
+                    <h3 id="conversationTitle"></h3>
+                    <div class="conversation-timestamp" id="conversationTimestamp"></div>
+                    <pre id="conversationDetail"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New/Edit Project Modal -->
+    <div id="projectModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="projectModalTitle">New Project</h2>
+                <button class="close-button" id="closeProjectModal">&times;</button>
+            </div>
+            <form id="projectForm">
+                <div class="form-group">
+                    <label for="projectNameInput">Project Name</label>
+                    <input type="text" id="projectNameInput" required>
+                </div>
+                <div class="form-group">
+                    <label for="projectDescriptionInput">Description</label>
+                    <textarea id="projectDescriptionInput" rows="4"></textarea>
+                </div>
+                <div class="actions">
+                    <button type="button" class="secondary" id="cancelProjectModal">Cancel</button>
+                    <button type="submit">Save Project</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Conversation Modal -->
+    <div id="conversationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Conversation to Project</h2>
+                <button class="close-button" id="closeConversationModal">&times;</button>
+            </div>
+            <div id="availableConversationsLoading" class="loading">
+                <div class="spinner"></div>
+            </div>
+            <div id="availableConversations"></div>
+            <div class="actions">
+                <button type="button" class="secondary" id="cancelConversationModal">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Delete Modal -->
+    <div id="confirmDeleteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Confirm Delete</h2>
+                <button class="close-button" id="closeDeleteModal">&times;</button>
+            </div>
+            <p>Are you sure you want to delete this project? This action cannot be undone.</p>
+            <div class="actions">
+                <button type="button" class="secondary" id="cancelDeleteModal">Cancel</button>
+                <button type="button" id="confirmDeleteBtn" style="background-color: #FF3B30;">Delete Project</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let currentProjectId = null;
+        let allProjects = [];
+        let allConversations = [];
+        let currentConversationId = null;
+
+        // DOM elements
+        const projectList = document.getElementById('projectList');
+        const projectsLoading = document.getElementById('projectsLoading');
+        const projectDetailSection = document.getElementById('projectDetailSection');
+        const noProjectSelected = document.getElementById('noProjectSelected');
+        const projectName = document.getElementById('projectName');
+        const projectDescription = document.getElementById('projectDescription');
+        const projectConversations = document.getElementById('projectConversations');
+        const conversationsLoading = document.getElementById('conversationsLoading');
+        const conversationDetailSection = document.getElementById('conversationDetailSection');
+        const conversationTitle = document.getElementById('conversationTitle');
+        const conversationTimestamp = document.getElementById('conversationTimestamp');
+        const conversationDetail = document.getElementById('conversationDetail');
+
+        // Modal elements
+        const projectModal = document.getElementById('projectModal');
+        const projectModalTitle = document.getElementById('projectModalTitle');
+        const projectForm = document.getElementById('projectForm');
+        const projectNameInput = document.getElementById('projectNameInput');
+        const projectDescriptionInput = document.getElementById('projectDescriptionInput');
+        const conversationModal = document.getElementById('conversationModal');
+        const availableConversations = document.getElementById('availableConversations');
+        const availableConversationsLoading = document.getElementById('availableConversationsLoading');
+        const confirmDeleteModal = document.getElementById('confirmDeleteModal');
+
+        // Buttons
+        const newProjectBtn = document.getElementById('newProjectBtn');
+        const editProjectBtn = document.getElementById('editProjectBtn');
+        const deleteProjectBtn = document.getElementById('deleteProjectBtn');
+        const addConversationBtn = document.getElementById('addConversationBtn');
+        const backToProjectBtn = document.getElementById('backToProjectBtn');
+        const closeProjectModal = document.getElementById('closeProjectModal');
+        const cancelProjectModal = document.getElementById('cancelProjectModal');
+        const closeConversationModal = document.getElementById('closeConversationModal');
+        const cancelConversationModal = document.getElementById('cancelConversationModal');
+        const closeDeleteModal = document.getElementById('closeDeleteModal');
+        const cancelDeleteModal = document.getElementById('cancelDeleteModal');
+        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProjects();
+            setupEventListeners();
+        });
+
+        // Set up all event listeners
+        function setupEventListeners() {
+            // Project actions
+            newProjectBtn.addEventListener('click', () => openProjectModal('create'));
+            editProjectBtn.addEventListener('click', () => openProjectModal('edit'));
+            deleteProjectBtn.addEventListener('click', openDeleteModal);
+            addConversationBtn.addEventListener('click', openConversationModal);
+            backToProjectBtn.addEventListener('click', showProjectDetail);
+
+            // Modal actions
+            projectForm.addEventListener('submit', saveProject);
+            closeProjectModal.addEventListener('click', closeModal);
+            cancelProjectModal.addEventListener('click', closeModal);
+            closeConversationModal.addEventListener('click', closeModal);
+            cancelConversationModal.addEventListener('click', closeModal);
+            closeDeleteModal.addEventListener('click', closeModal);
+            cancelDeleteModal.addEventListener('click', closeModal);
+            confirmDeleteBtn.addEventListener('click', deleteProject);
+        }
+
+        // Load all projects
+        async function loadProjects() {
+            projectsLoading.style.display = 'flex';
+            projectList.innerHTML = '';
+
+            try {
+                const response = await fetch('/api/projects');
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    allProjects = data.projects;
+                    
+                    if (allProjects.length === 0) {
+                        projectList.innerHTML = '<div class="empty-state">No projects yet. Create your first project!</div>';
+                    } else {
+                        renderProjects();
+                    }
+                } else {
+                    projectList.innerHTML = '<div class="empty-state">Failed to load projects. Please try again.</div>';
+                }
+            } catch (error) {
+                console.error('Error loading projects:', error);
+                projectList.innerHTML = '<div class="empty-state">Failed to load projects. Please try again.</div>';
+            } finally {
+                projectsLoading.style.display = 'none';
+            }
+        }
+
+        // Render projects in the sidebar
+        function renderProjects() {
+            projectList.innerHTML = '';
+            
+            allProjects.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
+            
+            allProjects.forEach(project => {
+                const li = document.createElement('li');
+                li.className = 'project-item';
+                if (currentProjectId === project.project_id) {
+                    li.classList.add('active');
+                }
+                
+                const conversationCount = project.conversations.length;
+                li.innerHTML = `
+                    ${project.name}
+                    <span class="badge badge-count">${conversationCount}</span>
+                `;
+                
+                li.addEventListener('click', () => {
+                    selectProject(project.project_id);
+                });
+                
+                projectList.appendChild(li);
+            });
+        }
+
+        // Select a project and show its details
+        function selectProject(projectId) {
+            currentProjectId = projectId;
+            currentConversationId = null;
+            renderProjects();
+            showProjectDetail();
+            
+            const project = allProjects.find(p => p.project_id === projectId);
+            if (project) {
+                projectName.textContent = project.name;
+                projectDescription.textContent = project.description || 'No description provided.';
+                loadProjectConversations(projectId);
+            }
+        }
+
+        // Load conversations for a project
+        async function loadProjectConversations(projectId) {
+            conversationsLoading.style.display = 'flex';
+            projectConversations.innerHTML = '';
+            
+            try {
+                const response = await fetch(`/api/projects/${projectId}/conversations`);
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    if (data.conversations.length === 0) {
+                        projectConversations.innerHTML = '<div class="empty-state">No conversations in this project yet.</div>';
+                    } else {
+                        renderProjectConversations(data.conversations);
+                    }
+                } else {
+                    projectConversations.innerHTML = '<div class="empty-state">Failed to load conversations.</div>';
+                }
+            } catch (error) {
+                console.error('Error loading project conversations:', error);
+                projectConversations.innerHTML = '<div class="empty-state">Failed to load conversations.</div>';
+            } finally {
+                conversationsLoading.style.display = 'none';
+            }
+        }
+
+        // Render conversations for a project
+        function renderProjectConversations(conversations) {
+            projectConversations.innerHTML = '';
+            
+            conversations.forEach(conversation => {
+                const div = document.createElement('div');
+                div.className = 'conversation-item';
+                
+                // Format date for display
+                let dateDisplay = 'Unknown date';
+                if (conversation.added_at) {
+                    const date = new Date(conversation.added_at);
+                    dateDisplay = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+                }
+                
+                div.innerHTML = `
+                    <div class="conversation-title">${conversation.title}</div>
+                    <div class="conversation-timestamp">Added: ${dateDisplay}</div>
+                `;
+                
+                div.addEventListener('click', () => {
+                    viewConversation(conversation.conversation_id);
+                });
+                
+                projectConversations.appendChild(div);
+            });
+        }
+
+        // Load and view a specific conversation
+        async function viewConversation(conversationId) {
+            currentConversationId = conversationId;
+            conversationDetailSection.style.display = 'block';
+            projectDetailSection.style.display = 'none';
+            noProjectSelected.style.display = 'none';
+            
+            // Find the conversation in the current project
+            const project = allProjects.find(p => p.project_id === currentProjectId);
+            if (project) {
+                const conversation = project.conversations.find(c => c.conversation_id === conversationId);
+                if (conversation) {
+                    conversationTitle.textContent = conversation.title;
+                    
+                    // Format date for display
+                    if (conversation.added_at) {
+                        const date = new Date(conversation.added_at);
+                        conversationTimestamp.textContent = `Added to project: ${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+                    } else {
+                        conversationTimestamp.textContent = '';
+                    }
+                    
+                    // Try to load the conversation content if not loaded yet
+                    conversationDetail.textContent = 'Loading conversation...';
+                    
+                    try {
+                        // TODO: Implement actual conversation content fetching
+                        // For now, just show a placeholder
+                        setTimeout(() => {
+                            conversationDetail.textContent = `Conversation ID: ${conversationId}\n\nThis is a placeholder for the actual conversation content. In a full implementation, the conversation history would be retrieved from the memory system.`;
+                        }, 500);
+                    } catch (error) {
+                        console.error('Error loading conversation:', error);
+                        conversationDetail.textContent = 'Failed to load conversation content.';
+                    }
+                }
+            }
+        }
+
+        // Show project detail view
+        function showProjectDetail() {
+            if (currentProjectId) {
+                projectDetailSection.style.display = 'block';
+                noProjectSelected.style.display = 'none';
+            } else {
+                projectDetailSection.style.display = 'none';
+                noProjectSelected.style.display = 'block';
+            }
+            conversationDetailSection.style.display = 'none';
+        }
+
+        // Open the project creation/editing modal
+        function openProjectModal(mode) {
+            projectModal.classList.add('active');
+            
+            if (mode === 'edit' && currentProjectId) {
+                projectModalTitle.textContent = 'Edit Project';
+                const project = allProjects.find(p => p.project_id === currentProjectId);
+                
+                if (project) {
+                    projectNameInput.value = project.name;
+                    projectDescriptionInput.value = project.description || '';
+                    projectForm.dataset.mode = 'edit';
+                }
+            } else {
+                projectModalTitle.textContent = 'New Project';
+                projectNameInput.value = '';
+                projectDescriptionInput.value = '';
+                projectForm.dataset.mode = 'create';
+            }
+        }
+
+        // Open the conversation selection modal
+        async function openConversationModal() {
+            conversationModal.classList.add('active');
+            availableConversationsLoading.style.display = 'flex';
+            availableConversations.innerHTML = '';
+            
+            try {
+                const response = await fetch('/api/conversations');
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    allConversations = data.conversations;
+                    
+                    // Filter out conversations already in the current project
+                    const project = allProjects.find(p => p.project_id === currentProjectId);
+                    const projectConversationIds = project ? project.conversations.map(c => c.conversation_id) : [];
+                    
+                    const availableConvs = allConversations.filter(
+                        c => !projectConversationIds.includes(c.conversation_id)
+                    );
+                    
+                    if (availableConvs.length === 0) {
+                        availableConversations.innerHTML = '<div class="empty-state">No more conversations available to add.</div>';
+                    } else {
+                        renderAvailableConversations(availableConvs);
+                    }
+                } else {
+                    availableConversations.innerHTML = '<div class="empty-state">Failed to load conversations.</div>';
+                }
+            } catch (error) {
+                console.error('Error loading conversations:', error);
+                availableConversations.innerHTML = '<div class="empty-state">Failed to load conversations.</div>';
+            } finally {
+                availableConversationsLoading.style.display = 'none';
+            }
+        }
+
+        // Render available conversations for selection
+        function renderAvailableConversations(conversations) {
+            availableConversations.innerHTML = '';
+            
+            conversations.forEach(conversation => {
+                const div = document.createElement('div');
+                div.className = 'conversation-item';
+                
+                // Format date for display
+                let dateDisplay = 'Unknown date';
+                if (conversation.timestamp) {
+                    const date = new Date(conversation.timestamp);
+                    dateDisplay = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+                }
+                
+                div.innerHTML = `
+                    <div class="conversation-title">${conversation.title}</div>
+                    <div class="conversation-timestamp">${dateDisplay}</div>
+                `;
+                
+                div.addEventListener('click', () => {
+                    addConversationToProject(conversation.conversation_id, conversation.title);
+                });
+                
+                availableConversations.appendChild(div);
+            });
+        }
+
+        // Add a conversation to the current project
+        async function addConversationToProject(conversationId, title) {
+            if (!currentProjectId) return;
+            
+            try {
+                const response = await fetch(`/api/projects/${currentProjectId}/conversations`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        conversation_id: conversationId,
+                        title: title
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    closeModal();
+                    
+                    // Refresh the project to show the new conversation
+                    const projectIndex = allProjects.findIndex(p => p.project_id === currentProjectId);
+                    if (projectIndex !== -1) {
+                        // Update the local state with the new conversation
+                        allProjects[projectIndex].conversations.push({
+                            conversation_id: conversationId,
+                            title: title,
+                            added_at: new Date().toISOString()
+                        });
+                        
+                        // Refresh the UI
+                        loadProjectConversations(currentProjectId);
+                    }
+                } else {
+                    alert('Failed to add conversation to project.');
+                }
+            } catch (error) {
+                console.error('Error adding conversation to project:', error);
+                alert('Failed to add conversation to project.');
+            }
+        }
+
+        // Open the delete confirmation modal
+        function openDeleteModal() {
+            if (currentProjectId) {
+                confirmDeleteModal.classList.add('active');
+            }
+        }
+
+        // Save a new or edited project
+        async function saveProject(e) {
+            e.preventDefault();
+            
+            const name = projectNameInput.value.trim();
+            const description = projectDescriptionInput.value.trim();
+            const mode = projectForm.dataset.mode;
+            
+            if (!name) {
+                alert('Project name is required.');
+                return;
+            }
+            
+            if (mode === 'edit' && currentProjectId) {
+                // Update existing project
+                try {
+                    const response = await fetch(`/api/projects/${currentProjectId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            name,
+                            description
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.status === 'success') {
+                        closeModal();
+                        
+                        // Update local state
+                        const projectIndex = allProjects.findIndex(p => p.project_id === currentProjectId);
+                        if (projectIndex !== -1) {
+                            allProjects[projectIndex].name = name;
+                            allProjects[projectIndex].description = description;
+                            allProjects[projectIndex].updated_at = new Date().toISOString();
+                        }
+                        
+                        // Refresh UI
+                        renderProjects();
+                        projectName.textContent = name;
+                        projectDescription.textContent = description || 'No description provided.';
+                    } else {
+                        alert('Failed to update project.');
+                    }
+                } catch (error) {
+                    console.error('Error updating project:', error);
+                    alert('Failed to update project.');
+                }
+            } else {
+                // Create new project
+                try {
+                    const response = await fetch('/api/projects', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            name,
+                            description
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.status === 'success') {
+                        closeModal();
+                        
+                        // Create a new project object
+                        const newProject = {
+                            project_id: data.project_id,
+                            name,
+                            description,
+                            conversations: [],
+                            created_at: new Date().toISOString(),
+                            updated_at: new Date().toISOString()
+                        };
+                        
+                        // Add to local state
+                        allProjects.push(newProject);
+                        
+                        // Select the new project
+                        selectProject(data.project_id);
+                    } else {
+                        alert('Failed to create project.');
+                    }
+                } catch (error) {
+                    console.error('Error creating project:', error);
+                    alert('Failed to create project.');
+                }
+            }
+        }
+
+        // Delete the current project
+        async function deleteProject() {
+            if (!currentProjectId) return;
+            
+            try {
+                const response = await fetch(`/api/projects/${currentProjectId}`, {
+                    method: 'DELETE'
+                });
+                
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    closeModal();
+                    
+                    // Remove from local state
+                    allProjects = allProjects.filter(p => p.project_id !== currentProjectId);
+                    
+                    // Reset selection
+                    currentProjectId = null;
+                    
+                    // Refresh UI
+                    renderProjects();
+                    showProjectDetail();
+                } else {
+                    alert('Failed to delete project.');
+                }
+            } catch (error) {
+                console.error('Error deleting project:', error);
+                alert('Failed to delete project.');
+            }
+        }
+
+        // Close any open modal
+        function closeModal() {
+            projectModal.classList.remove('active');
+            conversationModal.classList.remove('active');
+            confirmDeleteModal.classList.remove('active');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+# This file has been deprecated and replaced by think_tank_consolidated.py
+# It is kept for historical reference only and should not be used in production.
+# Please use think_tank_consolidated.py instead.
+
+# All functionality from this file has been consolidated and optimized in the new module.
+# The new implementation maintains all the critical features:
+# - Complete model response data structure
+# - Improved response ranking system
+# - Specialized response blending strategies
+# - Enhanced quality evaluation metrics
+# - Model capabilities system
+# - Robust ranking logic
+
+# MIGRATION NOTE: This file will be removed in a future update.
+# Last modified: 2025-03-13

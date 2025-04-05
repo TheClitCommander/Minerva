@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Super Simple Minerva Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        .chat-box {
+            height: 300px;
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+            padding: 10px;
+            overflow-y: auto;
+            background-color: #f9f9f9;
+        }
+        .controls {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px 0 0 4px;
+        }
+        button {
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+        }
+        .message {
+            margin-bottom: 10px;
+            padding: 8px;
+            border-radius: 4px;
+        }
+        .user {
+            background-color: #DCF8C6;
+            margin-left: 20%;
+            text-align: right;
+        }
+        .bot {
+            background-color: #EAEAEA;
+            margin-right: 20%;
+        }
+        .debug {
+            margin-top: 30px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        .debug h3 {
+            margin-top: 0;
+        }
+        pre {
+            white-space: pre-wrap;
+            margin: 0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Super Simple Minerva Chat</h1>
+        <div class="chat-box" id="chatBox"></div>
+        <div class="controls">
+            <input type="text" id="messageInput" placeholder="Type your message...">
+            <button id="sendButton">Send</button>
+        </div>
+        <div>
+            <button id="wsButton">Test WebSocket</button>
+            <button id="restButton">Test REST API</button>
+        </div>
+        <div class="debug">
+            <h3>Debug Info</h3>
+            <pre id="debugLog"></pre>
+        </div>
+    </div>
+
+    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"></script>
+    <script>
+        // DOM elements
+        const chatBox = document.getElementById('chatBox');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        const wsButton = document.getElementById('wsButton');
+        const restButton = document.getElementById('restButton');
+        const debugLog = document.getElementById('debugLog');
+        
+        // State
+        let socket = null;
+        let conversationId = '';
+        
+        // Helper functions
+        function log(message) {
+            const timestamp = new Date().toISOString();
+            debugLog.textContent = `[${timestamp}] ${message}\n${debugLog.textContent}`;
+        }
+        
+        function addMessage(text, isUser) {
+            const div = document.createElement('div');
+            div.className = `message ${isUser ? 'user' : 'bot'}`;
+            div.textContent = text;
+            chatBox.appendChild(div);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+        
+        // WebSocket setup
+        function setupWebSocket() {
+            log('Setting up WebSocket connection...');
+            
+            if (socket) {
+                socket.disconnect();
+            }
+            
+            // More explicit configuration for better compatibility
+            socket = io("http://localhost:9876", {
+                transports: ['websocket', 'polling'],
+                reconnectionDelayMax: 10000,
+                reconnection: true,
+                reconnectionAttempts: 5,
+                timeout: 20000
+            });
+            
+            // Debug all socket.io events
+            const onevent = socket.onevent;
+            socket.onevent = function(packet) {
+                const args = packet.data || [];
+                log(`[DEBUG] Socket event: ${args[0]}, data: ${JSON.stringify(args.slice(1))}`);
+                onevent.call(this, packet);
+            };
+            
+            socket.on('connect', () => {
+                log(`WebSocket connected! Socket ID: ${socket.id}`);
+                
+                // Send a test message on connect to verify connection is working
+                setTimeout(() => {
+                    log('Sending test message on connect...');
+                    socket.emit('test_message', { message: 'Connection test from simple-chat' });
+                    
+                    // Also send a basic message to test the simpler handler
+                    setTimeout(() => {
+                        log('Sending basic message...');
+                        socket.emit('message', 'Basic message test');
+                    }, 1000);
+                }, 1000);
+            });
+            
+            socket.on('connect_error', (error) => {
+                log(`WebSocket connection error: ${error.message}`);
+            });
+            
+            socket.on('disconnect', () => {
+                log('WebSocket disconnected');
+            });
+            
+            // Handle both structured and simple message responses
+            socket.on('message', (data) => {
+                log(`Basic message received: ${JSON.stringify(data)}`);
+                
+                // Handle both string and object responses
+                if (typeof data === 'string') {
+                    addMessage(data, false);
+                } else {
+                    addMessage(JSON.stringify(data), false);
+                }
+            });
+            
+            // Add handler for 'response' event that the server emits
+            socket.on('response', (data) => {
+                log(`Response received: ${JSON.stringify(data)}`);
+                
+                // Extract the message from the response
+                if (data && typeof data === 'object') {
+                    const message = data.message || data.response || JSON.stringify(data);
+                    addMessage(message, false);
+                    
+                    // Store conversation ID if present
+                    if (data.conversation_id) {
+                        conversationId = data.conversation_id;
+                    }
+                } else if (typeof data === 'string') {
+                    addMessage(data, false);
+                }
+            });
+            
+            socket.on('message_received', (data) => {
+                log(`Received message: ${JSON.stringify(data)}`);
+                addMessage(data.response, false);
+                conversationId = data.conversation_id || conversationId;
+            });
+            
+            socket.on('error', (data) => {
+                log(`Error: ${JSON.stringify(data)}`);
+            });
+            
+            socket.on('test_response', (data) => {
+                log(`Test response: ${JSON.stringify(data)}`);
+                addMessage(`Test response received: ${data.message}`, false);
+            });
+        }
+        
+        // Send message via WebSocket
+        function sendMessage() {
+            const messageText = messageInput.value.trim();
+            if (!messageText) return;
+            
+            addMessage(messageText, true);
+            
+            log(`Sending message: ${messageText}`);
+            
+            if (socket && socket.connected) {
+                // Only send one message format to prevent duplicates
+                socket.emit('chat_message', {
+                    message: messageText,
+                    conversation_id: conversationId
+                });
+                
+                log('Message sent via WebSocket');
+            } else {
+                // Fall back to REST API
+                sendMessageViaREST(messageText);
+            }
+            
+            messageInput.value = '';
+        }
+        
+        // Send message via REST API
+        async function sendMessageViaREST(message) {
+            log(`Sending REST API message: ${message}`);
+            
+            try {
+                const response = await fetch('/api/chat/message', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        conversation_id: conversationId
+                    })
+                });
+                
+                const data = await response.json();
+                log(`REST API response: ${JSON.stringify(data)}`);
+                
+                if (data.status === 'success') {
+                    addMessage(data.response, false);
+                    conversationId = data.conversation_id || conversationId;
+                } else {
+                    log(`Error: ${data.message}`);
+                }
+            } catch (error) {
+                log(`REST API error: ${error.message}`);
+            }
+        }
+        
+        // Initialize
+        setupWebSocket();
+        
+        // Event listeners
+        sendButton.addEventListener('click', sendMessage);
+        
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendButton.click();
+            }
+        });
+        
+        wsButton.addEventListener('click', () => {
+            log('Testing WebSocket...');
+            socket.emit('test_message', { message: 'Test connection' });
+        });
+        
+        restButton.addEventListener('click', async () => {
+            const testMessage = 'Test REST API';
+            addMessage(testMessage, true);
+            await sendMessageViaREST(testMessage);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,272 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="mb-4">
+        <i class="fas fa-chart-line me-2"></i> Minerva API Usage Analytics
+    </h1>
+    
+    <!-- Summary Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="card h-100 border-primary">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-primary">Total API Calls</h5>
+                    <h2 class="display-4">{{ total_calls }}</h2>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3 mb-3">
+            <div class="card h-100 border-success">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-success">Total Tokens</h5>
+                    <h2 class="display-4">{{ total_tokens }}</h2>
+                    <p class="card-text text-muted">Estimated usage</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3 mb-3">
+            <div class="card h-100 border-danger">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-danger">Total Cost</h5>
+                    <h2 class="display-4">${{ total_cost }}</h2>
+                    <p class="card-text text-muted">Estimated USD</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3 mb-3">
+            <div class="card h-100 border-info">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-info">Avg Response Time</h5>
+                    <h2 class="display-4">{{ avg_response_time }}s</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- API Usage Chart -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">API Usage by Model</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="modelUsageChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Token Usage Chart -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Token Usage by Model</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="tokenUsageChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Detailed Model Usage Table -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Detailed Model Usage Statistics</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Model</th>
+                                    <th class="text-center">Call Count</th>
+                                    <th class="text-center">Total Tokens</th>
+                                    <th class="text-center">Avg Response Time</th>
+                                    <th class="text-center">Estimated Cost</th>
+                                    <th class="text-center">Last Used</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for model in model_usage %}
+                                <tr>
+                                    <td><strong>{{ model.model }}</strong></td>
+                                    <td class="text-center">{{ model.count }}</td>
+                                    <td class="text-center">{{ model.tokens }}</td>
+                                    <td class="text-center">{{ model.avg_time }}s</td>
+                                    <td class="text-center">${{ model.estimated_cost }}</td>
+                                    <td class="text-center">{{ model.last_used }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Performance Metrics -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Response Quality</h5>
+                </div>
+                <div class="card-body d-flex align-items-center justify-content-center">
+                    <div class="text-center">
+                        <div class="display-1 mb-3">{{ response_quality }}</div>
+                        <div class="text-muted">Average rating out of 5</div>
+                        <div class="mt-3">Based on {{ feedback_count }} user feedback responses</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Think Tank Performance</h5>
+                </div>
+                <div class="card-body">
+                    <p class="lead text-center mb-4">Model Selection Effectiveness</p>
+                    <div class="progress mb-4" style="height: 25px;">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: 85%;" 
+                             aria-valuenow="85" aria-valuemin="0" aria-valuemax="100">85% Optimal</div>
+                    </div>
+                    
+                    <p class="lead text-center mb-4">Response Blending Efficiency</p>
+                    <div class="progress" style="height: 25px;">
+                        <div class="progress-bar bg-info" role="progressbar" style="width: 78%;" 
+                             aria-valuenow="78" aria-valuemin="0" aria-valuemax="100">78% Effective</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include Chart.js library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Pass data from template to JavaScript -->
+<script>
+    // Data from Flask backend
+    var modelData = {
+        labels: [
+            {% for model in model_usage %}
+                "{{ model.model }}"
+                {% if not loop.last %},{% endif %}
+            {% endfor %}
+        ],
+        callCounts: [
+            {% for model in model_usage %}
+                {{ model.count }}
+                {% if not loop.last %},{% endif %}
+            {% endfor %}
+        ],
+        tokenCounts: [
+            {% for model in model_usage %}
+                {{ model.tokens }}
+                {% if not loop.last %},{% endif %}
+            {% endfor %}
+        ],
+        responseTimes: [
+            {% for model in model_usage %}
+                {{ model.avg_response_time|default(0)|round(2) }}
+                {% if not loop.last %},{% endif %}
+            {% endfor %}
+        ],
+        estimatedCosts: [
+            {% for model in model_usage %}
+                {{ model.estimated_cost|default(0)|round(4) }}
+                {% if not loop.last %},{% endif %}
+            {% endfor %}
+        ]
+    };
+</script>
+
+<!-- Custom chart initialization script -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Model Usage Chart (Bar Chart)
+        const modelUsageCtx = document.getElementById('modelUsageChart').getContext('2d');
+        new Chart(modelUsageCtx, {
+            type: 'bar',
+            data: {
+                labels: modelData.labels,
+                datasets: [{
+                    label: 'API Calls',
+                    data: modelData.callCounts,
+                    backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: 'Number of API Calls by Model'
+                    }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+        
+        // Token Usage Chart (Pie Chart)
+        const tokenUsageCtx = document.getElementById('tokenUsageChart').getContext('2d');
+        new Chart(tokenUsageCtx, {
+            type: 'pie',
+            data: {
+                labels: modelData.labels,
+                datasets: [{
+                    label: 'Token Usage',
+                    data: modelData.tokenCounts,
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.7)',
+                        'rgba(255, 99, 132, 0.7)',
+                        'rgba(54, 162, 235, 0.7)',
+                        'rgba(255, 159, 64, 0.7)',
+                        'rgba(153, 102, 255, 0.7)',
+                        'rgba(255, 206, 86, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 206, 86, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' },
+                    title: {
+                        display: true,
+                        text: 'Token Usage Distribution'
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

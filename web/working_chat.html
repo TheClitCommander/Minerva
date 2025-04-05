@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Minerva Chat - Direct Connection</title>
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+
+        .page-content {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        /* Floating Chat Styles */
+        .chat-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 350px;
+            height: 450px;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            border: 1px solid rgba(200, 200, 200, 0.5);
+        }
+        
+        .chat-header {
+            background: #4a86e8;
+            color: white;
+            padding: 10px 15px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: move;
+        }
+        
+        .chat-controls button {
+            background: transparent;
+            color: white;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 0 5px;
+        }
+        
+        .chat-minimized {
+            height: 50px !important;
+        }
+        
+        .feature-section {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background-color: #f7f7f7;
+        }
+        
+        .message {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            max-width: 80%;
+        }
+        
+        .system-message {
+            background: #f0f4ff;
+            border-left: 3px solid #4a86e8;
+            margin: 15px auto;
+            max-width: 90%;
+            font-size: 0.9em;
+        }
+        
+        .system-content {
+            padding: 5px;
+        }
+        
+        .project-form {
+            display: flex;
+            margin-top: 10px;
+            gap: 5px;
+        }
+        
+        #project-name {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        #create-project {
+            padding: 8px 12px;
+            background: #4a86e8;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        #create-project:hover {
+            background: #2a66c8;
+        }
+        
+        .user-message {
+            background: #DCF8C6;
+            margin-left: auto;
+        }
+        
+        .ai-message {
+            background: white;
+            margin-right: auto;
+            border-left: 3px solid #4a86e8;
+        }
+        
+        .chat-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+            background: white;
+        }
+        
+        #message-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            outline: none;
+        }
+        
+        #send-button {
+            padding: 10px 15px;
+            margin-left: 10px;
+            background: #4a86e8;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        #send-button:hover {
+            background: #2a66c8;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(74, 134, 232, 0.3);
+            border-radius: 50%;
+            border-top-color: #4a86e8;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-content">
+        <h1>Minerva Think Tank</h1>
+        <p>This is the main content of your Minerva homepage. The floating chat component is available in the bottom right corner.</p>
+        
+        <div class="feature-section">
+            <h2>Advanced AI Capabilities</h2>
+            <p>Minerva leverages cutting-edge AI models to provide intelligent responses to your questions and help you organize your projects effectively.</p>
+        </div>
+        
+        <div class="feature-section">
+            <h2>Project Management</h2>
+            <p>Create and manage projects from your conversations, keeping all related content organized and accessible.</p>
+        </div>
+    </div>
+    
+    <div class="chat-container" id="floating-chat">
+        <div class="chat-header">
+            <span>Minerva Chat</span>
+            <div class="chat-controls">
+                <button id="minimize-chat">−</button>
+            </div>
+        </div>
+        <div id="chat-messages" class="chat-messages"></div>
+        <div class="chat-input">
+            <input type="text" id="message-input" placeholder="Type a message..." autofocus>
+            <button id="send-button">Send</button>
+        </div>
+    </div>
+    
+    <script>
+        // DOM elements
+        const chatMessages = document.getElementById('chat-messages');
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+        const minimizeButton = document.getElementById('minimize-chat');
+        const floatingChat = document.getElementById('floating-chat');
+        
+        // Conversation state
+        let conversationId = localStorage.getItem('minerva_conversation_id') || ('chat-' + Date.now());
+        let messageCount = parseInt(localStorage.getItem('minerva_message_count') || '0');
+        
+        // Store conversation ID
+        localStorage.setItem('minerva_conversation_id', conversationId);
+        
+        // Make chat draggable
+        makeDraggable(floatingChat);
+        
+        // Initialize with a welcome message
+        addMessage("Welcome to Minerva Think Tank. How can I help you today?", "ai");
+        
+        // Minimize/maximize chat
+        minimizeButton.addEventListener('click', function() {
+            floatingChat.classList.toggle('chat-minimized');
+            if (floatingChat.classList.contains('chat-minimized')) {
+                minimizeButton.textContent = '+'; 
+            } else {
+                minimizeButton.textContent = '−';
+            }
+        });
+        
+        // Make chat header double-clickable for minimize/maximize
+        document.querySelector('.chat-header').addEventListener('dblclick', function() {
+            minimizeButton.click();
+        });
+        
+        // Event listeners
+        sendButton.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+        
+        // Function to add messages to the chat
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message');
+            messageDiv.classList.add(sender + '-message');
+            messageDiv.textContent = text;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // If chat is minimized, maximize it when receiving a message
+            if (floatingChat.classList.contains('chat-minimized') && sender === 'ai') {
+                floatingChat.classList.remove('chat-minimized');
+                minimizeButton.textContent = '−';
+            }
+        }
+        
+        // Make an element draggable
+        function makeDraggable(element) {
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            const header = element.querySelector('.chat-header');
+            
+            header.onmousedown = dragMouseDown;
+            
+            function dragMouseDown(e) {
+                e.preventDefault();
+                // Get the mouse cursor position at startup
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement;
+                // Call a function whenever the cursor moves
+                document.onmousemove = elementDrag;
+            }
+            
+            function elementDrag(e) {
+                e.preventDefault();
+                // Calculate the new cursor position
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                // Set the element's new position
+                element.style.top = (element.offsetTop - pos2) + "px";
+                element.style.left = (element.offsetLeft - pos1) + "px";
+                element.style.right = 'auto';
+                element.style.bottom = 'auto';
+            }
+            
+            function closeDragElement() {
+                // Stop moving when mouse button is released
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+        }
+        
+        // Function to send message to API
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            if (!message) return;
+            
+            // Add user message to chat
+            addMessage(message, 'user');
+            messageInput.value = '';
+            
+            // Increment message count and check for project conversion
+            messageCount++;
+            localStorage.setItem('minerva_message_count', messageCount);
+            
+            // Check if we should offer project conversion (after 3 messages)
+            if (messageCount >= 3 && !document.getElementById('project-conversion')) {
+                offerProjectConversion();
+            }
+            
+            // Add temporary loading indicator
+            const loadingDiv = document.createElement('div');
+            loadingDiv.classList.add('message', 'ai-message');
+            const loadingIndicator = document.createElement('span');
+            loadingIndicator.classList.add('loading');
+            loadingDiv.appendChild(loadingIndicator);
+            chatMessages.appendChild(loadingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // Send message to API
+            fetch('/api/think-tank', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: message,  // Changed from 'query' to 'message' to match backend expectations
+                    conversation_id: conversationId,
+                    store_in_memory: true
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('API request failed');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Remove loading indicator
+                chatMessages.removeChild(loadingDiv);
+                
+                console.log('API response:', data);
+                console.log('Response type:', typeof data.response);
+                
+                // Add response to chat - with enhanced error handling
+                if (data.response) {
+                    // Handle case where response might be an object
+                    let responseText = data.response;
+                    
+                    // Ensure the response is always a string
+                    if (typeof responseText === 'object') {
+                        try {
+                            responseText = JSON.stringify(responseText);
+                            console.log('Converted object response to string:', responseText);
+                        } catch (e) {
+                            console.error('Failed to stringify response object:', e);
+                            responseText = 'Error: Could not display response properly';
+                        }
+                    }
+                    
+                    addMessage(responseText, 'ai');
+                    
+                    // Store conversation ID from response if available
+                    if (data.conversation_id) {
+                        conversationId = data.conversation_id;
+                        localStorage.setItem('minerva_conversation_id', conversationId);
+                        console.log('Updated conversation ID:', conversationId);
+                    }
+                } else {
+                    addMessage("Sorry, I couldn't process that request.", 'ai');
+                }
+            })
+            .catch(error => {
+                // Remove loading indicator
+                chatMessages.removeChild(loadingDiv);
+                
+                // Add error message
+                addMessage("Sorry, there was an error processing your request. Please try again.", 'ai');
+                console.error('Error:', error);
+            });
+        }
+        
+        // Function to offer project conversion
+        function offerProjectConversion() {
+            const systemDiv = document.createElement('div');
+            systemDiv.id = 'project-conversion';
+            systemDiv.classList.add('message', 'system-message');
+            systemDiv.innerHTML = `
+                <div class="system-content">
+                    <p>Would you like to convert this conversation to a project?</p>
+                    <div class="project-form">
+                        <input type="text" id="project-name" placeholder="Enter project name">
+                        <button id="create-project">Create Project</button>
+                    </div>
+                </div>
+            `;
+            chatMessages.appendChild(systemDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // Add event listener for project creation
+            document.getElementById('create-project').addEventListener('click', createProject);
+        }
+        
+        // Function to create a project from conversation
+        function createProject() {
+            const projectName = document.getElementById('project-name').value.trim();
+            if (!projectName) return;
+            
+            // Create the project via API
+            fetch('/api/create-project', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    project_name: projectName,
+                    conversation_id: conversationId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Remove the project conversion offer
+                const conversionDiv = document.getElementById('project-conversion');
+                if (conversionDiv) {
+                    chatMessages.removeChild(conversionDiv);
+                }
+                
+                // Add confirmation message
+                const confirmDiv = document.createElement('div');
+                confirmDiv.classList.add('message', 'system-message');
+                confirmDiv.innerHTML = `
+                    <div class="system-content">
+                        <p>✅ Project "${projectName}" created successfully!</p>
+                    </div>
+                `;
+                chatMessages.appendChild(confirmDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            })
+            .catch(error => {
+                console.error('Error creating project:', error);
+                alert('Failed to create project. Please try again.');
+            });
+        }
+    </script>
+</body>
+</html>

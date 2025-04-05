@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Think Tank Chat</title>
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        #chat-box {
+            height: 400px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+        .user {
+            text-align: right;
+            margin: 10px 0;
+            padding: 8px;
+            background: #e1f5fe;
+            border-radius: 10px;
+            max-width: 80%;
+            margin-left: auto;
+        }
+        .ai {
+            text-align: left;
+            margin: 10px 0;
+            padding: 8px;
+            background: #f1f1f1;
+            border-radius: 10px;
+            max-width: 80%;
+            margin-right: auto;
+        }
+        #input-container {
+            display: flex;
+        }
+        #message-input {
+            flex-grow: 1;
+            padding: 10px;
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background: #0078d7;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Minerva Think Tank Chat</h1>
+    <div id="chat-box"></div>
+    <div id="input-container">
+        <input type="text" id="message-input" placeholder="Type your message...">
+        <button id="send-button">Send</button>
+    </div>
+
+    <script>
+        const chatBox = document.getElementById('chat-box');
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+
+        // Add event listeners
+        sendButton.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Display initial message
+        displayMessage("Hello! How can I help you today?", "ai");
+
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            if (!message) return;
+
+            // Display user message
+            displayMessage(message, "user");
+            messageInput.value = '';
+
+            // Call API
+            fetch('/api/think-tank', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    query: message
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('API request failed');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.response) {
+                    displayMessage(data.response, "ai");
+                } else {
+                    displayMessage("Sorry, I couldn't process that request.", "ai");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                displayMessage("There was an error processing your request. Please try again.", "ai");
+            });
+        }
+
+        function displayMessage(text, sender) {
+            const messageDiv = document.createElement("div");
+            messageDiv.className = sender;
+            messageDiv.textContent = text;
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    </script>
+</body>
+</html>

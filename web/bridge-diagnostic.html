@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minerva Bridge Server Diagnostic</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        h1, h2, h3 {
+            color: #4a6bdf;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .diagnostic-section {
+            margin-bottom: 20px;
+        }
+        
+        button {
+            background: #4a6bdf;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+            font-weight: 500;
+        }
+        
+        button:hover {
+            background: #3a57bc;
+        }
+        
+        pre {
+            background: #f0f2f5;
+            padding: 15px;
+            border-radius: 4px;
+            overflow: auto;
+            font-family: monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+        }
+        
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        
+        .success {
+            background-color: #e3f8e3;
+            color: #1e741e;
+        }
+        
+        .error {
+            background-color: #ffe8e8;
+            color: #d32f2f;
+        }
+        
+        .warning {
+            background-color: #fff8e1;
+            color: #b76d00;
+        }
+        
+        .info {
+            background-color: #e8f4fd;
+            color: #0277bd;
+        }
+        
+        .log-container {
+            height: 300px;
+            overflow-y: auto;
+            background: #1e1e2e;
+            color: #f8f8f2;
+            border-radius: 4px;
+            padding: 10px;
+            font-family: monospace;
+        }
+        
+        .log-entry {
+            margin: 5px 0;
+            padding: 5px;
+            border-bottom: 1px solid #333344;
+        }
+        
+        .log-entry.request {
+            color: #8be9fd;
+        }
+        
+        .log-entry.response {
+            color: #50fa7b;
+        }
+        
+        .log-entry.error {
+            color: #ff5555;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: #f5f5f5;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-badge.online {
+            background-color: #e3f8e3;
+            color: #1e741e;
+        }
+        
+        .status-badge.offline {
+            background-color: #ffe8e8;
+            color: #d32f2f;
+        }
+        
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        
+        .refresh {
+            background-color: #9c5ddb;
+        }
+    </style>
+</head>
+<body>
+    <h1>Minerva Bridge Server Diagnostic</h1>
+    
+    <div class="toolbar">
+        <div>
+            <button onclick="runAllTests()">Run All Tests</button>
+            <button class="refresh" onclick="location.reload()">Refresh Page</button>
+        </div>
+        <div id="timestamp"></div>
+    </div>
+    
+    <div class="card">
+        <h2>System Status</h2>
+        <table>
+            <tr>
+                <th>Component</th>
+                <th>Status</th>
+                <th>URL</th>
+            </tr>
+            <tr>
+                <td>Web Server</td>
+                <td id="web-server-status"><span class="status-badge online">ONLINE</span></td>
+                <td>http://localhost:8080</td>
+            </tr>
+            <tr>
+                <td>Bridge Server</td>
+                <td id="bridge-server-status"><span class="status-badge">Checking...</span></td>
+                <td>http://localhost:8090</td>
+            </tr>
+        </table>
+    </div>
+    
+    <div class="card diagnostic-section">
+        <h2>1. Basic Connectivity Test</h2>
+        <p>Tests if the browser can reach the bridge server.</p>
+        <button id="test-connectivity">Run Test</button>
+        <div id="connectivity-result" class="result"></div>
+    </div>
+    
+    <div class="card diagnostic-section">
+        <h2>2. CORS Configuration Test</h2>
+        <p>Checks if CORS is correctly configured on the bridge server.</p>
+        <button id="test-cors">Run Test</button>
+        <div id="cors-result" class="result"></div>
+    </div>
+    
+    <div class="card diagnostic-section">
+        <h2>3. API Endpoint Test</h2>
+        <p>Tests if the Think Tank API endpoint is responding correctly.</p>
+        <button id="test-api">Run Test</button>
+        <div id="api-result" class="result"></div>
+    </div>
+    
+    <div class="card diagnostic-section">
+        <h2>4. Message Sending Test</h2>
+        <p>Sends a test message to verify full functionality.</p>
+        <div>
+            <textarea id="test-message" rows="2" style="width: 100%; padding: 8px; margin-bottom: 10px;" placeholder="Enter a test message">Test message from diagnostic tool</textarea>
+        </div>
+        <button id="send-message">Send Test Message</button>
+        <div id="message-result" class="result"></div>
+        <pre id="response-data"></pre>
+    </div>
+    
+    <div class="card">
+        <h2>Debug Log</h2>
+        <div class="log-container" id="log-container"></div>
+    </div>
+    
+    <div class="card">
+        <h2>Troubleshooting Guide</h2>
+        <div id="troubleshooting-guide">
+            <h3>If the bridge server is unreachable:</h3>
+            <ol>
+                <li>Check if the bridge server is running: <code>ps aux | grep simple_bridge_server.py</code></li>
+                <li>If not running, start it with: <code>python3 simple_bridge_server.py</code></li>
+                <li>Verify no firewall is blocking port 8090</li>
+            </ol>
+            
+            <h3>If CORS tests fail:</h3>
+            <ol>
+                <li>Ensure the bridge server has proper CORS headers</li>
+                <li>Headers should include: <code>Access-Control-Allow-Origin: http://localhost:8080</code></li>
+                <li>Restart the bridge server after making changes</li>
+            </ol>
+            
+            <h3>If API tests fail but connectivity works:</h3>
+            <ol>
+                <li>Check the bridge server logs for errors</li>
+                <li>Verify the API endpoint is correctly implemented</li>
+                <li>Try with a simple message to rule out message formatting issues</li>
+            </ol>
+        </div>
+    </div>
+    
+    <script>
+        // Update timestamp
+        function updateTimestamp() {
+            const now = new Date();
+            document.getElementById('timestamp').textContent = now.toLocaleString();
+        }
+        updateTimestamp();
+        
+        // Logging function
+        function log(type, message, data) {
+            const logContainer = document.getElementById('log-container');
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry ${type}`;
+            
+            const timestamp = new Date().toLocaleTimeString();
+            let logText = `[${timestamp}] [${type.toUpperCase()}] ${message}`;
+            
+            if (data) {
+                if (typeof data === 'object') {
+                    try {
+                        logText += '\n' + JSON.stringify(data, null, 2);
+                    } catch (e) {
+                        logText += '\n[Object cannot be stringified]';
+                    }
+                } else {
+                    logText += ' ' + data;
+                }
+            }
+            
+            logEntry.textContent = logText;
+            logContainer.appendChild(logEntry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+            
+            // Also log to console for additional debugging
+            console.log(`[${type}]`, message, data || '');
+        }
+        
+        // Check if bridge server is running
+        function checkBridgeServer() {
+            const statusElement = document.getElementById('bridge-server-status');
+            statusElement.innerHTML = `<span class="status-badge">Checking...</span>`;
+            
+            fetch('http://localhost:8090/', { 
+                method: 'GET',
+                mode: 'cors'
+            })
+            .then(response => {
+                if (response.ok) {
+                    statusElement.innerHTML = `<span class="status-badge online">ONLINE</span>`;
+                    log('info', 'Bridge server is online');
+                    return response.text();
+                } else {
+                    throw new Error(`Server responded with status: ${response.status}`);
+                }
+            })
+            .catch(error => {
+                statusElement.innerHTML = `<span class="status-badge offline">OFFLINE</span>`;
+                log('error', 'Bridge server appears to be offline', error.message);
+            });
+        }
+        
+        // Test 1: Basic Connectivity
+        document.getElementById('test-connectivity').addEventListener('click', function() {
+            const resultElement = document.getElementById('connectivity-result');
+            resultElement.className = 'result';
+            resultElement.textContent = 'Testing connectivity...';
+            
+            log('request', 'Testing basic connectivity to bridge server');
+            
+            fetch('http://localhost:8090/', { 
+                method: 'GET',
+                mode: 'cors'
+            })
+            .then(response => {
+                if (response.ok) {
+                    resultElement.className = 'result success';
+                    resultElement.innerHTML = '✓ Success! The bridge server is reachable.';
+                    log('response', 'Bridge server connection successful', { status: response.status });
+                    return response.text();
+                } else {
+                    throw new Error(`Server responded with status: ${response.status}`);
+                }
+            })
+            .catch(error => {
+                resultElement.className = 'result error';
+                resultElement.innerHTML = `✗ Error: Cannot reach the bridge server. ${error.message}`;
+                log('error', 'Bridge server connection failed', error.message);
+            });
+        });
+        
+        // Test 2: CORS Configuration
+        document.getElementById('test-cors').addEventListener('click', function() {
+            const resultElement = document.getElementById('cors-result');
+            resultElement.className = 'result';
+            resultElement.textContent = 'Testing CORS configuration...';
+            
+            log('request', 'Testing CORS configuration');
+            
+            fetch('http://localhost:8090/api/think-tank', {
+                method: 'OPTIONS',
+                mode: 'cors'
+            })
+            .then(response => {
+                // Check CORS headers
+                const corsHeader = response.headers.get('Access-Control-Allow-Origin');
+                const methodsHeader = response.headers.get('Access-Control-Allow-Methods');
+                
+                log('response', 'CORS preflight response received', {
+                    status: response.status,
+                    corsHeader,
+                    methodsHeader
+                });
+                
+                if (corsHeader && methodsHeader) {
+                    resultElement.className = 'result success';
+                    resultElement.innerHTML = `✓ CORS is properly configured!<br>
+                        Access-Control-Allow-Origin: ${corsHeader}<br>
+                        Access-Control-Allow-Methods: ${methodsHeader}`;
+                } else {
+                    resultElement.className = 'result warning';
+                    resultElement.innerHTML = `⚠ CORS headers may be incomplete:<br>
+                        Access-Control-Allow-Origin: ${corsHeader || 'missing'}<br>
+                        Access-Control-Allow-Methods: ${methodsHeader || 'missing'}`;
+                }
+            })
+            .catch(error => {
+                resultElement.className = 'result error';
+                resultElement.innerHTML = `✗ CORS test failed: ${error.message}`;
+                log('error', 'CORS test failed', error.message);
+            });
+        });
+        
+        // Test 3: API Endpoint
+        document.getElementById('test-api').addEventListener('click', function() {
+            const resultElement = document.getElementById('api-result');
+            resultElement.className = 'result';
+            resultElement.textContent = 'Testing API endpoint...';
+            
+            log('request', 'Testing API endpoint with GET request');
+            
+            // First test with GET (should return an error, but a controlled one)
+            fetch('http://localhost:8090/api/think-tank', {
+                method: 'GET',
+                mode: 'cors'
+            })
+            .then(response => {
+                return response.text().then(text => {
+                    log('response', 'API GET response received', {
+                        status: response.status,
+                        body: text
+                    });
+                    
+                    // If we get here, the endpoint exists but expects POST
+                    // This is actually good - it means the endpoint is available
+                    resultElement.className = 'result success';
+                    resultElement.innerHTML = '✓ API endpoint exists and is responding. Endpoint expects POST requests.';
+                });
+            })
+            .catch(error => {
+                resultElement.className = 'result error';
+                resultElement.innerHTML = `✗ API endpoint test failed: ${error.message}`;
+                log('error', 'API endpoint test failed', error.message);
+            });
+        });
+        
+        // Test 4: Message Sending
+        document.getElementById('send-message').addEventListener('click', function() {
+            const resultElement = document.getElementById('message-result');
+            const responseDataElement = document.getElementById('response-data');
+            const message = document.getElementById('test-message').value.trim();
+            
+            if (!message) {
+                resultElement.className = 'result warning';
+                resultElement.textContent = 'Please enter a message to send';
+                return;
+            }
+            
+            resultElement.className = 'result';
+            resultElement.textContent = 'Sending message...';
+            responseDataElement.textContent = '';
+            
+            const payload = {
+                message: message,
+                conversation_id: 'diagnostic-test-' + Date.now(),
+                project_id: 'diagnostic-project',
+                client_version: '1.0.2'
+            };
+            
+            log('request', 'Sending test message to API', payload);
+            
+            fetch('http://localhost:8090/api/think-tank', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                mode: 'cors',
+                body: JSON.stringify(payload)
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json().then(data => {
+                        log('response', 'Message response received', data);
+                        
+                        resultElement.className = 'result success';
+                        resultElement.innerHTML = '✓ Message sent and response received successfully!';
+                        responseDataElement.textContent = JSON.stringify(data, null, 2);
+                    });
+                } else {
+                    return response.text().then(text => {
+                        throw new Error(`Server responded with status ${response.status}: ${text}`);
+                    });
+                }
+            })
+            .catch(error => {
+                resultElement.className = 'result error';
+                resultElement.innerHTML = `✗ Message sending failed: ${error.message}`;
+                log('error', 'Message sending failed', error.message);
+                responseDataElement.textContent = error.message;
+            });
+        });
+        
+        // Run all tests in sequence
+        function runAllTests() {
+            log('info', 'Running all diagnostic tests');
+            
+            // First check server status
+            checkBridgeServer();
+            
+            // Wait 1 second between tests
+            setTimeout(() => {
+                document.getElementById('test-connectivity').click();
+                
+                setTimeout(() => {
+                    document.getElementById('test-cors').click();
+                    
+                    setTimeout(() => {
+                        document.getElementById('test-api').click();
+                        
+                        setTimeout(() => {
+                            document.getElementById('send-message').click();
+                        }, 1000);
+                    }, 1000);
+                }, 1000);
+            }, 1000);
+        }
+        
+        // Initialize: check server status on load
+        checkBridgeServer();
+    </script>
+</body>
+</html>

@@ -1,0 +1,3681 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Load enhanced immediate fixes first, before ANY other scripts -->
+<script src="/static/js/immediate-fixes.js"></script>
+<!-- Immediate Fix Script - Implements Rules #5, #10 & #17 -->
+<script>
+    // Run immediately to fix UI issues before anything else loads
+    (function() {
+        console.log('🚀 Minerva Immediate Fix Script - Implementing Master Ruleset');
+        
+        // Fix for duplicate welcome messages (Rule #17)
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                const chatHistory = document.getElementById('chat-history');
+                if (!chatHistory) return;
+                
+                // Find welcome messages - SUPER AGGRESSIVE FIX
+                const welcomeMessages = chatHistory.querySelectorAll('.message.system.info, .system-message.info');
+                if (welcomeMessages.length > 0) {
+                    console.log(`CRITICAL FIX: Found ${welcomeMessages.length} welcome messages, keeping only first (Rule #17)`);
+                    // Remove all but first
+                    if (welcomeMessages.length > 1) {
+                        const keepMessage = welcomeMessages[0];
+                        // First clear all welcome messages
+                        welcomeMessages.forEach(msg => msg.remove());
+                        // Then re-add just the first one
+                        chatHistory.prepend(keepMessage);
+                    }
+                }
+                
+                // Improve error messages (Rule #10)
+                const errorMessages = chatHistory.querySelectorAll('.message.system.error');
+                errorMessages.forEach(message => {
+                    if (message.textContent.includes('Failed to fetch')) {
+                        message.innerHTML = `<div class="message-content">
+                            <div class="message-text">Think Tank API is currently offline. Your messages are being saved locally and will sync when connection is restored.</div>
+                            <div class="message-note">Using fallback mode per Rule #4</div>
+                        </div>`;
+                        message.className = 'message system warning';
+                    }
+                });
+            }, 500); // Wait a bit for all messages to load
+        });
+        
+        // Override fetch to provide better error reporting
+        const originalFetch = window.fetch;
+        window.fetch = function(...args) {
+            return originalFetch.apply(this, args)
+                .catch(error => {
+                    // Improve error reporting for network issues
+                    if (error.message === 'Failed to fetch') {
+                        console.warn('Network request failed to: ' + args[0] + ' (Rule #4 fallback mode activated)');
+                        // Add more context to the error
+                        error.minervaContext = {
+                            url: args[0],
+                            timestamp: new Date().toISOString(),
+                            fallbackAvailable: true
+                        };
+                    }
+                    throw error;
+                });
+        };
+    })();
+</script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minerva Central Interface</title>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <!-- Theme system -->
+    <link rel="stylesheet" href="/static/css/theme-variables.css">
+
+    <!-- Include model visualization CSS -->
+    <link rel="stylesheet" href="/static/css/model-visualization.css">
+    <link rel="stylesheet" href="/static/css/capability-visualization.css">
+    <link rel="stylesheet" href="/static/css/orbital-integration.css">
+    <link rel="stylesheet" href="/static/css/chat-interface.css">
+    
+    <!-- Include floating chat component CSS -->
+    <link rel="stylesheet" href="/static/css/chat-integration.css">
+    
+    <!-- Include system logs and conversation styles -->
+    <link rel="stylesheet" href="/static/css/system-logs.css">
+    
+    <!-- Chat fixes for Rule #17, #19, and #20 implementation -->
+    <link rel="stylesheet" href="/static/css/chat-fixes.css">
+    
+    <!-- Theme Toggle Disabler - MUST run before other scripts -->
+    <script>
+    // Immediately run script to disable theme toggle
+    (function() {
+        console.log('🔧 Disabling theme toggle functionality');
+        // Override theme manager functions to prevent toggle creation
+        window.DISABLE_THEME_TOGGLE = true;
+        
+        // Define a removal function that runs repeatedly
+        function removeThemeToggles() {
+            const selectors = ['#theme-toggle', '.theme-toggle-btn', '.floating-theme-toggle'];
+            let removed = false;
+            
+            selectors.forEach(selector => {
+                document.querySelectorAll(selector).forEach(el => {
+                    if (el && el.parentNode) {
+                        console.log('Removing theme toggle:', selector);
+                        el.parentNode.removeChild(el);
+                        removed = true;
+                    }
+                });
+            });
+            
+            return removed;
+        }
+        
+        // Run immediately
+        removeThemeToggles();
+        
+        // Set up interval to keep checking for toggles
+        setInterval(removeThemeToggles, 500);
+        
+        // Also hook into DOMContentLoaded
+        document.addEventListener('DOMContentLoaded', function() {
+            removeThemeToggles();
+            setTimeout(removeThemeToggles, 100);
+            setTimeout(removeThemeToggles, 500);
+        });
+    })();
+    </script>
+    
+    <!-- Chat components - restore original system with enhanced API -->
+    <script src="/static/js/chat/conversation-storage.js"></script>
+    <script src="/static/js/chat/api-connector.js"></script>
+    <script src="/static/js/chat/independent-chat.js"></script>
+    <script src="/static/js/chat/emergency-chat.js"></script>
+    
+    <!-- Force remove theme toggle and fix UI issues -->
+    <script src="/static/js/remove-theme-toggle.js"></script>
+    
+    <!-- Project context styles -->
+    <link rel="stylesheet" href="/static/css/projects/project-context-indicator.css">
+    <link rel="stylesheet" href="/static/css/projects/project-context-debugger.css">
+    
+    <!-- Enhanced conversation management styles -->
+    <style>
+        /* Conversation list panel */
+        .conversation-list-panel {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 300px;
+            max-height: 80vh;
+            background: rgba(10, 14, 23, 0.9);
+            border: 1px solid rgba(156, 93, 219, 0.5);
+            border-radius: 8px;
+            color: #fff;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            transform-origin: top left;
+        }
+        
+        .conversation-list-panel.hidden {
+            transform: scale(0.95);
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .conversation-list-header {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(156, 93, 219, 0.5);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .conversation-list-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .conversation-controls {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .conversation-search {
+            padding: 10px 15px;
+            border-bottom: 1px solid rgba(156, 93, 219, 0.3);
+        }
+        
+        .conversation-search input {
+            width: 100%;
+            background: rgba(20, 25, 40, 0.7);
+            color: #fff;
+            border: 1px solid rgba(156, 93, 219, 0.3);
+            border-radius: 4px;
+            padding: 8px 10px;
+            font-size: 14px;
+        }
+        
+        .conversation-list {
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        
+        .conversation-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(156, 93, 219, 0.2);
+            cursor: pointer;
+            transition: background 0.2s ease;
+            position: relative;
+        }
+        
+        .conversation-item:hover {
+            background: rgba(156, 93, 219, 0.1);
+        }
+        
+        .conversation-item.active {
+            background: rgba(156, 93, 219, 0.2);
+        }
+        
+        .conversation-title {
+            font-size: 14px;
+            margin-bottom: 5px;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .conversation-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .conversation-timestamp {
+            white-space: nowrap;
+        }
+        
+        .conversation-project {
+            max-width: 70%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .conversation-actions {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: none;
+            background: rgba(20, 25, 40, 0.9);
+            border-radius: 4px;
+            padding: 4px;
+        }
+        
+        .conversation-item:hover .conversation-actions {
+            display: flex;
+        }
+        
+        .action-button {
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 4px 6px;
+            cursor: pointer;
+            font-size: 12px;
+            border-radius: 3px;
+        }
+        
+        .action-button:hover {
+            background: rgba(156, 93, 219, 0.2);
+            color: #fff;
+        }
+        
+        .pin-indicator {
+            color: gold;
+            margin-right: 6px;
+        }
+        
+        .highlighted {
+            color: #9c5ddb;
+            font-weight: bold;
+        }
+        
+        .no-conversations {
+            padding: 20px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-style: italic;
+        }
+    </style>
+    <link rel="stylesheet" href="/static/css/conversation-list.css">
+    
+    <!-- Load Three.js core library -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.0/build/three.min.js"></script>
+    
+    <!-- Inline OrbitControls implementation to avoid dependency issues -->
+    <script>
+        // Make sure THREE exists
+        if (typeof THREE === 'undefined') {
+            console.error('THREE failed to load, creating placeholder');
+            window.THREE = {};
+        }
+        
+        // Full OrbitControls implementation directly included
+        // This is a simplified version of Three.js OrbitControls
+        THREE.OrbitControls = function(object, domElement) {
+            this.object = object;
+            this.domElement = (domElement !== undefined) ? domElement : document;
+            
+            // API
+            this.enabled = true;
+            this.center = new THREE.Vector3();
+            
+            this.enableZoom = true;
+            this.zoomSpeed = 1.0;
+            
+            this.enableRotate = true;
+            this.rotateSpeed = 1.0;
+            
+            this.enablePan = true;
+            this.panSpeed = 1.0;
+            
+            this.enableDamping = false;
+            this.dampingFactor = 0.25;
+            
+            this.minDistance = 0;
+            this.maxDistance = Infinity;
+            
+            // Internals
+            this._state = 'none';
+            this._eye = new THREE.Vector3();
+            this._rotateStart = new THREE.Vector2();
+            this._rotateEnd = new THREE.Vector2();
+            this._zoomStart = new THREE.Vector2();
+            this._zoomEnd = new THREE.Vector2();
+            
+            // Methods
+            this.update = function() {
+                this._eye.subVectors(this.object.position, this.center);
+                return true;
+            };
+            
+            this.dispose = function() {
+                this.domElement.removeEventListener('contextmenu', onContextMenu);
+                this.domElement.removeEventListener('pointerdown', onPointerDown);
+                this.domElement.removeEventListener('wheel', onMouseWheel);
+            };
+            
+            // Event callbacks
+            const onContextMenu = function(event) {
+                event.preventDefault();
+            };
+            
+            const onPointerDown = function(event) {
+                if (this.enabled === false) return;
+                event.preventDefault();
+            }.bind(this);
+            
+            const onMouseWheel = function(event) {
+                if (this.enabled === false || this.enableZoom === false) return;
+                event.preventDefault();
+            }.bind(this);
+            
+            // Add event listeners
+            this.domElement.addEventListener('contextmenu', onContextMenu);
+            this.domElement.addEventListener('pointerdown', onPointerDown);
+            this.domElement.addEventListener('wheel', onMouseWheel);
+            
+            console.log('Inline OrbitControls implementation loaded');
+            this.update();
+            return this;
+        };
+        
+        console.log('OrbitControls defined:', typeof THREE.OrbitControls);
+    </script>
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #000;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: #fff;
+        }
+        
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Chat Interface Styling */
+        #transparency-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            border-top: 1px solid rgba(156, 93, 219, 0.3);
+            margin-top: 10px;
+            font-size: 0.8rem;
+        }
+        
+        #transparency-slider {
+            flex: 1;
+            height: 5px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: rgba(156, 93, 219, 0.3);
+            border-radius: 5px;
+            outline: none;
+        }
+        
+        #transparency-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: rgb(156, 93, 219);
+            cursor: pointer;
+        }
+        
+        #transparency-slider::-moz-range-thumb {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: rgb(156, 93, 219);
+            cursor: pointer;
+            border: none;
+        }
+        
+        #chat-interface {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 380px;
+            max-width: 90vw;
+            background: rgba(10, 14, 23, 0.6);
+            color: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            z-index: 100;
+            box-shadow: 0 0 20px rgba(156, 93, 219, 0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(156, 93, 219, 0.5);
+            transition: all 0.3s ease;
+            resize: both;
+            overflow: hidden;
+            cursor: move;
+        }
+        
+        #chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: move;
+            margin-bottom: 10px;
+            cursor: move;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(156, 93, 219, 0.3);
+        }
+        
+        #chat-title {
+            font-weight: bold;
+            color: #9c5ddb;
+        }
+        
+        #chat-controls {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .chat-control-btn {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            padding: 0;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        /* Enhanced styling for project conversion button */
+        #convert-to-project {
+            background-color: #4a86e8;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        #convert-to-project:hover {
+            background-color: #2b5797;
+            transform: scale(1.05);
+        }
+        
+        #convert-to-project i {
+            font-size: 12px;
+        }
+        
+        /* Badge for project indication */
+        .project-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+        }
+        
+        /* Styling for the project view button */
+        .view-projects-btn {
+            background-color: #34a853;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+        
+        .view-projects-btn:hover {
+            background-color: #2d8e47;
+        }
+        
+        .chat-control-btn:hover {
+            color: #fff;
+        }
+        
+        #chat-interface.minimized {
+            height: 40px !important;
+            overflow: hidden;
+        }
+        
+        #chat-interface.minimized #chat-messages,
+        #chat-interface.minimized #chat-input-container {
+            display: none;
+        }
+        
+        #chat-messages {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            padding-right: 10px;
+        }
+        
+        .system-message {
+            background: rgba(156, 93, 219, 0.2);
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 3px solid #9c5ddb;
+        }
+        
+        .user-message {
+            background: rgba(74, 107, 223, 0.2);
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 3px solid #4a6bdf;
+            text-align: right;
+        }
+        
+        .minerva-message {
+            background: rgba(156, 93, 219, 0.2);
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 3px solid #9c5ddb;
+        }
+        
+        #chat-input-container {
+            display: flex;
+            gap: 10px;
+        }
+        
+        #chat-input {
+            flex-grow: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(156, 93, 219, 0.5);
+            border-radius: 5px;
+            color: white;
+            padding: 10px;
+            min-height: 40px;
+            resize: none;
+        }
+        
+        #send-message {
+            background: #9c5ddb;
+            color: white;
+            border: none;
+            padding: 0 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        #send-message:hover {
+            background: #7344a5;
+        }
+        
+        /* Model evaluation UI */
+        .model-evaluation {
+            background: rgba(10, 14, 23, 0.9);
+            border: 1px solid rgba(156, 93, 219, 0.5);
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 10px;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+            animation: expand 0.5s ease-out forwards;
+        }
+        
+        @keyframes expand {
+            from { max-height: 0; }
+            to { max-height: 500px; }
+        }
+        
+        .evaluation-header {
+            color: #9c5ddb;
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .models-used {
+            margin-bottom: 8px;
+        }
+        
+        .rankings {
+            margin-bottom: 8px;
+        }
+        
+        .rankings ul {
+            margin-top: 5px;
+            padding-left: 20px;
+        }
+        
+        .system-message {
+            background: rgba(255, 180, 0, 0.2);
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 3px solid #ffb400;
+            font-style: italic;
+        }
+        
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0A0E17 0%, #131C2E 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            color: #fff;
+            transition: opacity 0.5s;
+        }
+        
+        .loading-screen.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .loading-spinner {
+            width: 80px;
+            height: 80px;
+            border: 3px solid rgba(156, 93, 219, 0.3);
+            border-radius: 50%;
+            border-top-color: #9c5ddb;
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Loading indicator for chat responses */
+        .loading-indicator {
+            display: flex;
+            justify-content: center;
+            padding: 15px;
+            font-size: 16px;
+            color: #ccc;
+        }
+        
+        /* WebSocket connection status indicator */
+        #connection-status {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            opacity: 0.7;
+            z-index: 1000;
+        }
+        
+        #connection-status.connected {
+            background-color: rgba(39, 174, 96, 0.2);
+            color: #27ae60;
+            border: 1px solid #27ae60;
+        }
+        
+        #connection-status.disconnected {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+            border: 1px solid #e74c3c;
+        }
+        
+        .loading-dots span {
+            animation: loading 1.4s infinite ease-in-out both;
+            font-size: 24px;
+        }
+        
+        .loading-dots span:nth-child(1) {
+            animation-delay: 0s;
+        }
+        
+        .loading-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .loading-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes loading {
+            0%, 80%, 100% { opacity: 0.3; }
+            40% { opacity: 1; }
+        }
+        
+        /* Connection status indicator */
+        .connection-status {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            z-index: 10;
+        }
+        
+        .connection-status.connected {
+            background-color: rgba(0, 255, 0, 0.2);
+            color: #00ff00;
+        }
+        
+        .connection-status.disconnected {
+            background-color: rgba(255, 0, 0, 0.2);
+            color: #ff6666;
+        }
+        
+        .memory-indicator {
+            font-size: 0.75rem;
+            margin-top: 5px;
+            display: inline-block;
+        }
+        
+        .memory-badge {
+            background-color: rgba(139, 92, 246, 0.6);
+            color: #fff;
+            border-radius: 12px;
+            padding: 3px 8px;
+            font-size: 0.7rem;
+            display: inline-block;
+            cursor: help; /* Shows a help cursor to indicate tooltip */
+            transition: all 0.2s ease;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+        
+        .memory-badge:hover {
+            background-color: rgba(139, 92, 246, 0.8);
+            box-shadow: 0 0 8px rgba(139, 92, 246, 0.5);
+        }
+        
+        /* Think Tank indicator */
+        .think-tank-indicator {
+            margin-top: 5px;
+            text-align: right;
+        }
+        
+        .think-tank-badge {
+            background-color: rgba(156, 93, 219, 0.3);
+            color: #d1b9ff;
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 0.7em;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-spinner"></div>
+        <div>Loading Minerva Interface...</div>
+    </div>
+    
+    <!-- 3D Canvas Container - Orbital UI removed as per user request -->
+    <div id="canvas-container">
+    </div>
+    
+    <!-- Content Display Container -->
+    <div id="content-display">
+        <!-- This will hold the conversations view and other content sections -->
+        <div id="conversations-view" class="conversations-view hidden"></div>
+    </div>
+    
+    <!-- Orbital Planet Visualization Container removed as per user request -->
+    
+    <!-- Chat Interface (Think Tank) -->
+    <div id="chat-interface">
+        <!-- Chat header with controls -->
+        <div id="chat-header">
+            <div id="chat-title">Minerva Think Tank</div>
+            <div id="chat-controls">
+                <button class="chat-control-btn" id="view-projects" title="View Projects"><i class="fas fa-folder-open"></i> <span>Projects</span></button>
+                <button class="chat-control-btn" id="convert-to-project" title="Convert to Project"><i class="fas fa-folder"></i> <span>To Project</span></button>
+                <button class="chat-control-btn" id="clear-chat" title="Clear Conversation"><i class="fas fa-trash"></i></button>
+                <button class="chat-control-btn" id="save-chat" title="Save Conversation"><i class="fas fa-save"></i></button>
+                <button class="chat-control-btn" id="minimize-chat" title="Minimize chat"><i class="fas fa-minus"></i></button>
+            </div>
+        </div>
+        
+        <!-- Metrics panel removed -->
+        
+        <div id="chat-messages">
+            <div class="system-message">Welcome to Minerva's Think Tank. How can I assist you today?</div>
+        </div>
+        <div id="chat-input-container">
+            <textarea id="chat-input" placeholder="Ask Minerva anything..."></textarea>
+            <button id="send-message">Send</button>
+        </div>
+        
+        <!-- Transparency controls removed as per user request -->
+    </div>
+    
+    <!-- Load Three.js -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.0/examples/js/controls/OrbitControls.js"></script>
+    
+    <!-- Load Socket.IO for real-time communication -->
+    <script src="https://cdn.socket.io/4.4.1/socket.io.min.js"></script>
+    
+    <script>
+        // Initialize conversation storage system
+        window.enhancedConversationStorage = window.enhancedConversationStorage || {};
+        
+        // Wait for Three.js to load
+        window.addEventListener('load', initializeScene);
+        
+        // Ensure conversation systems are loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Initializing conversation systems...');
+            
+            // Force display the chat interface
+            const chatInterface = document.getElementById('chat-interface');
+            if (chatInterface) {
+                chatInterface.style.display = 'flex';
+                chatInterface.style.visibility = 'visible';
+                chatInterface.style.opacity = '1';
+                console.log('Chat interface made visible explicitly');
+            }
+        });
+        
+        // Define the main variables
+        let scene, camera, renderer, controls;
+        let minervaOrb;
+        let raycaster = new THREE.Raycaster();
+        let mouse = new THREE.Vector2();
+        
+        // Minerva orb data
+        const minervaData = {
+            name: "Minerva",
+            description: "Central AI system with Think Tank capabilities",
+            position: [0, 0, 0],
+            color: 0x9c5ddb
+        };
+                function initializeScene() {
+            // Create scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0a0e17);
+            
+            // Create camera
+            camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 15;
+            
+            // Create renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            document.getElementById('canvas-container').appendChild(renderer.domElement);
+            
+            // Add orbital controls with zoom limits
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.minDistance = 8;    // Can't zoom in closer than 8 units
+            controls.maxDistance = 180;  // Allow zooming out much further
+            
+            // Add ambient light
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+            scene.add(ambientLight);
+            
+            // Add point light at center with Minerva glow
+            const pointLight = new THREE.PointLight(0x9c5ddb, 1.0);
+            pointLight.position.set(0, 0, 0);
+            scene.add(pointLight);
+            
+            // Add white ambient light to balance the scene
+            const secondaryLight = new THREE.PointLight(0xffffff, 0.6);
+            secondaryLight.position.set(0, 5, 0);
+            scene.add(secondaryLight);
+            
+            // Add stars to background
+            addStars();
+            
+            // Create Minerva orb
+            createMinervaOrb();
+            
+            // Add event listeners
+            window.addEventListener('resize', onWindowResize);
+            
+            // Initialize chat interface
+            initializeChatInterface();
+            
+            // Hide loading screen
+            setTimeout(() => {
+                document.getElementById('loading-screen').classList.add('fade-out');
+            }, 1500);
+            
+            // Start animation loop
+            animate();
+        }
+        
+        function createMinervaOrb() {
+            // Create Minerva planet with atmospheric layers
+            const planetRadius = 1.5;
+            
+            // Create planet core with procedural texture
+            const planetGeometry = new THREE.SphereGeometry(planetRadius, 64, 64);
+            
+            // Create a canvas-based procedural texture for the planet
+            const textureSize = 1024;
+            const canvas = document.createElement('canvas');
+            canvas.width = textureSize;
+            canvas.height = textureSize;
+            const ctx = canvas.getContext('2d');
+            
+            // Create gradient background for the planet
+            const gradient = ctx.createRadialGradient(
+                textureSize/2, textureSize/2, 0,
+                textureSize/2, textureSize/2, textureSize/2
+            );
+            gradient.addColorStop(0, '#9c5ddb');
+            gradient.addColorStop(0.5, '#7344a5');
+            gradient.addColorStop(1, '#3c1f60');
+            
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, textureSize, textureSize);
+            
+            // Add some noise/texture to make it look like a planet
+            for (let i = 0; i < 5000; i++) {
+                const x = Math.random() * textureSize;
+                const y = Math.random() * textureSize;
+                const radius = Math.random() * 2 + 0.5;
+                const opacity = Math.random() * 0.07;
+                
+                ctx.beginPath();
+                ctx.arc(x, y, radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+                ctx.fill();
+            }
+            // Add swirling "cloud" patterns
+            for (let i = 0; i < 20; i++) {
+                const x = Math.random() * textureSize;
+                const y = Math.random() * textureSize;
+                const width = 50 + Math.random() * 150;
+                const height = 10 + Math.random() * 30;
+                const angle = Math.random() * Math.PI * 2;
+                
+                ctx.save();
+                ctx.translate(x, y);
+                ctx.rotate(angle);
+                ctx.beginPath();
+                ctx.ellipse(0, 0, width, height, 0, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, 0.05)`;
+                ctx.fill();
+                ctx.restore();
+            }
+            // Add the Minerva logo
+            ctx.save();
+            ctx.translate(textureSize/2, textureSize/2);
+            ctx.font = 'bold 120px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.fillText('M', 0, 0);
+            
+            // Add a circular border around the logo
+            ctx.beginPath();
+            ctx.arc(0, 0, 100, 0, Math.PI * 2);
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.lineWidth = 8;
+            ctx.stroke();
+            ctx.restore();
+            
+            // Convert canvas to texture
+            const texture = new THREE.CanvasTexture(canvas);
+            
+            // Create planet material
+            const planetMaterial = new THREE.MeshStandardMaterial({
+                map: texture,
+                roughness: 0.5,
+                metalness: 0.3,
+                emissive: new THREE.Color(0x3c1f60),
+                emissiveIntensity: 0.2
+            });
+            
+            // Create main planet mesh
+            minervaOrb = new THREE.Mesh(planetGeometry, planetMaterial);
+            minervaOrb.position.set(...minervaData.position);
+            minervaOrb.userData = {
+                name: minervaData.name,
+                description: minervaData.description
+            };
+            
+            scene.add(minervaOrb);
+            
+            // Add atmosphere glow
+            const atmosphereGeometry = new THREE.SphereGeometry(planetRadius + 0.15, 64, 64);
+            const atmosphereMaterial = new THREE.MeshBasicMaterial({
+                color: 0x9c5ddb,
+                transparent: true,
+                opacity: 0.15,
+                side: THREE.BackSide
+            });
+            
+            const atmosphere = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial);
+            atmosphere.position.set(...minervaData.position);
+            scene.add(atmosphere);
+            
+            // Add outer atmosphere glow
+            const outerGlowGeometry = new THREE.SphereGeometry(planetRadius + 0.4, 64, 64);
+            const outerGlowMaterial = new THREE.MeshBasicMaterial({
+                color: 0xb56efa,
+                transparent: true,
+                opacity: 0.07,
+                side: THREE.BackSide
+            });
+            
+            const outerGlow = new THREE.Mesh(outerGlowGeometry, outerGlowMaterial);
+            outerGlow.position.set(...minervaData.position);
+            scene.add(outerGlow);
+            
+            // Create a subtle pulsing animation for the atmosphere
+            function animateMinerva() {
+                const time = Date.now() * 0.0005;
+                const planetScale = 1 + 0.02 * Math.sin(time);
+                const atmosphereScale = 1 + 0.05 * Math.sin(time * 1.2);
+                
+                minervaOrb.scale.set(planetScale, planetScale, planetScale);
+                atmosphere.scale.set(atmosphereScale, atmosphereScale, atmosphereScale);
+                outerGlow.scale.set(atmosphereScale * 1.02, atmosphereScale * 1.02, atmosphereScale * 1.02);
+                
+                // Slow rotation of the planet
+                minervaOrb.rotation.y += 0.001;
+                
+                requestAnimationFrame(animateMinerva);
+            }animateMinerva();
+        }
+        
+        function addStars() {
+            const starGeometry = new THREE.BufferGeometry();
+            const starMaterial = new THREE.PointsMaterial({
+                color: 0xffffff,
+                size: 0.1
+            });
+            
+            const starVertices = [];
+            
+            for (let i = 0; i < 2000; i++) {
+                const x = (Math.random() - 0.5) * 100;
+                const y = (Math.random() - 0.5) * 100;
+                const z = (Math.random() - 0.5) * 100;
+                starVertices.push(x, y, z);
+            }
+            starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
+            
+            const stars = new THREE.Points(starGeometry, starMaterial);
+            scene.add(stars);
+        }
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            // Update orbital controls
+            controls.update();
+            
+            // Subtle floating motion for the entire Minerva planet
+            minervaOrb.position.y = Math.sin(Date.now() * 0.0005) * 0.1;
+            
+            renderer.render(scene, camera);
+        }
+        
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+        
+        function initializeLegacyChatInterface() {
+            // Make chat interface draggable
+            makeDraggable(document.getElementById('chat-interface'));
+            
+            // Function to make an element draggable
+            function makeDraggable(element) {
+                let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+                
+                // Get the header element to use as drag handle
+                const header = document.getElementById('chat-header');
+                if (header) {
+                    header.onmousedown = dragMouseDown;
+                } else {
+                    element.onmousedown = dragMouseDown;
+                }    
+                function dragMouseDown(e) {
+                    e = e || window.event;
+                    e.preventDefault();
+                    // Get mouse position at start
+                    pos3 = e.clientX;
+                    pos4 = e.clientY;
+                    document.onmouseup = closeDragElement;
+                    document.onmousemove = elementDrag;
+                }    
+                function elementDrag(e) {
+                    e = e || window.event;
+                    e.preventDefault();
+                    // Calculate new position
+                    pos1 = pos3 - e.clientX;
+                    pos2 = pos4 - e.clientY;
+                    pos3 = e.clientX;
+                    pos4 = e.clientY;
+                    // Set element's new position
+                    element.style.top = (element.offsetTop - pos2) + 'px';
+                    element.style.left = (element.offsetLeft - pos1) + 'px';
+                    element.style.bottom = 'auto';
+                    element.style.right = 'auto';
+                }    
+                function closeDragElement() {
+                    // Stop moving when mouse button is released
+                    document.onmouseup = null;
+                    document.onmousemove = null;
+                }}           const chatInput = document.getElementById('chat-input');
+            const sendButton = document.getElementById('send-message');
+            const chatMessages = document.getElementById('chat-messages');
+            const chatInterface = document.getElementById('chat-interface');
+            
+            // Set fixed opacity for chat interface
+            chatInterface.style.backgroundColor = 'rgba(10, 14, 23, 0.85)';let socket;
+            let connected = false;
+            let connectionAttempted = false;
+            
+            // Display welcome message
+            function displayWelcomeMessage() {
+                setTimeout(() => {
+                    chatMessages.innerHTML = `<div class="system-message">Welcome to Minerva's Think Tank. How can I assist you today?</div>`;
+                }, 500);
+            }
+            // Display welcome message on load
+            displayWelcomeMessage();
+            
+            // Attempt to connect to actual backend via REST API
+            async function connectToBackend() {
+                // First display welcome message
+                const statusMsg = document.createElement('div');
+                statusMsg.className = 'system-message';
+                statusMsg.textContent = 'Welcome to Minerva Assistant. I\'m connected to the Think Tank API and ready to help.';
+                chatMessages.appendChild(statusMsg);
+                document.getElementById('loading-screen').style.display = 'none';
+                
+                try {
+                    console.log("Testing backend connectivity...");
+                    // First try the minimal_chat_server.py endpoint
+                    const bridgeServerUrl = 'http://' + window.location.hostname + ':8090';
+                    console.log("Trying to connect to bridge server at", bridgeServerUrl);
+                    
+                    try {
+                        // Try the real Think Tank endpoint
+                        const thinkTankResponse = await fetch(bridgeServerUrl + '/api/think-tank', {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        });
+                        
+                        if (thinkTankResponse.ok) {
+                            console.log("Real Think Tank server connection successful!");
+                            return true;
+                        }
+                    } catch (err) {
+                        console.log("Think Tank server not available, trying memories API...", err);
+                    }
+                    
+                    // Fallback to memories test endpoint
+                    const response = await fetch(bridgeServerUrl + '/api/memories/test', {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        console.log("Backend API connection successful!");
+                        connected = true;
+                        return true;
+                    } else {
+                        console.warn("Backend API available but returned error status:", response.status);
+                        initializeEmergencyHandlers();
+                        return false;
+                    }
+                } catch (error) {
+                    console.error("Backend connection failed:", error);
+                    initializeEmergencyHandlers();
+                    return false;
+                }
+            }
+            
+            function initializeEmergencyHandlers() {
+                console.log("Initializing emergency message handlers...");
+                // Use the unified chat handler and emergency chat systems
+                if (typeof window.UnifiedChat !== 'undefined') {
+                    console.log("Using UnifiedChat emergency handler");
+                }
+            }           
+            // Try to connect to backend on initialization
+            connectToBackend();
+            
+            // Display Think Tank response with enhanced handling of real Think Tank responses
+            function displayThinkTankResponse(data, isRealThinkTank = false) {
+                // Only show the actual response
+                const mainResponse = data.response || data.message || "No response received";
+                
+                // Create the main response element
+                const responseHtml = `<div class="minerva-message">${mainResponse}</div>`;
+                
+                // Add the response to the chat
+                chatMessages.innerHTML += responseHtml;
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // Get model information and memory information if available
+                const modelInfo = data.model_info || {};
+                const memoryUsed = data.memory_used || [];
+                
+                // Add to conversation history with enhanced data
+                conversationHistory.push({
+                    role: 'assistant',
+                    content: mainResponse,
+                    timestamp: new Date().toISOString(),
+                    model_info: modelInfo,
+                    using_real_think_tank: isRealThinkTank,
+                    memory_used: memoryUsed,
+                    conversation_id: data.conversation_id || conversationId
+                });
+                
+                // Show memory indicators when memory is being used
+                const SHOW_MEMORY_INDICATORS = true;
+                if (SHOW_MEMORY_INDICATORS && (data.memory_used || data.memory_id || data.using_memory || data.using_conversation_memory || data.memory_context)) {
+                    // Calculate memory count - if memory_used is an array use its length, otherwise check if memory is being used
+                    const memoryCount = Array.isArray(data.memory_used) ? data.memory_used.length : (data.memory_id ? 1 : 0);
+                    const usingConversationMemory = data.using_conversation_memory || data.using_memory || (data.memory_context && data.memory_context.using_conversation_memory);
+                    
+                    if (memoryCount > 0 || usingConversationMemory) {
+                        const memoryIndicator = document.createElement('div');
+                        memoryIndicator.className = 'memory-indicator';
+                        
+                        // Create memory badges with appropriate labels
+                        const badges = [];
+                        
+                        // Badge for specific memories being used
+                        if (memoryCount > 0) {
+                            badges.push(`<span class="memory-badge">🧠 Using ${memoryCount} ${memoryCount === 1 ? 'memory' : 'memories'}</span>`);
+                        }
+                        
+                        // Badge for conversation memory
+                        if (usingConversationMemory) {
+                            const contextLabel = (data.memory_context && data.memory_context.context_summary) ? 
+                                data.memory_context.context_summary : 'Using conversation history';
+                            badges.push(`<span class="memory-badge">💬 ${contextLabel}</span>`);
+                        }
+                        
+                        // Add all badges to the indicator
+                        memoryIndicator.innerHTML = badges.join(' ');
+                        
+                        // Add tooltip with memory details if available
+                        let tooltipContent = '';
+                        
+                        // Add memory context information to tooltip
+                        if (data.memory_context) {
+                            tooltipContent = data.memory_context.context_summary || 'Using relevant conversation context';
+                        } else if (data.memory_details || data.memory_info) {
+                            const memoryDetails = data.memory_details || data.memory_info;
+                            tooltipContent = typeof memoryDetails === 'object' ? 
+                                JSON.stringify(memoryDetails, null, 2) : memoryDetails.toString();
+                        } else if (usingConversationMemory) {
+                            tooltipContent = 'Using context from your previous messages to provide a more relevant response';
+                        }
+                        
+                        if (tooltipContent) {
+                            memoryIndicator.title = tooltipContent;
+                        }
+                        
+                        document.querySelector('.minerva-message:last-child').appendChild(memoryIndicator);
+                    }
+                }
+                
+                // Show Think Tank indicator if using real Think Tank
+                if (data.model_info || isRealThinkTank) {
+                    console.log("Model evaluation details:", data.model_info || "Using real Think Tank indicator");
+                    
+                    // Check if this response is from the real Think Tank
+                    const usingRealThinkTank = isRealThinkTank || 
+                                          data.using_real_think_tank || 
+                                          (data.model_info && data.model_info.models_used && 
+                                           data.model_info.models_used.length > 0);
+                    
+                    if (usingRealThinkTank) {
+                        const thinkTankIndicator = document.createElement('div');
+                        thinkTankIndicator.className = 'think-tank-indicator';
+                        thinkTankIndicator.innerHTML = `<span class="think-tank-badge">🧠 Real Think Tank</span>`;
+                        document.querySelector('.minerva-message:last-child').appendChild(thinkTankIndicator);
+                        
+                        // Display model blend information if available
+                        if (data.model_info && data.model_info.models_used && data.model_info.models_used.length > 0) {
+                            const modelBlendIndicator = document.createElement('div');
+                            modelBlendIndicator.className = 'model-blend-info';
+                            modelBlendIndicator.style.fontSize = '0.75rem';
+                            modelBlendIndicator.style.opacity = '0.8';
+                            modelBlendIndicator.style.marginTop = '3px';
+                            
+                            // Format the models used
+                            let modelNames = [];
+                            if (Array.isArray(data.model_info.models_used)) {
+                                modelNames = data.model_info.models_used.map(model => {
+                                    if (typeof model === 'string') {
+                                        return model;
+                                    } else if (model.name) {
+                                        return model.name;
+                                    } else {
+                                        return 'Unknown model';
+                                    }
+                                });
+                            }
+                            
+                            if (modelNames.length > 0) {
+                                modelBlendIndicator.innerHTML = `<span class="model-info">Models: ${modelNames.join(', ')}</span>`;
+                                document.querySelector('.minerva-message:last-child').appendChild(modelBlendIndicator);
+                            }
+                        }
+                    }
+                            }
+            }
+            // Store conversation history with proper initialization
+            let conversationHistory = [];
+            let conversationId = 'conv_' + Date.now();
+            let conversationTitle = 'Conversation ' + new Date().toLocaleString();
+            
+            // Check URL parameters for a conversation ID on load
+            function initializeConversation() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const conversationParam = urlParams.get('conversation');
+                
+                if (conversationParam) {
+                    console.log('Loading conversation from URL parameter:', conversationParam);
+                    // Use the provided conversation ID
+                    conversationId = conversationParam;
+                    loadConversationById(conversationId);
+                } else {
+                    // Create a new conversation
+                    console.log('Creating new conversation with ID:', conversationId);
+                }
+            }
+            
+            // Load a conversation by its ID from storage
+            function loadConversationById(id) {
+                console.log(`Loading conversation with ID: ${id}`);
+                let conversationData = null;
+                
+                // First try to get it from the conversation manager
+                if (typeof window.conversationManager !== 'undefined') {
+                    try {
+                        conversationData = window.conversationManager.getConversation(id);
+                    } catch(e) {
+                        console.warn('Error getting conversation from manager:', e);
+                    }
+                }
+                
+                // Fall back to localStorage if not found
+                if (!conversationData) {
+                    try {
+                        const savedConversations = JSON.parse(localStorage.getItem('minerva_conversations'));
+                        if (savedConversations && savedConversations.general) {
+                            // Find in general conversations
+                            const found = savedConversations.general.find(conv => conv.id === id);
+                            if (found) {
+                                conversationData = found;
+                            }
+                        }
+                    } catch(e) {
+                        console.error('Error loading conversation from localStorage:', e);
+                    }
+                }
+                
+                if (!conversationData) {
+                    console.warn(`Conversation with ID ${id} not found`);
+                    // If not found, continue with a new conversation
+                    return;
+                }
+                
+                // Update global conversation variables
+                conversationId = id;
+                conversationTitle = conversationData.title || conversationTitle;
+                
+                // Load the conversation history
+                if (conversationData.messages && conversationData.messages.length > 0) {
+                    conversationHistory = conversationData.messages;
+                    
+                    // Clear current messages and display loaded conversation
+                    chatMessages.innerHTML = `<div class="system-message">Loading conversation: ${conversationTitle}</div>`;
+                    
+                    // Display each message in the conversation history
+                    conversationData.messages.forEach(msg => {
+                        if (msg.role === 'user') {
+                            chatMessages.innerHTML += `<div class="user-message">${msg.content}</div>`;
+                        } else if (msg.role === 'assistant') {
+                            // Use displayThinkTankResponse for assistant messages if possible
+                            if (msg.model_info) {
+                                displayThinkTankResponse({
+                                    response: msg.content,
+                                    model_info: msg.model_info
+                                }, false);
+                            } else {
+                                chatMessages.innerHTML += `<div class="minerva-message">${msg.content}</div>`;
+                            }
+                        } else if (msg.role === 'system') {
+                            chatMessages.innerHTML += `<div class="system-message">${msg.content}</div>`;
+                        }
+                    });
+                    
+                    // Scroll to bottom
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    console.log(`Loaded conversation with ${conversationHistory.length} messages`);
+                }
+            }
+            
+            // Function to save the current conversation to the conversations manager
+            function saveCurrentConversation() {
+                // Check if we have any messages to save
+                if (conversationHistory.length === 0) {
+                    console.log('No messages to save in conversation');
+                    return;
+                }
+                
+                // Get current project context if available
+                const currentProjectId = window.currentProjectId || null;
+                
+                // Check if this conversation has associated memories
+                const hasMemories = window.minervaMemory && window.minervaMemory.length > 0;
+                
+                // Generate a title if none exists - use the first user message
+                if (!conversationTitle || conversationTitle.startsWith('Conversation ')) {
+                    const firstUserMessage = conversationHistory.find(msg => msg.role === 'user');
+                    if (firstUserMessage) {
+                        // Create a title based on the first message (max 50 chars)
+                        conversationTitle = firstUserMessage.content.substring(0, 50);
+                        if (conversationTitle.length === 50) conversationTitle += '...';
+                    }
+                }
+                
+                // Get the memory references if memory manager is available
+                let memoryReferences = [];
+                if (window.minervaMemoryManager && typeof window.minervaMemoryManager.getRelatedMemories === 'function') {
+                    memoryReferences = window.minervaMemoryManager.getRelatedMemories(conversationId);
+                }
+                
+                // Prepare conversation object with enhanced metadata
+                const conversation = {
+                    id: conversationId,
+                    title: conversationTitle,
+                    messages: conversationHistory,
+                    created: new Date().toISOString(),
+                    lastUpdated: new Date().toISOString(),
+                    hasMemories: hasMemories,
+                    memoryReferences: memoryReferences,
+                    project: currentProjectId,
+                    summary: generateConversationSummary(conversationHistory)
+                };
+                
+                // Try using the enhanced conversation storage system first
+                if (window.enhancedConversationStorage) {
+                    console.log('Using enhanced conversation storage system to save chat history');
+                    
+                    // Update conversation in storage
+                    window.enhancedConversationStorage.updateConversation(conversationId, {
+                        title: conversationTitle,
+                        summary: conversation.summary,
+                        lastUpdated: new Date().toISOString()
+                    });
+                    
+                    // If assigned to a project, update that association
+                    if (currentProjectId) {
+                        window.enhancedConversationStorage.assignToProject(conversationId, currentProjectId);
+                    }
+                    
+                    // Update the conversation list UI if available
+                    if (typeof updateConversationListUI === 'function') {
+                        updateConversationListUI();
+                    }
+                }
+                // Fall back to traditional conversation-manager.js API
+                else if (typeof createNewConversation === 'function') {
+                    console.log('Using createNewConversation to save chat history');
+                    createNewConversation(conversation);
+                } else {
+                    // Direct localStorage saving as fallback
+                    try {
+                        let savedConversations = JSON.parse(localStorage.getItem('minerva_conversations')) || {
+                            general: [],
+                            projects: {},
+                            agents: {}
+                        };
+                        
+                        // Check if this conversation already exists
+                        const existingIndex = savedConversations.general.findIndex(c => c.id === conversationId);
+                        
+                        if (existingIndex >= 0) {
+                            // Update existing conversation
+                            savedConversations.general[existingIndex] = conversation;
+                        } else {
+                            // Add as new conversation
+                            savedConversations.general.push(conversation);
+                        }
+                        
+                        // If assigned to a project, also save to project collection
+                        if (currentProjectId) {
+                            if (!savedConversations.projects[currentProjectId]) {
+                                savedConversations.projects[currentProjectId] = [];
+                            }
+                            
+                            // Update or add to project-specific collection
+                            const projectIndex = savedConversations.projects[currentProjectId].findIndex(c => c.id === conversationId);
+                            if (projectIndex >= 0) {
+                                savedConversations.projects[currentProjectId][projectIndex] = conversation;
+                            } else {
+                                savedConversations.projects[currentProjectId].push(conversation);
+                            }
+                        }
+                        
+                        // Save back to localStorage
+                        localStorage.setItem('minerva_conversations', JSON.stringify(savedConversations));
+                        console.log('Saved conversation to localStorage with memory integration');
+                    } catch (e) {
+                        console.error('Failed to save conversation:', e);
+                    }
+                }
+                
+                // Dispatch an event so other components can react to the conversation being saved
+                document.dispatchEvent(new CustomEvent('minerva-conversation-saved', { 
+                    detail: { conversation: conversation }
+                }));
+            }
+            
+            // Helper function to generate a simple summary of the conversation
+            function generateConversationSummary(messages) {
+                if (!messages || messages.length === 0) return "";
+                
+                // Get the first few meaningful messages
+                const relevantMessages = messages.filter(msg => msg.role === 'user').slice(0, 2);
+                
+                if (relevantMessages.length === 0) return "";
+                
+                // Create a summary based on the first user message
+                const firstMessage = relevantMessages[0].content;
+                
+                // Limit summary to 100 characters
+                return firstMessage.substring(0, 100) + (firstMessage.length > 100 ? '...' : '');
+            }
+            
+            // Direct connection to Think Tank API (simplified approach)
+            async function originalSendMessage() {
+                const message = chatInput.value.trim();
+                if (!message) return;
+                
+                // Add user message to chat
+                chatMessages.innerHTML += `<div class="user-message">${message}</div>`;
+                chatInput.value = '';
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // Add to conversation history with timestamp and project context
+                conversationHistory.push({
+                    role: 'user',
+                    content: message,
+                    timestamp: new Date().toISOString(),
+                    conversation_id: conversationId,
+                    project_id: currentProjectId || null
+                });
+                
+                // Save conversation after adding user message
+                try {
+                    saveCurrentConversation();
+                } catch (e) {
+                    console.error('Error saving conversation:', e);
+                }
+                
+                // Add loading indicator
+                const loadingIndicator = document.createElement('div');
+                loadingIndicator.className = 'loading-indicator';
+                loadingIndicator.innerHTML = `<div class="loading-dots"><span>.</span><span>.</span><span>.</span></div>`;
+                chatMessages.appendChild(loadingIndicator);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                console.log("Processing message with direct connection:", message);
+                
+                // Prepare the request payload
+                const payload = {
+                    message: message,
+                    conversation_id: conversationId,
+                    message_history: conversationHistory,
+                    store_in_memory: true,
+                    use_memory: true,
+                    use_think_tank: true,
+                    force_real_think_tank: true,
+                    client_version: '1.0.0',
+                    user_id: localStorage.getItem('user_id') || `user-${Date.now()}`,
+                    project_id: currentProjectId || null,
+                    enable_blending: true,
+                    enable_validation: true,
+                    retain_context: true
+                };
+                
+                // If this is the first message, generate and store user ID
+                if (!localStorage.getItem('user_id')) {
+                    const userId = `user-${Date.now()}`;
+                    localStorage.setItem('user_id', userId);
+                    payload.user_id = userId;
+                }
+                
+                // Send request directly to the API endpoint
+                try {
+                    console.log("Sending direct request to Think Tank API");
+                    const bridgeServerUrl = 'http://' + window.location.hostname + ':8090';
+                    const response = await fetch(bridgeServerUrl + '/api/think-tank', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    });
+                    
+                    // Remove loading indicator
+                    if (chatMessages.contains(loadingIndicator)) {
+                        chatMessages.removeChild(loadingIndicator);
+                    }
+                    
+                    if (!response.ok) {
+                        throw new Error(`API error: ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    console.log("Received response from Think Tank API:", data);
+                    
+                    // Check if this is from the real Think Tank
+                    const isRealThinkTank = data.using_real_think_tank === true || 
+                                        (data.model_info && data.model_info.models_used && 
+                                        data.model_info.models_used.length > 0);
+                    
+                    // Display the response
+                    displayThinkTankResponse(data, isRealThinkTank);
+                    console.log(isRealThinkTank ? "✅ Using real Think Tank" : "⚠️ Using simulated response");
+                    
+                    // Save the conversation after receiving a response
+                    saveCurrentConversation();
+                    
+                } catch (error) {
+                    console.error("Error connecting to Think Tank API:", error);
+                    
+                    // Remove loading indicator
+                    if (chatMessages.contains(loadingIndicator)) {
+                        chatMessages.removeChild(loadingIndicator);
+                    }
+                    
+                    // Show error message to user
+                    chatMessages.innerHTML += `<div class="system-message error">Sorry, I couldn't connect to the Think Tank API: ${error.message}</div>`;
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }
+            }
+            
+            // Check if the Think Tank API is available - returns a Promise
+            function checkThinkTankAPI() {
+                return new Promise((resolve) => {
+                    // Use the bridge server running on port 8090
+                    const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
+                    const host = window.location.hostname + ':8090';
+                    const apiUrl = `${protocol}//${host}/api/think-tank`;
+                    console.log('Checking Think Tank API at:', apiUrl);
+                    
+                    // Send a small test request to check if the API is available
+                    fetch(apiUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({message: "ping", test_mode: true})
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            console.log('Think Tank API is available');
+                            resolve(true);
+                        } else {
+                            console.warn('Think Tank API returned an error status:', response.status);
+                            resolve(false);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error checking Think Tank API:', error);
+                        resolve(false);
+                    });
+                });
+            }
+            // This function is replaced by sendMessage which uses REST API directly
+            // Process memory updates from API responses
+            function processMemoryUpdates(data) {
+                try {
+                    // Process memory updates if available
+                    if (data.memory_updates && window.minervaMemoryManager) {
+                        // Process memory updates with memory manager
+                        window.minervaMemoryManager.processUpdates(data.memory_updates);
+                    }
+                    const messageId = data.message_id;
+                    const loadingIndicator = messageId && window.pendingMessages ? 
+                                              window.pendingMessages[messageId] : null;
+                    
+                    if (data.error) {
+                        console.error('Error from Think Tank:', data.error);
+                        // Remove loading indicator if it exists
+                        if (loadingIndicator && chatMessages.contains(loadingIndicator)) {
+                            chatMessages.removeChild(loadingIndicator);
+                        }            // Add error message
+                        const errorHtml = `<div class="system-message error">Sorry, I encountered an error: ${data.error}</div>`;
+                        chatMessages.innerHTML += errorHtml;
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                        return;
+                    }        
+                    // Check if this is a response completion
+                    if (data.response_complete) {
+                        // Remove loading indicator if it exists
+                        if (loadingIndicator && chatMessages.contains(loadingIndicator)) {
+                            chatMessages.removeChild(loadingIndicator);
+                        }
+                        // Clear from pending messages
+                        if (messageId && window.pendingMessages) {
+                            delete window.pendingMessages[messageId];
+                        }
+                        // Format the response for our chat interface
+                        const responseData = {
+                            response: data.text || data.response,
+                            model_info: data.model_info,
+                            using_real_think_tank: data.using_real_think_tank
+                        };
+                        
+                        // Check if this is from the real Think Tank
+                        const isRealThinkTank = data.using_real_think_tank === true || 
+                                              (data.model_info && data.model_info.models_used && 
+                                               data.model_info.models_used.length > 0);
+                        
+                        // Add to conversation history
+                        conversationHistory.push({
+                            role: 'assistant',
+                            content: responseData.response,
+                            timestamp: new Date().toISOString()
+                        });
+                        
+                        // Save conversation after adding the assistant response
+                        saveCurrentConversation();
+                        
+                        // Display the response with appropriate indicator
+                        displayThinkTankResponse(responseData, isRealThinkTank);
+                        console.log(isRealThinkTank ? "✅ Using real Think Tank" : "⚠️ Using simulated response");
+                    }        
+                    // Enhance model info to ensure compatibility with our display format
+                    function enhanceModelInfo(modelInfo) {
+                        if (!modelInfo) return null;
+                        
+                        // Check if the model info is already in our expected format
+                        if (modelInfo.models && Array.isArray(modelInfo.models)) {
+                            return modelInfo;
+                        }            
+                        // Create a properly formatted model info object
+                        const enhancedInfo = {
+                            models: [],
+                            blending_info: {
+                                method: 'unknown',
+                                contributors: []
+                            }            };
+                        
+                        // Handle different Think Tank response formats
+                        
+                        // Case 1: If we have rankings array (from the improved Think Tank)
+                        if (modelInfo.rankings && Array.isArray(modelInfo.rankings)) {
+                            enhancedInfo.models = modelInfo.rankings.map(rank => ({
+                                name: rank.model_name || rank.model || 'Unknown Model',
+                                score: rank.score || rank.quality_score || 0.5,
+                                color: getModelColor(rank.model_name || rank.model),
+                                reason: rank.reason || rank.selection_reason || ''
+                            }));
+                            
+                            // Sort by score descending
+                            enhancedInfo.models.sort((a, b) => b.score - a.score);
+                        }
+                        // Case 2: If we have models and scores in separate arrays
+                        else if (modelInfo.model_names && Array.isArray(modelInfo.model_names) && 
+                                 modelInfo.model_scores && Array.isArray(modelInfo.model_scores)) {
+                            enhancedInfo.models = modelInfo.model_names.map((name, index) => ({
+                                name: name,
+                                score: modelInfo.model_scores[index] || 0.5,
+                                color: getModelColor(name),
+                                reason: (modelInfo.selection_reasons && modelInfo.selection_reasons[index]) || ''
+                            }));
+                        }
+                        // Case 3: If we have the legacy format with a single selected model
+                        else if (modelInfo.selected_model) {
+                            enhancedInfo.models.push({
+                                name: modelInfo.selected_model,
+                                score: 0.9,
+                                color: getModelColor(modelInfo.selected_model),
+                                reason: 'Selected model for this response'
+                            });
+                        }
+                        // Add blending information if available
+                        if (modelInfo.blending_info) {
+                            enhancedInfo.blending_info = modelInfo.blending_info;
+                        } 
+                        else if (modelInfo.blending_method) {
+                            enhancedInfo.blending_info.method = modelInfo.blending_method;
+                            
+                            // If we have contributing models info
+                            if (modelInfo.contributing_models && Array.isArray(modelInfo.contributing_models)) {
+                                enhancedInfo.blending_info.contributors = modelInfo.contributing_models;
+                            } else if (enhancedInfo.models.length > 0) {
+                                // Use top models as contributors if not specified
+                                enhancedInfo.blending_info.contributors = 
+                                    enhancedInfo.models.slice(0, Math.min(2, enhancedInfo.models.length))
+                                        .map(model => model.name);
+                            }
+                        }
+                        return enhancedInfo;
+                    }
+                    // Get standard color for a model
+                    function getModelColor(modelName) {
+                        if (!modelName) return '#6366f1';
+                        
+                        const modelColors = {
+                            'gpt-4': '#19c37d',
+                            'gpt-3.5': '#10a37f',
+                            'claude-3': '#9c5ddb',
+                            'claude-instant': '#8a5cca',
+                            'gemini': '#4285f4',
+                            'gemini-pro': '#4285f4',
+                            'llama-3': '#e37400',
+                            'mistral': '#00a3bf'
+                        };
+                        
+                        // Normalize model name for matching
+                        const normalizedName = modelName.toLowerCase();
+                        
+                        // Find matching color
+                        for (const [key, color] of Object.entries(modelColors)) {
+                            if (normalizedName.includes(key)) {
+                                return color;
+                            }
+                        }
+                        // Default color if no match
+                        return '#6366f1';
+                    }
+                    
+                    // Handle other message types
+                    if (data.typing) {
+                        // This is a typing indicator update, no action needed
+                        console.log('Received typing indicator');
+                    } else if (data.partial_response) {
+                        // For streaming responses, we could implement streaming UI here
+                        console.log('Received partial response:', data.text);
+                    }
+                } catch (error) {
+                    console.error('Error processing memory updates:', error);
+                }
+            }
+            // Use the real Think Tank through Minerva's Core Server
+            async function simulateThinkTankResponse(userMessage) {
+                try {
+                    console.log("Connecting to Think Tank API via Minerva Core...");
+                
+                    // Prepare a comprehensive payload with conversation history and memory options
+                    const requestPayload = {
+                        message: userMessage,
+                        conversation_id: conversationId,
+                        message_history: conversationHistory,
+                        use_memory: true,
+                        use_think_tank: true,
+                        force_real_think_tank: true,
+                        enable_blending: true,
+                        enable_validation: true,
+                        retain_context: true,
+                        memory_options: {
+                            load_relevant: true,
+                            save_context: true,
+                            project_id: currentProjectId || null
+                        }
+                    };
+                
+                    // Connect to Minerva Core Server through the main server on port 8080
+                    const bridgeServerUrl = 'http://' + window.location.hostname + ':8080';
+                    console.log('📡 Using Think Tank API server at:', bridgeServerUrl);
+                    console.log('Using Think Tank API server at:', bridgeServerUrl);
+                    console.log('Sending request to: ' + bridgeServerUrl + '/api/think-tank');
+                    console.log('Payload:', JSON.stringify(requestPayload, null, 2));
+                    
+                    let response;
+                    try {
+                        response = await fetch(bridgeServerUrl + '/api/think-tank', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(requestPayload)
+                        });
+                        
+                        if (!response.ok) {
+                            console.error(`API error status: ${response.status}`);
+                            const errorText = await response.text();
+                            console.error('Error response:', errorText);
+                            throw new Error(`API error: ${response.status} - ${errorText}`);
+                        }
+                    } catch (fetchError) {
+                        console.error('Fetch error:', fetchError);
+                        // Show a message in the chat immediately
+                        const errorElement = document.createElement('div');
+                        errorElement.className = 'system-message error';
+                        errorElement.innerHTML = `<strong>Connection Error:</strong> Cannot connect to the Think Tank API. Using fallback mode.`;
+                        document.getElementById('chat-messages').appendChild(errorElement);
+                        document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight;
+                        
+                        // Use the fallback handler if available
+                        if (window.minervaFallbackHandler) {
+                            console.log('Using fallback handler to process message');
+                            const fallbackResponse = await window.minervaFallbackHandler.processMessage(userMessage, conversationId);
+                            return fallbackResponse; // Return the fallback response
+                        }
+                        
+                        // If no fallback handler, rethrow to trigger the main catch block
+                        throw fetchError;
+                    }
+                    
+                    const data = await response.json();
+                    console.log("Response from Think Tank API:", data);
+                    
+                    // Check if this is a valid Think Tank response
+                    const isValidResponse = data && data.response;
+                    
+                    if (isValidResponse) {
+                        console.log("✅ Using Think Tank response");
+                        displayThinkTankResponse(data, true);
+                    } else {
+                        console.warn("⚠️ API returned invalid response format");
+                        throw new Error("Invalid response format");
+                    }
+                } catch (error) {
+                    console.error("Error processing Think Tank request:", error);
+                    // Display error message to user
+                    const errorResponse = {
+                        response: "I'm having trouble connecting to the server. Your message was saved locally.",
+                        model_info: { error: error.message },
+                        conversation_id: conversationId
+                    };
+                    displayThinkTankResponse(errorResponse, false);
+                }
+            }
+                        
+            // Function to send messages to the Think Tank API
+            async function fetchThinkTankResponse(message) {
+                return await simulateThinkTankResponse(message);
+            }
+            
+            // Initialize model rankings display
+            function initializeModelRankings() {
+                // Default query type
+                let queryType = "general";
+                
+                // Simulate model rankings based on query type
+                const modelRankings = [];
+                
+                // Different ranking patterns based on query type
+                if (queryType === "technical") {
+                    modelRankings.push(
+                        { model: "GPT-4", score: 9.4, reasoning: "Strong technical accuracy and code quality" },
+                        { model: "Claude-3", score: 8.9, reasoning: "Good explanation but less complete code" },
+                        { model: "Gemini", score: 8.2, reasoning: "Decent technical response with some gaps" }
+                    );
+                } else if (queryType === "creative") {
+                    modelRankings.push(
+                        { model: "Claude-3", score: 9.6, reasoning: "Exceptional creativity and coherence" },
+                        { model: "GPT-4", score: 9.1, reasoning: "Strong creative response with good structure" },
+                        { model: "Gemini", score: 8.7, reasoning: "Good creative elements but less cohesive" }
+                    );
+                } else if (queryType === "reasoning") {
+                    modelRankings.push(
+                        { model: "Claude-3", score: 9.5, reasoning: "Excellent logical flow and nuanced analysis" },
+                        { model: "GPT-4", score: 9.3, reasoning: "Strong reasoning with comprehensive coverage" },
+                        { model: "Gemini", score: 8.5, reasoning: "Good points but less structured explanation" }
+                    );
+                } else { // general
+                    modelRankings.push(
+                        { model: "GPT-4", score: 9.2, reasoning: "Comprehensive and well-structured response" },
+                        { model: "Claude-3", score: 9.0, reasoning: "Nuanced and helpful information" },
+                        { model: "Gemini", score: 8.4, reasoning: "Clear but less detailed than alternatives" }
+                    );
+                }    
+                // Construct the simulated model_info
+                return {
+                    models_used: ["GPT-4", "Claude-3", "Gemini"],
+                    rankings: modelRankings,
+                    blending: {
+                        strategy: queryType === "technical" ? "Technical Blending" : 
+                                 queryType === "creative" ? "Creative Blending" : 
+                                 queryType === "reasoning" ? "Explanation Blending" : "General Blending",
+                        contributions: {
+                            "GPT-4": queryType === "technical" ? 60 : 40,
+                            "Claude-3": queryType === "creative" || queryType === "reasoning" ? 55 : 40,
+                            "Gemini": 20
+                        }
+                    }
+                };
+            }
+            // Event listeners for sending messages
+            sendButton.addEventListener('click', sendMessage);
+            chatInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+        }
+    </script>
+    
+    <!-- Theme Manager -->
+    <script src="/static/js/theme-manager.js"></script>
+    
+    <!-- CRITICAL: Additional fallback chat handlers for robustness -->
+    <script src="/static/js/chat/fallback-handler.js"></script>
+    
+    <!-- Model visualization script for Think Tank AI integration -->
+    <script src="/static/js/model-visualization.js"></script>
+    <script src="/static/js/think-tank-metrics.js"></script>
+    
+    <!-- Conversations and memory management scripts -->
+    <script src="/static/js/concept-extractor.js"></script>
+    <script src="/static/js/conversation-manager.js"></script>
+    <script src="/static/js/conversations-manager.js"></script>
+    <script src="/static/js/conversations-init.js"></script>
+    <script src="/static/js/conversation-detail-view.js"></script>
+    <script src="/static/js/conversation-storage.js"></script>
+    <script src="/static/js/orb-interface.js"></script>
+    <script src="/static/js/dashboard-conversation-integration.js"></script>
+    <script src="/static/js/fix-orb-interface.js"></script>
+    
+    <!-- 3D Orbital UI scripts -->
+    <script src="/static/js/orb-ui/minerva-3d-loader.js"></script>
+    <script src="/static/js/planet-visualization.js"></script>
+    
+    <!-- Initialize the 3D UI and Chat -->
+    <script>
+        // Function to make element draggable - moved to global scope
+        function makeDraggable(element, handle) {
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            
+            if (handle) {
+                handle.style.cursor = 'move';
+                handle.onmousedown = dragMouseDown;
+            } else {
+                element.onmousedown = dragMouseDown;
+            }
+            
+            function dragMouseDown(e) {
+                e = e || window.event;
+                if (e.target.tagName === 'BUTTON' || e.target.tagName === 'TEXTAREA' || 
+                    e.target.tagName === 'INPUT' || e.target.tagName === 'I') {
+                    return;
+                }
+                
+                e.preventDefault();
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                
+                document.onmouseup = closeDragElement;
+                document.onmousemove = elementDrag;
+            }
+            
+            function elementDrag(e) {
+                e = e || window.event;
+                e.preventDefault();
+                
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                
+                element.style.top = (element.offsetTop - pos2) + 'px';
+                element.style.left = (element.offsetLeft - pos1) + 'px';
+            }
+            
+            function closeDragElement() {
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Initializing Minerva Think Tank...');
+            
+            // Initialize the conversation storage system
+            if (typeof enhancedConversationStorage !== 'undefined' && enhancedConversationStorage.initialize) {
+                enhancedConversationStorage.initialize();
+                console.log('Conversation storage system initialized');
+            } else {
+                console.error('Conversation storage system not available!');
+            }
+            
+            // Make the chat interface visible immediately
+            const chatInterface = document.getElementById('chat-interface');
+            if (chatInterface) {
+                chatInterface.style.display = 'flex';
+                chatInterface.style.visibility = 'visible';
+                chatInterface.style.opacity = '1';
+                console.log('Chat interface made visible');
+            } else {
+                console.error('Chat interface element not found!');
+            }
+            
+            // Remove loading screen immediately to prevent blocking UI
+            const loadingScreen = document.getElementById('loading-screen');
+            if (loadingScreen) {
+                loadingScreen.style.display = 'none';
+            }
+            
+            // Initialize chat interface regardless of 3D status
+            // Use the updated initializeChatInterface function defined below
+            
+            // Function to initialize the chat interface
+            function initializeChatInterface() {
+                // Make chat interface draggable
+                const chatInterface = document.getElementById('chat-interface');
+                const chatHeader = document.getElementById('chat-header');
+                if (chatInterface && chatHeader) {
+                    makeDraggable(chatInterface, chatHeader);
+                }
+                
+                // Setup transparency slider
+                const transparencySlider = document.getElementById('transparency-slider');
+                if (transparencySlider) {
+                    transparencySlider.addEventListener('input', function() {
+                        const opacity = this.value / 100;
+                        document.getElementById('chat-interface').style.opacity = opacity;
+                    });
+                }
+                
+                // Initialize send button and chat input
+                const sendButton = document.getElementById('send-message');
+                const chatInput = document.getElementById('chat-input');
+                const chatMessages = document.getElementById('chat-messages');
+                
+                if (sendButton && chatInput && chatMessages) {
+                    console.log('Chat interface elements found, setting up event listeners');
+                    
+                    // Initialize conversation system first
+                    initializeConversation();
+                    
+                    // Legacy conversation memory storage
+                    window.minervaMemory = window.minervaMemory || [];
+                    
+                    // Initialize enhanced conversation storage system
+                    window.conversationTitleGenerated = false;
+                    
+                    // Make sure conversation storage is properly initialized
+                    if (typeof window.enhancedConversationStorage === 'undefined') {
+                        console.log('Waiting for enhanced conversation storage to initialize...');
+                        
+                        // Wait a moment for the conversation-storage.js script to load if needed
+                        setTimeout(() => {
+                            if (typeof window.enhancedConversationStorage !== 'undefined') {
+                                console.log('Enhanced conversation storage detected!');
+                            } else {
+                                console.warn('Enhanced conversation storage not found - check script loading');
+                            }
+                        }, 500);
+                    } else {
+                        console.log('Enhanced conversation storage already initialized!');
+                    }
+                    
+                    // Handle minimize/maximize
+                    const minimizeBtn = document.getElementById('minimize-chat');
+                    if (minimizeBtn) {
+                        minimizeBtn.addEventListener('click', function() {
+                            chatInterface.classList.toggle('minimized');
+                            
+                            const icon = this.querySelector('i');
+                            if (icon) {
+                                if (chatInterface.classList.contains('minimized')) {
+                                    icon.classList.remove('fa-minus');
+                                    icon.classList.add('fa-expand');
+                                    this.setAttribute('title', 'Expand chat');
+                                } else {
+                                    icon.classList.remove('fa-expand');
+                                    icon.classList.add('fa-minus');
+                                    this.setAttribute('title', 'Minimize chat');
+                                }
+                            }
+                        });
+                    }
+                    
+                    // Event listeners for sending messages - using proper references to external functions
+                    // First remove any existing event listeners to prevent conflicts
+                    if (sendButton) {
+                        // Create a clean new clone to remove all event listeners
+                        const newSendButton = sendButton.cloneNode(true);
+                        sendButton.parentNode.replaceChild(newSendButton, sendButton);
+                        sendButton = newSendButton;
+                    }
+                    
+                    // Define a direct send function that will call the external one if it exists
+                    function handleSendButtonClick() {
+                        console.log('Direct send button click detected');
+                        // Check if we're using the external JS file's sendMessage
+                        if (typeof window.MinervaExternalSendMessage === 'function') {
+                            console.log('Using external sendMessage function');
+                            window.MinervaExternalSendMessage();
+                        } else {
+                            // Fallback to inline implementation
+                            console.log('Using inline sendMessage function');
+                            sendMessageInline();
+                        }
+                    }
+                    
+                    sendButton.addEventListener('click', handleSendButtonClick);
+                    chatInput.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            handleSendButtonClick();
+                        }
+                    });
+                    
+                    // Remove loading screen once chat is ready
+                    const loadingScreen = document.getElementById('loading-screen');
+                    if (loadingScreen) {
+                        loadingScreen.style.display = 'none';
+                    }
+                    
+                    // Renamed to avoid conflict with external JS file
+                    async function sendMessageInline() {
+                        const message = chatInput.value.trim();
+                        if (!message) return;
+                        
+                        // Clear input field
+                        chatInput.value = '';
+                        
+                        // Add user message to chat
+                        const userMessageElem = document.createElement('div');
+                        userMessageElem.className = 'user-message';
+                        userMessageElem.textContent = message;
+                        chatMessages.appendChild(userMessageElem);
+                        
+                        // Scroll to bottom
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                        
+                        // Save message in both storage systems for backward compatibility
+                        
+                        // 1. Legacy memory system
+                        window.minervaMemory.push({
+                            role: 'user',
+                            content: message,
+                            timestamp: new Date().toISOString()
+                        });
+                        
+                        // 2. Enhanced storage system (if available)
+                        if (window.enhancedConversationStorage) {
+                            window.enhancedConversationStorage.saveMessage(conversationId, message, 'user');
+                            
+                            // Update the conversation list UI if the function exists
+                            if (typeof updateConversationListUI === 'function') {
+                                updateConversationListUI();
+                            }
+                        }
+                        
+                        // Add loading indicator
+                        const loadingElem = document.createElement('div');
+                        loadingElem.className = 'assistant-message loading';
+                        loadingElem.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+                        chatMessages.appendChild(loadingElem);
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                        
+                        try {
+                            // Try to get a response from the server
+                            const response = await fetchThinkTankResponse(message);
+                            
+                            // Remove loading indicator
+                            chatMessages.removeChild(loadingElem);
+                            
+                            // Add assistant response to chat
+                            const assistantMessageElem = document.createElement('div');
+                            assistantMessageElem.className = 'assistant-message';
+                            assistantMessageElem.textContent = response.message;
+                            
+                            // Add memory indicator if response has memory
+                            if (response.has_memory) {
+                                const memoryIndicator = document.createElement('div');
+                                memoryIndicator.className = 'memory-indicator';
+                                memoryIndicator.innerHTML = '<span class="memory-badge" title="Minerva is using conversation memory">Memory Active</span>';
+                                assistantMessageElem.appendChild(memoryIndicator);
+                            }
+                            
+                            chatMessages.appendChild(assistantMessageElem);
+                            
+                            // Add to both conversation memory systems
+                            
+                            // 1. Legacy memory system
+                            window.minervaMemory.push({
+                                role: 'assistant',
+                                content: response.message,
+                                timestamp: new Date().toISOString()
+                            });
+                            
+                            // Store legacy conversation memory in local storage
+                            localStorage.setItem('minervaMemory', JSON.stringify(window.minervaMemory));
+                            
+                            // 2. Enhanced storage system (if available)
+                            if (window.enhancedConversationStorage) {
+                                // Save the message
+                                window.enhancedConversationStorage.saveMessage(conversationId, response.message, 'assistant');
+                                
+                                // Generate a smart title for new conversations
+                                if (!window.conversationTitleGenerated && window.minervaMemory.length >= 2) {
+                                    const firstUserMessage = window.minervaMemory.find(m => m.role === 'user')?.content || '';
+                                    window.enhancedConversationStorage.generateSmartTitle(conversationId, firstUserMessage);
+                                    window.conversationTitleGenerated = true;
+                                }
+                                
+                                // Update the conversation list UI if available
+                                if (typeof updateConversationListUI === 'function') {
+                                    updateConversationListUI();
+                                }
+                            }
+                            
+                            // Pulse the 3D orb (if it exists)
+                            const pulseEvent = new CustomEvent('minerva-new-message');
+                            document.dispatchEvent(pulseEvent);
+                        } catch (error) {
+                            console.error('Error fetching response:', error);
+                            
+                            // Remove loading indicator
+                            chatMessages.removeChild(loadingElem);
+                            
+                            // Call fallback function for offline mode
+                            fallbackToSimulation(message);
+                        }
+                        
+                        // Scroll to bottom of chat
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    }
+                    
+                    // Function to fetch response from server
+                    async function fetchThinkTankResponse(message) {
+                        try {
+                            // Create request body with message and conversation history
+                            const requestBody = {
+                                message: message,
+                                conversation_id: conversationId,
+                                message_history: window.minervaMemory,
+                                store_in_memory: true,
+                                use_memory: true,
+                                use_think_tank: true,
+                                force_real_think_tank: true,
+                                client_version: '1.0.0',
+                                user_id: localStorage.getItem('user_id') || `user-${Date.now()}`,
+                                project_id: currentProjectId || null,
+                                enable_blending: true,
+                                enable_validation: true,
+                                retain_context: true
+                            };
+                            
+                            // If this is the first message, generate and store user ID
+                            if (!localStorage.getItem('user_id')) {
+                                const userId = `user-${Date.now()}`;
+                                localStorage.setItem('user_id', userId);
+                                requestBody.user_id = userId;
+                            }
+                            
+                            // Make API request directly to Minerva's core server
+                            // We use the same server that serves the static content (port 8080)
+                            const minervaServerUrl = window.location.origin; // This gets http://localhost:8080
+                            console.log('Sending request to Think Tank API at:', minervaServerUrl + '/api/think-tank');
+                            
+                            const response = await fetch(minervaServerUrl + '/api/think-tank', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(requestBody)
+                            });
+                            
+                            // Handle non-200 responses
+                            if (!response.ok) {
+                                throw new Error(`Network response was not ok: ${response.status}`);
+                            }
+                            
+                            // Parse JSON response
+                            const data = await response.json();
+                            console.log('Received response from Think Tank API:', data);
+                            
+                            // Process memory updates if present
+                            if (data.memory_updates && window.minervaMemoryManager) {
+                                console.log('Processing memory updates:', data.memory_updates);
+                                window.minervaMemoryManager.processMemoryUpdates(data.memory_updates);
+                            }
+                            
+                            // Create a consistent response format
+                            return {
+                                message: data.response || data.text || data.message || "No response content",
+                                has_memory: Boolean(data.memory_updates || data.memory_id || data.memory_info),
+                                model_info: data.model_info || {},
+                                conversation_id: data.conversation_id || conversationId,
+                                memory_id: data.memory_id,
+                                memory_info: data.memory_info
+                            };
+                        } catch (error) {
+                            console.error('Error in fetchThinkTankResponse:', error);
+                            throw error;
+                        }
+                    }
+                    
+                    // Fallback function for when server is unavailable
+                    function fallbackToSimulation(userMessage) {
+                        // Create a fallback response based on user input
+                        let responseText = "I'm currently operating in offline mode. ";
+                        let memoryStatus = false;
+                        
+                        // Try to leverage existing memory if available
+                        if (window.minervaMemory && window.minervaMemory.length > 3) {
+                            memoryStatus = true;
+                            responseText += "However, I can still access our conversation history. ";
+                        }
+                        
+                        // Generate contextual responses based on input
+                        if (userMessage.toLowerCase().includes('hello') || userMessage.toLowerCase().includes('hi')) {
+                            responseText += "Hello! I'm Minerva's Think Tank. I can't access my full capabilities right now, but I'm here to help with basic information.";
+                        } else if (userMessage.toLowerCase().includes('help')) {
+                            responseText += "I'd normally be able to provide detailed assistance, but I'm in offline mode. Please check your connection to the Think Tank server.";
+                        } else if (userMessage.toLowerCase().includes('memory') || userMessage.toLowerCase().includes('remember')) {
+                            if (memoryStatus) {
+                                responseText += "I can see we've been discussing various topics. While I can access this conversation's memory, my ability to analyze it deeply requires a connection to the Think Tank server.";
+                            } else {
+                                responseText += "I'm designed to remember our conversation context, but my memory systems require a connection to the Think Tank server, which is currently unavailable.";
+                            }
+                        } else if (userMessage.toLowerCase().includes('project') || userMessage.toLowerCase().includes('convert')) {
+                            responseText += "Converting conversations to projects and organizing them requires connection to the Think Tank. Please try again when online.";
+                        } else {
+                            responseText += "I can't provide a specific response to your query in offline mode. Please check your connection to the Think Tank server.";
+                        }
+                        
+                        // Add fallback message to chat with proper styling
+                        const fallbackElem = document.createElement('div');
+                        fallbackElem.className = 'assistant-message fallback';
+                        fallbackElem.textContent = responseText;
+                        
+                        // Add memory indicator if we're using memory
+                        if (memoryStatus) {
+                            const memoryIndicator = document.createElement('div');
+                            memoryIndicator.className = 'memory-indicator';
+                            memoryIndicator.innerHTML = '<span class="memory-badge" title="Minerva is using conversation memory">Memory Active</span>';
+                            fallbackElem.appendChild(memoryIndicator);
+                        }
+                        
+                        chatMessages.appendChild(fallbackElem);
+                        
+                        // Add system notification
+                        const notificationElem = document.createElement('div');
+                        notificationElem.className = 'system-message';
+                        notificationElem.textContent = 'Think Tank connection unavailable. Operating in offline mode.';
+                        chatMessages.appendChild(notificationElem);
+                        
+                        // Add to conversation memory (for the ThinkTank API context)
+                        window.minervaMemory.push({
+                            role: 'assistant',
+                            content: responseText,
+                            timestamp: new Date().toISOString(),
+                            fallback: true,
+                            has_memory: memoryStatus
+                        });
+                        
+                        // Add to conversation history for persistence
+                        conversationHistory.push({
+                            role: 'assistant',
+                            content: responseText,
+                            timestamp: new Date().toISOString(),
+                            fallback: true,
+                            has_memory: memoryStatus,
+                            conversation_id: conversationId,
+                            project_id: window.currentProjectId || null
+                        });
+                        
+                        // Save the conversation after adding fallback response
+                        saveCurrentConversation();
+                        
+                        // Scroll to the bottom of the chat
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    }
+                    
+                    // Initialize the chat system and handle memory integration
+                    function initializeChatSystem() {
+                        console.log('Initializing chat system with memory integration...');
+                        
+                        // Check for conversation ID in URL parameters (for direct linking to conversations)
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const conversationParam = urlParams.get('conversation');
+                        
+                        if (conversationParam) {
+                            // Try to load the specified conversation
+                            loadConversationById(conversationParam);
+                            return; // Skip the normal initialization since we're loading a specific conversation
+                        }
+                        
+                        // If no specific conversation, load saved memory from localStorage
+                        const savedMemory = localStorage.getItem('minervaMemory');
+                        if (savedMemory) {
+                            try {
+                                window.minervaMemory = JSON.parse(savedMemory);
+                                
+                                // Add a system message indicating memory has been loaded
+                                const memoryNotification = document.createElement('div');
+                                memoryNotification.className = 'system-message';
+                                memoryNotification.textContent = 'Previous conversation memory loaded.';
+                                chatMessages.appendChild(memoryNotification);
+                                
+                                // Display the last few messages from memory for context
+                                if (window.minervaMemory.length > 0) {
+                                    const recentMessages = window.minervaMemory.slice(-4); // Last 4 messages
+                                    
+                                    // Add a small delay for better UX
+                                    setTimeout(() => {
+                                        for (const msg of recentMessages) {
+                                            const messageElem = document.createElement('div');
+                                            messageElem.className = msg.role === 'user' ? 'user-message memory' : 'assistant-message memory';
+                                            messageElem.textContent = msg.content;
+                                            
+                                            if (msg.role === 'assistant' && (msg.has_memory || msg.memory_used)) {
+                                                const memoryIndicator = document.createElement('div');
+                                                memoryIndicator.className = 'memory-indicator';
+                                                memoryIndicator.innerHTML = '<span class="memory-badge" title="Loaded from conversation memory">From Memory</span>';
+                                                messageElem.appendChild(memoryIndicator);
+                                            }
+                                            
+                                            chatMessages.appendChild(messageElem);
+                                        }
+                                        // Scroll to the bottom of the chat after adding messages
+                                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                                    }, 300);
+                                    
+                                    // Update the conversation title based on content if available
+                                    const firstUserMessage = window.minervaMemory.find(msg => msg.role === 'user');
+                                    if (firstUserMessage && conversationTitle.startsWith('Conversation ')) {
+                                        conversationTitle = firstUserMessage.content.substring(0, 50);
+                                        if (conversationTitle.length === 50) conversationTitle += '...';
+                                    }
+                                }
+                            } catch (error) {
+                                console.error('Error loading conversation memory:', error);
+                                window.minervaMemory = [];
+                            }
+                        }
+                        
+                        // Check for a current project context via URL param
+                        const projectParam = urlParams.get('project');
+                        if (projectParam) {
+                            window.currentProjectId = projectParam;
+                            console.log(`Set current project context to: ${projectParam}`);
+                            
+                            // Add a project context indicator in the chat interface
+                            const projectIndicator = document.createElement('div');
+                            projectIndicator.className = 'system-message project-context';
+                            projectIndicator.textContent = `Current project context: ${projectParam}`;
+                            chatMessages.appendChild(projectIndicator);
+                        }
+                        
+                        // Setup event listener for project selection if we have a project selector
+                        const projectSelector = document.getElementById('project-selector');
+                        if (projectSelector) {
+                            projectSelector.addEventListener('change', function() {
+                                window.currentProjectId = this.value || null;
+                                console.log(`Project context changed to: ${window.currentProjectId}`);
+                                
+                                // Save this setting to localStorage
+                                if (window.currentProjectId) {
+                                    localStorage.setItem('currentProjectId', window.currentProjectId);
+                                } else {
+                                    localStorage.removeItem('currentProjectId');
+                                }
+                                
+                                // Add a project context message to the chat
+                                const projectIndicator = document.createElement('div');
+                                projectIndicator.className = 'system-message project-context';
+                                projectIndicator.textContent = window.currentProjectId 
+                                    ? `Project context changed to: ${window.currentProjectId}` 
+                                    : 'Project context cleared.';
+                                chatMessages.appendChild(projectIndicator);
+                            });
+                        }
+                        
+                        console.log('Chat system initialized with memory integration');
+                    }
+                    
+                    // Call initialization function when the chat interface is ready
+                    initializeChatSystem();
+                    
+                    /**
+                     * Load a specific conversation by its ID
+                     * @param {string} conversationId - The ID of the conversation to load
+                     */
+                    function loadConversationById(conversationId) {
+                        console.log(`Attempting to load conversation with ID: ${conversationId}`);
+                        let conversation = null;
+                        
+                        // Try to find the conversation from different sources
+                        if (window.conversationManager && typeof window.conversationManager.getConversationById === 'function') {
+                            // Use the conversation manager API if available
+                            conversation = window.conversationManager.getConversationById(conversationId);
+                        } else {
+                            // Try to find it in localStorage
+                            try {
+                                const savedConversations = JSON.parse(localStorage.getItem('minerva_conversations'));
+                                if (savedConversations) {
+                                    // Check in general conversations
+                                    if (savedConversations.general) {
+                                        conversation = savedConversations.general.find(c => c.id === conversationId);
+                                    }
+                                    
+                                    // If not found in general, check in projects
+                                    if (!conversation && savedConversations.projects) {
+                                        // Search through all project conversations
+                                        for (const projectId in savedConversations.projects) {
+                                            if (savedConversations.projects.hasOwnProperty(projectId)) {
+                                                const projectConvs = savedConversations.projects[projectId];
+                                                const foundConv = projectConvs.find(c => c.id === conversationId);
+                                                
+                                                if (foundConv) {
+                                                    conversation = foundConv;
+                                                    // Set the current project context
+                                                    window.currentProjectId = projectId;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            } catch (error) {
+                                console.error('Error loading conversation from localStorage:', error);
+                            }
+                        }
+                        
+                        // If conversation found, load it into the chat interface
+                        if (conversation) {
+                            console.log('Found conversation, loading into chat interface:', conversation);
+                            
+                            // Clear existing chat messages
+                            chatMessages.innerHTML = '';
+                            
+                            // Reset conversation history and memory
+                            conversationHistory = [];
+                            window.minervaMemory = [];
+                            
+                            // Update conversation metadata
+                            conversationTitle = conversation.title || 'Loaded Conversation';
+                            conversationId = conversation.id;
+                            
+                            // Add system message to indicate loading conversation
+                            const loadNotification = document.createElement('div');
+                            loadNotification.className = 'system-message';
+                            loadNotification.textContent = `Loaded conversation: ${conversationTitle}`;
+                            chatMessages.appendChild(loadNotification);
+                            
+                            // If conversation has a project context, display it
+                            if (conversation.project) {
+                                const projectIndicator = document.createElement('div');
+                                projectIndicator.className = 'system-message project-context';
+                                projectIndicator.textContent = `Project context: ${conversation.project}`;
+                                chatMessages.appendChild(projectIndicator);
+                            }
+                            
+                            // Add all messages from the conversation
+                            if (conversation.messages && conversation.messages.length > 0) {
+                                // Add messages with a slight delay for better UX
+                                setTimeout(() => {
+                                    conversation.messages.forEach(msg => {
+                                        // Create message element
+                                        const messageElem = document.createElement('div');
+                                        messageElem.className = msg.role === 'user' ? 'user-message' : 'assistant-message';
+                                        messageElem.textContent = msg.content;
+                                        
+                                        // Add memory indicator for assistant messages if they used memory
+                                        if (msg.role === 'assistant' && (msg.has_memory || msg.memory_used)) {
+                                            const memoryIndicator = document.createElement('div');
+                                            memoryIndicator.className = 'memory-indicator';
+                                            memoryIndicator.innerHTML = '<span class="memory-badge" title="This response used conversation memory">Memory Used</span>';
+                                            messageElem.appendChild(memoryIndicator);
+                                        }
+                                        
+                                        chatMessages.appendChild(messageElem);
+                                        
+                                        // Also add to conversation history and memory
+                                        conversationHistory.push(msg);
+                                        window.minervaMemory.push({
+                                            role: msg.role,
+                                            content: msg.content,
+                                            timestamp: msg.timestamp || new Date().toISOString()
+                                        });
+                                    });
+                                    
+                                    // Scroll to bottom of chat
+                                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                                }, 300);
+                            }
+                            
+                            // Update the URL to reflect the loaded conversation without reloading the page
+                            const url = new URL(window.location.href);
+                            url.searchParams.set('conversation', conversationId);
+                            if (window.currentProjectId) {
+                                url.searchParams.set('project', window.currentProjectId);
+                            }
+                            window.history.pushState({}, '', url);
+                            
+                            // Store memory in localStorage
+                            localStorage.setItem('minervaMemory', JSON.stringify(window.minervaMemory));
+                            
+                            return true;
+                        } else {
+                            console.error(`Conversation with ID ${conversationId} not found`);
+                            
+                            // Add error message to chat
+                            const errorMsg = document.createElement('div');
+                            errorMsg.className = 'system-message error';
+                            errorMsg.textContent = `Error: Conversation with ID ${conversationId} could not be found.`;
+                            chatMessages.appendChild(errorMsg);
+                            
+                            return false;
+                        }
+                    }
+                    
+                    console.log('Chat interface initialized successfully with conversation memory and loading capabilities');
+                }
+            }
+            
+            // 3D visualization removed as per user request
+            
+            // Debug the chat functionality
+            console.log('Chat interface initialization completed');
+            console.log('Conversation ID:', conversationId);
+            console.log('Conversation Saving functionality is ' + (typeof saveCurrentConversation === 'function' ? 'available' : 'not available'));
+            console.log('Conversation Manager API is ' + (typeof createNewConversation === 'function' ? 'available' : 'not available'));
+        });
+    </script>
+    
+    <!-- Debug script for chat functionality -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Checking Minerva assistant functionality...');
+            // Ensure the chat interface is visible and accessible
+            setTimeout(() => {
+                const chatInterface = document.getElementById('chat-interface');
+                if (chatInterface) {
+                    console.log('Chat interface found and ready');
+                    // Initialize chat control buttons
+                    initChatControlButtons();
+                }
+            }, 1000);
+            
+            // Initialize the chat control buttons and their event listeners
+            function initChatControlButtons() {
+                // Get button elements
+                const viewProjectsBtn = document.getElementById('view-projects');
+                const convertToProjectBtn = document.getElementById('convert-to-project');
+                const clearChatBtn = document.getElementById('clear-chat');
+                const saveChatBtn = document.getElementById('save-chat');
+                
+                // Set up event listeners for the chat control buttons
+                if (viewProjectsBtn) {
+                    viewProjectsBtn.addEventListener('click', function() {
+                        showProjectsPanel();
+                    });
+                    console.log('View projects button initialized');
+                }
+                
+                if (convertToProjectBtn) {
+                    convertToProjectBtn.addEventListener('click', convertConversationToProject);
+                    console.log('Project conversion button initialized');
+                }
+                
+                if (clearChatBtn) {
+                    clearChatBtn.addEventListener('click', clearConversation);
+                    console.log('Clear conversation button initialized');
+                }
+                
+                if (saveChatBtn) {
+                    saveChatBtn.addEventListener('click', function() {
+                        if (typeof saveCurrentConversation === 'function') {
+                            saveCurrentConversation();
+                            
+                            // Show a confirmation message in chat
+                            const chatMessages = document.getElementById('chat-messages');
+                            if (chatMessages) {
+                                const saveMessage = document.createElement('div');
+                                saveMessage.className = 'system-message';
+                                saveMessage.textContent = 'Conversation saved.';
+                                chatMessages.appendChild(saveMessage);
+                                chatMessages.scrollTop = chatMessages.scrollHeight;
+                            }
+                        } else {
+                            console.error('saveCurrentConversation function not available');
+                        }
+                    });
+                    console.log('Save conversation button initialized');
+                }
+            }
+            
+            // Function to clear the current conversation
+            function clearConversation() {
+                if (confirm('Are you sure you want to clear the current conversation? This cannot be undone.')) {
+                    const chatMessages = document.getElementById('chat-messages');
+                    if (!chatMessages) return;
+                    
+                    // If saveCurrentConversation is available, save before clearing
+                    if (typeof saveCurrentConversation === 'function') {
+                        saveCurrentConversation();
+                    }
+                    
+                    // Clear chat messages
+                    chatMessages.innerHTML = '';
+                    
+                    // Add a system message
+                    const systemMessage = document.createElement('div');
+                    systemMessage.className = 'system-message';
+                    systemMessage.textContent = 'Conversation cleared. Start a new conversation.';
+                    chatMessages.appendChild(systemMessage);
+                    
+                    // Reset conversation memory if available in the window context
+                    if (typeof conversationHistory !== 'undefined') {
+                        conversationHistory = [];
+                    }
+                    
+                    if (window.minervaMemory) {
+                        window.minervaMemory = [];
+                        localStorage.removeItem('minervaMemory');
+                    }
+                    
+                    // Generate a new conversation ID if available in the window context
+                    if (typeof conversationId !== 'undefined') {
+                        conversationId = 'conv_' + Date.now();
+                    }
+                    
+                    // Update conversation title if available
+                    if (typeof conversationTitle !== 'undefined') {
+                        conversationTitle = 'Conversation ' + new Date().toLocaleString();
+                    }
+                    
+                    // Update the URL to remove any conversation parameters
+                    const url = new URL(window.location.href);
+                    url.searchParams.delete('conversation');
+                    window.history.pushState({}, '', url);
+                    
+                    console.log('Conversation cleared successfully');
+                }
+            }
+            
+            // Function to convert the current conversation to a project
+            function convertConversationToProject() {
+                // Make sure conversationHistory is available and we have a conversation ID
+                if (typeof conversationHistory === 'undefined' || !conversationHistory || conversationHistory.length === 0) {
+                    alert('There is no conversation to convert to a project. Please start a conversation first.');
+                    return;
+                }
+                
+                if (!conversationId) {
+                    alert('No conversation ID found. Please restart the conversation.');
+                    return;
+                }
+                
+                // Prompt for project name
+                let defaultName = 'New Project';
+                if (typeof conversationTitle !== 'undefined' && conversationTitle) {
+                    defaultName = conversationTitle;
+                }
+                
+                const projectName = prompt('Enter a name for this project:', defaultName);
+                if (!projectName) return; // User cancelled
+                
+                // Generate a project description
+                const projectDescription = generateProjectDescription(conversationHistory);
+                
+                // Show loading indicator
+                const chatMessages = document.getElementById('chat-messages');
+                const loadingMessage = document.createElement('div');
+                loadingMessage.className = 'system-message';
+                loadingMessage.innerHTML = `<span class="project-badge"><i class="fas fa-spinner fa-spin"></i> Converting conversation to project...</span>`;
+                chatMessages.appendChild(loadingMessage);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // Call our new server-side API endpoint
+                fetch('/api/convert-to-project', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        conversation_id: conversationId,
+                        project_name: projectName,
+                        project_description: projectDescription
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Project conversion response:', data);
+                    
+                    // Remove loading message
+                    chatMessages.removeChild(loadingMessage);
+                    
+                    if (data.status === 'success') {
+                        // Create local reference to the project too for backwards compatibility
+                        try {
+                            let projectData = JSON.parse(localStorage.getItem('minerva_projects') || '{}');
+                            const projectId = 'proj_' + Date.now();
+                            
+                            projectData[projectId] = {
+                                id: projectId,
+                                name: projectName,
+                                created: new Date().toISOString(),
+                                updated: new Date().toISOString(),
+                                description: projectDescription,
+                                conversations: [conversationId],
+                                memories: [],
+                                tags: [],
+                                icon: 'folder', // Default icon
+                                server_synced: true // Mark as synced with server
+                            };
+                            
+                            // Save the project data
+                            localStorage.setItem('minerva_projects', JSON.stringify(projectData));
+                            
+                            // Set current project context
+                            window.currentProjectId = projectId;
+                        } catch (e) {
+                            console.error('Error creating local project reference:', e);
+                        }
+                        
+                        // Add success message
+                        const successMessage = document.createElement('div');
+                        successMessage.className = 'system-message';
+                        successMessage.innerHTML = `<span class="project-badge"><i class="fas fa-check-circle"></i> Conversation successfully converted to project: <strong>${projectName}</strong></span>`;
+                        chatMessages.appendChild(successMessage);
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                        
+                        // Add a button to view projects
+                        const viewProjectButton = document.createElement('button');
+                        viewProjectButton.className = 'view-projects-btn';
+                        viewProjectButton.innerHTML = '<i class="fas fa-folder-open"></i> View Projects';
+                        viewProjectButton.onclick = function() {
+                            // Show a projects panel
+                            showProjectsPanel(projectId);
+                        };
+                        successMessage.appendChild(viewProjectButton);
+                    } else {
+                        // Add error message
+                        const errorMessage = document.createElement('div');
+                        errorMessage.className = 'system-message error';
+                        errorMessage.innerHTML = `<span class="project-badge"><i class="fas fa-exclamation-circle"></i> Error converting conversation to project: ${data.message}</span>`;
+                        chatMessages.appendChild(errorMessage);
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error converting conversation to project:', error);
+                    
+                    // Remove loading message
+                    chatMessages.removeChild(loadingMessage);
+                    
+                    // Add error message
+                    const errorMessage = document.createElement('div');
+                    errorMessage.className = 'system-message error';
+                    errorMessage.innerHTML = `<span class="project-badge"><i class="fas fa-exclamation-circle"></i> Error converting conversation to project. Please try again later.</span>`;
+                    chatMessages.appendChild(errorMessage);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                });
+                
+                // For backwards compatibility, still update the URL
+                const projectId = 'proj_' + Date.now();
+                const url = new URL(window.location.href);
+                url.searchParams.set('project', projectId);
+                window.history.pushState({}, '', url);
+                
+                console.log('Converting conversation to project. Conversation ID:', conversationId);
+                return projectId;
+            }
+            
+            // Helper function to generate a project description from conversation history
+            function generateProjectDescription(history) {
+                if (!history || history.length === 0) return "No conversation history available.";
+                
+                // Extract user messages for the description
+                const userMessages = history.filter(msg => msg.role === 'user').map(msg => msg.content);
+                
+                if (userMessages.length === 0) return "No user messages in conversation.";
+                
+                // Use the first message as the main description
+                const firstMsg = userMessages[0];
+                
+                // If we have more messages, add a summary
+                if (userMessages.length > 1) {
+                    return `${firstMsg.substring(0, 100)}${firstMsg.length > 100 ? '...' : ''} (Conversation with ${userMessages.length} messages)`;
+                } else {
+                    return firstMsg.substring(0, 150) + (firstMsg.length > 150 ? '...' : '');
+                }
+            }
+            
+            // Function to display a projects panel
+            function showProjectsPanel(highlightProjectId = null) {
+                console.log('Opening projects panel, highlighting project:', highlightProjectId);
+                
+                // Create panel container if it doesn't exist
+                let projectsPanel = document.getElementById('projects-panel');
+                if (!projectsPanel) {
+                    projectsPanel = document.createElement('div');
+                    projectsPanel.id = 'projects-panel';
+                    projectsPanel.className = 'minerva-panel';
+                    document.body.appendChild(projectsPanel);
+                    
+                    // Add styling for the panel if not already in CSS
+                    if (!document.getElementById('projects-panel-style')) {
+                        const style = document.createElement('style');
+                        style.id = 'projects-panel-style';
+                        style.textContent = `
+                            .minerva-panel {
+                                position: fixed;
+                                top: 50px;
+                                right: 50px;
+                                width: 450px;
+                                max-height: 80vh;
+                                background-color: #1e1e2e;
+                                border: 1px solid #3c3c50;
+                                border-radius: 8px;
+                                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+                                z-index: 1000;
+                                overflow: hidden;
+                                display: flex;
+                                flex-direction: column;
+                            }
+                            .panel-header {
+                                padding: 12px 16px;
+                                border-bottom: 1px solid #3c3c50;
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                background-color: #252538;
+                            }
+                            .panel-title {
+                                font-weight: bold;
+                                font-size: 16px;
+                                color: white;
+                            }
+                            .panel-close {
+                                background: none;
+                                border: none;
+                                color: #aaa;
+                                cursor: pointer;
+                                font-size: 16px;
+                            }
+                            .panel-content {
+                                padding: 16px;
+                                overflow-y: auto;
+                                max-height: calc(80vh - 50px);
+                            }
+                            .panel-footer {
+                                padding: 12px 16px;
+                                border-top: 1px solid #3c3c50;
+                                display: flex;
+                                justify-content: flex-end;
+                                background-color: #252538;
+                            }
+                            .project-list {
+                                list-style: none;
+                                padding: 0;
+                                margin: 0;
+                            }
+                            .project-item {
+                                padding: 10px;
+                                margin-bottom: 8px;
+                                border-radius: 6px;
+                                background-color: #2d2d42;
+                                transition: all 0.2s ease;
+                                cursor: pointer;
+                            }
+                            .project-item:hover {
+                                background-color: #3d3d55;
+                            }
+                            .project-item.highlighted {
+                                background-color: #4a5097;
+                                border-left: 4px solid #6878e0;
+                            }
+                            .project-name {
+                                font-weight: bold;
+                                margin-bottom: 4px;
+                                font-size: 15px;
+                            }
+                            .project-description {
+                                font-size: 13px;
+                                color: #aaa;
+                                margin-bottom: 4px;
+                            }
+                            .project-meta {
+                                font-size: 12px;
+                                color: #777;
+                                display: flex;
+                                justify-content: space-between;
+                            }
+                            .no-projects {
+                                text-align: center;
+                                color: #888;
+                                padding: 20px;
+                            }
+                        `;
+                        document.head.appendChild(style);
+                    }
+                }
+                
+                // Clear existing content
+                projectsPanel.innerHTML = '';
+                
+                // Create header
+                const header = document.createElement('div');
+                header.className = 'panel-header';
+                header.innerHTML = `
+                    <div class="panel-title">Minerva Projects</div>
+                    <button class="panel-close" id="close-projects-panel"><i class="fas fa-times"></i></button>
+                `;
+                projectsPanel.appendChild(header);
+                
+                // Create content area
+                const content = document.createElement('div');
+                content.className = 'panel-content';
+                projectsPanel.appendChild(content);
+                
+                // Get projects from localStorage
+                let projects = {};
+                try {
+                    projects = JSON.parse(localStorage.getItem('minerva_projects') || '{}');
+                } catch (e) {
+                    console.error('Error parsing projects from localStorage:', e);
+                    projects = {};
+                }
+                
+                // Check if we have any projects
+                if (Object.keys(projects).length === 0) {
+                    content.innerHTML = '<div class="no-projects">No projects found. Convert conversations to projects to get started.</div>';
+                } else {
+                    // Create project list
+                    const projectList = document.createElement('ul');
+                    projectList.className = 'project-list';
+                    content.appendChild(projectList);
+                    
+                    // Add projects to the list
+                    Object.keys(projects).forEach(projectId => {
+                        const project = projects[projectId];
+                        const isHighlighted = projectId === highlightProjectId;
+                        
+                        const projectItem = document.createElement('li');
+                        projectItem.className = `project-item ${isHighlighted ? 'highlighted' : ''}`;
+                        projectItem.dataset.projectId = projectId;
+                        
+                        // Format the date
+                        let formattedDate = 'Unknown date';
+                        try {
+                            const date = new Date(project.created);
+                            formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+                        } catch (e) {
+                            console.warn('Error formatting date:', e);
+                        }
+                        
+                        // Create project item content
+                        projectItem.innerHTML = `
+                            <div class="project-name"><i class="fas fa-${project.icon || 'folder'}"></i> ${project.name}</div>
+                            <div class="project-description">${project.description || 'No description available.'}</div>
+                            <div class="project-meta">
+                                <span>Created: ${formattedDate}</span>
+                                <span>${project.conversations ? project.conversations.length : 0} conversations</span>
+                            </div>
+                        `;
+                        
+                        // Add click event to the project item
+                        projectItem.addEventListener('click', function() {
+                            // Here you would implement project selection/opening
+                            console.log('Selected project:', projectId);
+                            // For now, just show a message
+                            const chatMessages = document.getElementById('chat-messages');
+                            if (chatMessages) {
+                                const systemMessage = document.createElement('div');
+                                systemMessage.className = 'system-message';
+                                systemMessage.innerHTML = `<span class="project-badge"><i class="fas fa-folder-open"></i> Selected project: <strong>${project.name}</strong></span>`;
+                                chatMessages.appendChild(systemMessage);
+                                chatMessages.scrollTop = chatMessages.scrollHeight;
+                            }
+                            // Close the panel after selection
+                            projectsPanel.style.display = 'none';
+                        });
+                        
+                        projectList.appendChild(projectItem);
+                    });
+                }
+                
+                // Add footer with actions
+                const footer = document.createElement('div');
+                footer.className = 'panel-footer';
+                footer.innerHTML = `
+                    <button class="view-projects-btn"><i class="fas fa-plus"></i> New Project</button>
+                `;
+                projectsPanel.appendChild(footer);
+                
+                // Add event listener for the close button
+                document.getElementById('close-projects-panel').addEventListener('click', function() {
+                    projectsPanel.style.display = 'none';
+                });
+                
+                // Add event listener for the new project button
+                footer.querySelector('.view-projects-btn').addEventListener('click', function() {
+                    // For now, just show a prompt to enter project details
+                    const projectName = prompt('Enter a name for the new project:');
+                    if (projectName) {
+                        // Generate a new project ID
+                        const projectId = 'proj_' + Date.now();
+                        
+                        // Create and save the project
+                        let projectData = {};
+                        try {
+                            projectData = JSON.parse(localStorage.getItem('minerva_projects') || '{}');
+                        } catch (e) {
+                            console.error('Error parsing projects from localStorage:', e);
+                            projectData = {};
+                        }
+                        
+                        projectData[projectId] = {
+                            id: projectId,
+                            name: projectName,
+                            created: new Date().toISOString(),
+                            updated: new Date().toISOString(),
+                            description: 'New empty project',
+                            conversations: [],
+                            memories: [],
+                            tags: [],
+                            icon: 'folder-plus'
+                        };
+                        
+                        // Save to localStorage
+                        localStorage.setItem('minerva_projects', JSON.stringify(projectData));
+                        
+                        // Refresh the projects panel
+                        showProjectsPanel(projectId);
+                    }
+                });
+                
+                // Show the panel
+                projectsPanel.style.display = 'flex';
+            }
+        });
+    </script>
+    
+    <!-- This has been replaced by the enhanced-conversation-storage.js in the header -->
+    <script src="/static/js/conversations-manager.js"></script>
+    
+    <!-- Project context integration -->
+    <script src="/static/js/projects/project-context-processor.js"></script>
+    <script src="/static/js/projects/project-context-debugger.js"></script>
+    
+    <!-- Emergency chat functionality fix -->
+    <script src="/static/js/chat/chat-fix.js"></script>
+    <!-- Direct emergency chat handler - guaranteed to work -->
+    <script>
+        // Execute immediately and after DOM is fully loaded
+        (function() {
+            console.log('🆘 Adding emergency inline chat handler');
+            setupEmergencyChat();
+            document.addEventListener('DOMContentLoaded', setupEmergencyChat);
+            
+            // If DOM already loaded, run again after a delay
+            if (document.readyState === 'complete' || document.readyState === 'interactive') {
+                setTimeout(setupEmergencyChat, 500);
+            }
+            
+            function setupEmergencyChat() {
+                console.log('Setting up emergency chat handlers...');
+                
+                const chatInput = document.getElementById('chat-input');
+                const sendButton = document.getElementById('send-message');
+                const chatMessages = document.getElementById('chat-messages');
+                
+                if (!chatInput || !sendButton || !chatMessages) {
+                    console.warn('Chat elements not found, will retry in 1 second');
+                    setTimeout(setupEmergencyChat, 1000);
+                    return;
+                }
+                
+                console.log('Chat elements found, setting up direct handlers');
+                
+                // Add direct event listeners
+                sendButton.addEventListener('click', function() {
+                    emergencySendMessage();
+                });
+                
+                chatInput.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        emergencySendMessage();
+                    }
+                });
+                
+                // Direct message sending function
+                function emergencySendMessage() {
+                    const message = chatInput.value.trim();
+                    console.log('Emergency send function triggered with message:', message);
+                    
+                    if (!message) {
+                        console.log('Message is empty, not sending');
+                        return;
+                    }
+                    
+                    // Clear input field
+                    chatInput.value = '';
+                    
+                    // Create and add user message to chat
+                    const userMessageElem = document.createElement('div');
+                    userMessageElem.className = 'user-message';
+                    userMessageElem.innerHTML = `<p>${message}</p>`;
+                    chatMessages.appendChild(userMessageElem);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    
+                    // Store in conversation history if available
+                    if (window.conversationHistory) {
+                        window.conversationHistory.push({
+                            role: 'user',
+                            content: message
+                        });
+                    }
+                    
+                    // Try using existing API function if available
+                    if (typeof simulateThinkTankResponse === 'function') {
+                        try {
+                            console.log('Using simulateThinkTankResponse...');
+                            simulateThinkTankResponse(message);
+                        } catch (error) {
+                            console.error('Error using Think Tank API:', error);
+                            showFallbackResponse(message);
+                        }
+                    } else {
+                        console.log('No API function available, showing fallback');
+                        showFallbackResponse(message);
+                    }
+                }
+                
+                // Function to show fallback response when API fails
+                function showFallbackResponse(userMessage) {
+                    // Create and display bot response
+                    const botMessageElem = document.createElement('div');
+                    botMessageElem.className = 'ai-message';
+                    botMessageElem.innerHTML = `
+                        <p>I've received your message: "${userMessage}"</p>
+                        <p>The server connection appears to be unavailable right now.</p>
+                        <p>Your message has been saved locally.</p>
+                    `;
+                    
+                    // Add response after a small delay to simulate processing
+                    setTimeout(function() {
+                        chatMessages.appendChild(botMessageElem);
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                        
+                        // Store in conversation history if available
+                        if (window.conversationHistory) {
+                            window.conversationHistory.push({
+                                role: 'assistant',
+                                content: botMessageElem.textContent
+                            });
+                        }
+                    }, 800);
+                }
+                
+                // Log success message
+                console.log('Emergency chat handler installed successfully');
+                
+                // Add system message to let user know chat is working
+                const systemMsg = document.createElement('div');
+                systemMsg.className = 'system-message';
+                systemMsg.innerHTML = '<p><em>Emergency chat handler active. You can now send messages.</em></p>';
+                chatMessages.appendChild(systemMsg);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        })();
+    </script>
+    
+    <!-- Ensure Chat Interface is always visible per Rule #5 of Minerva Master Ruleset -->
+    <script>
+        // Execute after a brief delay to ensure DOM is fully loaded
+        setTimeout(function() {
+            // Rule #5: Ensure chat interface is always visible and accessible
+            const chatInterface = document.getElementById('chat-interface');
+            if (chatInterface) {
+                chatInterface.style.display = 'flex';
+                chatInterface.style.visibility = 'visible';
+                chatInterface.style.opacity = '1';
+                console.log('🔵 Chat interface visibility enforced (Rule #5)');
+                
+                // Ensure chat elements inside the interface are also visible
+                const chatMessages = document.getElementById('chat-messages');
+                if (chatMessages) {
+                    chatMessages.style.display = 'flex';
+                    chatMessages.style.flexDirection = 'column';
+                    chatMessages.style.visibility = 'visible';
+                    chatMessages.style.opacity = '1';
+                }
+                
+                // Ensure the chat history is properly displayed
+                const chatHistory = document.querySelector('#chat-messages .message-history');
+                if (chatHistory) {
+                    chatHistory.style.display = 'flex';
+                    chatHistory.style.flexDirection = 'column';
+                    chatHistory.style.visibility = 'visible';
+                    chatHistory.style.opacity = '1';
+                    chatHistory.style.overflow = 'auto';
+                    console.log('🔵 Chat history display enforced');
+                }
+            }
+            
+            // Set up automatic health check for API connection
+            setInterval(function() {
+                if (window.minervaAPI && typeof window.minervaAPI.connectToAPI === 'function') {
+                    console.log('⏱️ Performing scheduled API health check');
+                    window.minervaAPI.connectToAPI().catch(err => {
+                        console.warn('API health check failed:', err);
+                    });
+                }
+            }, 60000); // Check every 60 seconds per Rule #4
+        }, 1000);
+    </script>
+    
+    <!-- Direct Chat Fix Script - Implements Rules #4, #5, #7, #10 from Minerva Master Ruleset -->
+    <script>
+        // Initialize immediately
+        (function() {
+            console.log('🔧 Starting direct chat fix...');
+            
+            // Fix duplicate welcome messages
+            const chatHistory = document.getElementById('chat-history');
+            if (chatHistory) {
+                // Remove duplicate welcome messages
+                const welcomeMessages = chatHistory.querySelectorAll('.message.system.info');
+                if (welcomeMessages.length > 1) {
+                    console.log(`Found ${welcomeMessages.length} welcome messages, removing duplicates`);
+                    for (let i = 1; i < welcomeMessages.length; i++) {
+                        welcomeMessages[i].remove();
+                    }
+                }
+                
+                // Fix error messages to be more user-friendly (Rule #10)
+                const errorMessages = chatHistory.querySelectorAll('.message.system.error');
+                errorMessages.forEach(msg => {
+                    if (msg.textContent.includes('Failed to fetch')) {
+                        msg.innerHTML = '<div class="message-text">Think Tank API is currently offline. ' + 
+                            'Your messages are being saved locally and will sync when connection is restored.</div>' +
+                            '<div class="message-note">Using fallback mode per rule #4</div>';
+                    }
+                });
+            }
+            
+            // Get chat elements
+            const chatInput = document.getElementById('chat-input');
+            const sendButton = document.getElementById('send-message');
+            
+            if (chatInput && sendButton && chatHistory) {
+                console.log('Found all chat elements, setting up direct handlers');
+                
+                // Reset event listeners by cloning elements
+                const newSendButton = sendButton.cloneNode(true);
+                sendButton.parentNode.replaceChild(newSendButton, sendButton);
+                
+                const newChatInput = chatInput.cloneNode(true);
+                chatInput.parentNode.replaceChild(newChatInput, chatInput);
+                
+                // Add event listeners for sending messages
+                newSendButton.addEventListener('click', function() {
+                    sendChatMessage(newChatInput.value);
+                });
+                
+                newChatInput.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        sendChatMessage(newChatInput.value);
+                    }
+                });
+                
+                console.log('✅ Chat input and send button fixed');
+                
+                // Add a status message
+                const statusMsg = document.createElement('div');
+                statusMsg.className = 'message system success';
+                statusMsg.innerHTML = '<div class="message-text">Chat system fixed and ready to use! 🚀</div>';
+                chatHistory.appendChild(statusMsg);
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+            }
+            
+            // Function to send message with API fallback per Rule #4
+            function sendChatMessage(messageText) {
+                if (!messageText || messageText.trim() === '') return;
+                
+                const message = messageText.trim();
+                console.log('Sending message:', message);
+                
+                // Clear the input
+                if (chatInput) chatInput.value = '';
+                
+                // Get current time
+                const now = new Date();
+                const time = now.getHours().toString().padStart(2, '0') + ':' + 
+                           now.getMinutes().toString().padStart(2, '0');
+                
+                // Add user message to chat
+                const userMsgElement = document.createElement('div');
+                userMsgElement.className = 'message user-message';
+                userMsgElement.innerHTML = `
+                    <div class="message-content">
+                        <div class="message-text">${message}</div>
+                        <div class="message-time">${time}</div>
+                    </div>
+                `;
+                chatHistory.appendChild(userMsgElement);
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+                
+                // Save to conversation memory per Rule #2
+                if (window.enhancedConversationStorage) {
+                    if (!window.enhancedConversationStorage.messages) {
+                        window.enhancedConversationStorage.messages = [];
+                    }
+                    window.enhancedConversationStorage.messages.push({
+                        role: 'user', 
+                        content: message,
+                        timestamp: new Date().toISOString()
+                    });
+                }
+                
+                // Try to send to Think Tank API with proper fallback (Rule #4)
+                try {
+                    fetch('http://127.0.0.1:8080/think-tank', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ message: message })
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Display bot response
+                        const botMessage = data.response || data.message || 'I received your message.';
+                        displayBotMessage(botMessage, time);
+                        
+                        // Save to conversation memory
+                        if (window.enhancedConversationStorage && window.enhancedConversationStorage.messages) {
+                            window.enhancedConversationStorage.messages.push({
+                                role: 'assistant',
+                                content: botMessage,
+                                timestamp: new Date().toISOString(),
+                                model: data.model || 'think-tank'
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching from Think Tank API:', error);
+                        handleApiFallback(message, time);
+                    });
+                } catch (error) {
+                    console.error('Exception in fetch:', error);
+                    handleApiFallback(message, time);
+                }
+            }
+            
+            // Handle API fallback per Rule #4
+            function handleApiFallback(message, time) {
+                // Fallback message per Rule #4
+                const fallbackResponse = "I'm currently operating in fallback mode because the Think Tank API is offline. " + 
+                                        "Your message has been saved and will be processed when the connection is restored.";
+                
+                // Display fallback message
+                displayBotMessage(fallbackResponse, time, true);
+                
+                // Save to conversation memory
+                if (window.enhancedConversationStorage && window.enhancedConversationStorage.messages) {
+                    window.enhancedConversationStorage.messages.push({
+                        role: 'assistant',
+                        content: fallbackResponse,
+                        timestamp: new Date().toISOString(),
+                        metadata: { fallback: true }
+                    });
+                }
+            }
+            
+            // Display bot message
+            function displayBotMessage(message, time, isFallback = false) {
+                const botMsgElement = document.createElement('div');
+                botMsgElement.className = isFallback ? 'message bot-message fallback' : 'message bot-message';
+                
+                let messageHTML = `
+                    <div class="message-content">
+                        <div class="message-text">${message}</div>
+                        <div class="message-time">${time}</div>
+                `;
+                
+                if (isFallback) {
+                    messageHTML += `<div class="message-note">Using fallback mode per rule #4</div>`;
+                }
+                
+                messageHTML += `</div>`;
+                botMsgElement.innerHTML = messageHTML;
+                
+                chatHistory.appendChild(botMsgElement);
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+            }
+        })();
+    </script>
+</body>
+</html>

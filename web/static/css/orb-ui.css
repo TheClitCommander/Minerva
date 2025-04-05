@@ -1,0 +1,229 @@
+/* 
+ * Minerva Orbital UI Styles
+ * Styles for the 3D orbital interface and Think Tank visualization
+ */
+
+/* Container styling */
+.orbital-ui-container {
+    position: relative;
+    background-color: #080815;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+/* Loading indicator */
+.minerva-ui-loader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    z-index: 10;
+}
+
+/* React Three Fiber components styling */
+.orb-label {
+    color: white;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* Widget styling */
+.widget-container {
+    background: rgba(10, 10, 25, 0.8);
+    border: 1px solid rgba(100, 100, 255, 0.2);
+    border-radius: 6px;
+    padding: 8px;
+    color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 255, 0.2);
+    backdrop-filter: blur(4px);
+    transition: all 0.3s ease;
+}
+
+.widget-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    border-bottom: 1px solid rgba(100, 100, 255, 0.2);
+    padding-bottom: 4px;
+}
+
+.widget-title {
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+
+.widget-title i {
+    margin-right: 8px;
+}
+
+.widget-expand-btn {
+    cursor: pointer;
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: rgba(74, 107, 223, 0.2);
+    color: #4a6bdf;
+    user-select: none;
+}
+
+/* Think Tank specific styling */
+.think-tank-model {
+    background: rgba(20, 20, 40, 0.6);
+    border-radius: 4px;
+    margin-bottom: 8px;
+    padding: 6px 8px;
+    transition: all 0.3s ease;
+}
+
+.think-tank-model:hover {
+    background: rgba(30, 30, 60, 0.6);
+}
+
+.model-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.model-name {
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+}
+
+.model-score {
+    font-weight: bold;
+    background: rgba(30, 30, 60, 0.6);
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-size: 12px;
+}
+
+.model-metrics {
+    display: flex;
+    gap: 10px;
+    margin-top: 6px;
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.model-metric {
+    background: rgba(30, 30, 60, 0.5);
+    padding: 2px 6px;
+    border-radius: 10px;
+    white-space: nowrap;
+}
+
+.model-capabilities {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 6px;
+}
+
+.model-capability {
+    background: rgba(74, 107, 223, 0.3);
+    padding: 1px 6px;
+    border-radius: 10px;
+    font-size: 9px;
+    white-space: nowrap;
+}
+
+/* Model status indicators */
+.model-status {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 6px;
+    padding: 2px 5px;
+    border-radius: 10px;
+    font-size: 9px;
+}
+
+.status-thinking {
+    background: rgba(111, 66, 193, 0.2);
+}
+
+.status-processing {
+    background: rgba(74, 107, 223, 0.2);
+}
+
+.status-active {
+    background: rgba(20, 195, 142, 0.2);
+}
+
+/* Active model glow effect */
+.active-model {
+    box-shadow: 0 0 10px rgba(100, 100, 255, 0.3);
+    border-left: 3px solid rgba(111, 66, 193, 0.6);
+}
+
+/* Animation keyframes for pulsating models */
+@keyframes pulse {
+    0% {
+        opacity: 0.8;
+        box-shadow: 0 0 5px rgba(100, 100, 255, 0.2);
+    }
+    50% {
+        opacity: 1;
+        box-shadow: 0 0 15px rgba(100, 100, 255, 0.4);
+    }
+    100% {
+        opacity: 0.8;
+        box-shadow: 0 0 5px rgba(100, 100, 255, 0.2);
+    }
+}
+
+.pulsating {
+    animation: pulse 2s infinite;
+}
+
+/* Help tooltip styling */
+.orb-tooltip {
+    position: absolute;
+    background: rgba(10, 10, 25, 0.9);
+    border: 1px solid rgba(100, 100, 255, 0.3);
+    padding: 8px 12px;
+    border-radius: 4px;
+    color: white;
+    font-size: 12px;
+    pointer-events: none;
+    z-index: 1000;
+    max-width: 200px;
+    box-shadow: 0 0 10px rgba(0, 0, 255, 0.2);
+}
+
+/* Control ring styling */
+.control-ring-tab {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.control-ring-tab:hover {
+    transform: scale(1.1);
+}
+
+.active-tab {
+    box-shadow: 0 0 15px rgba(111, 66, 193, 0.6);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .orbital-ui-container {
+        height: 300px !important;
+    }
+}

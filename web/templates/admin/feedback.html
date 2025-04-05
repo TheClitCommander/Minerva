@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minerva Admin - Feedback Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/dashboard.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <style>
+        .feedback-controls {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .feedback-chart-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .chart-container {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .chart-container.wide {
+            grid-column: span 2;
+        }
+        
+        #feedback-status {
+            margin-bottom: 20px;
+        }
+        
+        .loading {
+            padding: 20px;
+            text-align: center;
+            color: #666;
+        }
+        
+        .error {
+            padding: 20px;
+            text-align: center;
+            color: #d32f2f;
+            background-color: #ffebee;
+            border-radius: 5px;
+        }
+        
+        .stats-summary {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .helpful { color: #4CAF50; }
+        .not-helpful { color: #F44336; }
+        .neutral { color: #2196F3; }
+        
+        .feedback-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .feedback-table th, .feedback-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .feedback-table th {
+            background-color: #f5f5f5;
+        }
+        
+        .feedback-table tr:hover {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <nav class="admin-sidebar">
+            <div class="admin-logo">
+                <img src="{{ url_for('static', filename='img/minerva-logo.png') }}" alt="Minerva Logo">
+                <h2>Minerva Admin</h2>
+            </div>
+            <ul class="admin-menu">
+                <li><a href="{{ url_for('admin.admin_dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('admin.admin_feedback') }}" class="active">Feedback</a></li>
+                <li><a href="#">Users</a></li>
+                <li><a href="#">Models</a></li>
+                <li><a href="#">Settings</a></li>
+            </ul>
+        </nav>
+        
+        <main class="admin-main">
+            <header class="admin-header">
+                <h1>User Feedback Dashboard</h1>
+                <div class="admin-user">
+                    <span>{{ current_user.username }}</span>
+                    <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+                </div>
+            </header>
+            
+            <div class="admin-content">
+                <div class="stats-summary">
+                    <div class="stat-card">
+                        <h3>Total Feedback</h3>
+                        <div class="stat-value neutral" id="total-feedback">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Helpful Responses</h3>
+                        <div class="stat-value helpful" id="helpful-count">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Not Helpful</h3>
+                        <div class="stat-value not-helpful" id="not-helpful-count">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Helpful Percentage</h3>
+                        <div class="stat-value" id="helpful-percentage">-</div>
+                    </div>
+                </div>
+                
+                <div id="feedback-charts">
+                    <!-- Charts will be dynamically inserted here by the feedback_visualizer.js -->
+                </div>
+                
+                <div class="feedback-table-container">
+                    <h2>Recent Feedback</h2>
+                    <table class="feedback-table" id="recent-feedback-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Model</th>
+                                <th>Feedback</th>
+                                <th>Reason</th>
+                                <th>Query</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Will be populated via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/admin/feedback_visualizer.js') }}"></script>
+    <script>
+        // Load recent feedback data
+        document.addEventListener('DOMContentLoaded', () => {
+            // Update summary stats when visualizer loads data
+            document.addEventListener('feedback-data-loaded', (event) => {
+                const data = event.detail;
+                if (data && data.overall) {
+                    document.getElementById('total-feedback').textContent = data.overall.total;
+                    document.getElementById('helpful-count').textContent = data.overall.helpful;
+                    document.getElementById('not-helpful-count').textContent = data.overall.not_helpful;
+                    document.getElementById('helpful-percentage').textContent = 
+                        data.overall.helpful_percentage.toFixed(1) + '%';
+                }
+            });
+            
+            // Load recent feedback entries
+            fetch('/api/admin/recent_feedback')
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.getElementById('recent-feedback-table').querySelector('tbody');
+                    tableBody.innerHTML = '';
+                    
+                    if (data.items && data.items.length > 0) {
+                        data.items.forEach(item => {
+                            const row = document.createElement('tr');
+                            
+                            // Format date
+                            const date = new Date(item.timestamp);
+                            const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+                            
+                            // Truncate long text
+                            const truncate = (text, length = 50) => {
+                                if (!text) return '-';
+                                return text.length > length ? text.substring(0, length) + '...' : text;
+                            };
+                            
+                            row.innerHTML = `
+                                <td>${formattedDate}</td>
+                                <td>${item.model || 'unknown'}</td>
+                                <td class="${item.feedback === 'helpful' ? 'helpful' : 'not-helpful'}">
+                                    ${item.feedback === 'helpful' ? 'Helpful' : 'Not Helpful'}
+                                </td>
+                                <td title="${item.reason || ''}">${truncate(item.reason)}</td>
+                                <td title="${item.query || ''}">${truncate(item.query)}</td>
+                            `;
+                            
+                            tableBody.appendChild(row);
+                        });
+                    } else {
+                        tableBody.innerHTML = '<tr><td colspan="5" class="empty-table">No feedback data available</td></tr>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading recent feedback:', error);
+                    const tableBody = document.getElementById('recent-feedback-table').querySelector('tbody');
+                    tableBody.innerHTML = '<tr><td colspan="5" class="error">Error loading feedback data</td></tr>';
+                });
+        });
+    </script>
+</body>
+</html>

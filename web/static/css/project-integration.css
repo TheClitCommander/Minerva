@@ -1,0 +1,324 @@
+/**
+ * Project Management Integration Styles
+ * Provides styling for project management features in Minerva
+ */
+
+/* Project Management Panel */
+#project-management-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 340px;
+    height: 100%;
+    background-color: rgba(15, 23, 42, 0.95);
+    border-left: 1px solid rgba(100, 116, 139, 0.5);
+    z-index: 1200;
+    transform: translateX(0);
+    transition: transform 0.3s ease-in-out;
+    overflow-y: auto;
+    backdrop-filter: blur(10px);
+}
+
+#project-management-panel.hidden {
+    transform: translateX(100%);
+}
+
+.panel-header {
+    padding: 15px;
+    background-color: rgba(30, 41, 59, 0.8);
+    border-bottom: 1px solid rgba(100, 116, 139, 0.3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.panel-header h3 {
+    margin: 0;
+    color: #e2e8f0;
+    font-size: 18px;
+}
+
+.panel-content {
+    padding: 15px;
+}
+
+.panel-section {
+    margin-bottom: 20px;
+}
+
+.panel-section h4 {
+    margin: 0 0 10px 0;
+    color: #e2e8f0;
+    font-size: 16px;
+    border-bottom: 1px solid rgba(100, 116, 139, 0.3);
+    padding-bottom: 5px;
+}
+
+.input-group {
+    display: flex;
+    gap: 10px;
+}
+
+.input-group input {
+    flex: 1;
+    background-color: rgba(30, 41, 59, 0.5);
+    border: 1px solid rgba(100, 116, 139, 0.3);
+    color: #e2e8f0;
+    padding: 8px 12px;
+    border-radius: 4px;
+}
+
+.primary-btn {
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.primary-btn:hover {
+    background-color: #2563eb;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    font-size: 16px;
+    transition: color 0.2s;
+}
+
+.close-button:hover {
+    color: #e2e8f0;
+}
+
+/* Project List */
+.project-list {
+    margin-top: 10px;
+}
+
+.no-projects-message {
+    color: #94a3b8;
+    text-align: center;
+    padding: 20px 0;
+    font-style: italic;
+}
+
+.project-item {
+    background-color: rgba(30, 41, 59, 0.5);
+    border: 1px solid rgba(100, 116, 139, 0.3);
+    border-radius: 4px;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.project-item-name {
+    font-weight: 500;
+    color: #e2e8f0;
+    flex: 1;
+}
+
+.project-item-date {
+    color: #94a3b8;
+    font-size: 12px;
+    margin: 0 10px;
+}
+
+.project-item-actions {
+    display: flex;
+    gap: 5px;
+}
+
+.project-action {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 5px;
+    border-radius: 3px;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.project-action:hover {
+    background-color: rgba(100, 116, 139, 0.2);
+    color: #e2e8f0;
+}
+
+.select-project:hover {
+    color: #38bdf8;
+}
+
+.delete-project:hover {
+    color: #ef4444;
+}
+
+/* Orbital UI Project Integration */
+.orb.project-orb {
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.6) 0%, rgba(37, 99, 235, 0.8) 100%);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.orb.project-orb:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(37, 99, 235, 0.6);
+}
+
+.orb.project-orb.active-project {
+    box-shadow: 0 0 20px rgba(37, 99, 235, 0.8);
+    border: 2px solid rgba(147, 197, 253, 0.8);
+}
+
+.orb-icon {
+    font-size: 24px;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 5px;
+}
+
+.orb-label {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.9);
+    max-width: 90px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    text-align: center;
+}
+
+/* Project Detail View */
+#project-detail-view {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(15, 23, 42, 0.97);
+    z-index: 1100;
+    display: none;
+    flex-direction: column;
+}
+
+#project-detail-view.hidden {
+    display: none;
+}
+
+#project-detail-view:not(.hidden) {
+    display: flex;
+}
+
+.detail-view-header {
+    padding: 15px 25px;
+    background-color: rgba(30, 41, 59, 0.8);
+    border-bottom: 1px solid rgba(100, 116, 139, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.back-button {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px;
+    border-radius: 3px;
+    transition: color 0.2s;
+}
+
+.back-button:hover {
+    color: #e2e8f0;
+}
+
+#project-detail-title {
+    margin: 0;
+    color: #94a3b8;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.detail-view-title {
+    margin: 0;
+    color: #e2e8f0;
+    font-size: 20px;
+    flex: 1;
+}
+
+.detail-view-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.action-button {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 8px;
+    border-radius: 3px;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.action-button:hover {
+    background-color: rgba(100, 116, 139, 0.2);
+    color: #e2e8f0;
+}
+
+.action-button[data-action="edit"]:hover {
+    color: #38bdf8;
+}
+
+.action-button[data-action="pause"]:hover {
+    color: #fbbf24;
+}
+
+.action-button[data-action="delete"]:hover {
+    color: #ef4444;
+}
+
+.detail-view-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    position: relative;
+}
+
+/* Project content specific styles */
+.project-content-placeholder {
+    color: #94a3b8;
+    text-align: center;
+    padding: 50px 0;
+    font-style: italic;
+}
+
+.project-section {
+    background-color: rgba(30, 41, 59, 0.5);
+    border: 1px solid rgba(100, 116, 139, 0.3);
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.project-section h3 {
+    margin: 0 0 15px 0;
+    color: #e2e8f0;
+    font-size: 18px;
+    border-bottom: 1px solid rgba(100, 116, 139, 0.3);
+    padding-bottom: 10px;
+}
+
+/* Error message */
+.system-message.error {
+    background-color: rgba(239, 68, 68, 0.2);
+    border-left: 3px solid rgba(239, 68, 68, 0.8);
+}

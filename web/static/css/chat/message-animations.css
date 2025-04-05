@@ -1,0 +1,155 @@
+/**
+ * Minerva Chat Message Animations
+ * Enhances the UI experience for chat interactions
+ */
+
+/* Animation classes */
+.animate-in {
+    animation-fill-mode: both;
+    transform-origin: center bottom;
+}
+
+/* Bounce animation for user messages */
+@keyframes message-bounce-in {
+    0% {
+        opacity: 0;
+        transform: scale(0.8) translateY(10px);
+    }
+    70% {
+        opacity: 1;
+        transform: scale(1.05) translateY(-5px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* Slide animation for bot messages */
+@keyframes message-slide-in {
+    0% {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Fade animation for system messages */
+@keyframes message-fade-in {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes message-fade-out {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+/* Apply animations to specific message types */
+.user-message.animate-in {
+    animation: message-bounce-in 0.5s cubic-bezier(0.17, 0.89, 0.32, 1.49);
+}
+
+.bot-message.animate-in {
+    animation: message-slide-in 0.4s ease-out;
+}
+
+.system-message.animate-in {
+    animation: message-fade-in 0.3s ease-in;
+}
+
+/* Enhanced typing indicator */
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: rgba(var(--message-bg-rgb, 40, 44, 52), 0.7);
+    border-radius: 12px;
+    max-width: 60%;
+    margin: 8px 0 8px 10px;
+}
+
+.typing-indicator .typing-dots {
+    display: inline-flex;
+}
+
+.typing-indicator .dot {
+    width: 8px;
+    height: 8px;
+    margin: 0 3px;
+    background-color: var(--text-color, #fff);
+    border-radius: 50%;
+    opacity: 0.6;
+    animation: dot-pulse 1.4s infinite ease-in-out both;
+}
+
+.typing-indicator .dot:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.typing-indicator .dot:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+@keyframes dot-pulse {
+    0%, 80%, 100% { 
+        transform: scale(0.6);
+        opacity: 0.4;
+    } 
+    40% { 
+        transform: scale(1);
+        opacity: 0.8;
+    }
+}
+
+/* Message hover effects */
+.message {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.message:hover {
+    z-index: 5;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.user-message:hover {
+    transform: translateX(-3px);
+}
+
+.bot-message:hover {
+    transform: translateX(3px);
+}
+
+/* Code block animations */
+.message pre {
+    transition: background-color 0.3s ease;
+}
+
+.message pre:hover {
+    background-color: rgba(var(--code-bg-rgb, 45, 50, 60), 1);
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion) {
+    .animate-in,
+    .message,
+    .typing-indicator .dot {
+        animation: none !important;
+        transition: opacity 0.1s ease !important;
+    }
+    
+    .message:hover {
+        transform: none !important;
+    }
+}

@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minerva - 3D Orbital UI (Fixed)</title>
+    <link rel="stylesheet" href="static/css/orb-ui/orb-style.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Full screen container for the orbital UI */
+        #react-orbital-ui {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: radial-gradient(circle at center, #131c2e 0%, #0a0e17 100%);
+            overflow: hidden;
+        }
+        
+        /* Styling for toggles in settings panels */
+        .toggle {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+        }
+        
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #374151;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        .toggle input:checked + .toggle-slider {
+            background-color: #4a6bdf;
+        }
+        
+        .toggle input:checked + .toggle-slider:before {
+            transform: translateX(20px);
+        }
+        
+        /* Debug overlay */
+        #debug-overlay {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            z-index: 9999;
+            font-size: 12px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Debug Overlay -->
+    <div id="debug-overlay"></div>
+
+    <!-- Loading screen -->
+    <div id="loading-screen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #0a0e17; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease-in-out;">
+        <img src="static/images/minerva_logo.png" alt="Minerva Logo" style="width: 120px; margin-bottom: 20px;">
+        <div style="width: 200px; height: 4px; background-color: #1a202c; border-radius: 2px; overflow: hidden;">
+            <div id="loading-bar" style="width: 0%; height: 100%; background: linear-gradient(to right, #4a6bdf, #6f42c1); transition: width 2s ease-in-out;"></div>
+        </div>
+        <div style="margin-top: 15px; color: #a0aec0; font-size: 14px;">
+            Launching Orbital Interface...
+        </div>
+    </div>
+
+    <!-- Root container for React -->
+    <div id="react-orbital-ui"></div>
+
+    <!-- Libraries: React & Three.js -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/three@0.159.0/build/three.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/@react-three/fiber@8.15.12/dist/react-three-fiber.min.js"></script>
+    <script src="https://unpkg.com/@react-three/drei@9.92.3/index.min.js"></script>
+
+    <!-- Debug script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const debug = document.getElementById('debug-overlay');
+            
+            // For development/debugging - toggle with Ctrl+D
+            document.addEventListener('keydown', function(e) {
+                if (e.ctrlKey && e.key === 'd') {
+                    debug.style.display = debug.style.display === 'none' ? 'block' : 'none';
+                    e.preventDefault();
+                }
+            });
+            
+            // Check if libraries are loaded
+            const libs = {
+                'React': typeof React !== 'undefined' ? React.version : 'Not loaded',
+                'ReactDOM': typeof ReactDOM !== 'undefined' ? ReactDOM.version : 'Not loaded',
+                'THREE': typeof THREE !== 'undefined' ? THREE.version : 'Not loaded',
+                'Babel': typeof Babel !== 'undefined' ? 'Loaded' : 'Not loaded',
+                'ReactThreeF': typeof ReactThreeF !== 'undefined' ? 'Loaded' : 'Not loaded',
+                'drei': typeof drei !== 'undefined' ? 'Loaded' : 'Not loaded'
+            };
+            
+            let debugHtml = '<h3>Library Status:</h3>';
+            for (const [lib, status] of Object.entries(libs)) {
+                const color = status === 'Not loaded' ? '#ff6b6b' : '#69db7c';
+                debugHtml += `<div>${lib}: <span style="color: ${color}">${status}</span></div>`;
+            }
+            
+            debugHtml += '<div style="margin-top: 10px;">Press Ctrl+D to toggle this overlay</div>';
+            debug.innerHTML = debugHtml;
+            
+            // Loading animation
+            const loadingBar = document.getElementById('loading-bar');
+            loadingBar.style.width = '100%';
+        });
+    </script>
+
+    <!-- Main application with inline JSX -->
+    <script type="text/babel">
+        // React hooks
+        const { useState, useEffect, useRef } = React;
+        const { Canvas, useThree, useFrame } = ReactThreeF;
+        const { OrbitControls, Html } = drei;
+        
+        // Load the actual UI component implementations
+        // ThinkTank component with blended response visualization
+        function ThinkTank({ active, data }) {
+            const [expanded, setExpanded] = useState(true);
+            
+            // Use sample data if nothing was provided
+            const models = data || [
+                { 
+                    name: "Claude 3 Opus", 
+                    score: 9.4, 
+                    metrics: { quality: 94, relevance: 93, technical: 91, coherence: 95, helpfulness: 92 }, 
+                    capabilities: ["Research", "Analysis", "Reasoning"],
+                    reasoning: "Best overall quality with excellent structure and coherence. Strong technical accuracy with minimal AI self-references.",
+                    active: true
+                },
+                { 
+                    name: "GPT-4 Turbo", 
+                    score: 9.2, 
+                    metrics: { quality: 92, relevance: 95, technical: 89, coherence: 87, helpfulness: 94 }, 
+                    capabilities: ["Code", "Creative", "Problem-Solving"],
+                    reasoning: "Highest relevance and excellent code examples. Used for technical sections of the blended response."
+                },
+                { 
+                    name: "Gemini Pro", 
+                    score: 8.7, 
+                    metrics: { quality: 87, relevance: 89, technical: 85, coherence: 84, helpfulness: 86 }, 
+                    capabilities: ["Fast", "Concise", "Web Knowledge"],
+                    reasoning: "Contributed supplementary information and alternative perspectives to the blended response."
+                }
+            ];
+            
+            // Calculate blend percentages based on scores
+            const totalScore = models.reduce((sum, model) => sum + model.score, 0);
+            const blendPercentages = models.map(model => ({
+                name: model.name,
+                percentage: Math.round((model.score / totalScore) * 100)
+            }));
+            
+            // This would be wired up to show active models in the Think Tank
+            const activeModels = models.filter(model => model.active).map(model => model.name);
+            
+            // Utility functions
+            function getMetricColor(metric, value) {
+                if (value >= 90) return '#72e872';
+                if (value >= 80) return '#a0e0a0';
+                if (value >= 70) return '#e8e872';
+                return '#e87272';
+            }
+            
+            function getModelColor(name) {
+                if (name.includes('Claude')) return 'rgba(156, 93, 219, 0.8)';
+                if (name.includes('GPT')) return 'rgba(25, 195, 125, 0.8)';
+                if (name.includes('Gemini')) return 'rgba(66, 133, 244, 0.8)';
+                if (name.includes('Llama')) return 'rgba(227, 116, 0, 0.8)';
+                return 'rgba(111, 66, 193, 0.8)';
+            }
+            
+            return (
+                <div style={{ 
+                    position: 'absolute',
+                    top: '20px',
+                    right: '20px',
+                    width: expanded ? '400px' : '220px',
+                    backdropFilter: 'blur(8px)',
+                    WebkitBackdropFilter: 'blur(8px)',
+                    background: 'rgba(10, 10, 30, 0.75)',
+                    boxShadow: `0 0 20px rgba(111, 66, 193, ${active ? '0.6' : '0.2'})`,
+                    border: '1px solid rgba(111, 66, 193, 0.4)',
+                    borderRadius: '12px',
+                    padding: '0',
+                    overflow: 'hidden',
+                    transition: 'all 0.3s ease',
+                    zIndex: 1000
+                }}>
+                    {/* Header Bar */}
+                    <div style={{ 
+                        background: 'linear-gradient(90deg, rgba(111, 66, 193, 0.8) 0%, rgba(74, 107, 223, 0.8) 100%)',
+                        padding: '12px 15px',
+                        display: 'flex', 
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        borderBottom: '1px solid rgba(111, 66, 193, 0.6)',
+                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.3)'
+                    }}>
+                        <div style={{ 
+                            fontWeight: 'bold', 
+                            fontSize: '14px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            color: 'white',
+                            textShadow: '0 0 10px rgba(111, 66, 193, 0.8)'
+                        }}>
+                            <i className="fas fa-brain" style={{ 
+                                marginRight: '10px',
+                                fontSize: '16px',
+                                color: 'white',
+                                textShadow: '0 0 15px rgba(255, 255, 255, 0.8)'
+                            }}></i>
+                            Think Tank Insights
+                        </div>
+                        <div style={{ display: 'flex', gap: '8px' }}>
+                            <button 
+                                onClick={() => setExpanded(!expanded)}
+                                style={{
+                                    background: 'none',
+                                    border: 'none',
+                                    color: 'white',
+                                    cursor: 'pointer',
+                                    padding: '0px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    width: '20px',
+                                    height: '20px',
+                                    borderRadius: '4px',
+                                    transition: 'all 0.2s'
+                                }}
+                            >
+                                <i className={`fas fa-${expanded ? 'compress-alt' : 'expand-alt'}`}></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    {/* Model Metrics */}
+                    <div style={{ padding: '15px', maxHeight: '70vh', overflowY: 'auto' }}>
+                        <div style={{ marginBottom: '20px' }}>
+                            <h3 style={{ 
+                                margin: '0 0 10px 0', 
+                                fontSize: '14px',
+                                color: '#a892e0',
+                                fontWeight: 'bold'
+                            }}>Model Evaluation</h3>
+                            
+                            {models.map((model, index) => (
+                                <div key={index} style={{ 
+                                    marginBottom: '12px',
+                                    padding: '10px',
+                                    background: 'rgba(20, 20, 40, 0.4)',
+                                    borderRadius: '8px',
+                                    border: model.active ? '1px solid rgba(111, 66, 193, 0.4)' : '1px solid rgba(50, 50, 80, 0.4)'
+                                }}>
+                                    <div style={{ 
+                                        display: 'flex', 
+                                        justifyContent: 'space-between', 
+                                        alignItems: 'center',
+                                        marginBottom: '6px'
+                                    }}>
+                                        <div style={{ 
+                                            fontWeight: 'bold', 
+                                            color: model.active ? '#a892e0' : '#8899aa',
+                                            fontSize: '13px'
+                                        }}>
+                                            {model.name}
+                                        </div>
+                                        <div style={{ 
+                                            color: model.active ? '#a892e0' : '#8899aa',
+                                            background: model.active ? 'rgba(111, 66, 193, 0.2)' : 'rgba(50, 50, 80, 0.2)',
+                                            padding: '2px 6px',
+                                            borderRadius: '10px',
+                                            fontSize: '12px',
+                                            fontWeight: 'bold'
+                                        }}>
+                                            {model.score.toFixed(1)}
+                                        </div>
+                                    </div>
+                                    
+                                    {/* Quality Metrics */}
+                                    <div style={{ display: 'flex', gap: '6px', marginBottom: '8px', flexWrap: 'wrap' }}>
+                                        {Object.entries(model.metrics).map(([key, value], i) => (
+                                            <div key={i} style={{ 
+                                                fontSize: '10px',
+                                                background: 'rgba(40, 40, 60, 0.5)',
+                                                padding: '2px 5px',
+                                                borderRadius: '4px',
+                                                color: getMetricColor(key, value)
+                                            }}>
+                                                {key.charAt(0).toUpperCase() + key.slice(1)}: {value}
+                                            </div>
+                                        ))}
+                                    </div>
+                                    
+                                    {/* Capabilities */}
+                                    <div style={{ display: 'flex', gap: '4px', marginBottom: '8px', flexWrap: 'wrap' }}>
+                                        {model.capabilities.map((capability, i) => (
+                                            <div key={i} style={{
+                                                fontSize: '9px',
+                                                background: 'rgba(74, 107, 223, 0.2)',
+                                                border: '1px solid rgba(74, 107, 223, 0.4)',
+                                                padding: '1px 4px',
+                                                borderRadius: '4px',
+                                                color: '#a0b0f0'
+                                            }}>
+                                                {capability}
+                                            </div>
+                                        ))}
+                                    </div>
+                                    
+                                    {/* Reasoning */}
+                                    <div style={{ 
+                                        fontSize: '11px',
+                                        color: '#8899aa',
+                                        lineHeight: '1.4',
+                                        padding: '5px',
+                                        background: 'rgba(30, 30, 50, 0.3)',
+                                        borderRadius: '4px'
+                                    }}>
+                                        {model.reasoning}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        
+                        {/* Response Blending Visualization */}
+                        <div>
+                            <h3 style={{ 
+                                margin: '0 0 10px 0', 
+                                fontSize: '14px',
+                                color: '#a892e0',
+                                fontWeight: 'bold'
+                            }}>Response Blending</h3>
+                            
+                            <div style={{ 
+                                background: 'rgba(20, 20, 40, 0.4)',
+                                borderRadius: '8px',
+                                padding: '10px',
+                                border: '1px solid rgba(74, 107, 223, 0.4)'
+                            }}>
+                                {blendPercentages.map((item, index) => (
+                                    <div key={index} style={{ marginBottom: '8px' }}>
+                                        <div style={{ 
+                                            display: 'flex', 
+                                            justifyContent: 'space-between',
+                                            fontSize: '12px',
+                                            marginBottom: '3px'
+                                        }}>
+                                            <span style={{ color: '#a0b0e0' }}>{item.name}</span>
+                                            <span style={{ color: '#a0b0e0' }}>{item.percentage}%</span>
+                                        </div>
+                                        <div style={{ 
+                                            background: 'rgba(40, 40, 60, 0.5)',
+                                            borderRadius: '4px',
+                                            height: '6px',
+                                            overflow: 'hidden'
+                                        }}>
+                                            <div style={{
+                                                width: `${item.percentage}%`,
+                                                height: '100%',
+                                                background: getModelColor(item.name),
+                                                borderRadius: '4px'
+                                            }}></div>
+                                        </div>
+                                    </div>
+                                ))}
+                                
+                                <div style={{ 
+                                    fontSize: '11px',
+                                    color: '#8899aa',
+                                    marginTop: '10px',
+                                    padding: '5px',
+                                    background: 'rgba(30, 30, 50, 0.3)',
+                                    borderRadius: '4px',
+                                    lineHeight: '1.4'
+                                }}>
+                                    Blended response combines Claude's coherence, GPT-4's code sections, and Gemini's supplementary information.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // ThinkTankParticles component to visualize AI model activity
+        function ThinkTankParticles({ active, activeModels }) {
+            const particlesRef = useRef();
+            const [particles, setParticles] = useState([]);
+            
+            // Initialize particles
+            useEffect(() => {
+                if (active && activeModels && activeModels.length > 0) {
+                    const newParticles = [];
+                    const particleCount = 50; // Number of particles per model
+                    
+                    for (let i = 0; i < particleCount; i++) {
+                        newParticles.push({
+                            position: [
+                                (Math.random() - 0.5) * 10,
+                                (Math.random() - 0.5) * 10,
+                                (Math.random() - 0.5) * 10
+                            ],
+                            size: Math.random() * 0.2 + 0.1,
+                            color: '#6f42c1', // Default purple color
+                            speed: Math.random() * 0.02 + 0.01,
+                            offset: Math.random() * Math.PI * 2
+                        });
+                    }
+                    
+                    setParticles(newParticles);
+                }
+            }, [active, activeModels]);
+            
+            // Animate particles
+            useFrame(({ clock }) => {
+                if (particlesRef.current && particles.length > 0 && active) {
+                    const positions = particlesRef.current.attributes.position.array;
+                    const sizes = particlesRef.current.attributes.size.array;
+                    const time = clock.getElapsedTime();
+                    
+                    for (let i = 0; i < particles.length; i++) {
+                        const i3 = i * 3;
+                        const p = particles[i];
+                        
+                        // Spiral movement
+                        positions[i3] = Math.sin(time * p.speed + p.offset) * 3;
+                        positions[i3 + 1] = Math.cos(time * p.speed + p.offset) * 2 + Math.sin(time * 0.1) * 2;
+                        positions[i3 + 2] = Math.cos(time * p.speed + p.offset + Math.PI/2) * 3;
+                        
+                        // Pulse size
+                        sizes[i] = p.size * (1 + 0.3 * Math.sin(time * 2 + p.offset));
+                    }
+                    
+                    particlesRef.current.attributes.position.needsUpdate = true;
+                    particlesRef.current.attributes.size.needsUpdate = true;
+                }
+            });
+            
+            if (!active || particles.length === 0) return null;
+            
+            return (
+                <points>
+                    <bufferGeometry ref={particlesRef}>
+                        <bufferAttribute
+                            attach="attributes-position"
+                            count={particles.length}
+                            array={new Float32Array(particles.length * 3)}
+                            itemSize={3}
+                        />
+                        <bufferAttribute
+                            attach="attributes-size"
+                            count={particles.length}
+                            array={new Float32Array(particles.map(p => p.size))}
+                            itemSize={1}
+                        />
+                    </bufferGeometry>
+                    <pointsMaterial
+                        size={0.5}
+                        sizeAttenuation={true}
+                        color="#6f42c1"
+                        transparent
+                        opacity={0.8}
+                        fog={false}
+                    />
+                </points>
+            );
+        }
+
+        // Simple MinervaUI implementation
+        function MinervaUI() {
+            const [thinkTankActive, setThinkTankActive] = useState(true);
+            
+            // Sample Think Tank data
+            const thinkTankData = [
+                { 
+                    name: "Claude 3 Opus", 
+                    score: 9.4, 
+                    metrics: { quality: 94, relevance: 93, technical: 91, coherence: 95, helpfulness: 92 }, 
+                    capabilities: ["Research", "Analysis", "Reasoning"],
+                    reasoning: "Best overall quality with excellent structure and coherence. Strong technical accuracy with minimal AI self-references.",
+                    active: true
+                },
+                { 
+                    name: "GPT-4 Turbo", 
+                    score: 9.2, 
+                    metrics: { quality: 92, relevance: 95, technical: 89, coherence: 87, helpfulness: 94 }, 
+                    capabilities: ["Code", "Creative", "Problem-Solving"],
+                    reasoning: "Highest relevance and excellent code examples. Used for technical sections of the blended response."
+                },
+                { 
+                    name: "Gemini Pro", 
+                    score: 8.7, 
+                    metrics: { quality: 87, relevance: 89, technical: 85, coherence: 84, helpfulness: 86 }, 
+                    capabilities: ["Fast", "Concise", "Web Knowledge"],
+                    reasoning: "Contributed supplementary information and alternative perspectives to the blended response."
+                }
+            ];
+            
+            return (
+                <div style={{ width: '100%', height: '100%' }}>
+                    <Canvas
+                        camera={{ position: [0, 0, 10], fov: 50 }}
+                        style={{ background: 'radial-gradient(circle at center, #131c2e 0%, #0a0e17 100%)' }}
+                    >
+                        <ambientLight intensity={0.5} />
+                        <pointLight position={[10, 10, 10]} intensity={1} />
+                        
+                        {/* This would render the orbs and particles */}
+                        <ThinkTankParticles active={thinkTankActive} activeModels={["Claude 3 Opus"]} />
+                        
+                        {/* Camera controls */}
+                        <OrbitControls 
+                            enableZoom={true}
+                            enablePan={true}
+                            enableRotate={true}
+                            minDistance={5}
+                            maxDistance={20}
+                        />
+                        
+                        {/* Think Tank overlay */}
+                        <Html fullscreen>
+                            <ThinkTank active={thinkTankActive} data={thinkTankData} />
+                        </Html>
+                    </Canvas>
+                </div>
+            );
+        }
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            const debug = document.getElementById('debug-overlay');
+            
+            // Simulate loading
+            setTimeout(() => {
+                const loadingScreen = document.getElementById('loading-screen');
+                loadingScreen.style.opacity = 0;
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 500);
+            }, 2000);
+            
+            try {
+                // Show debug overlay temporarily for testing
+                debug.style.display = 'block';
+                
+                // Render the app
+                const container = document.getElementById('react-orbital-ui');
+                
+                if (typeof ReactDOM.createRoot === 'function') {
+                    // React 18+
+                    const root = ReactDOM.createRoot(container);
+                    root.render(<MinervaUI />);
+                } else {
+                    // Older React
+                    ReactDOM.render(<MinervaUI />, container);
+                }
+                
+                console.log("Minerva Orbital UI rendered successfully!");
+                
+                // Hide debug after 5 seconds
+                setTimeout(() => {
+                    debug.style.opacity = '0.3';
+                }, 5000);
+                
+                // Toggle debug on click
+                debug.addEventListener('click', () => {
+                    debug.style.opacity = debug.style.opacity === '0.3' ? '1' : '0.3';
+                });
+            } catch (error) {
+                console.error("Error rendering Minerva UI:", error);
+                debug.style.display = 'block';
+                debug.innerHTML += `
+                    <div style="color: #ff6b6b; margin-top: 15px;">
+                        <strong>Error:</strong> ${error.message}
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,368 @@
+{% extends "base.html" %}
+
+{% block title %}Minerva - Orbital UI{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/orb-ui/orb-style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/chat-interface.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/project-integration.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/orbital-enhanced.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+<!-- Deep Space Background -->
+<div class="space-background"></div>
+<div class="star-field"></div>
+
+<!-- Main Orbital UI Container for Three.js/React Rendering -->
+<div id="minerva-orbital-ui" class="orbital-ui-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100vh; z-index: 1;"></div>
+
+<!-- Orbital Rings (Present whether or not 3D rendering works) -->
+<div class="orbital-ring orbital-ring-1"></div>
+<div class="orbital-ring orbital-ring-2"></div>
+<div class="orbital-ring orbital-ring-3"></div>
+
+<!-- Holographic UI Elements -->
+<div class="holographic-ui">
+    <div class="ui-element" style="top: 20px; left: 20px; width: 120px; text-align: center;">
+        <i class="fas fa-home"></i> DASHBOARD
+    </div>
+    <div class="ui-element" style="bottom: 20px; left: 20px; width: 120px; text-align: center;">
+        <i class="fas fa-project-diagram"></i> PROJECTS
+    </div>
+    <div class="ui-element" style="top: 20px; right: 20px; width: 120px; text-align: center;">
+        <i class="fas fa-robot"></i> AGENTS
+    </div>
+    <div class="ui-element" style="bottom: 20px; right: 20px; width: 120px; text-align: center;">
+        <i class="fas fa-cog"></i> SETTINGS
+    </div>
+</div>
+
+<!-- Navigation Buttons -->
+<div class="nav-buttons">
+    <div class="nav-button">Dashboard</div>
+    <div class="nav-button">Projects</div>
+    <div class="nav-button">Think Tank</div>
+    <div class="nav-button">Settings</div>
+</div>
+
+<!-- Fallback UI Container (will be replaced by 3D interface) -->
+<div class="orbital-ui-container">
+    <!-- Central Minerva Orb -->
+    <div class="minerva-orb-container">
+        <div class="minerva-orb">
+            <div class="orb-pulse"></div>
+            <div class="orb-particles"></div>
+            <div class="orb-content">
+                <img src="{{ url_for('static', filename='images/minerva-logo.png') }}" alt="Minerva" class="orb-icon">
+                <div class="orb-label">Minerva</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Orbs -->
+    <div class="project-orbs-container">
+        <!-- Project Orb 1 -->
+        <div class="project-orb" data-project-id="1" style="--orbit-position: 0; --orb-color: #4a6bdf;">
+            <div class="orb-pulse"></div>
+            <div class="orb-content">
+                <i class="fas fa-robot orb-icon"></i>
+                <div class="orb-label">AI Assistant</div>
+            </div>
+            
+            <!-- Agent Orbs for Project 1 -->
+            <div class="agent-orbs-container">
+                <div class="agent-orb" data-agent-id="1" style="--orbit-position: 0; --orb-color: #17a2b8;">
+                    <div class="orb-content">
+                        <i class="fas fa-comments orb-icon"></i>
+                        <div class="orb-label">Chat Agent</div>
+                    </div>
+                </div>
+                <div class="agent-orb" data-agent-id="2" style="--orbit-position: 120; --orb-color: #28a745;">
+                    <div class="orb-content">
+                        <i class="fas fa-brain orb-icon"></i>
+                        <div class="orb-label">Think Tank</div>
+                    </div>
+                </div>
+                <div class="agent-orb" data-agent-id="3" style="--orbit-position: 240; --orb-color: #ffc107;">
+                    <div class="orb-content">
+                        <i class="fas fa-memory orb-icon"></i>
+                        <div class="orb-label">Memory</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Project Orb 2 -->
+        <div class="project-orb" data-project-id="2" style="--orbit-position: 120; --orb-color: #28a745;">
+            <div class="orb-pulse"></div>
+            <div class="orb-content">
+                <i class="fas fa-chart-line orb-icon"></i>
+                <div class="orb-label">Finance AI</div>
+            </div>
+            
+            <!-- Agent Orbs for Project 2 -->
+            <div class="agent-orbs-container">
+                <div class="agent-orb" data-agent-id="4" style="--orbit-position: 0; --orb-color: #17a2b8;">
+                    <div class="orb-content">
+                        <i class="fas fa-search-dollar orb-icon"></i>
+                        <div class="orb-label">Market Analysis</div>
+                    </div>
+                </div>
+                <div class="agent-orb" data-agent-id="5" style="--orbit-position: 180; --orb-color: #dc3545;">
+                    <div class="orb-content">
+                        <i class="fas fa-chart-pie orb-icon"></i>
+                        <div class="orb-label">Portfolio Optimizer</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Project Orb 3 -->
+        <div class="project-orb" data-project-id="3" style="--orbit-position: 240; --orb-color: #dc3545;">
+            <div class="orb-pulse"></div>
+            <div class="orb-content">
+                <i class="fas fa-globe orb-icon"></i>
+                <div class="orb-label">Web Research</div>
+            </div>
+            
+            <!-- Agent Orbs for Project 3 -->
+            <div class="agent-orbs-container">
+                <div class="agent-orb" data-agent-id="6" style="--orbit-position: 0; --orb-color: #ffc107;">
+                    <div class="orb-content">
+                        <i class="fas fa-spider orb-icon"></i>
+                        <div class="orb-label">Web Crawler</div>
+                    </div>
+                </div>
+                <div class="agent-orb" data-agent-id="7" style="--orbit-position: 120; --orb-color: #17a2b8;">
+                    <div class="orb-content">
+                        <i class="fas fa-file-alt orb-icon"></i>
+                        <div class="orb-label">Document Parser</div>
+                    </div>
+                </div>
+                <div class="agent-orb" data-agent-id="8" style="--orbit-position: 240; --orb-color: #28a745;">
+                    <div class="orb-content">
+                        <i class="fas fa-database orb-icon"></i>
+                        <div class="orb-label">Data Storage</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Speed Tabs (Perimeter) -->
+    <div class="speed-tabs-container">
+        <div class="speed-tab" data-tab="projects">
+            <i class="fas fa-folder-open"></i>
+            <span class="tab-label">Projects</span>
+        </div>
+        <div class="speed-tab" data-tab="analytics">
+            <i class="fas fa-chart-bar"></i>
+            <span class="tab-label">Analytics</span>
+        </div>
+        <div class="speed-tab" data-tab="settings">
+            <i class="fas fa-cog"></i>
+            <span class="tab-label">Settings</span>
+        </div>
+        <div class="speed-tab" data-tab="search">
+            <i class="fas fa-search"></i>
+            <span class="tab-label">Search</span>
+        </div>
+        <div class="speed-tab" data-tab="calendar">
+            <i class="fas fa-calendar-alt"></i>
+            <span class="tab-label">Calendar</span>
+        </div>
+        <div class="speed-tab" data-tab="help">
+            <i class="fas fa-question-circle"></i>
+            <span class="tab-label">Help</span>
+        </div>
+        <div class="speed-tab" data-tab="notifications">
+            <i class="fas fa-bell"></i>
+            <span class="tab-label">Alerts</span>
+        </div>
+        <div class="speed-tab" data-tab="api">
+            <i class="fas fa-code"></i>
+            <span class="tab-label">API</span>
+        </div>
+    </div>
+
+    <!-- Widgets Area -->
+    <div class="widgets-container">
+        <div class="widget" id="api-usage-widget">
+            <div class="widget-header">
+                <i class="fas fa-chart-line"></i>
+                <span>API Usage</span>
+            </div>
+            <div class="widget-content">
+                <div class="api-usage-chart">
+                    <div class="chart-bar" style="--percentage: 65%; --color: #4a6bdf;">
+                        <span class="chart-label">GPT-4</span>
+                        <span class="chart-value">65%</span>
+                    </div>
+                    <div class="chart-bar" style="--percentage: 25%; --color: #dc3545;">
+                        <span class="chart-label">Claude</span>
+                        <span class="chart-value">25%</span>
+                    </div>
+                    <div class="chart-bar" style="--percentage: 10%; --color: #28a745;">
+                        <span class="chart-label">Gemini</span>
+                        <span class="chart-value">10%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="widget" id="recent-activity-widget">
+            <div class="widget-header">
+                <i class="fas fa-history"></i>
+                <span>Recent Activity</span>
+            </div>
+            <div class="widget-content">
+                <div class="activity-item">
+                    <i class="fas fa-robot"></i>
+                    <div class="activity-details">
+                        <div class="activity-title">Think Tank processed query</div>
+                        <div class="activity-time">2 minutes ago</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <i class="fas fa-database"></i>
+                    <div class="activity-details">
+                        <div class="activity-title">Memory created</div>
+                        <div class="activity-time">15 minutes ago</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <i class="fas fa-chart-pie"></i>
+                    <div class="activity-details">
+                        <div class="activity-title">Model evaluation completed</div>
+                        <div class="activity-time">1 hour ago</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="widget" id="upcoming-widget">
+            <div class="widget-header">
+                <i class="fas fa-calendar-day"></i>
+                <span>Upcoming</span>
+            </div>
+            <div class="widget-content">
+                <div class="upcoming-item">
+                    <div class="upcoming-time">3:45 PM</div>
+                    <div class="upcoming-details">
+                        <div class="upcoming-title">Market Report Generation</div>
+                        <div class="upcoming-project">Finance AI</div>
+                    </div>
+                </div>
+                <div class="upcoming-item">
+                    <div class="upcoming-time">5:00 PM</div>
+                    <div class="upcoming-details">
+                        <div class="upcoming-title">Daily Web Crawl</div>
+                        <div class="upcoming-project">Web Research</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Project Detail View (Initially Hidden) -->
+    <div class="project-detail-view" id="project-detail-view">
+        <div class="detail-view-header">
+            <button id="back-to-orbital" class="back-button">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+            <h2 id="project-detail-title">Project Details</h2>
+            <h2 class="detail-view-title">Project Name</h2>
+            <div class="detail-view-actions">
+                <button class="action-button" data-action="edit">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="action-button" data-action="pause">
+                    <i class="fas fa-pause"></i>
+                </button>
+                <button class="action-button" data-action="delete">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
+        <div class="detail-view-content">
+            <!-- Content will be dynamically loaded -->
+            
+            <!-- Project Chat Panel - Small, wide and thin as requested -->
+            <div class="project-chat-panel" id="project-chat-panel">
+                <div id="project-chat-header" class="chat-header">
+                    <div id="project-chat-title" class="chat-title">Project Chat</div>
+                    <div class="chat-controls">
+                        <button class="chat-control-btn" id="minimize-project-chat" title="Minimize chat"><i class="fas fa-minus"></i></button>
+                        <button class="chat-control-btn" id="toggle-project-metrics" title="Show AI Insights"><i class="fas fa-brain"></i></button>
+                    </div>
+                </div>
+                
+                <div id="project-chat-messages" class="chat-messages">
+                    <div class="system-message">Project context activated. How can I help with this project?</div>
+                </div>
+                
+                <div id="project-chat-input-container" class="chat-input-container">
+                    <textarea id="project-chat-input" placeholder="Ask about this project..."></textarea>
+                    <button id="send-project-message"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Minerva Chat Interface (Will be positioned by the JS) -->
+    <div id="minerva-chat-interface" class="floating-chat-interface">
+        <div id="chat-header">
+            <div id="chat-title">Minerva Space</div>
+            <div id="chat-controls">
+                <button class="chat-control-btn" id="minimize-chat" title="Minimize chat"><i class="fas fa-minus"></i></button>
+                <button class="chat-control-btn" id="toggle-metrics" title="Show AI Insights"><i class="fas fa-brain"></i></button>
+                <button class="chat-control-btn" id="project-button" title="Manage projects"><i class="fas fa-project-diagram"></i></button>
+            </div>
+        </div>
+        
+        <!-- Model metrics panel (initially hidden) -->
+        <div id="model-metrics-panel" class="hidden">
+            <div class="metrics-header">
+                <h5>Think Tank AI Metrics</h5>
+                <button id="close-metrics" class="close-button"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="think-tank-metrics" class="think-tank-metrics">
+                <!-- Metrics will be populated by JS -->
+            </div>
+        </div>
+        
+        <div id="chat-messages">
+            <div class="system-message">Welcome to Minerva's Think Tank. How can I assist you today?</div>
+        </div>
+        <div id="chat-input-container">
+            <textarea id="chat-input" placeholder="Ask Minerva anything..."></textarea>
+            <button id="send-message"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Core Libraries -->
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/three@0.150.0/build/three.min.js"></script>
+<script src="https://unpkg.com/@react-three/fiber@8.11.5/dist/react-three-fiber.min.js"></script>
+<script src="https://unpkg.com/@react-three/drei@9.56.26/dist/drei.min.js"></script>
+
+<!-- Minerva-specific JavaScript -->
+<script src="{{ url_for('static', filename='js/three-orbit-controls.js') }}"></script>
+<script src="{{ url_for('static', filename='js/orb-ui/orb-ui-init.js') }}"></script>
+<script src="{{ url_for('static', filename='js/orb-ui/orb-ui-project.js') }}"></script>
+<script src="{{ url_for('static', filename='js/chat-interface.js') }}"></script>
+<script src="{{ url_for('static', filename='js/minerva-chat.js') }}"></script>
+<script src="{{ url_for('static', filename='js/minerva-ui-integration.js') }}"></script>
+
+<!-- Orbital UI React Components -->
+<script type="module" src="{{ url_for('static', filename='js/orb-ui/react-three/MinervaOrb.jsx') }}"></script>
+<script type="module" src="{{ url_for('static', filename='js/orb-ui/react-three/ProjectOrb.jsx') }}"></script>
+<script type="module" src="{{ url_for('static', filename='js/orb-ui/react-three/AgentOrb.jsx') }}"></script>
+<script type="module" src="{{ url_for('static', filename='js/orb-ui/react-three/OrbitalUI.jsx') }}"></script>
+{% endblock %}

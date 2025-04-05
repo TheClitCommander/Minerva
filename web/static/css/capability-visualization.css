@@ -1,0 +1,144 @@
+/* 
+ * Model Capability Visualization Styles
+ * Provides specialized styling for displaying AI model capabilities and strengths
+ */
+
+.capabilities-chart {
+    margin-bottom: 20px;
+}
+
+.capabilities-chart h4 {
+    margin: 0 0 15px 0;
+    font-size: 0.9rem;
+    color: #f8f9fa;
+    font-weight: 500;
+}
+
+.capabilities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 15px;
+}
+
+.capability-card {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    padding: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.capability-card h5 {
+    margin: 0 0 10px 0;
+    font-size: 0.9rem;
+    color: #f8f9fa;
+    font-weight: 500;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.capability-metrics {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.capability-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.capability-label {
+    font-size: 0.8rem;
+    color: #cbd5e1;
+}
+
+.capability-bar-container {
+    position: relative;
+    height: 20px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.capability-bar {
+    height: 100%;
+    background: linear-gradient(to right, #4338ca, #6366f1);
+    border-radius: 3px;
+    transition: width 0.5s ease;
+}
+
+.capability-value {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.75rem;
+    color: #f8f9fa;
+    font-weight: 500;
+}
+
+/* Different colors for different capabilities */
+.capability-item:nth-child(1) .capability-bar {
+    background: linear-gradient(to right, #4338ca, #6366f1); /* Technical */
+}
+
+.capability-item:nth-child(2) .capability-bar {
+    background: linear-gradient(to right, #0891b2, #06b6d4); /* Creative */
+}
+
+.capability-item:nth-child(3) .capability-bar {
+    background: linear-gradient(to right, #65a30d, #84cc16); /* Reasoning */
+}
+
+.capability-item:nth-child(4) .capability-bar {
+    background: linear-gradient(to right, #b45309, #d97706); /* General */
+}
+
+/* Additional styles for capability details in model info panels */
+.model-details .capability-card {
+    background-color: rgba(255, 255, 255, 0.02);
+    margin-top: 10px;
+}
+
+.model-details .capability-bar {
+    height: 16px;
+}
+
+.model-details .capability-label {
+    font-size: 0.75rem;
+}
+
+.model-details .capability-value {
+    font-size: 0.7rem;
+}
+
+/* Query type detection highlight */
+.query-type-indicator {
+    display: inline-block;
+    padding: 3px 8px;
+    margin-top: 5px;
+    font-size: 0.75rem;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.query-type-technical {
+    background-color: rgba(99, 102, 241, 0.2);
+    color: #a5b4fc;
+}
+
+.query-type-creative {
+    background-color: rgba(6, 182, 212, 0.2);
+    color: #67e8f9;
+}
+
+.query-type-reasoning {
+    background-color: rgba(132, 204, 22, 0.2);
+    color: #bef264;
+}
+
+.query-type-general {
+    background-color: rgba(217, 119, 6, 0.2);
+    color: #fcd34d;
+}

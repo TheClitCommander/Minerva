@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minerva Think Tank</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6F42C1;
+            --primary-light: #9C5DDB;
+            --accent-color: #4A6BDF;
+            --text-primary: #E0E0E0;
+            --text-secondary: #A0AEC0;
+            --bg-dark: #0A0E17;
+            --bg-card: rgba(20, 20, 40, 0.4);
+            --bg-gradient: linear-gradient(135deg, #0A0E17 0%, #131C2E 100%);
+            --card-border: rgba(111, 66, 193, 0.4);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        header {
+            background: rgba(10, 14, 23, 0.8);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid rgba(111, 66, 193, 0.2);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 100;
+        }
+        
+        .logo {
+            font-weight: 700;
+            font-size: 22px;
+            color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-icon {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px rgba(111, 66, 193, 0.5);
+        }
+        
+        .header-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .think-tank-toggle {
+            background: rgba(111, 66, 193, 0.15);
+            border: 1px solid rgba(111, 66, 193, 0.3);
+            color: var(--primary-light);
+            font-size: 14px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+        
+        .think-tank-toggle:hover {
+            background: rgba(111, 66, 193, 0.25);
+        }
+        
+        .think-tank-toggle.active {
+            background: rgba(111, 66, 193, 0.3);
+            box-shadow: 0 0 10px rgba(111, 66, 193, 0.4);
+        }
+        
+        main {
+            flex: 1;
+            display: flex;
+            position: relative;
+        }
+        
+        /* Think Tank Panel */
+        .think-tank-panel {
+            max-width: 500px;
+            width: 90%;
+            margin: 20px auto;
+            background: rgba(10, 10, 30, 0.75);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(111, 66, 193, 0.4);
+            overflow: hidden;
+            z-index: 200;
+        }
+        
+        .think-tank-header {
+            background: linear-gradient(90deg, rgba(111, 66, 193, 0.8) 0%, rgba(74, 107, 223, 0.8) 100%);
+            padding: 12px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .think-tank-title {
+            font-weight: 600;
+            font-size: 14px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .think-tank-content {
+            padding: 15px;
+            max-height: 70vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .section-title {
+            margin: 0 0 10px 0;
+            font-size: 14px;
+            color: var(--primary-light);
+            font-weight: 600;
+        }
+        
+        .model-card {
+            margin-bottom: 12px;
+            padding: 10px;
+            background: var(--bg-card);
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+            transition: all 0.2s;
+        }
+        
+        .model-card:hover {
+            border-color: rgba(111, 66, 193, 0.6);
+            box-shadow: 0 0 10px rgba(111, 66, 193, 0.2);
+        }
+        
+        .model-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+        
+        .model-name {
+            font-weight: 600;
+            color: var(--primary-light);
+            font-size: 13px;
+        }
+        
+        .model-score {
+            color: var(--primary-light);
+            background: rgba(111, 66, 193, 0.2);
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .metrics-container {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .metric {
+            font-size: 10px;
+            background: rgba(40, 40, 60, 0.5);
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+        
+        .capabilities-container {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .capability {
+            font-size: 9px;
+            background: rgba(74, 107, 223, 0.2);
+            border: 1px solid rgba(74, 107, 223, 0.4);
+            padding: 1px 4px;
+            border-radius: 4px;
+            color: #a0b0f0;
+        }
+        
+        .reasoning {
+            font-size: 11px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+            padding: 5px;
+            background: rgba(30, 30, 50, 0.3);
+            border-radius: 4px;
+        }
+        
+        .blend-container {
+            background: var(--bg-card);
+            border-radius: 8px;
+            padding: 12px;
+            border: 1px solid rgba(74, 107, 223, 0.4);
+        }
+        
+        .blend-item {
+            margin-bottom: 8px;
+        }
+        
+        .blend-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            margin-bottom: 3px;
+        }
+        
+        .blend-name, .blend-percentage {
+            color: #a0b0e0;
+        }
+        
+        .blend-bar-bg {
+            background: rgba(40, 40, 60, 0.5);
+            border-radius: 4px;
+            height: 6px;
+            overflow: hidden;
+        }
+        
+        .blend-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+        }
+        
+        .chat-input {
+            width: 90%;
+            max-width: 500px;
+            margin: 20px auto;
+            background: rgba(20, 20, 40, 0.6);
+            border: 1px solid rgba(111, 66, 193, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+        
+        .chat-input textarea {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 15px;
+            min-height: 50px;
+            max-height: 150px;
+            resize: none;
+            outline: none;
+            padding: 5px;
+        }
+        
+        .send-button {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+            color: white;
+            border: none;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 0 10px rgba(111, 66, 193, 0.4);
+            flex-shrink: 0;
+        }
+        
+        .send-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(111, 66, 193, 0.6);
+        }
+        
+        /* API Status Display */
+        .status-display {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(20, 20, 40, 0.8);
+            border: 1px solid var(--card-border);
+            border-radius: 4px;
+            padding: 5px 10px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            z-index: 1000;
+        }
+        
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin: 3px 0;
+        }
+        
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        
+        .status-success {
+            background-color: #48bb78;
+        }
+        
+        .status-error {
+            background-color: #e53e3e;
+        }
+        
+        .status-pending {
+            background-color: #ed8936;
+        }
+    </style>
+</head>
+<body>
+    <!-- API Status Overlay -->
+    <div class="status-display">
+        <div class="status-item">
+            <div id="apiStatus" class="status-indicator status-success"></div>
+            <span>API: Connected</span>
+        </div>
+        <div class="status-item">
+            <div id="modelsStatus" class="status-indicator status-success"></div>
+            <span>Models: Ready</span>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <main>
+        <div class="think-tank-panel">
+            <div class="think-tank-header">
+                <div class="think-tank-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 12c0 5.5-4.5 10-10 10S2 17.5 2 12 6.5 2 12 2s10 4.5 10 10z"></path>
+                        <path d="M12 8v4l3 3"></path>
+                    </svg>
+                    Think Tank Insights
+                </div>
+            </div>
+            
+            <div class="think-tank-content">
+                <div style="margin-bottom: 20px;">
+                    <h3 class="section-title">Model Evaluation</h3>
+                    
+                    <!-- Claude 3 Opus -->
+                    <div class="model-card">
+                        <div class="model-header">
+                            <div class="model-name">Claude 3 Opus</div>
+                            <div class="model-score">9.4</div>
+                        </div>
+                        
+                        <div class="metrics-container">
+                            <div class="metric" style="color: #72e872;">Quality: 94</div>
+                            <div class="metric" style="color: #72e872;">Relevance: 93</div>
+                            <div class="metric" style="color: #72e872;">Technical: 91</div>
+                            <div class="metric" style="color: #72e872;">Coherence: 95</div>
+                            <div class="metric" style="color: #72e872;">Helpfulness: 92</div>
+                        </div>
+                        
+                        <div class="capabilities-container">
+                            <div class="capability">Research</div>
+                            <div class="capability">Analysis</div>
+                            <div class="capability">Reasoning</div>
+                        </div>
+                        
+                        <div class="reasoning">
+                            Best overall quality with excellent structure and coherence. Strong technical accuracy with minimal AI self-references.
+                        </div>
+                    </div>
+                    
+                    <!-- GPT-4 Turbo -->
+                    <div class="model-card">
+                        <div class="model-header">
+                            <div class="model-name">GPT-4 Turbo</div>
+                            <div class="model-score">9.2</div>
+                        </div>
+                        
+                        <div class="metrics-container">
+                            <div class="metric" style="color: #72e872;">Quality: 92</div>
+                            <div class="metric" style="color: #72e872;">Relevance: 95</div>
+                            <div class="metric" style="color: #72e872;">Technical: 89</div>
+                            <div class="metric" style="color: #a0e0a0;">Coherence: 87</div>
+                            <div class="metric" style="color: #72e872;">Helpfulness: 94</div>
+                        </div>
+                        
+                        <div class="capabilities-container">
+                            <div class="capability">Code</div>
+                            <div class="capability">Creative</div>
+                            <div class="capability">Problem-Solving</div>
+                        </div>
+                        
+                        <div class="reasoning">
+                            Highest relevance and excellent code examples. Used for technical sections of the blended response.
+                        </div>
+                    </div>
+                    
+                    <!-- Gemini Pro -->
+                    <div class="model-card">
+                        <div class="model-header">
+                            <div class="model-name">Gemini Pro</div>
+                            <div class="model-score">8.7</div>
+                        </div>
+                        
+                        <div class="metrics-container">
+                            <div class="metric" style="color: #a0e0a0;">Quality: 87</div>
+                            <div class="metric" style="color: #a0e0a0;">Relevance: 89</div>
+                            <div class="metric" style="color: #a0e0a0;">Technical: 85</div>
+                            <div class="metric" style="color: #a0e0a0;">Coherence: 84</div>
+                            <div class="metric" style="color: #a0e0a0;">Helpfulness: 86</div>
+                        </div>
+                        
+                        <div class="capabilities-container">
+                            <div class="capability">Fast</div>
+                            <div class="capability">Concise</div>
+                            <div class="capability">Web Knowledge</div>
+                        </div>
+                        
+                        <div class="reasoning">
+                            Contributed supplementary information and alternative perspectives to the blended response.
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Response Blending Visualization -->
+                <div>
+                    <h3 class="section-title">Response Blending</h3>
+                    
+                    <div class="blend-container">
+                        <!-- Claude 3 Opus -->
+                        <div class="blend-item">
+                            <div class="blend-header">
+                                <span class="blend-name">Claude 3 Opus</span>
+                                <span class="blend-percentage">34%</span>
+                            </div>
+                            <div class="blend-bar-bg">
+                                <div class="blend-bar-fill" style="width: 34%; background: rgba(156, 93, 219, 0.8);"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- GPT-4 Turbo -->
+                        <div class="blend-item">
+                            <div class="blend-header">
+                                <span class="blend-name">GPT-4 Turbo</span>
+                                <span class="blend-percentage">33%</span>
+                            </div>
+                            <div class="blend-bar-bg">
+                                <div class="blend-bar-fill" style="width: 33%; background: rgba(25, 195, 125, 0.8);"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Gemini Pro -->
+                        <div class="blend-item">
+                            <div class="blend-header">
+                                <span class="blend-name">Gemini Pro</span>
+                                <span class="blend-percentage">33%</span>
+                            </div>
+                            <div class="blend-bar-bg">
+                                <div class="blend-bar-fill" style="width: 33%; background: rgba(66, 133, 244, 0.8);"></div>
+                            </div>
+                        </div>
+                        
+                        <div style="font-size: 11px; color: #8899aa; margin-top: 10px; padding: 5px; background: rgba(30, 30, 50, 0.3); border-radius: 4px; line-height: 1.4;">
+                            Blended response combines Claude's coherence, GPT-4's technical sections, and Gemini's supplementary information.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Input Area -->
+    <div class="chat-input">
+        <textarea id="userInput" placeholder="Ask a question..."></textarea>
+        <button id="sendButton" class="send-button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+        </button>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const userInput = document.getElementById('userInput');
+            const sendButton = document.getElementById('sendButton');
+            const apiStatus = document.getElementById('apiStatus');
+            const modelsStatus = document.getElementById('modelsStatus');
+            
+            // Auto-resize textarea
+            userInput.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+            
+            // Send message when Send button is clicked
+            sendButton.addEventListener('click', function() {
+                sendMessage();
+            });
+            
+            // Send message when Enter key is pressed (without Shift)
+            userInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+            
+            // Simulated send message function
+            function sendMessage() {
+                const message = userInput.value.trim();
+                if (message) {
+                    console.log('Sending message:', message);
+                    
+                    // Display sending status
+                    apiStatus.className = 'status-indicator status-pending';
+                    
+                    // Simulate API call
+                    setTimeout(function() {
+                        // Update model evaluations (this would come from actual API in real implementation)
+                        updateModelEvaluations();
+                        
+                        // Reset status
+                        apiStatus.className = 'status-indicator status-success';
+                        
+                        // Clear input
+                        userInput.value = '';
+                        userInput.style.height = 'auto';
+                    }, 1500);
+                }
+            }
+            
+            // Simulated update of model evaluations
+            function updateModelEvaluations() {
+                // This function would update the UI with real data from the API
+                // For now, it just logs to console
+                console.log('Updated model evaluations with response');
+                
+                // Here you would update the DOM with new evaluation data
+                // This is just a placeholder for demonstration
+            }
+            
+            // Simulate initial loading of models
+            setTimeout(function() {
+                modelsStatus.className = 'status-indicator status-success';
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

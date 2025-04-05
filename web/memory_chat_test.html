@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Minerva Memory-Enabled Think Tank</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #000;
+            color: #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #2d3748;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #a0aec0;
+        }
+        
+        .memory-indicator {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            color: #a0aec0;
+            background: #1a202c;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        
+        .memory-indicator.active {
+            color: #4fd1c5;
+        }
+        
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #1a202c;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .message {
+            padding: 10px 15px;
+            border-radius: 18px;
+            max-width: 80%;
+            position: relative;
+            line-height: 1.5;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .user-message {
+            align-self: flex-end;
+            background-color: #3182ce;
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .assistant-message {
+            align-self: flex-start;
+            background-color: #2d3748;
+            color: #e2e8f0;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .system-message {
+            align-self: center;
+            background-color: #4a5568;
+            color: #e2e8f0;
+            font-size: 0.9rem;
+            padding: 5px 10px;
+            border-radius: 5px;
+            opacity: 0.8;
+        }
+        
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+        
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #a0aec0;
+            animation: typing 1s infinite ease-in-out alternate;
+        }
+        
+        .typing-indicator span:nth-child(1) { animation-delay: 0s; }
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes typing {
+            from { opacity: 0.2; transform: translateY(0); }
+            to { opacity: 1; transform: translateY(-5px); }
+        }
+        
+        .memory-tag {
+            font-size: 0.8rem;
+            padding: 2px 6px;
+            border-radius: 3px;
+            background-color: #553c9a;
+            color: white;
+            margin-top: 5px;
+            display: inline-block;
+        }
+        
+        .input-container {
+            display: flex;
+            padding: 10px;
+            background-color: #2d3748;
+            border-top: 1px solid #4a5568;
+        }
+        
+        input {
+            flex: 1;
+            padding: 12px 15px;
+            background-color: #1a202c;
+            border: 1px solid #4a5568;
+            border-radius: 5px;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+        }
+        
+        button {
+            margin-left: 10px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4299e1;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #3182ce;
+        }
+        
+        .model-info {
+            font-size: 0.8rem;
+            color: #a0aec0;
+            margin-top: 5px;
+            align-self: flex-start;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Minerva Memory-Enabled Think Tank</h1>
+        <div class="memory-indicator active" id="memory-indicator">
+            🧠 Conversation Memory: Active
+        </div>
+    </div>
+    
+    <div class="chat-container">
+        <div class="chat-messages" id="chat-messages">
+            <div class="system-message">
+                Welcome to Minerva's Memory-Enabled Think Tank!
+            </div>
+        </div>
+        
+        <div class="input-container">
+            <input type="text" id="user-input" placeholder="Type your message here..." autocomplete="off">
+            <button id="send-button">Send</button>
+        </div>
+    </div>
+    
+    <script>
+        // Configuration and state
+        const API_PORT = 52952; // Use the port where your server is running
+        const API_BASE_URL = `http://127.0.0.1:${API_PORT}`;
+        const CONVERSATION_ID = 'memory-test-' + Date.now();
+        const DEBUG = true;
+        
+        // DOM elements
+        const chatMessages = document.getElementById('chat-messages');
+        const userInput = document.getElementById('user-input');
+        const sendButton = document.getElementById('send-button');
+        const memoryIndicator = document.getElementById('memory-indicator');
+        
+        // Event listeners
+        sendButton.addEventListener('click', sendMessage);
+        userInput.addEventListener('keydown', event => {
+            if (event.key === 'Enter') sendMessage();
+        });
+        
+        // Add initial system message
+        addMessage('Memory system is activated. I\'ll remember important information from our conversation!', 'system');
+        
+        function sendMessage() {
+            const message = userInput.value.trim();
+            if (!message) return;
+            
+            // Add user message to chat
+            addMessage(message, 'user');
+            userInput.value = '';
+            
+            // Add typing indicator
+            const typingIndicator = addTypingIndicator();
+            
+            // Prepare API call payload
+            const payload = {
+                message: message,
+                conversation_id: CONVERSATION_ID,
+                store_in_memory: true // Enable memory feature
+            };
+            
+            // Log if in debug mode
+            if (DEBUG) console.log('Sending message:', payload);
+            
+            // Call API
+            fetch(`${API_BASE_URL}/api/chat/message`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Remove typing indicator
+                typingIndicator.remove();
+                
+                // Log the response for debugging
+                if (DEBUG) console.log('API response:', data);
+                
+                // Extract response based on available fields
+                let responseText = '';
+                if (data.blended_response) {
+                    responseText = data.blended_response;
+                } else if (data.response) {
+                    responseText = data.response;
+                } else if (data.message) {
+                    responseText = data.message;
+                } else {
+                    responseText = "Sorry, I couldn't process that request.";
+                }
+                
+                // Add the response to chat
+                addMessage(responseText, 'assistant');
+                
+                // If memory was used, show a memory tag
+                if (data.memory_info && data.memory_info.memories_used > 0) {
+                    const memoryTag = document.createElement('div');
+                    memoryTag.className = 'memory-tag';
+                    memoryTag.textContent = `🧠 Used ${data.memory_info.memories_used} memories`;
+                    document.querySelector('.assistant-message:last-child').appendChild(memoryTag);
+                }
+                
+                // Show model info if available
+                if (data.model_info || (data.think_tank_result && data.think_tank_result.model_info)) {
+                    const modelInfo = data.model_info || data.think_tank_result.model_info;
+                    const modelInfoElement = document.createElement('div');
+                    modelInfoElement.className = 'model-info';
+                    
+                    if (modelInfo.models_used) {
+                        modelInfoElement.textContent = `Models: ${modelInfo.models_used.join(', ')}`;
+                    } else {
+                        modelInfoElement.textContent = `Primary model: ${modelInfo.primary_model || 'think_tank'}`;
+                    }
+                    
+                    chatMessages.appendChild(modelInfoElement);
+                }
+                
+                // Scroll to bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            })
+            .catch(error => {
+                // Remove typing indicator
+                typingIndicator.remove();
+                
+                // Show error
+                console.error('Error:', error);
+                addMessage(`Error: ${error.message}. Please check if the server is running on port ${API_PORT}.`, 'system');
+            });
+        }
+        
+        function addMessage(content, type) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}-message`;
+            messageDiv.textContent = content;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            return messageDiv;
+        }
+        
+        function addTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message assistant-message';
+            typingDiv.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            return typingDiv;
+        }
+    </script>
+</body>
+</html>

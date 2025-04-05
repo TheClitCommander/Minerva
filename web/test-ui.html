@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minerva Orbital UI Test</title>
+    
+    <!-- Base styles -->
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="static/css/minerva-ui.css">
+    <link rel="stylesheet" href="static/css/orb-ui.css">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="dark-theme">
+    <div class="container">
+        <h1>Minerva Orbital UI Test</h1>
+        
+        <!-- Orbital UI Container -->
+        <div id="minerva-orbital-ui" class="orbital-ui-container" style="width: 100%; height: 500px; margin: 20px 0;">
+            <div id="minerva-3d-root"></div>
+            
+            <!-- Loading indicator that will be hidden when UI loads -->
+            <div class="minerva-ui-loader">
+                <i class="fas fa-spinner fa-spin fa-3x"></i>
+                <p>Loading Minerva Orbital UI...</p>
+            </div>
+        </div>
+        
+        <!-- Debug Information Panel -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Debug Information</h3>
+            </div>
+            <div class="card-body">
+                <div id="debug-output"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Load React and Three.js dependencies -->
+    <script src="https://unpkg.com/react@18/umd/react.development.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.min.js"></script>
+    <script src="https://unpkg.com/three@0.149.0/build/three.min.js"></script>
+    <script src="https://unpkg.com/@react-three/fiber@8.11.5/dist/react-three-fiber.min.js"></script>
+    <script src="https://unpkg.com/@react-three/drei@9.56.28/dist/drei.min.js"></script>
+    
+    <!-- Load our component adapter -->
+    <script src="static/js/orb-ui/minerva-component-adapter.js"></script>
+    
+    <!-- Load the Think Tank bridge -->
+    <script src="static/js/think-tank-bridge.js"></script>
+    
+    <!-- Test initialization script -->
+    <script>
+        // Log debug info to the debug panel
+        function logDebug(message) {
+            const debugOutput = document.getElementById('debug-output');
+            const logEntry = document.createElement('div');
+            logEntry.className = 'debug-entry';
+            logEntry.innerHTML = `<span class="debug-time">[${new Date().toLocaleTimeString()}]</span> ${message}`;
+            debugOutput.appendChild(logEntry);
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            logDebug('DOM fully loaded');
+            
+            // Initialize UI after short delay to ensure dependencies are loaded
+            setTimeout(() => {
+                try {
+                    // Create mock project data
+                    const projectOrbs = [
+                        { name: "Project Alpha", icon: "code", active: false },
+                        { name: "Project Beta", icon: "database", active: false },
+                        { name: "Project Gamma", icon: "brain", active: true }
+                    ];
+                    
+                    // Get the 3D container
+                    const container = document.getElementById('minerva-orbital-ui');
+                    const root = document.getElementById('minerva-3d-root');
+                    
+                    // Check if we have required dependencies
+                    if (typeof React === 'undefined') {
+                        logDebug('ERROR: React is not loaded');
+                        return;
+                    }
+                    
+                    if (typeof ReactDOM === 'undefined') {
+                        logDebug('ERROR: ReactDOM is not loaded');
+                        return;
+                    }
+                    
+                    if (typeof THREE === 'undefined') {
+                        logDebug('ERROR: Three.js is not loaded');
+                        return;
+                    }
+                    
+                    if (typeof window.MinervaUI === 'undefined') {
+                        logDebug('ERROR: MinervaUI component is not loaded');
+                        return;
+                    }
+                    
+                    logDebug('All dependencies loaded, rendering MinervaUI');
+                    
+                    // Render the MinervaUI component
+                    const minervaElement = React.createElement(window.MinervaUI, { 
+                        projectOrbs: projectOrbs,
+                        thinkTankData: [
+                            { 
+                                name: "GPT-4 Turbo", 
+                                score: 9.2, 
+                                metrics: { quality: 92, relevance: 95, technical: 89 }, 
+                                capabilities: ["Reasoning", "Code", "Creative"],
+                                active: true,
+                                reasoning: "Strong performance across all metrics with excellent code understanding"
+                            },
+                            { 
+                                name: "Claude 3 Opus", 
+                                score: 9.4, 
+                                metrics: { quality: 94, relevance: 93, technical: 91 }, 
+                                capabilities: ["Research", "Analysis", "Creative"],
+                                active: false,
+                                reasoning: "Top model for analytical reasoning and detailed explanations"
+                            },
+                            { 
+                                name: "Gemini Pro", 
+                                score: 8.7, 
+                                metrics: { quality: 87, relevance: 89, technical: 85 }, 
+                                capabilities: ["Fast", "Research"],
+                                active: false,
+                                reasoning: "Good balance of speed and quality for general queries"
+                            }
+                        ]
+                    });
+                    
+                    // Create a new React root and render
+                    if (typeof ReactDOM.createRoot !== 'undefined') {
+                        // React 18+ approach
+                        const reactRoot = ReactDOM.createRoot(root);
+                        reactRoot.render(minervaElement);
+                        logDebug('MinervaUI rendered using React 18+ createRoot');
+                    } else {
+                        // Legacy React approach
+                        ReactDOM.render(minervaElement, root);
+                        logDebug('MinervaUI rendered using legacy ReactDOM.render');
+                    }
+                    
+                    // Hide the loading indicator
+                    const loader = container.querySelector('.minerva-ui-loader');
+                    if (loader) {
+                        loader.style.display = 'none';
+                    }
+                    
+                    logDebug('Initialization complete');
+                } catch (error) {
+                    logDebug(`ERROR: ${error.message}`);
+                    console.error(error);
+                }
+            }, 500);
+        });
+    </script>
+</body>
+</html>

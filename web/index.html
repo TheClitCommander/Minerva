@@ -1,0 +1,3009 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minerva Central</title>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <!-- Markdown processing libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.0/purify.min.js"></script>
+    
+    <!-- Auto-initialize floating chat but prevent it from controlling the orb -->
+    <meta name="minerva-floating-chat" content="auto">
+    <meta name="minerva-orb-handled" content="true">
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #1a1a2e;
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* Background with stars */
+        .space-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            transform-origin: center center;
+            transition: transform 2s cubic-bezier(0.19, 1, 0.22, 1);
+            z-index: -1;
+            background: radial-gradient(ellipse at center, #1a1a3e 0%, #0b0b20 50%, #050510 100%);
+        }
+        
+        .star {
+            position: absolute;
+            background-color: #fff;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: twinkle 5s infinite;
+        }
+        
+        .nebula {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(30px);
+            opacity: 0.15;
+            pointer-events: none;
+        }
+        
+        .galaxy {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: radial-gradient(ellipse at center, rgba(255,255,255,0.3) 0%, rgba(155,155,255,0.1) 40%, rgba(0,0,0,0) 70%);
+            box-shadow: 0 0 30px rgba(100, 150, 255, 0.2);
+            opacity: 0.3;
+            transform: rotate(45deg);
+        }
+        
+        .comet {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background-color: white;
+            border-radius: 50%;
+            box-shadow: 0 0 20px 2px rgba(255, 255, 255, 0.8), 
+                       -70px 0px 10px 0px rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            animation: cometMove 15s linear infinite;
+        }
+        
+        @keyframes cometMove {
+            0% { transform: translateX(-100vw) translateY(-50vh); opacity: 1; }
+            100% { transform: translateX(100vw) translateY(50vh); opacity: 1; }
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.8); }
+        }
+        
+        /* Navigation pad */
+        .nav-pad {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: rgba(30, 40, 80, 0.3);
+            border: 2px solid rgba(74, 107, 223, 0.4);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            z-index: 100;
+            backdrop-filter: blur(4px);
+        }
+        
+        .nav-btn {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: rgba(74, 107, 223, 0.8);
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s;
+            position: absolute;
+        }
+        
+        #zoom-in {
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        #zoom-out {
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .nav-btn:hover {
+            transform: scale(1.3) translateX(-40%);
+            background-color: rgba(120, 150, 255, 0.9);
+        }
+        
+        #zoom-in:hover {
+            transform: scale(1.3) translateX(-40%);
+        }
+        
+        #zoom-out:hover {
+            transform: scale(1.3) translateX(-40%);
+        }
+        
+        .zoom-level-indicator {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: rgba(30, 30, 50, 0.6);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            pointer-events: none;
+            z-index: 100;
+            transition: opacity 0.5s;
+        }
+        
+        /* Chat Interface Styling */
+        #chat-interface {
+            width: 400px;
+            height: 500px;
+            background-color: rgba(30, 30, 50, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        #chat-header {
+            padding: 15px;
+            background-color: #4a6bdf;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: move;
+        }
+        
+        #chat-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        #chat-controls {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .chat-control-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+        
+        .chat-control-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        #chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .system-message {
+            background-color: rgba(90, 90, 120, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            text-align: center;
+            color: #d1d1e0;
+            max-width: 80%;
+            align-self: center;
+        }
+        
+        .user-message {
+            background-color: #4a6bdf;
+            padding: 10px 15px;
+            border-radius: 18px 18px 0 18px;
+            max-width: 80%;
+            align-self: flex-end;
+            word-break: break-word;
+        }
+        
+        .assistant-message {
+            background-color: #2d2d44;
+            padding: 10px 15px;
+            border-radius: 18px 18px 18px 0;
+            max-width: 80%;
+            align-self: flex-start;
+            word-break: break-word;
+        }
+        
+        .user-message.memory, .assistant-message.memory {
+            opacity: 0.7;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+        
+        .assistant-message.loading {
+            background-color: #2d2d44;
+            min-width: 60px;
+        }
+        
+        .assistant-message.fallback {
+            background-color: #413d63;
+            border-left: 3px solid #f45b69;
+        }
+        
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .typing-indicator span {
+            height: 8px;
+            width: 8px;
+            background: #d1d1e0;
+            border-radius: 50%;
+            display: inline-block;
+            animation: bounce 1.3s linear infinite;
+        }
+        
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.15s;
+        }
+        
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+        
+        @keyframes bounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-5px); }
+        }
+        
+        #chat-input-container {
+            padding: 15px;
+            display: flex;
+            gap: 10px;
+            border-top: 1px solid rgba(156, 93, 219, 0.3);
+        }
+        
+        #chat-input {
+            flex: 1;
+            padding: 10px 15px;
+            border-radius: 18px;
+            border: 1px solid #4a4a6a;
+            background-color: #2d2d44;
+            color: white;
+            resize: none;
+            outline: none;
+            height: 20px;
+            max-height: 120px;
+        }
+        
+        #send-message {
+            background-color: #4a6bdf;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        #send-message:hover {
+            background-color: #3d5cce;
+        }
+        
+        #send-message:active {
+            transform: scale(0.95);
+        }
+        
+        /* Project selector styles */
+        #project-selector {
+            padding: 10px 15px;
+            background-color: #2d2d44;
+            border-bottom: 1px solid rgba(156, 93, 219, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        #project-selector select {
+            flex: 1;
+            padding: 5px 10px;
+            background-color: #1a1a2e;
+            color: white;
+            border: 1px solid #4a4a6a;
+            border-radius: 5px;
+        }
+        
+        #create-project-btn {
+            background-color: #9c5ddb;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        
+        /* Memory indicator styles */
+        .memory-indicator {
+            font-size: 0.75rem;
+            margin-top: 5px;
+            display: inline-block;
+        }
+        
+        .memory-badge {
+            background-color: rgba(139, 92, 246, 0.6);
+            color: #fff;
+            border-radius: 12px;
+            padding: 3px 8px;
+            font-size: 0.7rem;
+            display: inline-block;
+            cursor: help; /* Shows a help cursor to indicate tooltip */
+            transition: all 0.2s ease;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+        
+        .memory-badge:hover {
+            background-color: rgba(139, 92, 246, 0.8);
+            box-shadow: 0 0 8px rgba(139, 92, 246, 0.5);
+        }
+        
+        /* Minimized state */
+        #chat-interface.minimized {
+            height: 60px;
+        }
+        
+        #chat-interface.minimized #chat-messages,
+        #chat-interface.minimized #chat-input-container,
+        #chat-interface.minimized #project-selector {
+            display: none;
+        }
+        
+        /* Floating Chat Container Styles */
+        .floating-chat {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 350px;
+            background-color: rgba(30, 30, 50, 0.85);
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 1000;
+            backdrop-filter: blur(8px);
+            transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+            border: 1px solid rgba(74, 107, 223, 0.3);
+        }
+        
+        .floating-chat.cosmic-theme {
+            background: linear-gradient(to bottom, 
+                rgba(30, 30, 70, 0.85) 0%, 
+                rgba(20, 20, 50, 0.85) 100%);
+        }
+        
+        .floating-chat .chat-header {
+            background: linear-gradient(to right, rgba(74, 107, 223, 0.9), rgba(86, 67, 204, 0.9));
+            padding: 12px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: move;
+            color: white;
+            font-weight: 500;
+        }
+        
+        .floating-chat .chat-controls {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .floating-chat .minimize-button,
+        .floating-chat .close-button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+        
+        .floating-chat .minimize-button:hover,
+        .floating-chat .close-button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .floating-chat .chat-messages {
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+            height: 300px;
+            overflow-y: auto;
+            gap: 8px;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(74, 107, 223, 0.5) rgba(30, 30, 50, 0.2);
+        }
+        
+        .floating-chat .chat-input-container {
+            display: flex;
+            border-top: 1px solid rgba(74, 107, 223, 0.3);
+            padding: 10px;
+        }
+        
+        .floating-chat .chat-input {
+            flex: 1;
+            border: none;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 18px;
+            outline: none;
+            font-size: 14px;
+        }
+        
+        .floating-chat .chat-send-button {
+            background: rgba(74, 107, 223, 0.8);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            margin-left: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+        
+        .floating-chat .chat-send-button:hover {
+            background-color: rgba(90, 130, 255, 0.9);
+        }
+        
+        .floating-chat .system-message {
+            background-color: rgba(74, 107, 223, 0.2);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.9);
+            align-self: center;
+            margin: 5px 0;
+            max-width: 90%;
+        }
+        
+        .floating-chat .project-select-container {
+            padding: 8px 15px;
+            border-bottom: 1px solid rgba(74, 107, 223, 0.3);
+        }
+        
+        .floating-chat .project-select {
+            width: 100%;
+            background-color: rgba(50, 50, 80, 0.5);
+            color: white;
+            border: 1px solid rgba(74, 107, 223, 0.4);
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 13px;
+            outline: none;
+        }
+        
+        /* Pulse animation when orb is clicked */
+        @keyframes pulse-attention {
+            0% { transform: scale(1); box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3); }
+            50% { transform: scale(1.03); box-shadow: 0 5px 30px rgba(74, 107, 223, 0.6); }
+            100% { transform: scale(1); box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3); }
+        }
+        
+        .pulse-attention {
+            animation: pulse-attention 0.5s ease-in-out 2;
+        }
+        
+        /* Minerva Dashboard Overlay */
+        .minerva-dashboard-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(10, 15, 30, 0.7);
+            z-index: 9000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+        
+        .minerva-dashboard-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .minerva-dashboard-panel {
+            background-color: rgba(25, 30, 50, 0.85);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(74, 107, 223, 0.2);
+            width: 85%;
+            height: 85%;
+            max-width: 1200px;
+            max-height: 800px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+            color: #fff;
+            border: 1px solid rgba(74, 107, 223, 0.3);
+        }
+        
+        .minerva-dashboard-overlay.visible .minerva-dashboard-panel {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .minerva-dashboard-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 24px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            background-color: rgba(74, 107, 223, 0.1);
+        }
+        
+        .minerva-dashboard-close:hover {
+            background-color: rgba(74, 107, 223, 0.3);
+            color: #fff;
+        }
+        
+        /* Bottom Navigation Panel */
+        #minerva-bottom-nav {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            padding: 10px 20px;
+            background: rgba(25, 25, 50, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(74, 107, 223, 0.5), inset 0 0 5px rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(74, 107, 223, 0.3);
+            z-index: 9100;
+            transition: all 0.3s ease;
+        }
+        
+        /* Navigation Buttons */
+        .nav-button {
+            background: linear-gradient(120deg, rgba(74, 107, 223, 0.3), rgba(156, 93, 219, 0.5));
+            border: 1px solid rgba(74, 107, 223, 0.7);
+            color: white;
+            padding: 10px 15px;
+            font-size: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.5s ease;
+        }
+        
+        .nav-button:hover::before {
+            left: 100%;
+        }
+        
+        .nav-button:hover {
+            background: linear-gradient(120deg, rgba(74, 107, 223, 0.5), rgba(156, 93, 219, 0.7));
+            box-shadow: 0 0 10px rgba(74, 107, 223, 0.8), inset 0 0 5px rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .nav-button:active {
+            transform: translateY(1px);
+            box-shadow: 0 0 5px rgba(74, 107, 223, 0.6);
+        }
+        
+        .nav-button.active {
+            background: linear-gradient(120deg, rgba(74, 107, 223, 0.7), rgba(156, 93, 219, 0.9));
+            box-shadow: 0 0 15px rgba(74, 107, 223, 0.9), inset 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+        
+        /* Minerva Dashboard (new format) */
+        #minerva-dashboard {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+            z-index: 9500;
+        }
+        
+        /* Show Dashboard */
+        #minerva-dashboard.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* Dashboard Content */
+        .dashboard-content {
+            background: rgba(25, 25, 25, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            color: white;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(74, 107, 223, 0.7);
+            position: relative;
+            width: 80%;
+            max-width: 1200px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        /* Close Button */
+        #close-dashboard {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            color: white;
+            font-size: 20px;
+            border: none;
+            cursor: pointer;
+            z-index: 9600;
+        }
+        
+        /* Dashboard Content Styling */
+        .dashboard-content h2 {
+            color: #fff;
+            text-align: center;
+            margin-top: 5px;
+            margin-bottom: 20px;
+            font-size: 28px;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(74, 107, 223, 0.8);
+        }
+        
+        #dashboard-main {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 10px;
+            margin-bottom: 80px; /* Space for bottom nav */
+            max-height: calc(80vh - 150px);
+            overflow-y: auto;
+        }
+        
+        /* Scrollbar styling */
+        #dashboard-main::-webkit-scrollbar {
+            width: 5px;
+        }
+        
+        #dashboard-main::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        
+        #dashboard-main::-webkit-scrollbar-thumb {
+            background: rgba(74, 107, 223, 0.5);
+            border-radius: 10px;
+        }
+        
+        /* Dashboard Section Styling */
+        .dashboard-section {
+            background: rgba(20, 20, 40, 0.7);
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 0 10px rgba(74, 107, 223, 0.3), inset 0 0 5px rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(74, 107, 223, 0.2);
+            backdrop-filter: blur(5px);
+        }
+        
+        .dashboard-section h3 {
+            color: #fff;
+            margin-top: 0;
+            font-size: 18px;
+            border-bottom: 1px solid rgba(74, 107, 223, 0.3);
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .dashboard-section h4 {
+            color: #e1e1ff;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        /* Status Indicator */
+        .overview-card {
+            background: rgba(30, 30, 60, 0.7);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-dot.online {
+            background: rgb(0, 200, 83);
+            box-shadow: 0 0 8px rgba(0, 200, 83, 0.8);
+        }
+        
+        .status-text {
+            color: #fff;
+            font-weight: 500;
+        }
+        
+        .last-update {
+            color: #8e9ccf;
+            font-size: 12px;
+            margin-left: 10px;
+            opacity: 0.7;
+        }
+        
+        /* System Stats */
+        .system-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        
+        .stat-item {
+            background: rgba(74, 107, 223, 0.2);
+            padding: 8px 12px;
+            border-radius: 6px;
+            flex-basis: 48%;
+        }
+        
+        .stat-label {
+            color: #b8c3ff;
+            font-size: 14px;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+        
+        .stat-value {
+            color: #fff;
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        /* Progress Bar Styles */
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(30, 30, 60, 0.7);
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, rgba(74, 107, 223, 0.8), rgba(156, 93, 219, 0.9));
+            border-radius: 4px;
+            transition: width 1s ease-in-out;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Animated shimmer effect */
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        /* Status indication */
+        .status-dot {
+            transition: background-color 0.5s ease, box-shadow 0.5s ease;
+        }
+        
+        .status-dot.online {
+            animation: pulse 2s infinite;
+        }
+        
+        .status-dot.offline {
+            background: rgb(200, 30, 30);
+            box-shadow: 0 0 8px rgba(200, 30, 30, 0.8);
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 8px rgba(0, 200, 83, 0.8); }
+            50% { box-shadow: 0 0 15px rgba(0, 200, 83, 1); }
+            100% { box-shadow: 0 0 8px rgba(0, 200, 83, 0.8); }
+        }
+        
+        /* Process List */
+        .process-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .process-list li {
+            background: rgba(40, 40, 70, 0.7);
+            margin-bottom: 8px;
+            padding: 10px 12px;
+            border-radius: 6px;
+            color: #dde4ff;
+            display: flex;
+            align-items: center;
+            border-left: 3px solid rgba(74, 107, 223, 0.6);
+            position: relative;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .process-list li:hover {
+            background: rgba(50, 50, 90, 0.8);
+            transform: translateX(3px);
+        }
+        
+        .process-list li.selected {
+            background: rgba(60, 60, 110, 0.9);
+            border-left: 3px solid rgba(156, 93, 219, 0.8);
+        }
+        
+        .process-icon {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 10px;
+            position: relative;
+        }
+        
+        .process-icon.ai {
+            background: rgb(156, 93, 219);
+            box-shadow: 0 0 4px rgba(156, 93, 219, 0.8);
+        }
+        
+        .process-icon.memory {
+            background: rgb(74, 107, 223);
+            box-shadow: 0 0 4px rgba(74, 107, 223, 0.8);
+        }
+        
+        .process-icon.data {
+            background: rgb(64, 153, 255);
+            box-shadow: 0 0 4px rgba(64, 153, 255, 0.8);
+        }
+        
+        /* Process progress indicator */
+        .process-progress {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .mini-progress {
+            width: 50px;
+            height: 5px;
+            background: rgba(20, 20, 40, 0.6);
+            border-radius: 3px;
+            margin-right: 8px;
+            overflow: hidden;
+        }
+        
+        .mini-progress-bar {
+            height: 100%;
+            border-radius: 3px;
+            background: linear-gradient(90deg, rgba(74, 107, 223, 0.7), rgba(156, 93, 219, 0.8));
+        }
+        
+        /* Process Details Panel */
+        .process-details {
+            margin-top: 15px;
+            background: rgba(30, 30, 60, 0.8);
+            border-radius: 10px;
+            padding: 15px;
+            border: 1px solid rgba(74, 107, 223, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .details-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            border-bottom: 1px solid rgba(74, 107, 223, 0.3);
+            padding-bottom: 8px;
+        }
+        
+        .details-header h4 {
+            margin: 0;
+            color: #fff;
+            font-size: 16px;
+        }
+        
+        #close-details {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            font-size: 14px;
+            padding: 0;
+        }
+        
+        #close-details:hover {
+            color: #fff;
+        }
+        
+        .detail-row {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .detail-label {
+            color: rgba(230, 230, 255, 0.8);
+            width: 140px;
+            font-size: 14px;
+        }
+        
+        .detail-value {
+            color: #fff;
+            font-weight: 500;
+        }
+        
+        .progress-container {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+        }
+        
+        .detail-progress {
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+        
+        .progress-percentage {
+            font-size: 14px;
+            color: #fff;
+            width: 40px;
+            text-align: right;
+        }
+        
+        .log-section {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .log-section .detail-label {
+            margin-bottom: 8px;
+        }
+        
+        .log-container {
+            width: 100%;
+            max-height: 100px;
+            overflow-y: auto;
+            background: rgba(20, 20, 40, 0.5);
+            border-radius: 6px;
+            padding: 8px;
+            margin-top: 5px;
+        }
+        
+        .log-entry {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: rgba(200, 220, 255, 0.9);
+            padding: 3px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .log-container::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .log-container::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+        
+        .log-container::-webkit-scrollbar-thumb {
+            background: rgba(74, 107, 223, 0.5);
+            border-radius: 4px;
+        }
+        
+        /* Quick Access Panels */
+        .panel-card {
+            background: rgba(30, 30, 60, 0.7);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .recent-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .recent-list li {
+            padding: 8px 10px;
+            border-bottom: 1px solid rgba(74, 107, 223, 0.2);
+            color: #dde4ff;
+        }
+        
+        .recent-list li:last-child {
+            border-bottom: none;
+        }
+        
+        a.project-link {
+            color: #4a6bdf;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        
+        a.project-link:hover {
+            color: #6c8cff;
+            text-decoration: underline;
+        }
+        
+        /* Responsive layout for smaller screens */
+        @media (max-width: 768px) {
+            #dashboard-main {
+                grid-template-columns: 1fr;
+            }
+            
+            .dashboard-content {
+                width: 95%;
+                padding: 15px;
+            }
+        }
+    </style>
+    <!-- Single required CSS for Minerva Central UI -->
+    <link rel="stylesheet" href="static/css/core/minerva-navigation.css">
+    <link rel="stylesheet" href="static/css/conversation-history.css">
+    
+    <!-- Theme System CSS -->
+    <link rel="stylesheet" href="static/css/theme.css">
+    <link rel="stylesheet" href="static/css/theme-toggle.css">
+    <link rel="stylesheet" href="static/css/chat/markdown-format.css">
+    <link rel="stylesheet" href="static/css/animations.css">
+    <link rel="stylesheet" href="static/css/chat/typing-indicator.css">
+    <link rel="stylesheet" href="static/css/chat/message-animations.css">
+    <link rel="stylesheet" href="static/css/ui/micro-interactions.css">
+    <link rel="stylesheet" href="static/css/ui/loading-states.css">
+    <link rel="stylesheet" href="static/css/projects/project-intelligence.css">
+    <link rel="stylesheet" href="static/css/projects/project-context-indicator.css">
+    
+    <!-- Essential scripts only -->
+    <script src="static/js/core/zoom-manager.js" defer></script>
+    <!-- Core API Interface (must be loaded first) -->
+    <script src="static/js/think-tank-api.js"></script>
+    <!-- Project and conversation management -->
+    <script src="static/js/project-manager.js"></script>
+    <script src="static/js/projects/project-intelligence.js"></script>
+    <script src="static/js/projects/project-context-processor.js"></script>
+    <!-- Markdown Formatter -->
+    <script src="static/js/chat/markdown-formatter.js"></script>
+    <!-- UI Animation Utilities -->
+    <script src="static/js/ui/animation-utils.js"></script>
+    <!-- Direct Think Tank API Connection - Clean Implementation -->
+    <script src="static/js/chat/think-tank-connection.js" defer></script>
+    <script src="static/js/chat/simple-chat.js" defer></script>
+    <script src="static/js/dashboard.js" defer></script>
+    <script src="static/js/core/minerva-ui-integration.js" defer></script>
+    <script src="static/js/orb-ui/orb-ui-init.js" defer></script>
+    <script src="static/js/portal-initializer.js" defer></script>
+    
+    <!-- Floating chat styles -->
+    <style>
+        /* Floating Chat Styles */
+        .chat-container.floating-chat {
+            position: fixed;
+            width: 350px;
+            right: 20px;
+            bottom: 20px;
+            background: rgba(20, 25, 45, 0.8);
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(74, 107, 223, 0.3);
+            max-height: 500px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-container.floating-chat.minimized {
+            height: 50px !important;
+            min-height: 50px;
+            overflow: hidden;
+        }
+        
+        .floating-chat .chat-header {
+            background: linear-gradient(90deg, #4a6bdf, #9c5ddb);
+            color: white;
+            padding: 10px 15px;
+            font-weight: 500;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: move;
+            user-select: none;
+        }
+        
+        .floating-chat .chat-controls {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .floating-chat .minimize-button,
+        .floating-chat .close-button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+        }
+        
+        .floating-chat .minimize-button:hover,
+        .floating-chat .close-button:hover {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .floating-chat .chat-messages {
+            padding: 15px;
+            overflow-y: auto;
+            max-height: 300px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            color: #dde4ff;
+        }
+        
+        .floating-chat .message {
+            padding: 8px 12px;
+            border-radius: 8px;
+            max-width: 80%;
+            word-break: break-word;
+            line-height: 1.4;
+        }
+        
+        .floating-chat .user-message {
+            background: rgba(74, 107, 223, 0.3);
+            align-self: flex-end;
+            border-bottom-right-radius: 0;
+        }
+        
+        .floating-chat .system-message {
+            background: rgba(156, 93, 219, 0.3);
+            align-self: flex-start;
+            border-bottom-left-radius: 0;
+        }
+        
+        .floating-chat .chat-input-container {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid rgba(74, 107, 223, 0.3);
+        }
+        
+        .floating-chat .chat-input {
+            flex-grow: 1;
+            padding: 8px 12px;
+            border: 1px solid rgba(74, 107, 223, 0.5);
+            background: rgba(30, 35, 60, 0.7);
+            color: #dde4ff;
+            border-radius: 20px;
+            margin-right: 8px;
+        }
+        
+        .floating-chat .chat-input:focus {
+            outline: none;
+            border-color: rgba(74, 107, 223, 0.8);
+            box-shadow: 0 0 0 2px rgba(74, 107, 223, 0.3);
+        }
+        
+        .floating-chat .chat-send-button {
+            background: linear-gradient(90deg, #4a6bdf, #9c5ddb);
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .floating-chat .chat-send-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(74, 107, 223, 0.5);
+        }
+        
+        .floating-chat .project-select-container {
+            padding: 8px 15px;
+            border-bottom: 1px solid rgba(74, 107, 223, 0.3);
+            background: rgba(30, 35, 60, 0.7);
+        }
+        
+        .floating-chat .project-select {
+            width: 100%;
+            padding: 5px 8px;
+            background: rgba(20, 25, 45, 0.8);
+            color: #dde4ff;
+            border: 1px solid rgba(74, 107, 223, 0.5);
+            border-radius: 4px;
+        }
+        
+        .floating-chat.cosmic-theme {
+            background: rgba(20, 25, 45, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(74, 107, 223, 0.3);
+        }
+        
+        /* Scale for smaller screens */
+        @media (max-width: 480px) {
+            .chat-container.floating-chat {
+                width: 90%;
+                right: 5%;
+                bottom: 10px;
+                max-height: 400px;
+            }
+        }
+    </style>
+    
+    <!-- Theme Manager Script -->
+    <script src="static/js/theme-manager.js"></script>
+    
+    <!-- Set up global config -->
+    <script>
+        // Global configuration for Minerva Central UI
+        window.MINERVA_CONFIG = {
+            debug: false,
+            useMemory: true,
+            initialZoom: 1.0,
+            chatContainer: 'floating-chat-container',
+            floatingChat: true,
+            rememberConversations: true,
+            singlePageApp: true,
+            version: '1.0.3'
+        };
+        
+        // Initialize floating chat with custom options when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize floating chat with custom options
+            window.floatingChat = new FloatingChatComponent({
+                containerId: 'floating-chat-container',
+                title: 'Minerva Assistant',
+                placeholder: 'Ask me anything about your projects...',
+                position: { bottom: '20px', right: '20px' },
+                initiallyVisible: true,
+                width: '350px',
+                maxHeight: '500px',
+                transparency: 0.9,
+                projectAware: true,
+                theme: 'cosmic',
+                alwaysOnTop: true
+            });
+            
+            // Connect floating chat with Minerva orb
+            const minervaOrb = document.getElementById('minerva-portal');
+            if (minervaOrb) {
+                minervaOrb.addEventListener('click', function(e) {
+                    if (window.floatingChat) {
+                        if (window.floatingChat.isVisible) {
+                            if (window.floatingChat.isMinimized) {
+                                window.floatingChat.maximize();
+                            } else {
+                                window.floatingChat.minimize();
+                            }
+                        } else {
+                            window.floatingChat.show();
+                        }
+                        e.stopPropagation();
+                    }
+                });
+            }
+        });
+    </script>
+</head>
+<body>
+    <!-- Space Background -->
+    <div class="space-background" id="space-background"></div>
+    
+    <!-- Minerva Dashboard (new format) -->
+    <div id="minerva-dashboard" class="hidden">
+        <div class="dashboard-content">
+            <button id="close-dashboard">✖</button>
+            <h2>Minerva Dashboard</h2>
+            
+            <!-- Dashboard Main Content -->
+            <div id="dashboard-main">
+                <!-- System Overview Section -->
+                <div class="dashboard-section" id="system-overview">
+                    <h3>📊 System Overview</h3>
+                    <div class="overview-card">
+                        <div class="status-indicator">
+                            <span class="status-dot online" id="minerva-status-dot"></span>
+                            <span class="status-text" id="minerva-status-text">Minerva Online</span>
+                            <span class="last-update" id="last-update-time">Updated: just now</span>
+                        </div>
+                        <div class="system-stats">
+                            <div class="stat-item">
+                                <div class="stat-header">
+                                    <span class="stat-label">Active Memory:</span>
+                                    <span class="stat-value" id="memory-usage-value">0%</span>
+                                </div>
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar" id="memory-usage-bar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-header">
+                                    <span class="stat-label">System Load:</span>
+                                    <span class="stat-value" id="system-load-value">0%</span>
+                                </div>
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar" id="system-load-bar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Active Processes -->
+                    <div class="active-processes">
+                        <h4>⚙️ Active Processes</h4>
+                        <ul class="process-list" id="active-processes-list">
+                            <!-- Dynamically populated by JavaScript -->
+                        </ul>
+                    </div>
+                    
+                    <!-- Process Details Panel (hidden by default) -->
+                    <div class="process-details" id="process-details-panel" style="display: none;">
+                        <div class="details-header">
+                            <h4 id="process-detail-title">Process Details</h4>
+                            <button id="close-details">✖</button>
+                        </div>
+                        <div class="process-info">
+                            <div class="detail-row">
+                                <span class="detail-label">Status:</span>
+                                <span class="detail-value" id="process-status">Running</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Progress:</span>
+                                <div class="progress-container">
+                                    <div class="progress-bar-container detail-progress">
+                                        <div class="progress-bar" id="detail-progress-bar" style="width: 65%"></div>
+                                    </div>
+                                    <span class="progress-percentage" id="detail-progress-percentage">65%</span>
+                                </div>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Started:</span>
+                                <span class="detail-value" id="process-start-time">2 minutes ago</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Estimated completion:</span>
+                                <span class="detail-value" id="process-eta">~3 minutes</span>
+                            </div>
+                            <div class="detail-row log-section">
+                                <span class="detail-label">Recent logs:</span>
+                                <div class="log-container" id="process-logs">
+                                    <div class="log-entry">Initializing process parameters...</div>
+                                    <div class="log-entry">Loading context from memory store...</div>
+                                    <div class="log-entry">Processing input data, 65% complete...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick Access Panels -->
+                <div class="dashboard-section" id="quick-access">
+                    <h3>🔑 Quick Access</h3>
+                    
+                    <!-- Recent Projects -->
+                    <div class="panel-card">
+                        <h4>📂 Recent Projects</h4>
+                        <ul class="recent-list">
+                            <li><a href="#" class="project-link">Quantum AI Research</a></li>
+                            <li><a href="#" class="project-link">Neural Network Analysis</a></li>
+                            <li><a href="#" class="project-link">Cosmology Data Processing</a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Recent Think Tank Activity -->
+                    <div class="panel-card">
+                        <h4>🧠 Recent Think Tank Activity</h4>
+                        <ul class="recent-list">
+                            <li>Multi-model analysis of quantum entanglement</li>
+                            <li>Prediction models for stellar formation</li>
+                            <li>Language pattern recognition in ancient texts</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Recent AI Agent Tasks -->
+                    <div class="panel-card">
+                        <h4>🔍 Recent AI Agent Tasks</h4>
+                        <ul class="recent-list">
+                            <li>Completed data indexing for Research Project</li>
+                            <li>Generated visualization of cosmic microwave background</li>
+                            <li>Transcribed and analyzed 12 hours of audio data</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bottom Navigation Panel -->
+            <div id="minerva-bottom-nav">
+                <a href="dashboard.html"><button class="nav-button active" id="dashboard-btn">Dashboard</button></a>
+                <button class="nav-button" id="projects-btn">Projects</button>
+                <button class="nav-button" id="agents-btn">AI Agents</button>
+                <button class="nav-button" id="thinktank-btn">Think Tank</button>
+                <button class="nav-button" id="logs-btn">Logs</button>
+                <button class="nav-button" id="settings-btn">Settings</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Original Minerva Dashboard Overlay (keeping for backward compatibility) -->
+    <div class="minerva-dashboard-overlay" id="minerva-dashboard-overlay">
+        <div class="minerva-dashboard-panel">
+            <button class="minerva-dashboard-close" id="minerva-dashboard-close">&times;</button>
+            <!-- Dashboard content will be added in future steps -->
+        </div>
+    </div>
+    
+    <!-- Zoom Controls -->
+    <div class="nav-pad">
+        <div class="nav-btn" id="zoom-in" title="Zoom In"></div>
+        <div class="nav-btn" id="zoom-out" title="Zoom Out"></div>
+    </div>
+    <div class="zoom-level-indicator" id="zoom-level">Normal View (1.0x)</div>
+    
+    <!-- Minerva Central Orb -->
+    <div class="minerva-orb-container">
+        <div class="minerva-orb" id="minerva-portal">
+            <div class="minerva-orb-rings"></div>
+            <div class="minerva-orb-rings"></div>
+            <div class="minerva-orb-rings"></div>
+            <div class="minerva-orb-pulse"></div>
+            <div class="minerva-orb-icon">
+                <i class="fas fa-brain"></i>
+            </div>
+        </div>
+        <div class="minerva-orb-label">Minerva Portal</div>
+    </div>
+    
+    <!-- No hidden interfaces - just the orb and floating chat -->
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function to make element draggable
+            function makeDraggable(element, handle) {
+                let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+                
+                if (handle) {
+                    handle.style.cursor = 'move';
+                    handle.onmousedown = dragMouseDown;
+                } else {
+                    element.onmousedown = dragMouseDown;
+                }
+                
+                function dragMouseDown(e) {
+                    e = e || window.event;
+                    if (e.target.tagName === 'BUTTON' || e.target.tagName === 'TEXTAREA' || 
+                        e.target.tagName === 'INPUT' || e.target.tagName === 'I' || 
+                        e.target.tagName === 'SELECT') {
+                        return;
+                    }
+                    
+                    e.preventDefault();
+                    pos3 = e.clientX;
+                    pos4 = e.clientY;
+                    
+                    document.onmouseup = closeDragElement;
+                    document.onmousemove = elementDrag;
+                }
+                
+                function elementDrag(e) {
+                    e = e || window.event;
+                    e.preventDefault();
+                    
+                    pos1 = pos3 - e.clientX;
+                    pos2 = pos4 - e.clientY;
+                    pos3 = e.clientX;
+                    pos4 = e.clientY;
+                    
+                    // Calculate new position
+                    let newTop = element.offsetTop - pos2;
+                    let newLeft = element.offsetLeft - pos1;
+                    
+                    // Apply constraints to keep in viewport
+                    if (newTop < 0) newTop = 0;
+                    if (newLeft < 0) newLeft = 0;
+                    if (newTop > window.innerHeight - 100) newTop = window.innerHeight - 100;
+                    if (newLeft > window.innerWidth - 100) newLeft = window.innerWidth - 100;
+                    
+                    element.style.top = newTop + 'px';
+                    element.style.left = newLeft + 'px';
+                }
+                
+                function closeDragElement() {
+                    document.onmouseup = null;
+                    document.onmousemove = null;
+                }
+            }
+            
+            console.log('Initializing Minerva Memory Chat...');
+            
+            // Initialize chat interface
+            const chatInterface = document.getElementById('chat-interface');
+            const chatHeader = document.getElementById('chat-header');
+            const chatMessages = document.getElementById('chat-messages');
+            const chatInput = document.getElementById('chat-input');
+            const sendButton = document.getElementById('send-message');
+            const minimizeBtn = document.getElementById('minimize-chat');
+            const projectSelect = document.getElementById('project-select');
+            const createProjectBtn = document.getElementById('create-project-btn');
+            
+            // Make chat interface draggable
+            makeDraggable(chatInterface, chatHeader);
+            
+            // Initialize memory storage with project support
+            window.minervaMemory = window.minervaMemory || [];
+            window.minervaProjects = window.minervaProjects || {
+                general: { name: 'General Conversation', conversations: [] }
+            };
+            
+            // Active project tracking
+            let activeProject = 'general';
+            
+            // Handle minimize/maximize
+            minimizeBtn.addEventListener('click', function() {
+                chatInterface.classList.toggle('minimized');
+                
+                const icon = this.querySelector('i');
+                if (icon) {
+                    if (chatInterface.classList.contains('minimized')) {
+                        icon.classList.remove('fa-minus');
+                        icon.classList.add('fa-expand');
+                        this.setAttribute('title', 'Expand chat');
+                    } else {
+                        icon.classList.remove('fa-expand');
+                        icon.classList.add('fa-minus');
+                        this.setAttribute('title', 'Minimize chat');
+                    }
+                }
+            });
+            
+            // Handle project selection change
+            projectSelect.addEventListener('change', function() {
+                const selectedValue = this.value;
+                
+                if (selectedValue === 'create-new') {
+                    // Reset selection
+                    this.value = activeProject;
+                    
+                    // Prompt for new project name
+                    const projectName = prompt('Enter name for the new project:');
+                    if (projectName && projectName.trim()) {
+                        // Create a new project ID
+                        const projectId = 'project_' + Date.now();
+                        
+                        // Add to projects
+                        window.minervaProjects[projectId] = {
+                            name: projectName.trim(),
+                            conversations: [],
+                            created: new Date().toISOString()
+                        };
+                        
+                        // Add option to select
+                        const option = document.createElement('option');
+                        option.value = projectId;
+                        option.textContent = projectName.trim();
+                        
+                        // Insert before the "Create New" option
+                        const createNewOption = projectSelect.querySelector('option[value="create-new"]');
+                        projectSelect.insertBefore(option, createNewOption);
+                        
+                        // Select the new project
+                        projectSelect.value = projectId;
+                        activeProject = projectId;
+                        
+                        // Save projects to localStorage
+                        localStorage.setItem('minervaProjects', JSON.stringify(window.minervaProjects));
+                        
+                        // Add notification message
+                        addSystemMessage(`Created new project: ${projectName.trim()}`);
+                    }
+                } else {
+                    activeProject = selectedValue;
+                    loadProjectConversation(activeProject);
+                }
+            });
+            
+            // Handle create project from conversation
+            createProjectBtn.addEventListener('click', function() {
+                // Check if there are messages to convert
+                if (window.minervaMemory.length < 2) {
+                    alert('Have a conversation first before creating a project from it.');
+                    return;
+                }
+                
+                // Prompt for project name
+                const projectName = prompt('Enter name for the new project based on this conversation:');
+                if (projectName && projectName.trim()) {
+                    // Create new project ID
+                    const projectId = 'project_' + Date.now();
+                    
+                    // Create project with current conversation
+                    window.minervaProjects[projectId] = {
+                        name: projectName.trim(),
+                        conversations: [...window.minervaMemory], // Copy current memory
+                        created: new Date().toISOString()
+                    };
+                    
+                    // Add option to select
+                    const option = document.createElement('option');
+                    option.value = projectId;
+                    option.textContent = projectName.trim();
+                    
+                    // Insert before the "Create New" option
+                    const createNewOption = projectSelect.querySelector('option[value="create-new"]');
+                    projectSelect.insertBefore(option, createNewOption);
+                    
+                    // Select the new project
+                    projectSelect.value = projectId;
+                    activeProject = projectId;
+                    
+                    // Save projects to localStorage
+                    localStorage.setItem('minervaProjects', JSON.stringify(window.minervaProjects));
+                    
+                    // Add notification message
+                    addSystemMessage(`Current conversation converted to project: ${projectName.trim()}`);
+                }
+            });
+            
+            // Helper function to add system message
+            function addSystemMessage(text) {
+                const msgElement = document.createElement('div');
+                msgElement.className = 'system-message';
+                msgElement.textContent = text;
+                chatMessages.appendChild(msgElement);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Function to load conversation from a project
+            function loadProjectConversation(projectId) {
+                if (!window.minervaProjects[projectId]) return;
+                
+                // Clear chat messages
+                chatMessages.innerHTML = '';
+                
+                // Set memory to the project's conversations
+                if (window.minervaProjects[projectId].conversations && 
+                    window.minervaProjects[projectId].conversations.length > 0) {
+                    
+                    window.minervaMemory = [...window.minervaProjects[projectId].conversations];
+                    
+                    // Add project context message
+                    addSystemMessage(`Loaded project: ${window.minervaProjects[projectId].name}`);
+                    
+                    // Display the last few messages (up to 5)
+                    const recentMessages = window.minervaMemory.slice(-5);
+                    for (const msg of recentMessages) {
+                        const messageElem = document.createElement('div');
+                        messageElem.className = msg.role === 'user' ? 'user-message memory' : 'assistant-message memory';
+                        messageElem.textContent = msg.content;
+                        
+                        if (msg.role === 'assistant') {
+                            const memoryIndicator = document.createElement('div');
+                            memoryIndicator.className = 'memory-indicator';
+                            memoryIndicator.innerHTML = '<span class="memory-badge" title="From project memory">Project Memory</span>';
+                            messageElem.appendChild(memoryIndicator);
+                        }
+                        
+                        chatMessages.appendChild(messageElem);
+                    }
+                    
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                } else {
+                    window.minervaMemory = [];
+                    addSystemMessage(`Started new conversation in project: ${window.minervaProjects[projectId].name}`);
+                }
+            }
+            
+            // Legacy Send message function - now replaced by chat-simple.js
+            // Keeping for reference
+            async function sendLegacyMessage() {
+                const message = chatInput.value.trim();
+                if (!message) return;
+                
+                // Clear input
+                chatInput.value = '';
+                
+                // Add user message to chat
+                const userMessageElem = document.createElement('div');
+                userMessageElem.className = 'user-message';
+                userMessageElem.textContent = message;
+                chatMessages.appendChild(userMessageElem);
+                
+                // Scroll to bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // Add to memory with project context
+                window.minervaMemory.push({
+                    role: 'user',
+                    content: message,
+                    project: activeProject,
+                    timestamp: new Date().toISOString()
+                });
+                
+                // Update project's conversation array
+                if (window.minervaProjects[activeProject]) {
+                    window.minervaProjects[activeProject].conversations = [...window.minervaMemory];
+                    localStorage.setItem('minervaProjects', JSON.stringify(window.minervaProjects));
+                }
+                
+                // Add loading indicator
+                const loadingElem = document.createElement('div');
+                loadingElem.className = 'assistant-message loading';
+                loadingElem.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+                chatMessages.appendChild(loadingElem);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                try {
+                    // Try to get a response from the server
+                    const response = await fetchThinkTankResponse(message);
+                    
+                    // Remove loading indicator
+                    chatMessages.removeChild(loadingElem);
+                    
+                    // Add assistant response to chat
+                    const assistantMessageElem = document.createElement('div');
+                    assistantMessageElem.className = 'assistant-message';
+                    assistantMessageElem.textContent = response.message;
+                    
+                    // Add memory indicator
+                    const memoryIndicator = document.createElement('div');
+                    memoryIndicator.className = 'memory-indicator';
+                    memoryIndicator.innerHTML = '<span class="memory-badge" title="Minerva is using conversation memory">Memory Active</span>';
+                    assistantMessageElem.appendChild(memoryIndicator);
+                    
+                    chatMessages.appendChild(assistantMessageElem);
+                    
+                    // Add to memory
+                    window.minervaMemory.push({
+                        role: 'assistant',
+                        content: response.message,
+                        project: activeProject,
+                        timestamp: new Date().toISOString()
+                    });
+                    
+                    // Update project's conversation array
+                    if (window.minervaProjects[activeProject]) {
+                        window.minervaProjects[activeProject].conversations = [...window.minervaMemory];
+                        localStorage.setItem('minervaProjects', JSON.stringify(window.minervaProjects));
+                    }
+                } catch (error) {
+                    console.error('Error fetching response:', error);
+                    
+                    // Remove loading indicator
+                    chatMessages.removeChild(loadingElem);
+                    
+                    // Create fallback response based on input
+                    fallbackToSimulation(message);
+                }
+                
+                // Scroll to bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Fallback response function
+            function fallbackToSimulation(userMessage) {
+                // Create a fallback response
+                let responseText = "I'm operating in offline mode. ";
+                
+                // Simple keyword matching to seem responsive
+                if (userMessage.toLowerCase().includes('hello') || userMessage.toLowerCase().includes('hi')) {
+                    responseText += "Hello! I'm Minerva's Think Tank with memory capabilities. I can remember our conversation context and organize discussions into projects.";
+                } else if (userMessage.toLowerCase().includes('project')) {
+                    responseText += "Projects allow you to organize conversations by topic. You can create a new project or convert this conversation into a project using the controls above.";
+                } else if (userMessage.toLowerCase().includes('memory')) {
+                    responseText += "My conversation memory system allows me to maintain context between messages and across sessions. I store this locally on your device.";
+                } else {
+                    responseText += "I've stored your message in my conversation memory. When online, I can provide more detailed responses while maintaining context.";
+                }
+                
+                // Add response to chat
+                const assistantMessageElem = document.createElement('div');
+                assistantMessageElem.className = 'assistant-message fallback';
+                assistantMessageElem.textContent = responseText;
+                
+                // Add fallback indicator
+                const memoryIndicator = document.createElement('div');
+                memoryIndicator.className = 'memory-indicator';
+                memoryIndicator.innerHTML = '<span class="memory-badge" title="Using offline mode">Offline Mode</span>';
+                assistantMessageElem.appendChild(memoryIndicator);
+                
+                chatMessages.appendChild(assistantMessageElem);
+                
+                // Add to memory
+                window.minervaMemory.push({
+                    role: 'assistant',
+                    content: responseText,
+                    project: activeProject,
+                    timestamp: new Date().toISOString(),
+                    fallback: true
+                });
+                
+                // Update project's conversation array
+                if (window.minervaProjects[activeProject]) {
+                    window.minervaProjects[activeProject].conversations = [...window.minervaMemory];
+                    localStorage.setItem('minervaProjects', JSON.stringify(window.minervaProjects));
+                }
+            }
+            
+            // Legacy function to fetch response from server - now handled by chat-simple.js
+            // Keeping for reference
+            async function fetchLegacyThinkTankResponse(message) {
+                console.log('Sending to Think Tank API:', {
+                    message: message,
+                    project: activeProject,
+                    conversation_history: window.minervaMemory.length + ' messages'
+                });
+                
+                try {
+                    // First try the standard Think Tank endpoint
+                    const response = await fetch('/api/think-tank', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            message: message,
+                            project: activeProject,
+                            conversation_history: window.minervaMemory,
+                            use_memory: true,
+                            force_real_think_tank: true
+                        })
+                    });
+                    
+                    if (response.ok) {
+                        return await response.json();
+                    }
+                    
+                    // If that fails, try the chat endpoint as fallback
+                    console.log('Trying fallback to /api/chat endpoint...');
+                    const fallbackResponse = await fetch('/api/chat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            message: message,
+                            conversation_history: window.minervaMemory.slice(-10) // Send last 10 messages only
+                        })
+                    });
+                    
+                    if (fallbackResponse.ok) {
+                        return await fallbackResponse.json();
+                    }
+                    
+                    throw new Error(`Network response error: ${response.status} / ${fallbackResponse.status}`);
+                } catch (error) {
+                    console.error('Error in fetchThinkTankResponse:', error);
+                    throw error;
+                }
+            }
+            
+            // Load saved projects from localStorage
+            const savedProjects = localStorage.getItem('minervaProjects');
+            if (savedProjects) {
+                try {
+                    window.minervaProjects = JSON.parse(savedProjects);
+                    
+                    // Create options for each project
+                    for (const projectId in window.minervaProjects) {
+                        if (projectId === 'general') continue; // Skip general, it's already in the HTML
+                        
+                        const project = window.minervaProjects[projectId];
+                        const option = document.createElement('option');
+                        option.value = projectId;
+                        option.textContent = project.name;
+                        
+                        // Insert before the "Create New" option
+                        const createNewOption = projectSelect.querySelector('option[value="create-new"]');
+                        projectSelect.insertBefore(option, createNewOption);
+                    }
+                    
+                    console.log('Loaded projects:', Object.keys(window.minervaProjects).length);
+                } catch (error) {
+                    console.error('Error loading projects:', error);
+                    window.minervaProjects = {
+                        general: { name: 'General Conversation', conversations: [] }
+                    };
+                }
+            }
+            
+            // Load initial conversation for general project
+            loadProjectConversation('general');
+            
+            // Event listeners for sending messages are now handled by chat-simple.js
+            // This section is left for reference only
+            // The keydown event for Enter is also now handled in chat-simple.js
+            
+            // Auto-expand input when typing
+            chatInput.addEventListener('input', function() {
+                this.style.height = 'auto';
+                let newHeight = this.scrollHeight;
+                if (newHeight > 120) newHeight = 120;
+                if (newHeight < 40) newHeight = 40;
+                this.style.height = newHeight + 'px';
+            });
+            
+            // Focus input field
+            chatInput.focus();
+            
+            // Initialize space background with stars
+            const spaceBackground = document.getElementById('space-background');
+            const zoomInBtn = document.getElementById('zoom-in');
+            const zoomOutBtn = document.getElementById('zoom-out');
+            const zoomLevelIndicator = document.getElementById('zoom-level');
+            
+            // Current zoom level - start at normal view (1.0) and zoom out to 0.1
+            let zoomLevel = 1.0;   // Default scale factor (normal size)
+            const MIN_ZOOM = 0.1;  // Minimum zoom level (zoomed out - smaller)
+            const MAX_ZOOM = 1.0;  // Maximum zoom level (normal size - don't zoom in)
+            
+            // Initialize with correct zoom
+            updateZoom();
+            
+            // Create cosmic background
+            function createStars() {
+                // Clear existing elements
+                spaceBackground.innerHTML = '';
+                
+                // Create a large number of stars with different sizes
+                const numStars = window.innerWidth * window.innerHeight / 1000;
+                
+                for (let i = 0; i < numStars; i++) {
+                    const star = document.createElement('div');
+                    star.className = 'star';
+                    
+                    // Random size (bigger = closer, brighter stars)
+                    const size = Math.random() * 3;
+                    star.style.width = size + 'px';
+                    star.style.height = size + 'px';
+                    
+                    // Random position across a wider area for parallax effect
+                    const x = Math.random() * window.innerWidth * 3 - window.innerWidth;
+                    const y = Math.random() * window.innerHeight * 3 - window.innerHeight;
+                    star.style.left = x + 'px';
+                    star.style.top = y + 'px';
+                    
+                    // Random twinkle animation delay
+                    star.style.animationDelay = Math.random() * 5 + 's';
+                    
+                    spaceBackground.appendChild(star);
+                }
+                
+                // Add nebulae (colored clouds)
+                const nebulaColors = [
+                    'rgba(100, 50, 255, 0.3)', // Purple
+                    'rgba(50, 100, 255, 0.3)', // Blue
+                    'rgba(255, 100, 100, 0.2)', // Red
+                    'rgba(100, 255, 150, 0.2)', // Green
+                    'rgba(255, 180, 100, 0.2)'  // Orange
+                ];
+                
+                // Add 3-5 nebulae
+                const nebulaCount = Math.floor(Math.random() * 3) + 3;
+                for (let i = 0; i < nebulaCount; i++) {
+                    const nebula = document.createElement('div');
+                    nebula.className = 'nebula';
+                    
+                    // Random size
+                    const size = Math.random() * 300 + 200;
+                    nebula.style.width = size + 'px';
+                    nebula.style.height = size + 'px';
+                    
+                    // Random position (wider area)
+                    const x = Math.random() * (window.innerWidth * 3) - window.innerWidth;
+                    const y = Math.random() * (window.innerHeight * 3) - window.innerHeight;
+                    nebula.style.left = x + 'px';
+                    nebula.style.top = y + 'px';
+                    
+                    // Random color
+                    const colorIndex = Math.floor(Math.random() * nebulaColors.length);
+                    nebula.style.backgroundColor = nebulaColors[colorIndex];
+                    
+                    spaceBackground.appendChild(nebula);
+                }
+                
+                // Add distant galaxies
+                const galaxyCount = Math.floor(Math.random() * 4) + 2;
+                for (let i = 0; i < galaxyCount; i++) {
+                    const galaxy = document.createElement('div');
+                    galaxy.className = 'galaxy';
+                    
+                    // Random size
+                    const size = Math.random() * 200 + 100;
+                    galaxy.style.width = size + 'px';
+                    galaxy.style.height = size + 'px';
+                    
+                    // Random position in far distance
+                    const x = Math.random() * (window.innerWidth * 4) - window.innerWidth * 1.5;
+                    const y = Math.random() * (window.innerHeight * 4) - window.innerHeight * 1.5;
+                    galaxy.style.left = x + 'px';
+                    galaxy.style.top = y + 'px';
+                    
+                    // Random rotation
+                    const rotation = Math.random() * 360;
+                    galaxy.style.transform = `rotate(${rotation}deg)`;
+                    
+                    spaceBackground.appendChild(galaxy);
+                }
+                
+                // Add occasional comets
+                addComet();
+            }
+            
+            // Function to add comets occasionally
+            function addComet() {
+                const comet = document.createElement('div');
+                comet.className = 'comet';
+                
+                // Random starting position (top of screen)
+                const startX = Math.random() * window.innerWidth;
+                comet.style.left = startX + 'px';
+                comet.style.top = '10%';
+                
+                // Random animation duration
+                const duration = Math.random() * 10 + 10;
+                comet.style.animationDuration = duration + 's';
+                
+                // Random delay
+                const delay = Math.random() * 15;
+                comet.style.animationDelay = delay + 's';
+                
+                spaceBackground.appendChild(comet);
+                
+                // Schedule next comet
+                setTimeout(addComet, Math.random() * 15000 + 10000);
+            }
+            
+            // Update zoom level and background
+            function updateZoom() {
+                console.log('Legacy updateZoom called - using ZoomManager');
+                // If ZoomManager is available, let it handle the zoom
+                if (window.minervaApp && window.minervaApp.zoomManager) {
+                    window.minervaApp.zoomManager.updateZoom();
+                    return;
+                }
+                
+                // Legacy fallback if ZoomManager isn't available
+                console.warn('ZoomManager not available, using legacy zoom');
+                
+                // Update zoom level indicator with more intuitive labels
+                let zoomText;
+                if (zoomLevel >= 0.9) {
+                    zoomText = "Normal View";
+                } else if (zoomLevel >= 0.7) {
+                    zoomText = "Zoomed Out";
+                } else if (zoomLevel >= 0.4) {
+                    zoomText = "Distant View";
+                } else if (zoomLevel >= 0.2) {
+                    zoomText = "Far View";
+                } else {
+                    zoomText = "Universe View";
+                }
+                
+                zoomLevelIndicator.textContent = `${zoomText} (${zoomLevel.toFixed(1)}x)`;
+                
+                // Apply scale transform directly to space background
+                spaceBackground.style.transformOrigin = 'center';
+                spaceBackground.style.transform = `scale(${zoomLevel})`;
+                console.log(`Applied zoom: ${zoomLevel}x scale transform to #space-background element`);
+                
+                // Show zoom level indicator and fade it out
+                zoomLevelIndicator.style.opacity = '1';
+                setTimeout(() => {
+                    zoomLevelIndicator.style.opacity = '0.3';
+                }, 2000);
+                
+                // Apply parallax effect to stars based on zoom level
+                const stars = document.querySelectorAll('.star');
+                const nebulae = document.querySelectorAll('.nebula');
+                const galaxies = document.querySelectorAll('.galaxy');
+                
+                // Stars move faster than nebulae, which move faster than galaxies (parallax)
+                stars.forEach((star) => {
+                    star.style.opacity = Math.min(1, 1.5 / zoomLevel);
+                });
+                
+                nebulae.forEach((nebula) => {
+                    nebula.style.opacity = Math.min(0.3, 0.3 / (zoomLevel * 0.7));
+                });
+                
+                galaxies.forEach((galaxy) => {
+                    galaxy.style.opacity = Math.min(0.35, 0.2 / (zoomLevel * 0.5));
+                });
+            }
+            
+            // Make Minerva smaller to see more cosmos (zoom out)
+            function makeSmaller() {
+                console.log('Legacy makeSmaller called');
+                // Use ZoomManager if available
+                if (window.minervaApp && window.minervaApp.zoomManager) {
+                    window.minervaApp.zoomManager.zoomOut();
+                    return;
+                }
+                
+                // Legacy fallback
+                if (zoomLevel > MIN_ZOOM) {
+                    // Decrement by exactly 0.1
+                    zoomLevel -= 0.1;
+                    // Round to single decimal place to avoid floating point issues
+                    zoomLevel = Math.round(zoomLevel * 10) / 10;
+                    console.log("Zoomed out to:", zoomLevel);
+                    updateZoom();
+                }
+            }
+            
+            // Make Minerva back to normal size (zoom in)
+            function makeLarger() {
+                console.log('Legacy makeLarger called');
+                // Use ZoomManager if available
+                if (window.minervaApp && window.minervaApp.zoomManager) {
+                    window.minervaApp.zoomManager.zoomIn();
+                    return;
+                }
+                
+                // Legacy fallback
+                if (zoomLevel < MAX_ZOOM) {
+                    // Increment by exactly 0.1
+                    zoomLevel += 0.1;
+                    // Round to single decimal place to avoid floating point issues
+                    zoomLevel = Math.round(zoomLevel * 10) / 10;
+                    console.log("Zoomed in to:", zoomLevel);
+                    updateZoom();
+                }
+            }
+            
+            // Make Minerva Orb open the dashboard overlay
+            const minervaOrb = document.getElementById('minerva-portal');
+            const dashboardOverlay = document.getElementById('minerva-dashboard-overlay');
+            const dashboardClose = document.getElementById('minerva-dashboard-close');
+            
+            if (!minervaOrb) {
+                console.error("❌ Minerva Orb (minerva-portal) not found in DOM.");
+            } else if (!dashboardOverlay) {
+                console.error("❌ Minerva Dashboard Overlay (minerva-dashboard-overlay) not found in DOM.");
+            } else {
+                console.log("✅ Minerva Orb & Dashboard Overlay found. Click event being attached.");
+                
+                // Open dashboard when orb is clicked
+                minervaOrb.addEventListener('click', function() {
+                    console.log('🟢 Minerva Orb Clicked - Navigating to Dashboard');
+                    
+                    // Add pulse effect to orb when clicked for visual feedback
+                    minervaOrb.classList.add('pulse-attention');
+                    setTimeout(() => {
+                        minervaOrb.classList.remove('pulse-attention');
+                    }, 1000);
+                    
+                    // Navigate to the dashboard.html page
+                    window.location.href = 'dashboard.html';
+                });
+                
+                // Close dashboard when close button is clicked
+                if (!dashboardClose) {
+                    console.error("❌ Dashboard Close button not found in DOM.");
+                } else {
+                    dashboardClose.addEventListener('click', function() {
+                        console.log('🔴 Close Button Clicked - Hiding Dashboard');
+                        dashboardOverlay.classList.remove('visible');
+                    });
+                }
+                
+                // Also close when clicking outside the panel (on the overlay background)
+                dashboardOverlay.addEventListener('click', function(event) {
+                    if (event.target === dashboardOverlay) {
+                        console.log('🔵 Clicked outside dashboard - Hiding Dashboard');
+                        dashboardOverlay.classList.remove('visible');
+                    }
+                });
+                
+                // Close on escape key
+                document.addEventListener('keydown', function(event) {
+                    if (event.key === 'Escape' && dashboardOverlay.classList.contains('visible')) {
+                        console.log('🟡 Escape Key Pressed - Hiding Dashboard');
+                        dashboardOverlay.classList.remove('visible');
+                    }
+                });
+                
+                // Make the orb visually indicate it's clickable
+                minervaOrb.style.cursor = 'pointer';
+            }
+            
+            // Set up event listeners for zoom controls with logging
+            zoomInBtn.addEventListener('click', function() {
+                console.log('Zoom in clicked');
+                makeLarger();
+            });
+            
+            zoomOutBtn.addEventListener('click', function() {
+                console.log('Zoom out clicked');
+                makeSmaller();
+            });
+            
+            // Log that the listeners are properly set up
+            console.log('Zoom controls initialized:', { 
+                zoomInBtn: zoomInBtn !== null, 
+                zoomOutBtn: zoomOutBtn !== null,
+                zoomLevelIndicator: zoomLevelIndicator !== null 
+            });
+            
+            // Create stars on load and when window is resized
+            createStars();
+            window.addEventListener('resize', createStars);
+            
+            // Allow keyboard shortcuts for zooming
+            document.addEventListener('keydown', (e) => {
+                // Only respond to keyboard shortcuts if not typing in chat
+                if (document.activeElement !== chatInput) {
+                    if (e.key === '+' || (e.key === '=' && e.shiftKey)) {
+                        makeLarger();  // Plus makes Minerva larger
+                    } else if (e.key === '-') {
+                        makeSmaller();  // Minus makes Minerva smaller
+                    }
+                }
+            });
+            
+            // Mouse wheel zoom (when not over chat interface)
+            document.addEventListener('wheel', (e) => {
+                // Check if the mouse is over the chat interface
+                const rect = chatInterface.getBoundingClientRect();
+                const isOverChat = (
+                    e.clientX >= rect.left && 
+                    e.clientX <= rect.right && 
+                    e.clientY >= rect.top && 
+                    e.clientY <= rect.bottom
+                );
+                
+                if (!isOverChat) {
+                    if (e.deltaY < 0) {
+                        makeLarger();  // Wheel up makes Minerva larger
+                    } else {
+                        makeSmaller();  // Wheel down makes Minerva smaller
+                    }
+                    e.preventDefault();
+                }
+            }, { passive: false });
+            
+            console.log('Minerva Memory Chat initialized successfully with space background');
+        });
+    </script>
+    <!-- New Dashboard Functionality Script -->
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const minervaOrb = document.getElementById("minerva-orb") || document.getElementById("minerva-portal");
+        const dashboard = document.getElementById("minerva-dashboard");
+        const closeDashboard = document.getElementById("close-dashboard");
+        const navButtons = document.querySelectorAll("#minerva-bottom-nav .nav-button");
+
+        if (!minervaOrb || !dashboard) {
+            console.error("❌ Minerva Orb or Dashboard not found.");
+            return;
+        }
+
+        console.log("✅ Minerva Orb & Dashboard detected - Click event attached.");
+
+        // Open dashboard when clicking the Minerva Orb
+        minervaOrb.addEventListener("click", function () {
+            console.log("🟢 Minerva Orb Clicked - Navigating to Dashboard");
+            
+            // Navigate to the dashboard.html page
+            window.location.href = 'dashboard.html';
+        });
+
+        // Close dashboard when clicking close button
+        closeDashboard.addEventListener("click", function () {
+            console.log("🔴 Close Button Clicked - Hiding Dashboard");
+            dashboard.classList.remove("active");
+            stopSystemMonitoring();
+        });
+
+        // Close dashboard when clicking outside the panel
+        dashboard.addEventListener("click", function (event) {
+            if (event.target === dashboard) {
+                console.log("🔵 Clicked outside dashboard - Hiding Dashboard");
+                dashboard.classList.remove("active");
+                stopSystemMonitoring();
+            }
+        });
+
+        // Close dashboard with Escape key
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape" && dashboard.classList.contains("active")) {
+                console.log("🟡 Escape Key Pressed - Hiding Dashboard");
+                dashboard.classList.remove("active");
+                stopSystemMonitoring();
+            }
+        });
+        
+        // Make bottom navigation buttons interactive
+        navButtons.forEach(button => {
+            button.addEventListener("click", function() {
+                // Remove active class from all buttons
+                navButtons.forEach(btn => btn.classList.remove("active"));
+                
+                // Add active class to clicked button
+                this.classList.add("active");
+                
+                // Get button ID to determine which section to show
+                const sectionId = this.id.replace("-btn", "");
+                console.log(`Navigating to ${sectionId} section`);
+                
+                // In future implementations, this would show different content panels
+                // based on which button was clicked
+                
+                // For now, we'll just demonstrate the clickable functionality
+                if (sectionId !== "dashboard") {
+                    // Show a placeholder message for now
+                    alert(`${sectionId.charAt(0).toUpperCase() + sectionId.slice(1)} section will be implemented in a future update.`);
+                    
+                    // After showing the message, go back to dashboard
+                    setTimeout(() => {
+                        navButtons.forEach(btn => btn.classList.remove("active"));
+                        document.getElementById("dashboard-btn").classList.add("active");
+                    }, 500);
+                }
+            });
+        });
+        
+        // System status monitoring and updates
+        let updateInterval;
+        let systemOnline = true;
+        let lastUpdateTime = new Date();
+        
+        // Function to update the timestamp display
+        function updateTimestamp() {
+            const now = new Date();
+            const diff = Math.floor((now - lastUpdateTime) / 1000);
+            const timeElement = document.getElementById('last-update-time');
+            
+            if (diff < 10) {
+                timeElement.textContent = 'Updated: just now';
+            } else if (diff < 60) {
+                timeElement.textContent = `Updated: ${diff} seconds ago`;
+            } else if (diff < 3600) {
+                const minutes = Math.floor(diff / 60);
+                timeElement.textContent = `Updated: ${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+            } else {
+                const hours = Math.floor(diff / 3600);
+                timeElement.textContent = `Updated: ${hours} hour${hours > 1 ? 's' : ''} ago`;
+            }
+        }
+        
+        // Function to simulate system status change (online/offline)
+        function simulateStatusChange() {
+            // 95% chance to stay online, 5% chance to go offline
+            if (Math.random() > 0.95) {
+                systemOnline = !systemOnline;
+                updateSystemStatusIndicator();
+            }
+        }
+        
+        // Function to update the system status indicator
+        function updateSystemStatusIndicator() {
+            const statusDot = document.getElementById('minerva-status-dot');
+            const statusText = document.getElementById('minerva-status-text');
+            
+            if (systemOnline) {
+                statusDot.classList.remove('offline');
+                statusDot.classList.add('online');
+                statusText.textContent = 'Minerva Online';
+                statusText.style.color = '#fff';
+            } else {
+                statusDot.classList.remove('online');
+                statusDot.classList.add('offline');
+                statusText.textContent = 'Minerva Offline';
+                statusText.style.color = 'rgb(255, 100, 100)';
+                
+                // Try to reconnect after a short delay
+                setTimeout(() => {
+                    systemOnline = true;
+                    updateSystemStatusIndicator();
+                    console.log('Minerva reconnected successfully');
+                }, 5000 + Math.random() * 5000); // 5-10 second reconnect time
+            }
+        }
+        
+        // Function to update system status information
+        function updateSystemStatus() {
+            if (!systemOnline) return; // Don't update if system is offline
+            
+            // Update last update timestamp
+            lastUpdateTime = new Date();
+            updateTimestamp();
+            
+            // Simulate potential status changes
+            simulateStatusChange();
+            
+            // Get the elements
+            const memoryUsageValue = document.getElementById('memory-usage-value');
+            const memoryUsageBar = document.getElementById('memory-usage-bar');
+            const systemLoadValue = document.getElementById('system-load-value');
+            const systemLoadBar = document.getElementById('system-load-bar');
+            
+            // Generate realistic oscillating values rather than completely random ones
+            // This simulates actual system behavior better
+            
+            // Get current values or start with defaults
+            let currentMemory = memoryUsageValue.textContent ? 
+                parseInt(memoryUsageValue.textContent) : 75;
+            let currentLoad = systemLoadValue.textContent ? 
+                parseInt(systemLoadValue.textContent) : 30;
+            
+            // Add small random changes to create realistic oscillation
+            // Memory usage fluctuates less than system load
+            currentMemory = Math.max(70, Math.min(99, currentMemory + (Math.random() * 6 - 3)));
+            currentLoad = Math.max(10, Math.min(90, currentLoad + (Math.random() * 15 - 7.5)));
+            
+            // Apply color coding based on load levels
+            memoryUsageBar.style.background = currentMemory > 90 ? 
+                'linear-gradient(90deg, rgba(223, 74, 74, 0.8), rgba(219, 93, 156, 0.9))' : 
+                'linear-gradient(90deg, rgba(74, 107, 223, 0.8), rgba(156, 93, 219, 0.9))';
+                
+            systemLoadBar.style.background = currentLoad > 75 ? 
+                'linear-gradient(90deg, rgba(223, 156, 74, 0.8), rgba(219, 93, 93, 0.9))' : 
+                'linear-gradient(90deg, rgba(74, 183, 223, 0.8), rgba(93, 149, 219, 0.9))';
+            
+            // Update the UI
+            memoryUsageValue.textContent = Math.round(currentMemory) + '%';
+            memoryUsageBar.style.width = Math.round(currentMemory) + '%';
+            
+            systemLoadValue.textContent = Math.round(currentLoad) + '%';
+            systemLoadBar.style.width = Math.round(currentLoad) + '%';
+            
+            // Simulate process status changes
+            const processes = [
+                "Think Tank - Processing query",
+                "Memory Indexing - Background task",
+                "Data Analysis - Completing",
+                "Neural Network Training - 78% complete",
+                "Conversation Memory Indexing",
+                "Project Organization Update"
+            ];
+            
+            // Randomly select 3 processes to display
+            const selectedProcesses = processes.sort(() => 0.5 - Math.random()).slice(0, 3);
+            
+            // Update the process list
+            const processList = document.querySelector('.process-list');
+            processList.innerHTML = '';
+            
+            // Add each process with the appropriate icon class
+            selectedProcesses.forEach(process => {
+                const li = document.createElement('li');
+                const iconClass = process.toLowerCase().includes('think') ? 'ai' : 
+                                 process.toLowerCase().includes('memory') ? 'memory' : 'data';
+                                 
+                li.innerHTML = `<span class="process-icon ${iconClass}"></span> ${process}`;
+                processList.appendChild(li);
+            });
+            
+            console.log("System status updated with latest information");
+        }
+        
+        // Start the system stats auto-refresh when dashboard is opened
+        // Active process management
+        let activeProcesses = [];
+        let selectedProcess = null;
+        
+        // Process types and their properties
+        const processTypes = {
+            'think-tank': { icon: 'ai', color: 'rgba(156, 93, 219, 0.8)', name: 'Think Tank' },
+            'memory-indexing': { icon: 'memory', color: 'rgba(74, 107, 223, 0.8)', name: 'Memory Indexing' },
+            'data-analysis': { icon: 'data', color: 'rgba(64, 153, 255, 0.8)', name: 'Data Analysis' },
+            'conversation-memory': { icon: 'memory', color: 'rgba(74, 107, 223, 0.8)', name: 'Conversation Memory' },
+            'project-organization': { icon: 'data', color: 'rgba(64, 153, 255, 0.8)', name: 'Project Organization' },
+            'neural-training': { icon: 'ai', color: 'rgba(156, 93, 219, 0.8)', name: 'Neural Network Training' }
+        };
+        
+        // Sample process tasks for different process types
+        const processTasks = {
+            'think-tank': [
+                'Processing user query',
+                'Generating multi-model response',
+                'Analyzing context history',
+                'Synthesizing information'
+            ],
+            'memory-indexing': [
+                'Indexing conversation memory',
+                'Optimizing search vectors',
+                'Building semantic index',
+                'Analyzing memory patterns'
+            ],
+            'data-analysis': [
+                'Processing dataset',
+                'Running statistical analysis',
+                'Generating visualizations',
+                'Extracting insights'
+            ],
+            'conversation-memory': [
+                'Storing conversation context',
+                'Linking related memories',
+                'Optimizing retrieval paths',
+                'Pruning old contexts'
+            ],
+            'project-organization': [
+                'Organizing project structure',
+                'Categorizing conversations',
+                'Building relationship graph',
+                'Updating project metadata'
+            ],
+            'neural-training': [
+                'Training neural model',
+                'Fine-tuning parameters',
+                'Validating against test set',
+                'Optimizing performance'
+            ]
+        };
+        
+        // Log message templates for each process type
+        const logMessages = {
+            'think-tank': [
+                'Initializing Think Tank multi-model query processor...',
+                'Loading context from conversation history...',
+                'Routing query to appropriate models...',
+                'Analyzing responses from Model Group A...',
+                'Synthesizing information across model responses...',
+                'Optimizing response for coherence and accuracy...',
+                'Formatting final response...',
+                'Think Tank processing complete!'
+            ],
+            'memory-indexing': [
+                'Initializing memory indexing subsystem...',
+                'Scanning conversation archives for indexing...',
+                'Creating vector embeddings for semantic search...',
+                'Building optimized search index...',
+                'Analyzing conversation patterns for quick retrieval...',
+                'Compressing memory structures...',
+                'Testing retrieval performance...',
+                'Memory indexing complete!'
+            ],
+            'data-analysis': [
+                'Initializing data analysis engine...',
+                'Loading dataset into memory...',
+                'Performing initial data validation...',
+                'Running statistical analysis routines...',
+                'Generating correlation matrices...',
+                'Visualizing key patterns and trends...',
+                'Compiling findings and insights...',
+                'Data analysis complete!'
+            ],
+            'conversation-memory': [
+                'Initializing conversation memory system...',
+                'Processing conversation for key concepts...',
+                'Storing context with semantic markers...',
+                'Creating references to related memories...',
+                'Optimizing memory graph for efficient retrieval...',
+                'Testing context retrieval and relevance...',
+                'Finalizing memory storage operations...',
+                'Conversation memory processing complete!'
+            ],
+            'project-organization': [
+                'Initializing project organization system...',
+                'Analyzing conversation content for project relevance...',
+                'Creating project structure templates...',
+                'Associating conversations with project categories...',
+                'Building relationship map for project contents...',
+                'Optimizing navigation pathways...',
+                'Finalizing project structure updates...',
+                'Project organization complete!'
+            ],
+            'neural-training': [
+                'Initializing neural network training environment...',
+                'Loading training dataset into memory...',
+                'Configuring model architecture and parameters...',
+                'Beginning training iterations...',
+                'Evaluating model performance on validation set...',
+                'Fine-tuning model weights for optimal performance...',
+                'Preparing model for deployment...',
+                'Neural network training complete!'
+            ]
+        };
+        
+        // Function to create a new process
+        function createProcess(type, task) {
+            const processType = type || getRandomProcessType();
+            const processTask = task || getRandomTask(processType);
+            const process = {
+                id: 'process-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
+                type: processType,
+                task: processTask,
+                progress: 0,
+                status: 'initializing',
+                startTime: new Date(),
+                estimatedDuration: 30 + Math.floor(Math.random() * 120), // 30-150 seconds
+                logs: [logMessages[processType][0]]
+            };
+            
+            activeProcesses.push(process);
+            updateProcessList();
+            return process;
+        }
+        
+        // Get a random process type
+        function getRandomProcessType() {
+            const types = Object.keys(processTypes);
+            return types[Math.floor(Math.random() * types.length)];
+        }
+        
+        // Get a random task for a process type
+        function getRandomTask(type) {
+            const tasks = processTasks[type];
+            return tasks[Math.floor(Math.random() * tasks.length)];
+        }
+        
+        // Update the list of active processes in the UI
+        function updateProcessList() {
+            const processList = document.getElementById('active-processes-list');
+            if (!processList) return;
+            
+            processList.innerHTML = '';
+            
+            if (activeProcesses.length === 0) {
+                const li = document.createElement('li');
+                li.innerHTML = '<span class="process-icon data"></span> No active processes';
+                li.style.opacity = '0.7';
+                li.style.fontStyle = 'italic';
+                processList.appendChild(li);
+                return;
+            }
+            
+            activeProcesses.forEach(process => {
+                const li = document.createElement('li');
+                li.setAttribute('data-process-id', process.id);
+                if (selectedProcess && selectedProcess.id === process.id) {
+                    li.classList.add('selected');
+                }
+                
+                const type = processTypes[process.type];
+                li.innerHTML = `
+                    <span class="process-icon ${type.icon}"></span>
+                    ${type.name} - ${process.task}
+                    <div class="process-progress">
+                        <div class="mini-progress">
+                            <div class="mini-progress-bar" style="width: ${process.progress}%"></div>
+                        </div>
+                        <span>${process.progress}%</span>
+                    </div>
+                `;
+                
+                li.addEventListener('click', () => {
+                    showProcessDetails(process);
+                });
+                
+                processList.appendChild(li);
+            });
+        }
+        
+        // Show details for a selected process
+        function showProcessDetails(process) {
+            selectedProcess = process;
+            updateProcessList(); // Update the selection in the list
+            
+            const detailsPanel = document.getElementById('process-details-panel');
+            const detailTitle = document.getElementById('process-detail-title');
+            const processStatus = document.getElementById('process-status');
+            const progressBar = document.getElementById('detail-progress-bar');
+            const progressPercentage = document.getElementById('detail-progress-percentage');
+            const startTime = document.getElementById('process-start-time');
+            const eta = document.getElementById('process-eta');
+            const logsContainer = document.getElementById('process-logs');
+            
+            // Set the details
+            const type = processTypes[process.type];
+            detailTitle.textContent = `${type.name}: ${process.task}`;
+            processStatus.textContent = process.status.charAt(0).toUpperCase() + process.status.slice(1);
+            progressBar.style.width = `${process.progress}%`;
+            progressPercentage.textContent = `${process.progress}%`;
+            
+            // Format start time relative to now
+            const now = new Date();
+            const diff = Math.floor((now - process.startTime) / 1000);
+            if (diff < 60) {
+                startTime.textContent = `${diff} seconds ago`;
+            } else if (diff < 3600) {
+                const minutes = Math.floor(diff / 60);
+                startTime.textContent = `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+            } else {
+                const hours = Math.floor(diff / 3600);
+                startTime.textContent = `${hours} hour${hours > 1 ? 's' : ''} ago`;
+            }
+            
+            // Calculate ETA based on progress and estimated duration
+            const elapsedSeconds = diff;
+            const totalSeconds = process.estimatedDuration;
+            const remainingSeconds = process.progress < 100 ? 
+                totalSeconds - elapsedSeconds : 0;
+            
+            if (process.progress >= 100) {
+                eta.textContent = 'Completed';
+            } else if (remainingSeconds < 60) {
+                eta.textContent = `~${remainingSeconds} seconds`;
+            } else {
+                const minutes = Math.ceil(remainingSeconds / 60);
+                eta.textContent = `~${minutes} minute${minutes > 1 ? 's' : ''}`;
+            }
+            
+            // Display logs
+            logsContainer.innerHTML = '';
+            process.logs.forEach(log => {
+                const logEntry = document.createElement('div');
+                logEntry.className = 'log-entry';
+                logEntry.textContent = log;
+                logsContainer.appendChild(logEntry);
+            });
+            
+            // Scroll to the bottom of the logs
+            logsContainer.scrollTop = logsContainer.scrollHeight;
+            
+            // Show the panel
+            detailsPanel.style.display = 'block';
+        }
+        
+        // Close the process details panel
+        function closeProcessDetails() {
+            const detailsPanel = document.getElementById('process-details-panel');
+            detailsPanel.style.display = 'none';
+            selectedProcess = null;
+            updateProcessList();
+        }
+        
+        // Update a process's progress
+        function updateProcessProgress(process, increment) {
+            if (!process) return;
+            
+            // Update progress
+            process.progress = Math.min(100, process.progress + (increment || 5));
+            
+            // Update status based on progress
+            if (process.progress < 10) {
+                process.status = 'initializing';
+            } else if (process.progress < 90) {
+                process.status = 'running';
+            } else if (process.progress < 100) {
+                process.status = 'finalizing';
+            } else {
+                process.status = 'completed';
+                
+                // Schedule removal after a delay
+                setTimeout(() => {
+                    removeProcess(process);
+                }, 5000);
+            }
+            
+            // Add log messages at certain progress points
+            const logIndex = Math.floor(process.progress / 15); // Add log every ~15% progress
+            if (logIndex < logMessages[process.type].length && 
+                process.logs.length <= logIndex) {
+                process.logs.push(logMessages[process.type][logIndex]);
+            }
+            
+            // Update UI if this is the selected process
+            if (selectedProcess && selectedProcess.id === process.id) {
+                showProcessDetails(process);
+            }
+        }
+        
+        // Remove a completed process
+        function removeProcess(process) {
+            const index = activeProcesses.findIndex(p => p.id === process.id);
+            if (index !== -1) {
+                activeProcesses.splice(index, 1);
+                updateProcessList();
+                
+                // If this was the selected process, close the details panel
+                if (selectedProcess && selectedProcess.id === process.id) {
+                    closeProcessDetails();
+                }
+                
+                // Create a new process to keep the list populated for demo purposes
+                setTimeout(() => {
+                    if (activeProcesses.length < 3) {
+                        createProcess();
+                    }
+                }, 3000);
+            }
+        }
+        
+        // Process management simulation - updates all processes regularly
+        function simulateProcessUpdates() {
+            activeProcesses.forEach(process => {
+                // Random progress increment between 3-8%
+                const increment = 3 + Math.floor(Math.random() * 6);
+                updateProcessProgress(process, increment);
+            });
+            
+            // Update the process list
+            updateProcessList();
+        }
+        
+        // Initialize process management
+        function initializeProcessManagement() {
+            // Set up click handler for the close button
+            const closeButton = document.getElementById('close-details');
+            if (closeButton) {
+                closeButton.addEventListener('click', closeProcessDetails);
+            }
+            
+            // Create initial processes
+            createProcess('think-tank', 'Processing user query');
+            createProcess('memory-indexing', 'Optimizing search vectors');
+            createProcess('conversation-memory', 'Storing conversation context');
+            
+            // Start the process update simulation
+            setInterval(simulateProcessUpdates, 2000);
+            
+            // Periodically create new processes
+            setInterval(() => {
+                // Randomly decide whether to create a new process
+                if (activeProcesses.length < 5 && Math.random() > 0.7) {
+                    createProcess();
+                }
+            }, 10000);
+        }
+        
+        function startSystemMonitoring() {
+            // Initial update
+            updateSystemStatus();
+            initializeProcessManagement();
+            
+            // Set up auto-refresh every 3 seconds
+            if (!updateInterval) {
+                updateInterval = setInterval(() => {
+                    updateSystemStatus();
+                    // Update time display every second
+                    updateTimestamp();
+                }, 3000);
+                
+                // Update just the timestamp more frequently for a real-time feel
+                setInterval(updateTimestamp, 1000);
+            }
+        }
+        
+        // Stop monitoring when dashboard is closed
+        function stopSystemMonitoring() {
+            if (updateInterval) {
+                clearInterval(updateInterval);
+                updateInterval = null;
+            }
+        }
+    });
+    </script>
+</body>
+</html>

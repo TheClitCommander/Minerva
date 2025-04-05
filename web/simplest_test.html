@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Minerva Space UI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            overflow: hidden;
+            color: #e2e8f0;
+            background-color: #000;
+            height: 100vh;
+            width: 100vw;
+            position: relative;
+        }
+        
+        /* Space Universe Container - Zoomable */
+        #universe-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+            transition: transform 0.5s ease;
+            transform-origin: center;
+        }
+        
+        /* Deep Space Background */
+        .space-background {
+            position: absolute;
+            width: 5000px; /* Large background for zooming */
+            height: 5000px;
+            left: -2000px;
+            top: -2000px;
+            background: url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=3000') center center / cover no-repeat;
+            z-index: 0;
+        }
+        
+        /* Minerva Orb (Central AI Hub) */
+        .minerva-orb {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, rgba(88,101,242,0.9) 0%, rgba(56,65,153,0.8) 75%, rgba(30,34,79,0.7) 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 30px rgba(88,101,242,0.6), 0 0 60px rgba(88,101,242,0.4), 0 0 90px rgba(88,101,242,0.2);
+            z-index: 100;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            transition: all 0.4s ease;
+            animation: pulse 3s infinite;
+        }
+        
+        .minerva-orb:hover {
+            box-shadow: 0 0 40px rgba(88,101,242,0.8), 0 0 80px rgba(88,101,242,0.6), 0 0 120px rgba(88,101,242,0.4);
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 30px rgba(88,101,242,0.6), 0 0 60px rgba(88,101,242,0.2); }
+            50% { box-shadow: 0 0 40px rgba(88,101,242,0.8), 0 0 80px rgba(88,101,242,0.4); }
+            100% { box-shadow: 0 0 30px rgba(88,101,242,0.6), 0 0 60px rgba(88,101,242,0.2); }
+        }
+        
+        /* Project Orbs */
+        .project-orbs-container {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            height: 400px;
+            z-index: 99;
+            display: none;
+        }
+        
+        .project-orb {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            font-weight: 500;
+            font-size: 14px;
+            text-align: center;
+            transition: all 0.3s ease;
+            opacity: 0;
+            background: radial-gradient(circle, rgba(99,102,241,0.9) 0%, rgba(79,70,229,0.8) 100%);
+            box-shadow: 0 0 20px rgba(99,102,241,0.6);
+        }
+        
+        .project-orb:hover {
+            transform: scale(1.1);
+        }
+        
+        .project-orbs-container.active .project-orb {
+            opacity: 1;
+        }
+        
+        /* Memory Context Indicator */
+        .memory-context {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 10px 20px;
+            color: #e2e8f0;
+            font-size: 14px;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            opacity: 0;
+        }
+        
+        .memory-context.active {
+            opacity: 1;
+        }
+        
+        .memory-context .memory-icon {
+            font-size: 16px;
+            color: #8B5CF6;
+        }
+        
+        .memory-context .memory-count {
+            background-color: #8B5CF6;
+            color: white;
+            border-radius: 10px;
+            padding: 2px 8px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        /* Smart Suggestions */
+        .smart-suggestions {
+            position: absolute;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: max-content;
+            max-width: 600px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .smart-suggestions.active {
+            opacity: 1;
+        }
+        
+        .suggestion-chip {
+            background-color: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 8px 16px;
+            color: #e2e8f0;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(88,101,242,0.2);
+            white-space: nowrap;
+        }
+        
+        .suggestion-chip:hover {
+            background-color: rgba(37, 44, 59, 0.8);
+            transform: translateY(-2px);
+            border-color: rgba(88,101,242,0.4);
+        }
+        
+        /* Stars Layer */
+        .stars-layer {
+            position: absolute;
+            width: 4000px;
+            height: 4000px;
+            left: -1500px;
+            top: -1500px;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, rgba(255, 255, 255, 0.8), rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 40px 70px, rgba(255, 255, 255, 0.9), rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 90px 40px, rgba(255, 255, 255, 0.6), rgba(0,0,0,0)),
+                radial-gradient(3px 3px at 160px 120px, rgba(255, 255, 255, 0.8), rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 230px 180px, rgba(255, 255, 255, 0.7), rgba(0,0,0,0)),
+                radial-gradient(4px 4px at 350px 280px, rgba(255, 255, 255, 0.9), rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 400px 400px, rgba(255, 255, 255, 0.8), rgba(0,0,0,0)),
+                radial-gradient(3px 3px at 550px 150px, rgba(255, 255, 255, 0.7), rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 600px 600px;
+            z-index: 1;
+        }
+        
+        /* Nebula Effects */
+        .nebula {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.4;
+            z-index: 2;
+        }
+        
+        .nebula-1 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(123, 31, 162, 0.5), rgba(32, 0, 44, 0));
+            left: 20%;
+            top: 30%;
+            animation: nebula-pulse 15s infinite alternate;
+        }
+        
+        .nebula-2 {
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(32, 156, 238, 0.3), rgba(0, 44, 60, 0));
+            right: 25%;
+            top: 20%;
+            animation: nebula-pulse 20s infinite alternate-reverse;
+        }
+        
+        .nebula-3 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255, 87, 51, 0.3), rgba(60, 20, 0, 0));
+            left: 35%;
+            bottom: 10%;
+            animation: nebula-pulse 18s infinite alternate;
+        }
+        
+        @keyframes nebula-pulse {
+            0% { transform: scale(1); opacity: 0.4; }
+            50% { transform: scale(1.15); opacity: 0.5; }
+            100% { transform: scale(1); opacity: 0.4; }
+        }
+        
+        /* Minerva planet styling */
+        .minerva-planet {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            background: url('static/images/minerva_planet.jpg') no-repeat center center;
+            background-size: contain;
+            border-radius: 50%;
+            box-shadow: 0 0 80px rgba(123, 31, 162, 0.6);
+            z-index: 10;
+            animation: planet-rotation 180s linear infinite;
+        }
+        
+        @keyframes planet-rotation {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+        /* Zoom Controls */
+        .zoom-controls {
+            position: fixed;
+            left: 20px;
+            top: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .zoom-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 50%;
+            background-color: rgba(30, 41, 59, 0.8);
+            color: #e2e8f0;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+        }
+        
+        .zoom-btn:hover {
+            background-color: rgba(56, 189, 248, 0.8);
+        }
+        
+        .zoom-level {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(30, 41, 59, 0.8);
+            color: #e2e8f0;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        /* Web Research Information Styling */
+        .web-research-info {
+            margin-top: 10px;
+            border-top: 1px solid rgba(148, 163, 184, 0.3);
+            padding-top: 8px;
+        }
+        
+        .web-research-header {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #94a3b8;
+            margin-bottom: 5px;
+        }
+        
+        .web-results-list {
+            list-style-type: none;
+            padding-left: 0;
+            margin: 5px 0;
+        }
+        
+        .web-results-list li {
+            font-size: 0.8rem;
+            margin-bottom: 4px;
+        }
+        
+        .web-results-list a {
+            color: #93c5fd;
+            text-decoration: none;
+        }
+        
+        .web-results-list a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Model legend styling */
+        .model-legend {
+            display: flex;
+            flex-direction: column;
+            margin-top: 8px;
+            font-size: 0.7rem;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2px;
+        }
+        
+        .color-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        
+        .model-name {
+            flex: 1;
+        }
+        
+        .percentage {
+            font-weight: 600;
+            width: 40px;
+            text-align: right;
+        }
+        
+        .background-container {
+            width: 100%;
+            height: 100vh;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+        
+        /* Chat Interface Container */
+        #chat-interface {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 350px;
+            height: 450px;
+            background-color: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: all 0.3s ease-in-out;
+            backdrop-filter: blur(10px);
+            resize: none;
+        }
+        
+        /* Minimized state */
+        #chat-interface.minimized {
+            height: 40px;
+            overflow: hidden;
+        }
+        
+        /* Chat controls and header */
+        #chat-header {
+            padding: 10px 15px;
+            color: #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(30, 41, 59, 0.8);
+            border-bottom: 1px solid rgba(100, 116, 139, 0.3);
+            cursor: move; /* Entire header is draggable */
+            user-select: none;
+        }
+        
+        #chat-title {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+        
+        #chat-controls {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .chat-control-btn {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+        
+        .chat-control-btn:hover {
+            color: #e2e8f0;
+            background-color: rgba(100, 116, 139, 0.2);
+        }
+        
+        /* Chat messages container */
+        #chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            scroll-behavior: smooth;
+            color: #e2e8f0;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        /* Chat input area */
+        #chat-input-container {
+            display: flex;
+            padding: 12px;
+            background-color: rgba(30, 41, 59, 0.5);
+            border-top: 1px solid rgba(100, 116, 139, 0.3);
+            gap: 8px;
+        }
+        
+        #chat-input {
+            flex: 1;
+            min-height: 40px;
+            max-height: 120px;
+            padding: 10px 15px;
+            border-radius: 20px;
+            border: 1px solid rgba(100, 116, 139, 0.5);
+            background-color: rgba(15, 23, 42, 0.6);
+            color: #e2e8f0;
+            resize: none;
+            overflow-y: auto;
+            outline: none;
+            transition: border-color 0.2s;
+            font-family: inherit;
+            font-size: 14px;
+        }
+        
+        #chat-input:focus {
+            border-color: #3b82f6;
+        }
+        
+        #send-message {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            padding: 0;
+            font-size: 16px;
+        }
+        
+        #send-message:hover {
+            background-color: #2563eb;
+        }
+        
+        /* Message styles */
+        .user-message {
+            background-color: rgba(59, 130, 246, 0.15);
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin: 12px 0;
+            align-self: flex-end;
+            max-width: 80%;
+            word-wrap: break-word;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            border-bottom-right-radius: 0;
+        }
+        
+        .ai-message {
+            background-color: rgba(30, 41, 59, 0.4);
+            border-radius: 8px;
+            padding: 12px 15px;
+            margin: 12px 0;
+            align-self: flex-start;
+            max-width: 80%;
+            word-wrap: break-word;
+            position: relative;
+            border-bottom-left-radius: 0;
+        }
+        
+        .message-content {
+            margin-bottom: 5px;
+        }
+        
+        .message-timestamp {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.5);
+            align-self: flex-end;
+            margin-top: 4px;
+        }
+        
+        .system-message {
+            color: #94a3b8;
+            font-style: italic;
+            text-align: center;
+            margin: 8px 0;
+            font-size: 12px;
+        }
+        
+        /* Loading indicator */
+        .loading-indicator {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            background-color: rgba(30, 41, 59, 0.4);
+            border-radius: 8px;
+            margin: 8px 0;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+        
+        /* Model metrics panel */
+        #model-metrics-panel {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            width: 400px;
+            background-color: rgba(15, 23, 42, 0.92);
+            border: 1px solid rgba(100, 116, 139, 0.5);
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            z-index: 2000;
+            padding: 15px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        #model-metrics-panel.hidden {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-20px);
+        }
+        
+        /* Simple chart */
+        .simple-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .chart-bar {
+            height: 24px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            color: white;
+            font-size: 12px;
+            font-weight: 500;
+        }
+    </style>
+    <!-- Minerva Chat Integration Files -->
+    <link rel="stylesheet" href="/static/css/minerva-chat-styles.css">
+    <link rel="stylesheet" href="/static/css/minerva-navigation.css">
+    <script src="/static/js/chat-simple.js" defer></script>
+    
+    <!-- Markdown Formatting Support -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <!-- Universe Container (Zoomable) -->
+    <div id="universe-container">
+        <div class="space-background"></div>
+        <div class="stars-layer"></div>
+        
+        <!-- Nebula effects -->
+        <div class="nebula nebula-1"></div>
+        <div class="nebula nebula-2"></div>
+        <div class="nebula nebula-3"></div>
+        
+        <!-- Minerva planet -->
+        <div class="minerva-planet"></div>
+        
+        <!-- Minerva Orb (Central AI Hub) -->
+        <div class="minerva-orb" id="minerva-orb">
+            <i class="fas fa-brain"></i>
+        </div>
+        
+        <!-- Project Quick-Start Orbs -->
+        <div class="project-orbs-container" id="project-orbs-container">
+            <!-- Project orbs will be dynamically added here -->
+        </div>
+        
+        <!-- Memory Context Indicator -->
+        <div class="memory-context" id="memory-context">
+            <i class="fas fa-memory memory-icon"></i>
+            <span>Conversation Memory Active</span>
+            <span class="memory-count">0</span>
+        </div>
+        
+        <!-- Smart Suggestions -->
+        <div class="smart-suggestions" id="smart-suggestions">
+            <!-- Suggestion chips will be dynamically added here -->
+        </div>
+    </div>
+    
+    <!-- Zoom Controls -->
+    <div class="zoom-controls">
+        <button class="zoom-btn" id="zoom-in">+</button>
+        <div class="zoom-level" id="zoom-level">1x</div>
+        <button class="zoom-btn" id="zoom-out">-</button>
+    </div>
+    
+    <!-- Chat Interface (Think Tank) -->
+    <div class="chat-container" id="chat-interface">
+        <!-- Chat header with controls -->
+        <div class="chat-header" id="chat-header">
+            <div class="chat-header-title" id="chat-title">Minerva Space</div>
+            <div class="chat-header-version">v1.0</div>
+            <div id="chat-controls">
+                <button class="chat-control-btn" id="minimize-chat" title="Minimize chat"><i class="fas fa-minus"></i></button>
+                <button class="chat-control-btn" id="view-memories" title="View Memory System" onclick="window.location.href='/memories'"><i class="fas fa-brain"></i></button>
+                <button class="chat-control-btn" id="project-button" title="Manage projects" onclick="window.location.href='/dashboard'"><i class="fas fa-project-diagram"></i></button>
+            </div>
+        </div>
+        
+        <!-- Model metrics panel (initially hidden) -->
+        <div id="model-metrics-panel" class="hidden">
+            <div class="metrics-header">
+                <h5>Think Tank AI Metrics</h5>
+                <button id="close-metrics" class="close-button"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="think-tank-metrics">
+                <div class="metric-card">
+                    <h6>Blending</h6>
+                    <div class="metric-value" id="blending-percentage">85.2%</div>
+                </div>
+                <div class="metric-card">
+                    <h6>Rank Accuracy</h6>
+                    <div class="metric-value" id="rank-accuracy">92.5%</div>
+                </div>
+                <div class="metric-card">
+                    <h6>Routing Efficiency</h6>
+                    <div class="metric-value" id="routing-efficiency">88.7%</div>
+                </div>
+            </div>
+            
+            <!-- Model Usage Visualization -->
+            <div class="model-visualization-section">
+                <h6>Model Usage Distribution</h6>
+                <div id="model-usage-chart" class="visualization-container"></div>
+            </div>
+        </div>
+        
+        <div id="chat-messages">
+            <div class="system-message">Welcome to Minerva's Think Tank. How can I assist you today?</div>
+        </div>
+        <div class="chat-input-container">
+            <input type="text" id="chat-input" placeholder="Type a message...">
+            <button id="chat-send-button"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <!-- Load the chat functionality script -->
+    <script src="/static/js/chat-simple.js"></script>
+    
+    <script>
+      // Wait for the DOM to be fully loaded
+      document.addEventListener('DOMContentLoaded', function() {
+        console.log(`Minerva Space UI initialized at ${new Date().toLocaleTimeString()}`);
+        
+        // Set up links to other Minerva pages
+        const viewMemoriesBtn = document.getElementById('view-memories');
+        const projectButton = document.getElementById('project-button');
+        
+        // Initialize zoom controls if they exist
+        if (typeof initZoomControls === 'function') {
+          initZoomControls();
+        }
+      });
+    </script>
+</body>

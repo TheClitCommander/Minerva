@@ -1,0 +1,174 @@
+/**
+ * Minerva Animations
+ * Provides smooth transitions and animations for UI elements
+ */
+
+/* Message Transition Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes messageScale {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.02);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+/* Typing indicator animation */
+@keyframes typingDot {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+/* Message Animation Classes */
+.message {
+    transition: all 0.3s ease;
+}
+
+.message.user-message {
+    animation: fadeInRight 0.3s ease;
+}
+
+.message.bot-message {
+    animation: fadeInLeft 0.3s ease;
+}
+
+.message.system-message {
+    animation: fadeInUp 0.3s ease;
+}
+
+/* Sent message feedback animation */
+.message.user-message.just-sent {
+    animation: messageScale 0.4s ease;
+}
+
+/* System message fade-out */
+.message.system-message.fade-out {
+    animation: fadeOut 1.5s ease forwards;
+    animation-delay: 5s;
+}
+
+/* Typing indicator dots */
+.typing-indicator span {
+    animation: typingDot 1s infinite;
+}
+
+.typing-indicator span:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.typing-indicator span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+/* Button Hover Effects */
+.button, button, 
+input[type="button"], 
+input[type="submit"] {
+    transition: all 0.2s ease;
+}
+
+.button:hover, button:hover,
+input[type="button"]:hover, 
+input[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px var(--shadow-color);
+}
+
+.button:active, button:active,
+input[type="button"]:active, 
+input[type="submit"]:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+/* Micro-interactions for UI elements */
+.project-card, .branch-node {
+    transition: all 0.2s ease;
+}
+
+.project-card:hover, .branch-node:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 10px var(--shadow-color);
+}
+
+/* Smooth scrolling behavior for all elements */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Active state animations */
+.active, .selected {
+    transition: all 0.3s ease;
+}
+
+/* Improved focus states */
+input:focus, textarea:focus, select:focus {
+    transition: box-shadow 0.3s ease;
+    box-shadow: 0 0 0 3px rgba(var(--primary-accent-rgb), 0.3);
+}
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion) {
+    *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-delay: 0.001ms !important;
+        transition-duration: 0.001ms !important;
+    }
+    
+    html {
+        scroll-behavior: auto !important;
+    }
+}

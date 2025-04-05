@@ -1,0 +1,226 @@
+"""
+Multi-Model Processor for Minerva AI
+
+This module integrates multiple AI models (HuggingFace, GPT4All, AutoGPT) 
+and selects the best response based on quality metrics.
+"""
+
+import os
+import sys
+import re
+import time
+import asyncio
+import threading
+from typing import Dict, List, Optional, Any, Tuple, Callable
+from concurrent.futures import ThreadPoolExecutor, as_completed
+import logging
+
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("multi_model_processor")
+
+# Define direct simulated processors for easier access
+def simulated_gpt4_processor(message):
+    """GPT-4 simulated processor that returns a formatted, coherent response"""
+    logger.info(f"[THINK TANK] simulated_gpt4_processor called with message: {message[:30]}...")
+    return f"Simulated GPT-4 response to your question about {message.split()[0:3]}. This model would provide a detailed, nuanced explanation with clear examples and thorough analysis."
+
+def simulated_claude3_processor(message):
+    """Claude-3 simulated processor that returns a formatted, coherent response"""
+    logger.info(f"[THINK TANK] simulated_claude3_processor called with message: {message[:30]}...")
+    return f"Simulated Claude-3 response regarding {message.split()[0:3]}. This model tends to provide comprehensive, well-structured explanations with a focus on clarity and ethical considerations."
+
+def simulated_mistral7b_processor(message):
+    """Mistral-7B simulated processor that returns a formatted, coherent response"""
+    logger.info(f"[THINK TANK] simulated_mistral7b_processor called with message: {message[:30]}...")
+    return f"Simulated Mistral-7B responding to {message.split()[0:3]}. This model gives concise, informative responses that are technically accurate but less verbose than larger models."
+
+def simulated_gpt4all_processor(message):
+    """GPT4All simulated processor that returns a formatted, coherent response"""
+    logger.info(f"[THINK TANK] simulated_gpt4all_processor called with message: {message[:30]}...")
+    return f"Simulated GPT4All analysis of {message.split()[0:3]}. This model provides accessible explanations suitable for general audiences with practical examples."
+
+# Make simulated processors available for import
+__all__ = [
+    "simulated_gpt4_processor",
+    "simulated_claude3_processor",
+    "simulated_mistral7b_processor",
+    "simulated_gpt4all_processor"
+]
+
+# Quality evaluation functions
+def evaluate_response_quality(response: str, message: str, query_complexity: float = None, model_capabilities: Dict[str, Any] = None) -> float:
+    """
+    Evaluate the quality of a response based on various metrics including query complexity.
+    
+    Args:
+        response: The generated response to evaluate
+        message: The original message that prompted the response
+        query_complexity: Optional float indicating query complexity (0-1)
+        model_capabilities: Optional dict of model capabilities
+        
+    Returns:
+        float: Quality score between 0-1
+    """
+    # Simple implementation for baseline
+    if not response or len(response) < 10:
+        return 0.1
+    
+    # Basic metrics
+    length_score = min(1.0, len(response) / 500)  # Reward reasonable length
+    coherence_score = 0.8  # Placeholder - in a real implementation we would measure coherence
+    
+    # Check if response addresses the question
+    message_words = set(re.findall(r'\b\w+\b', message.lower()))
+    response_words = set(re.findall(r'\b\w+\b', response.lower()))
+    overlap = len(message_words.intersection(response_words)) / max(1, len(message_words))
+    relevance_score = min(1.0, overlap * 2)  # Scale up a bit
+    
+    # Factor in query complexity if provided
+    if query_complexity is not None:
+        # For complex queries, we expect longer, more detailed responses
+        if query_complexity > 0.7:
+            length_score = min(1.0, len(response) / 800)  # Higher bar for complex queries
+            
+        # Weight the scores differently based on query complexity
+        quality_score = (length_score * 0.2 + coherence_score * 0.3 + relevance_score * 0.5)
+    else:
+        quality_score = (length_score * 0.3 + coherence_score * 0.3 + relevance_score * 0.4)
+    
+    return quality_score
+
+def get_framework_manager():
+    """Get the framework manager to access integrations"""
+    try:
+        # Avoid circular imports by importing here
+        from web.integrations.framework_manager import get_framework_manager as get_manager
+        return get_manager()
+    except Exception as e:
+        logger.warning(f"Error getting framework manager: {e}")
+        return None
+
+def get_model_processors():
+    """
+    Get available model processing functions from framework integrations.
+    In test mode, returns mock implementations.
+    
+    Returns:
+        Dict with model processing functions
+    """
+    # In test mode, create mock implementations
+    if os.environ.get("MINERVA_TEST_MODE") == "1":
+        logger.info("Using mock model processors for testing")
+        return {
+            "openai": lambda msg: f"OpenAI mock response to: {msg}",
+            "claude": lambda msg: f"Claude mock response to: {msg}",
+            "huggingface": lambda msg: f"HuggingFace mock response to: {msg}"
+        }
+    
+    # Real implementation for production
+    processors = {
+        "huggingface": None,
+        "gpt4all": None, 
+        "autogpt": None
+    }
+
+    # First, check for direct HuggingFace model availability
+    try:
+        # Try to access the global variables from app.py
+        from web.app import direct_huggingface_model, direct_huggingface_tokenizer, direct_huggingface_available, process_huggingface_only
+    
+        if direct_huggingface_available and direct_huggingface_model is not None:
+            logger.info("Direct HuggingFace model is available, using it as processor")
+            processors["huggingface"] = process_huggingface_only
+    except ImportError as e:
+        logger.warning(f"Could not import direct HuggingFace model: {e}")
+    except Exception as e:
+        logger.warning(f"Error accessing direct HuggingFace model: {e}")
+
+    # Get framework manager for additional models
+    manager = get_framework_manager()
+    if not manager:
+        logger.warning("Framework manager not available")
+        # Return what we have so far with simulated processors
+        processors['gpt4'] = simulated_gpt4_processor
+        processors['claude3'] = simulated_claude3_processor
+        processors['mistral7b'] = simulated_mistral7b_processor
+        processors['gpt4all'] = simulated_gpt4all_processor
+        return processors
+
+    # If direct model wasn't available, try framework manager
+    if processors["huggingface"] is None:
+        try:
+            huggingface = manager.get_framework_by_name("HuggingFace")
+            if huggingface and hasattr(huggingface, "generate_text"):
+                logger.info("Using HuggingFace from framework manager")
+                processors["huggingface"] = huggingface.generate_text
+        except Exception as e:
+            logger.warning(f"Error getting HuggingFace integration from framework: {e}")
+    
+    # Get GPT4All integration
+    try:
+        gpt4all = manager.get_framework_by_name("GPT4All")
+        if gpt4all and hasattr(gpt4all, "process_message"):
+            processors["gpt4all"] = gpt4all.process_message
+            logger.info("GPT4All processor registered")
+    except Exception as e:
+        logger.warning(f"Error getting GPT4All integration: {e}")
+    
+    # Get AutoGPT integration
+    try:
+        autogpt = manager.get_framework_by_name("AutoGPT")
+        if autogpt and hasattr(autogpt, "execute_task"):
+            # Wrap AutoGPT's execute_task to extract text response
+            def autogpt_processor(message, **kwargs):
+                result = autogpt.execute_task(message, {"response_type": "text"})
+                return result.get("response", "")
+            processors["autogpt"] = autogpt_processor
+            logger.info("AutoGPT processor registered")
+    except Exception as e:
+        logger.warning(f"Error getting AutoGPT integration: {e}")
+        
+    # Add simulated processors for testing in think tank mode
+    # This ensures they're available for the coordinator to use
+    processors['gpt4'] = simulated_gpt4_processor
+    processors['claude3'] = simulated_claude3_processor
+    processors['mistral7b'] = simulated_mistral7b_processor
+    processors['gpt4all'] = simulated_gpt4all_processor
+    
+    # Log available processors
+    available = [name for name, proc in processors.items() if proc is not None]
+    logger.info(f"Available model processors: {available}")
+    
+    return processors
+
+def format_enhanced_prompt(message: str, model_type: str = "basic") -> str:
+    """
+    Format a more structured prompt for better AI responses.
+    
+    Args:
+        message: The user message to format
+        model_type: The type of model - "zephyr", "mistral", "basic", "gpt4all", "autogpt"
+        
+    Returns:
+        str: Properly formatted prompt for the given model type
+    """
+    message = message.strip()
+    
+    if model_type == "zephyr":
+        return f"<|system|>
+You are a helpful, accurate AI assistant. Answer the following question clearly and precisely.
+</|system|>
+"
+    
+    elif model_type == "mistral":
+        return f"<s>[INST] {message} [/INST]"
+    
+    elif model_type == "gpt4all":
+        return f"USER: {message}
+ASSISTANT: "
+    
+    elif model_type == "autogpt":
+        return f"TASK: {message}
+"
+    
+    # Basic prompt for other models
+    return message

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minerva Portal</title>
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/chat-integrated.css">
+    <link rel="stylesheet" href="/static/css/minerva-main.css">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            font-family: 'Arial', sans-serif;
+            color: #fff;
+            background-color: #000;
+            overflow: auto;
+        }
+
+        .portal-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background: linear-gradient(to bottom, #0a0a2a, #000);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .portal-header {
+            text-align: center;
+            padding: 30px 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .portal-title {
+            font-size: 3rem;
+            margin: 0;
+            background: linear-gradient(to right, #4a7ee7, #ADD8E6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(74, 126, 231, 0.3);
+        }
+
+        .portal-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            margin-top: 10px;
+        }
+
+        .portal-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            padding: 0 5%;
+        }
+
+        .portal-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .feature-card {
+            background: rgba(26, 58, 143, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(100, 149, 237, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            border-color: rgba(100, 149, 237, 0.6);
+        }
+        
+        .feature-status {
+            display: inline-block;
+            padding: 4px 8px;
+            margin-top: 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .feature-status.active {
+            background-color: rgba(0, 200, 0, 0.2);
+            color: #00FF00;
+            border: 1px solid rgba(0, 200, 0, 0.4);
+        }
+        
+        .feature-status.coming-soon {
+            background-color: rgba(200, 150, 0, 0.2);
+            color: #FFD700;
+            border: 1px solid rgba(200, 150, 0, 0.4);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: #4a7ee7;
+        }
+
+        .feature-title {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+        }
+
+        .feature-description {
+            font-size: 1rem;
+            line-height: 1.5;
+            opacity: 0.8;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(25, 25, 50, 0.7);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(100, 149, 237, 0.5);
+            z-index: 10;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-button:hover {
+            background: rgba(100, 149, 237, 0.9);
+            transform: scale(1.05);
+        }
+
+        .orb-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle at center, 
+                rgba(255, 255, 255, 0.1) 0%, 
+                rgba(100, 149, 237, 0.05) 40%, 
+                rgba(0, 0, 0, 0) 70%);
+            filter: blur(20px);
+            opacity: 0.7;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty));
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="portal-container">
+        <button class="back-button" onclick="window.location.href='/'">&larr;</button>
+        
+        <div class="orb-glow"></div>
+        <!-- Particles will be added via JavaScript -->
+        
+        <div class="portal-header">
+            <h1 class="portal-title">Minerva Portal</h1>
+            <p class="portal-subtitle">Access the knowledge and power of Minerva</p>
+        </div>
+        
+        <div class="portal-content">
+            <div class="portal-features">
+                <div class="feature-card" onclick="window.location.href='/original'">
+                    <div class="feature-icon">💬</div>
+                    <h3 class="feature-title">Conversations</h3>
+                    <p class="feature-description">Start or continue a conversation with Minerva's Think Tank system. Access your conversation history and leverage multi-model blending for comprehensive answers.</p>
+                    <div class="feature-status active">Active</div>
+                </div>
+                
+                <div class="feature-card" onclick="window.location.href='/projects'">
+                    <div class="feature-icon">📂</div>
+                    <h3 class="feature-title">Projects</h3>
+                    <p class="feature-description">Organize your work into projects. Turn conversations into structured projects for better knowledge management.</p>
+                    <div class="feature-status active">Active</div>
+                </div>
+                
+                <div class="feature-card" onclick="window.location.href='/memory'">
+                    <div class="feature-icon">🧠</div>
+                    <h3 class="feature-title">Memory System</h3>
+                    <p class="feature-description">Explore Minerva's conversation memory capabilities. Review past interactions and continue where you left off.</p>
+                    <div class="feature-status active">Active</div>
+                </div>
+                
+                <div class="feature-card" onclick="window.location.href='/settings'">
+                    <div class="feature-icon">⚙️</div>
+                    <h3 class="feature-title">Settings</h3>
+                    <p class="feature-description">Customize your Minerva experience with personalized settings and preferences.</p>
+                    <div class="feature-status active">Active</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- No chat containers needed on the portal page -->
+    
+    <!-- Socket.IO -->
+    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"></script>
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="/static/js/minerva-chat.js"></script>
+    <script src="/static/js/chat-debug.js"></script>
+    <script src="/static/js/portal-initializer.js"></script>
+    <script src="/static/js/chat-fix.js"></script>
+    
+    <script>
+        // Feature initialization functions
+        function initiateProjectsFeature() {
+            // For now, show a message about the upcoming feature
+            const message = 'Projects feature is coming soon! This will allow you to:\n\n' +
+                            '• Organize your work into separate projects\n' +
+                            '• Convert conversations into structured projects\n' +
+                            '• Maintain context across different project spaces\n\n' +
+                            'We\'re actively working on this feature.';
+            alert(message);
+            
+            // Future implementation will direct to the projects page
+            // window.location.href = '/projects';
+        }
+        
+        function initiateMemorySystem() {
+            // For now, show a message about the upcoming feature
+            const message = 'Memory System feature is coming soon! This will allow you to:\n\n' +
+                            '• Access your full conversation history\n' +
+                            '• Track context across multiple sessions\n' +
+                            '• Review and continue past conversations\n\n' +
+                            'This is a critical functionality we\'re prioritizing.';
+            alert(message);
+            
+            // Future implementation will direct to the memory system page
+            // window.location.href = '/memory';
+        }
+        
+        function initiateSettings() {
+            // For now, show a message about the upcoming feature
+            const message = 'Settings feature is coming soon! This will allow you to:\n\n' +
+                            '• Customize your Minerva experience\n' +
+                            '• Set personal preferences\n' +
+                            '• Configure model behavior and system settings\n\n' +
+                            'We\'re working on making Minerva more personalized.';
+            alert(message);
+            
+            // Future implementation will direct to the settings page
+            // window.location.href = '/settings';
+        }
+        
+        // Create floating particles
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.querySelector('.portal-container');
+            const numParticles = 30;
+            
+            for (let i = 0; i < numParticles; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Random size between 2-5px
+                const size = Math.random() * 3 + 2;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                
+                // Random starting position
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                particle.style.left = posX + '%';
+                particle.style.top = posY + '%';
+                
+                // Random ending position for animation
+                const tx = (Math.random() - 0.5) * 300;
+                const ty = (Math.random() - 0.5) * 300;
+                particle.style.setProperty('--tx', tx + 'px');
+                particle.style.setProperty('--ty', ty + 'px');
+                
+                // Random animation delay
+                particle.style.animationDelay = (Math.random() * 10) + 's';
+                
+                container.appendChild(particle);
+            }
+        });
+    </script>
+</body>
+</html>

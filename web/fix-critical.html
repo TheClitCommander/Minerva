@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fix Minerva</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f0f0f0; padding: 20px; }
+        .button { 
+            display: block; 
+            padding: 15px 20px; 
+            margin: 10px 0;
+            background: #4a4a9e; 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            font-size: 16px;
+            text-align: center;
+            text-decoration: none;
+        }
+        .button:hover { background: #5a5aae; }
+        pre { background: #333; color: #f0f0f0; padding: 15px; border-radius: 5px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>Minerva Quick Fix</h1>
+    <p>Click the button below to try each option in order until the system works correctly:</p>
+    
+    <a href="http://localhost:8080/backups/minerva_central_20250316/index.html" class="button">Option 1: Load Working Backup Version</a>
+    
+    <a href="http://localhost:7070/api/think-tank" class="button">Option 2: Check API Server</a>
+    
+    <a href="http://localhost:8080/simple-chat.html" class="button">Option 3: Use Simple Chat</a>
+    
+    <h2>Instructions:</h2>
+    <ol>
+        <li>First try Option 1 which loads the known good backup</li>
+        <li>If that doesn't work, check if the API server is running with Option 2</li>
+        <li>If all else fails, use the simple chat we created with Option 3</li>
+    </ol>
+    
+    <h2>Technical Details:</h2>
+    <p>The console shows these errors:</p>
+    <pre>
+[ERROR] Chat input or send button not found!
+[ERROR] Send button not found
+[ERROR] Chat input not found
+[ERROR] Chat messages container not found
+[ERROR] ❌ CORS test failed at /api/think-tank: Server error: 501
+[ERROR] Chat messages container not found
+[ERROR] Floating chat container not found!
+    </pre>
+</body>
+</html>

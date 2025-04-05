@@ -1,0 +1,2370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cost Analysis - Minerva Think Tank</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    
+    <style>
+        /* Custom styling */
+        .card-cost {
+            border-left: 4px solid;
+        }
+        .card-cost-primary { border-color: #4e73df; }
+        .card-cost-success { border-color: #1cc88a; }
+        .card-cost-warning { border-color: #f6c23e; }
+        .card-cost-danger { border-color: #e74a3b; }
+
+        .cost-metric-card {
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+        .cost-metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+        
+        .savings-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            font-size: 0.75rem;
+            z-index: 100;
+        }
+        
+        .optimization-item {
+            border-left: 3px solid transparent;
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+        }
+        
+        .optimization-high { 
+            border-color: #e74a3b; 
+        }
+        
+        .optimization-medium { 
+            border-color: #f6c23e; 
+        }
+        
+        .optimization-low { 
+            border-color: #1cc88a; 
+        }
+        
+        /* Sidebar styling */
+        .sidebar {
+            min-height: 100vh;
+            background-color: #4e73df;
+            background-image: linear-gradient(180deg, #4e73df 10%, #224abe 100%);
+            background-size: cover;
+        }
+        
+        .sidebar-heading {
+            padding: 0.875rem 1.25rem;
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .sidebar-link {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        
+        .sidebar-link:hover {
+            color: #fff;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-link.active {
+            color: #fff;
+            font-weight: bold;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Main content */
+        .main-content {
+            flex-grow: 1;
+        }
+        
+        /* Responsive charts */
+        .chart-container {
+            width: 100%;
+            min-height: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 sidebar p-0">
+                <div class="py-4 text-center">
+                    <h4 class="text-white">Minerva</h4>
+                    <p class="text-white-50">Cost Analysis</p>
+                </div>
+                <hr class="text-white-50 mx-3">
+                
+                <div class="sidebar-heading">Dashboards</div>
+                <a href="/usage" class="sidebar-link">
+                    <i class="fas fa-chart-line me-2"></i> Usage Overview
+                </a>
+                <a href="/usage/cost-analysis" class="sidebar-link active">
+                    <i class="fas fa-dollar-sign me-2"></i> Cost Analysis
+                </a>
+                
+                <div class="sidebar-heading mt-3">Cost Management</div>
+                <a href="#" class="sidebar-link" data-section="summary">
+                    <i class="fas fa-tachometer-alt me-2"></i> Cost Summary
+                </a>
+                <a href="#" class="sidebar-link" data-section="distribution">
+                    <i class="fas fa-chart-pie me-2"></i> Model Distribution
+                </a>
+                <a href="#" class="sidebar-link" data-section="trends">
+                    <i class="fas fa-chart-area me-2"></i> Historical Trends
+                </a>
+                <a href="#" class="sidebar-link" data-section="projections">
+                    <i class="fas fa-chart-line me-2"></i> Future Projections
+                </a>
+                <a href="#" class="sidebar-link" data-section="optimizer">
+                    <i class="fas fa-magic me-2"></i> Cost Optimizer
+                </a>
+                <a href="#" class="sidebar-link" data-section="scenarios">
+                    <i class="fas fa-flask me-2"></i> What-If Scenarios
+                </a>
+                <a href="#" class="sidebar-link" data-section="budget-alerts">
+                    <i class="fas fa-bell me-2"></i> Budget Alerts
+                </a>
+                <a href="#" class="sidebar-link" data-section="model-switching">
+                    <i class="fas fa-exchange-alt me-2"></i> Model Switching
+                </a>
+                
+                <hr class="text-white-50 mx-3">
+                <div class="text-center text-white-50 small mt-5">
+                    <p>© 2025 Minerva AI</p>
+                </div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-md-10 main-content p-4">
+                <!-- Header -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2><i class="fas fa-dollar-sign text-primary me-2"></i> Minerva Cost Analysis</h2>
+                    <div>
+                        <div class="input-group">
+                            <select class="form-select" id="timeRangeSelector">
+                                <option value="today">Today</option>
+                                <option value="week">This Week</option>
+                                <option value="month" selected>This Month</option>
+                                <option value="quarter">Last 3 Months</option>
+                                <option value="year">This Year</option>
+                            </select>
+                            <button class="btn btn-primary" id="applyDateRange">
+                                <i class="fas fa-sync-alt"></i> Update
+                            </button>
+                            <button class="btn btn-outline-secondary" id="exportCostReport">
+                                <i class="fas fa-download"></i> Export
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Alert for emergency mode -->
+                <div class="alert alert-danger d-none" id="emergency-cost-alert" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i> <strong>Emergency Cost Control Active!</strong> 
+                    Your monthly AI spending has exceeded the emergency threshold. 
+                    Cost-saving measures have been automatically enabled.
+                </div>
+                
+                <!-- Cost Summary Section -->
+                <section id="summary" class="mb-5">
+                    <h3 class="mb-4">Cost Summary</h3>
+                    
+                    <!-- Cost KPIs -->
+                    <div class="row">
+                        <!-- Total Cost This Month -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card card-cost card-cost-primary shadow h-100 py-2 cost-metric-card">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                Total Cost (Month)
+                                            </div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="total-monthly-cost">$0.00</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-calendar-alt fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Projected Monthly Cost -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card card-cost card-cost-warning shadow h-100 py-2 cost-metric-card">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                Projected Monthly Cost
+                                            </div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="projected-monthly-cost">$0.00</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-chart-line fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Average Cost Per Request -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card card-cost card-cost-success shadow h-100 py-2 cost-metric-card">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                Avg. Cost Per Request
+                                            </div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="avg-request-cost">$0.00</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-comments fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Cost Savings from Optimization -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card card-cost card-cost-danger shadow h-100 py-2 cost-metric-card">
+                                <div class="position-relative">
+                                    <span class="badge bg-success savings-badge" id="savings-percentage">+0%</span>
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                                    Cost Savings This Month
+                                                </div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="cost-savings">$0.00</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-piggy-bank fa-2x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Budget Progress -->
+                    <div class="row">
+                        <div class="col-lg-6 mb-4">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Monthly Budget Utilization</h6>
+                                </div>
+                                <div class="card-body">
+                                    <h4 class="small font-weight-bold">Current: <span id="monthly-budget-used" class="float-end">20%</span></h4>
+                                    <div class="progress mb-4">
+                                        <div id="monthly-budget-progress" class="progress-bar bg-success" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <div class="text-xs mb-0">
+                                        Spent <span id="monthly-spent" class="fw-bold">$100</span> of <span id="monthly-budget" class="fw-bold">$500</span> monthly budget
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-6 mb-4">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Budget Alerts</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div id="budget-alerts-placeholder">
+                                        <div class="text-center py-3">
+                                            <i class="fas fa-check-circle text-success fa-3x mb-3"></i>
+                                            <p class="mb-0">No budget alerts at this time.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Placeholder sections for future implementation -->
+                <section id="distribution" class="mb-5 d-none">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h6 class="m-0 font-weight-bold text-primary">Model Cost Distribution</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container" id="model-distribution-chart">
+                                <!-- Model distribution chart will be rendered here -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="trends" class="mb-5 d-none">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h6 class="m-0 font-weight-bold text-primary">Historical Cost Trends</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container" id="historical-trends-chart">
+                                <!-- Historical trends chart will be rendered here -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="projections" class="mb-5 d-none">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h6 class="m-0 font-weight-bold text-primary">Future Cost Projections</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container" id="future-projections-chart">
+                                <!-- Future projections chart will be rendered here -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="optimizer" class="mb-5 d-none">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h6 class="m-0 font-weight-bold text-primary">Cost Optimization Recommendations</h6>
+                        </div>
+                        <div class="card-body">
+                            <div id="optimization-recommendations">
+                                <!-- Optimization recommendations will be rendered here -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="scenarios" class="mb-5 d-none">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h6 class="m-0 font-weight-bold text-primary">What-If Scenario Modeling</h6>
+                        </div>
+                        <div class="card-body">
+                            <div id="scenario-modeling">
+                                <!-- Scenario modeling interface will be rendered here -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Budget Alerts Section -->
+                <section id="budget-alerts-section" class="dashboard-section">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Predictive Budget Alerts</h5>
+                            <button class="btn btn-sm btn-outline-primary" id="refresh-budget-alerts">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div class="budget-prediction-container">
+                                <div id="budget-prediction-loading" class="text-center py-5">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <p class="mt-3">Loading budget predictions...</p>
+                                </div>
+                                <div id="budget-prediction-content" class="d-none">
+                                    <div class="row mb-4">
+                                        <div class="col-md-6">
+                                            <div class="card h-100 bg-light">
+                                                <div class="card-body">
+                                                    <h6 class="card-title text-muted">Current Budget Status</h6>
+                                                    <div class="d-flex align-items-center mt-3">
+                                                        <div class="budget-progress-container flex-grow-1 me-3">
+                                                            <div class="progress" style="height: 10px;">
+                                                                <div id="budget-progress-bar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                                            </div>
+                                                        </div>
+                                                        <span id="budget-percentage" class="fw-bold">0%</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between mt-3">
+                                                        <div>
+                                                            <small class="text-muted">Spent</small>
+                                                            <h5 id="budget-spent" class="mb-0">$0</h5>
+                                                        </div>
+                                                        <div class="text-end">
+                                                            <small class="text-muted">Budget</small>
+                                                            <h5 id="budget-total" class="mb-0">$0</h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="card h-100 bg-light">
+                                                <div class="card-body">
+                                                    <h6 class="card-title text-muted">Predicted Depletion</h6>
+                                                    <div class="predicted-depletion-content mt-3">
+                                                        <div id="prediction-summary">
+                                                            <div class="d-flex align-items-center mb-2">
+                                                                <i id="prediction-icon" class="fas fa-circle me-2"></i>
+                                                                <h4 id="prediction-days" class="mb-0">-</h4>
+                                                            </div>
+                                                            <p id="prediction-message" class="text-muted mb-0">Calculating prediction...</p>
+                                                        </div>
+                                                        <p id="prediction-date" class="mt-3 mb-0 fw-bold">-</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card mb-4">
+                                        <div class="card-header">
+                                            <h6 class="mb-0">Cost Optimization Recommendations</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <ul id="cost-recommendations" class="list-group list-group-flush">
+                                                <li class="list-group-item text-center text-muted">No recommendations available</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="budget-prediction-error" class="alert alert-danger d-none" role="alert">
+                                    Error loading budget predictions.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Model Switching Section -->
+                <section id="model-switching-section" class="dashboard-section">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Automatic Model Switching</h5>
+                            <button class="btn btn-sm btn-outline-primary" id="refresh-model-switches">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div class="model-switching-container">
+                                <div id="model-switching-loading" class="text-center py-5">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <p class="mt-3">Loading model switching statistics...</p>
+                                </div>
+                                <div id="model-switching-content" class="d-none">
+                                    <div class="row mb-4">
+                                        <div class="col-md-6">
+                                            <div class="card h-100 bg-light">
+                                                <div class="card-body">
+                                                    <h6 class="card-title text-muted">Model Switching Summary</h6>
+                                                    <div class="row text-center mt-3">
+                                                        <div class="col-6">
+                                                            <h3 id="total-switches" class="mb-1">0</h3>
+                                                            <p class="text-muted small mb-0">Total Switches</p>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <h3 id="cost-savings" class="mb-1">$0</h3>
+                                                            <p class="text-muted small mb-0">Estimated Savings</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="card h-100 bg-light">
+                                                <div class="card-body">
+                                                    <h6 class="card-title text-muted">Efficiency Metrics</h6>
+                                                    <div class="row text-center mt-3">
+                                                        <div class="col-6">
+                                                            <h3 id="efficiency-score" class="mb-1">0%</h3>
+                                                            <p class="text-muted small mb-0">Cost Efficiency</p>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <h3 id="optimization-rate" class="mb-1">0%</h3>
+                                                            <p class="text-muted small mb-0">Optimization Rate</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card mb-4">
+                                        <div class="card-header">
+                                            <h6 class="mb-0">Recent Model Switches</h6>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <div class="table-responsive">
+                                                <table class="table table-hover mb-0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Query Type</th>
+                                                            <th>Original Model</th>
+                                                            <th>Switched To</th>
+                                                            <th>Reason</th>
+                                                            <th>Savings</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="recent-switches">
+                                                        <tr>
+                                                            <td colspan="5" class="text-center">No recent switches found</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="model-switching-error" class="alert alert-danger d-none" role="alert">
+                                    Error loading model switching data.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Navigation click handlers
+            document.querySelectorAll('.sidebar-link[data-section]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetSection = this.getAttribute('data-section');
+                    
+                    // Hide all sections first
+                    document.querySelectorAll('section[id]').forEach(section => {
+                        section.classList.add('d-none');
+                    });
+                    
+                    // Show the target section
+                    document.getElementById(targetSection).classList.remove('d-none');
+                    
+                    // Update active link
+                    document.querySelectorAll('.sidebar-link[data-section]').forEach(navLink => {
+                        navLink.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                });
+            });
+            
+            // Show the summary section by default
+            document.getElementById('summary').classList.remove('d-none');
+            
+            // Load cost data
+            loadCostSummaryData();
+            loadBudgetStatus();
+            loadHistoricalTrends();
+            loadCostPredictions();
+            loadCostOptimizationRecommendations();
+            loadWhatIfScenarios();
+            
+            // Set up event listeners
+            document.getElementById('applyDateRange').addEventListener('click', function() {
+                loadCostSummaryData();
+            });
+            
+            document.getElementById('exportCostReport').addEventListener('click', function() {
+                exportCostReport();
+            });
+            
+            // Add Plotly.js for charts
+            if (!document.getElementById('plotly-script')) {
+                const plotlyScript = document.createElement('script');
+                plotlyScript.id = 'plotly-script';
+                plotlyScript.src = 'https://cdn.plot.ly/plotly-2.14.0.min.js';
+                document.head.appendChild(plotlyScript);
+            }
+        });
+        
+        // Function to load cost summary data
+        function loadCostSummaryData() {
+            const timeRange = document.getElementById('timeRangeSelector').value;
+            
+            // Show loading state
+            document.getElementById('total-monthly-cost').innerHTML = '<small class="text-muted"><i class="fas fa-spinner fa-spin"></i> Loading...</small>';
+            document.getElementById('projected-monthly-cost').innerHTML = '<small class="text-muted"><i class="fas fa-spinner fa-spin"></i> Loading...</small>';
+            document.getElementById('avg-request-cost').innerHTML = '<small class="text-muted"><i class="fas fa-spinner fa-spin"></i> Loading...</small>';
+            document.getElementById('cost-savings').innerHTML = '<small class="text-muted"><i class="fas fa-spinner fa-spin"></i> Loading...</small>';
+            
+            // Fetch data from API
+            fetch(`/api/usage/cost-data?period=${timeRange}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        updateCostMetrics(data.data);
+                        loadModelDistribution(data.data);
+                        loadHistoricalTrends();
+                        loadCostOptimizationRecommendations();
+                    } else {
+                        console.error('Error loading cost data:', data.message);
+                        showErrorMessage('Failed to load cost data');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading cost data:', error);
+                    showErrorMessage('Failed to load cost data');
+                });
+        }
+        
+        // Function to update cost metrics UI
+        function updateCostMetrics(data) {
+            // Total cost for the period
+            document.getElementById('total-monthly-cost').textContent = `$${data.total_cost.toFixed(2)}`;
+            
+            // Projected monthly cost
+            document.getElementById('projected-monthly-cost').textContent = `$${data.projected_cost.toFixed(2)}`;
+            
+            // Average cost per request
+            const avgCost = data.total_requests > 0 ? data.total_cost / data.total_requests : 0;
+            document.getElementById('avg-request-cost').textContent = `$${avgCost.toFixed(4)}`;
+            
+            // Cost savings
+            document.getElementById('cost-savings').textContent = `$${data.cost_savings.toFixed(2)}`;
+            
+            // Savings percentage
+            const savingsPercentage = data.potential_cost > 0 
+                ? (data.cost_savings / data.potential_cost) * 100 
+                : 0;
+            document.getElementById('savings-percentage').textContent = `+${savingsPercentage.toFixed(0)}%`;
+            
+            // Show emergency alert if needed
+            document.getElementById('emergency-cost-alert').classList.toggle('d-none', !data.emergency_mode);
+        }
+        
+        // Function to load budget status
+        function loadBudgetStatus() {
+            fetch('/api/usage/budget-status')
+                .then(response => response.json())
+                .then(data => {
+                    // Update monthly budget progress
+                    const monthlyPercentage = Math.min(100, (data.monthly.spent / data.monthly.budget) * 100);
+                    document.getElementById('monthly-spent').textContent = `$${data.monthly.spent.toFixed(2)}`;
+                    document.getElementById('monthly-budget').textContent = `$${data.monthly.budget.toFixed(2)}`;
+                    document.getElementById('monthly-budget-used').textContent = `${monthlyPercentage.toFixed(0)}%`;
+                    document.getElementById('monthly-budget-progress').style.width = `${monthlyPercentage}%`;
+                    document.getElementById('monthly-budget-progress').setAttribute('aria-valuenow', monthlyPercentage);
+                    
+                    // Set progress bar color based on percentage
+                    if (monthlyPercentage >= 90) {
+                        document.getElementById('monthly-budget-progress').className = 'progress-bar bg-danger';
+                    } else if (monthlyPercentage >= 75) {
+                        document.getElementById('monthly-budget-progress').className = 'progress-bar bg-warning';
+                    } else {
+                        document.getElementById('monthly-budget-progress').className = 'progress-bar bg-success';
+                    }
+                    
+                    // Update budget alerts
+                    updateBudgetAlerts(data);
+                })
+                .catch(error => {
+                    console.error('Error loading budget status:', error);
+                });
+        }
+        
+        // Function to update budget alerts
+        function updateBudgetAlerts(data) {
+            const alertsContainer = document.getElementById('budget-alerts-placeholder');
+            alertsContainer.innerHTML = '';
+            
+            let alertsExist = false;
+            
+            // Check daily budget
+            if (data.daily.percentage >= 80) {
+                alertsExist = true;
+                const severity = data.daily.percentage >= 100 ? 'danger' : 'warning';
+                alertsContainer.innerHTML += `
+                    <div class="alert alert-${severity} mb-2">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        <strong>Daily Budget Alert:</strong> You've used ${data.daily.percentage.toFixed(0)}% of your daily budget.
+                    </div>
+                `;
+            }
+            
+            // Check weekly budget
+            if (data.weekly.percentage >= 80) {
+                alertsExist = true;
+                const severity = data.weekly.percentage >= 100 ? 'danger' : 'warning';
+                alertsContainer.innerHTML += `
+                    <div class="alert alert-${severity} mb-2">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        <strong>Weekly Budget Alert:</strong> You've used ${data.weekly.percentage.toFixed(0)}% of your weekly budget.
+                    </div>
+                `;
+            }
+            
+            // Emergency mode alert
+            if (data.emergency_mode) {
+                alertsExist = true;
+                alertsContainer.innerHTML += `
+                    <div class="alert alert-danger mb-2">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Emergency Budget Protocol Active:</strong> High-cost AI models have been automatically restricted.
+                    </div>
+                `;
+            }
+            
+            // If no alerts, show the all-clear message
+            if (!alertsExist) {
+                alertsContainer.innerHTML = `
+                    <div class="text-center py-3">
+                        <i class="fas fa-check-circle text-success fa-3x mb-3"></i>
+                        <p class="mb-0">No budget alerts at this time.</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // Function to load model distribution data
+        function loadModelDistribution(data) {
+            const modelSection = document.getElementById('distribution');
+            if (!modelSection) return;
+            
+            // Get the chart container
+            const chartContainer = modelSection.querySelector('.chart-container') || 
+                modelSection.querySelector('.card-body');
+                
+            if (!chartContainer) return;
+            
+            if (!data.models_usage) {
+                chartContainer.innerHTML = '<div class="alert alert-info">No model usage data available for the selected period.</div>';
+                return;
+            }
+            
+            // Format the data for Plotly
+            const models = Object.keys(data.models_usage);
+            const usage = Object.values(data.models_usage).map(val => val.requests);
+            const costs = Object.values(data.models_usage).map(val => val.cost);
+            
+            // Create the chart container if it doesn't exist
+            let usageChartDiv = chartContainer.querySelector('#model-usage-chart');
+            let costChartDiv = chartContainer.querySelector('#model-cost-chart');
+            
+            if (!usageChartDiv) {
+                chartContainer.innerHTML = '';
+                
+                const header = document.createElement('h4');
+                header.className = 'mb-4';
+                header.textContent = 'Model Usage Distribution';
+                chartContainer.appendChild(header);
+                
+                usageChartDiv = document.createElement('div');
+                usageChartDiv.id = 'model-usage-chart';
+                usageChartDiv.className = 'chart-container mb-4';
+                usageChartDiv.style.height = '300px';
+                chartContainer.appendChild(usageChartDiv);
+                
+                const costHeader = document.createElement('h4');
+                costHeader.className = 'mb-4 mt-4';
+                costHeader.textContent = 'Model Cost Distribution';
+                chartContainer.appendChild(costHeader);
+                
+                costChartDiv = document.createElement('div');
+                costChartDiv.id = 'model-cost-chart';
+                costChartDiv.className = 'chart-container';
+                costChartDiv.style.height = '300px';
+                chartContainer.appendChild(costChartDiv);
+            }
+            
+            // Render usage pie chart
+            const usageData = [{
+                type: 'pie',
+                labels: models,
+                values: usage,
+                hole: 0.4,
+                textinfo: 'label+percent',
+                marker: {
+                    colors: [
+                        '#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', 
+                        '#e74a3b', '#6f42c1', '#5a5c69', '#858796'
+                    ]
+                }
+            }];
+            
+            const usageLayout = {
+                title: 'Request Distribution by Model',
+                height: 300,
+                margin: {t: 50, b: 0, l: 0, r: 0}
+            };
+            
+            Plotly.newPlot('model-usage-chart', usageData, usageLayout);
+            
+            // Render cost pie chart
+            const costData = [{
+                type: 'pie',
+                labels: models,
+                values: costs,
+                hole: 0.4,
+                textinfo: 'label+percent',
+                marker: {
+                    colors: [
+                        '#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', 
+                        '#e74a3b', '#6f42c1', '#5a5c69', '#858796'
+                    ].reverse() // Use different color order to differentiate
+                }
+            }];
+            
+            const costLayout = {
+                title: 'Cost Distribution by Model',
+                height: 300,
+                margin: {t: 50, b: 0, l: 0, r: 0}
+            };
+            
+            Plotly.newPlot('model-cost-chart', costData, costLayout);
+            
+            // Create a summary table
+            let summaryTable = chartContainer.querySelector('#model-summary-table');
+            
+            if (!summaryTable) {
+                const tableHeader = document.createElement('h4');
+                tableHeader.className = 'mb-3 mt-4';
+                tableHeader.textContent = 'Model Usage Summary';
+                chartContainer.appendChild(tableHeader);
+                
+                summaryTable = document.createElement('table');
+                summaryTable.id = 'model-summary-table';
+                summaryTable.className = 'table table-bordered table-hover';
+                chartContainer.appendChild(summaryTable);
+            }
+            
+            // Create the table content
+            let tableHTML = `
+                <thead class="table-light">
+                    <tr>
+                        <th>Model</th>
+                        <th>Requests</th>
+                        <th>Cost</th>
+                        <th>Avg. Cost/Request</th>
+                        <th>Cost %</th>
+                    </tr>
+                </thead>
+                <tbody>
+            `;
+            
+            // Calculate total cost for percentage
+            const totalCost = costs.reduce((sum, cost) => sum + cost, 0);
+            
+            // Add rows for each model
+            models.forEach((model, index) => {
+                const requests = usage[index];
+                const cost = costs[index];
+                const avgCost = requests > 0 ? cost / requests : 0;
+                const costPercentage = totalCost > 0 ? (cost / totalCost) * 100 : 0;
+                
+                tableHTML += `
+                    <tr>
+                        <td><span class="badge bg-primary">${model}</span></td>
+                        <td>${requests.toLocaleString()}</td>
+                        <td>$${cost.toFixed(2)}</td>
+                        <td>$${avgCost.toFixed(4)}</td>
+                        <td>${costPercentage.toFixed(1)}%</td>
+                    </tr>
+                `;
+            });
+            
+            // Add total row
+            tableHTML += `
+                <tr class="table-light fw-bold">
+                    <td>Total</td>
+                    <td>${usage.reduce((sum, val) => sum + val, 0).toLocaleString()}</td>
+                    <td>$${totalCost.toFixed(2)}</td>
+                    <td>$${(totalCost / usage.reduce((sum, val) => sum + val, 0) || 0).toFixed(4)}</td>
+                    <td>100%</td>
+                </tr>
+            `;
+            
+            tableHTML += '</tbody>';
+            summaryTable.innerHTML = tableHTML;
+        }
+        
+        // Function to load historical trends
+        function loadHistoricalTrends() {
+            const timeRange = document.getElementById('timeRangeSelector').value;
+            const trendsSection = document.getElementById('trends');
+            
+            if (!trendsSection) return;
+            
+            // Get or create chart container
+            let chartContainer = trendsSection.querySelector('.chart-container');
+            if (!chartContainer) {
+                trendsSection.innerHTML = '<h3 class="mb-4">Historical Cost Trends</h3>';
+                chartContainer = document.createElement('div');
+                chartContainer.className = 'chart-container';
+                chartContainer.style.height = '400px';
+                trendsSection.appendChild(chartContainer);
+            }
+            
+            // Show loading indicator
+            chartContainer.innerHTML = '<div class="d-flex justify-content-center align-items-center h-100"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div></div>';
+            
+            // Fetch data from API
+            fetch(`/api/usage/cost-data?period=${timeRange}`)
+                .then(response => response.json())
+                .then(result => {
+                    if (result.status === 'success' && result.data.daily_costs) {
+                        const data = result.data;
+                        renderHistoricalTrendsChart(chartContainer, data.daily_costs, data.daily_dates);
+                    } else {
+                        chartContainer.innerHTML = '<div class="alert alert-info">No historical cost data available for the selected period.</div>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading historical trends:', error);
+                    chartContainer.innerHTML = '<div class="alert alert-danger">Failed to load historical cost data.</div>';
+                });
+        }
+        
+        // Function to render historical trends chart
+        function renderHistoricalTrendsChart(container, costs, dates) {
+            // Create the main cost trend line
+            const trace1 = {
+                x: dates,
+                y: costs,
+                type: 'scatter',
+                mode: 'lines+markers',
+                name: 'Daily Cost',
+                line: {
+                    color: '#4e73df',
+                    width: 3
+                },
+                marker: {
+                    size: 8
+                }
+            };
+            
+            // Calculate 7-day moving average
+            const movingAvg = costs.map((_, index, arr) => {
+                if (index < 6) return null; // Not enough data for 7-day average at the start
+                
+                let sum = 0;
+                for (let i = 0; i < 7; i++) {
+                    sum += arr[index - i];
+                }
+                return sum / 7;
+            });
+            
+            // Create the moving average line
+            const trace2 = {
+                x: dates,
+                y: movingAvg,
+                type: 'scatter',
+                mode: 'lines',
+                name: '7-Day Avg',
+                line: {
+                    color: '#1cc88a',
+                    width: 2,
+                    dash: 'dot'
+                }
+            };
+            
+            // Calculate linear trend
+            const xValues = Array.from({length: dates.length}, (_, i) => i);
+            const yValues = costs;
+            
+            // Simple linear regression
+            const xMean = xValues.reduce((sum, val) => sum + val, 0) / xValues.length;
+            const yMean = yValues.reduce((sum, val) => sum + val, 0) / yValues.length;
+            
+            let numerator = 0;
+            let denominator = 0;
+            
+            for (let i = 0; i < xValues.length; i++) {
+                numerator += (xValues[i] - xMean) * (yValues[i] - yMean);
+                denominator += Math.pow(xValues[i] - xMean, 2);
+            }
+            
+            const slope = denominator !== 0 ? numerator / denominator : 0;
+            const intercept = yMean - slope * xMean;
+            
+            const trendLine = xValues.map(x => slope * x + intercept);
+            
+            // Create the trend line
+            const trace3 = {
+                x: dates,
+                y: trendLine,
+                type: 'scatter',
+                mode: 'lines',
+                name: 'Trend',
+                line: {
+                    color: '#e74a3b',
+                    width: 2,
+                    dash: 'dash'
+                }
+            };
+            
+            const layout = {
+                title: 'Daily Cost Trends',
+                xaxis: {
+                    title: 'Date'
+                },
+                yaxis: {
+                    title: 'Cost ($)'
+                },
+                legend: {
+                    x: 0,
+                    y: 1.1,
+                    orientation: 'h'
+                },
+                margin: {
+                    l: 60,
+                    r: 20,
+                    t: 60,
+                    b: 60
+                }
+            };
+            
+            Plotly.newPlot(container, [trace1, trace2, trace3], layout);
+            
+            // Add trend analysis summary
+            const summary = document.createElement('div');
+            summary.className = 'card mt-4';
+            summary.innerHTML = `
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Trend Analysis</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h6>Current Daily Average</h6>
+                            <p class="h4">$${(costs.slice(-7).reduce((sum, cost) => sum + cost, 0) / 7).toFixed(2)}</p>
+                        </div>
+                        <div class="col-md-4">
+                            <h6>Cost Trend</h6>
+                            <p class="h4 ${slope > 0 ? 'text-danger' : 'text-success'}">                                
+                                ${slope > 0 ? '↗ Increasing' : (slope < 0 ? '↘ Decreasing' : '→ Stable')}
+                            </p>
+                        </div>
+                        <div class="col-md-4">
+                            <h6>30-Day Projection</h6>
+                            <p class="h4">$${(slope * (xValues.length + 30) + intercept).toFixed(2)}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Add the summary after the chart
+            container.parentNode.insertBefore(summary, container.nextSibling);
+        }
+        
+        // Function to load cost predictions
+        function loadCostPredictions() {
+            const projSection = document.getElementById('projections');
+            if (!projSection) return;
+            
+            // Create or get chart container
+            let chartContainer = projSection.querySelector('.chart-container');
+            if (!chartContainer) {
+                projSection.innerHTML = '<h3 class="mb-4">Cost Projections</h3>';
+                chartContainer = document.createElement('div');
+                chartContainer.className = 'chart-container';
+                chartContainer.style.height = '400px';
+                projSection.appendChild(chartContainer);
+            }
+            
+            // Show loading indicator
+            chartContainer.innerHTML = '<div class="d-flex justify-content-center align-items-center h-100"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div></div>';
+            
+            // Fetch prediction data
+            fetch('/api/usage/cost-predictions?days_ahead=30')
+                .then(response => response.json())
+                .then(result => {
+                    if (result.status === 'success') {
+                        renderCostPredictionsChart(chartContainer, result.data);
+                    } else {
+                        chartContainer.innerHTML = '<div class="alert alert-warning">Unable to generate cost predictions at this time.</div>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading cost predictions:', error);
+                    chartContainer.innerHTML = '<div class="alert alert-danger">Failed to load cost predictions.</div>';
+                });
+        }
+        
+        // Function to render cost predictions chart
+        function renderCostPredictionsChart(container, predictionData) {
+            // Extract data
+            const dates = predictionData.prediction_dates;
+            const costs = predictionData.predicted_costs;
+            const upperBound = predictionData.upper_bound || costs.map(cost => cost * 1.25); // Default if not provided
+            const lowerBound = predictionData.lower_bound || costs.map(cost => cost * 0.75); // Default if not provided
+            
+            // Create the main prediction line
+            const trace1 = {
+                x: dates,
+                y: costs,
+                type: 'scatter',
+                mode: 'lines+markers',
+                name: 'Predicted Cost',
+                line: {
+                    color: '#4e73df',
+                    width: 3
+                },
+                marker: {
+                    size: 8
+                }
+            };
+            
+            // Create the confidence interval
+            const trace2 = {
+                x: dates.concat(dates.slice().reverse()),
+                y: upperBound.concat(lowerBound.slice().reverse()),
+                fill: 'toself',
+                fillcolor: 'rgba(78, 115, 223, 0.2)',
+                line: {color: 'transparent'},
+                name: 'Confidence Interval',
+                showlegend: true,
+                hoverinfo: 'skip'
+            };
+            
+            const layout = {
+                title: '30-Day Cost Projection',
+                xaxis: {
+                    title: 'Date'
+                },
+                yaxis: {
+                    title: 'Projected Cost ($)'
+                },
+                legend: {
+                    x: 0,
+                    y: 1.1,
+                    orientation: 'h'
+                },
+                margin: {
+                    l: 60,
+                    r: 20,
+                    t: 60,
+                    b: 60
+                }
+            };
+            
+            // Plot the chart
+            Plotly.newPlot(container, [trace2, trace1], layout);
+            
+            // Add prediction summary
+            const totalPredicted = costs.reduce((sum, cost) => sum + cost, 0);
+            const dailyAverage = totalPredicted / costs.length;
+            
+            const summary = document.createElement('div');
+            summary.className = 'row mt-4';
+            summary.innerHTML = `
+                <div class="col-md-4">
+                    <div class="card shadow h-100">
+                        <div class="card-body">
+                            <h5 class="text-primary">30-Day Total</h5>
+                            <p class="h2">$${totalPredicted.toFixed(2)}</p>
+                            <p class="text-muted">Predicted total cost for next 30 days</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card shadow h-100">
+                        <div class="card-body">
+                            <h5 class="text-primary">Daily Average</h5>
+                            <p class="h2">$${dailyAverage.toFixed(2)}</p>
+                            <p class="text-muted">Predicted average daily cost</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card shadow h-100">
+                        <div class="card-body">
+                            <h5 class="text-primary">Confidence Level</h5>
+                            <p class="h2">${(predictionData.confidence * 100).toFixed(1)}%</p>
+                            <p class="text-muted">Prediction accuracy confidence</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Add the summary after the chart
+            container.parentNode.insertBefore(summary, container.nextSibling);
+        }
+        
+        // Function to load cost optimization recommendations
+        function loadCostOptimizationRecommendations() {
+            const optimizerSection = document.getElementById('optimizer');
+            if (!optimizerSection) return;
+            
+            // Create or get recommendations container
+            let recommendationsContainer = optimizerSection.querySelector('.optimization-recommendations');
+            if (!recommendationsContainer) {
+                optimizerSection.innerHTML = '<h3 class="mb-4">Cost Optimization</h3>';
+                recommendationsContainer = document.createElement('div');
+                recommendationsContainer.className = 'optimization-recommendations';
+                optimizerSection.appendChild(recommendationsContainer);
+            }
+            
+            // Show loading indicator
+            recommendationsContainer.innerHTML = '<div class="d-flex justify-content-center py-4"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div></div>';
+            
+            // Fetch optimization opportunities
+            fetch('/api/usage/optimization-opportunities')
+                .then(response => response.json())
+                .then(result => {
+                    if (result.status === 'success') {
+                        renderOptimizationRecommendations(recommendationsContainer, result.data);
+                    } else {
+                        recommendationsContainer.innerHTML = '<div class="alert alert-warning">Unable to generate optimization recommendations at this time.</div>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading optimization opportunities:', error);
+                    recommendationsContainer.innerHTML = '<div class="alert alert-danger">Failed to load optimization recommendations.</div>';
+                });
+        }
+        
+        // Function to render optimization recommendations
+        function renderOptimizationRecommendations(container, opportunities) {
+            if (!opportunities || opportunities.length === 0) {
+                container.innerHTML = `
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <strong>Good news!</strong> Your current model selection strategy is already optimized for cost efficiency.
+                    </div>
+                `;
+                return;
+            }
+            
+            // Clear container
+            container.innerHTML = '';
+            
+            // Sort opportunities by estimated savings (highest first)
+            opportunities.sort((a, b) => b.estimated_monthly_savings - a.estimated_monthly_savings);
+            
+            // Create recommendations
+            opportunities.forEach(opportunity => {
+                const card = document.createElement('div');
+                card.className = `card mb-4 shadow-sm border-left-${getPriorityClass(opportunity.priority)}`;
+                card.style.borderLeft = `4px solid ${getPriorityColor(opportunity.priority)}`;
+                
+                const savings = opportunity.estimated_monthly_savings;
+                const savingsPercentage = opportunity.savings_percentage || Math.round((opportunity.average_cost_difference / opportunity.current_cost_per_query) * 100);
+                
+                card.innerHTML = `
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <span class="badge bg-${getPriorityClass(opportunity.priority)}">${opportunity.priority.toUpperCase()}</span>
+                            ${opportunity.query_type} Queries Optimization
+                        </h5>
+                        <span class="badge bg-success">$${savings.toFixed(2)} monthly savings</span>
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-3">${opportunity.description || `Switch from ${opportunity.current_model} to ${opportunity.recommended_model} for ${opportunity.query_type} queries.`}</p>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center">
+                                    <div class="me-3">
+                                        <span class="badge bg-danger p-2">Current</span>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0">${opportunity.current_model}</h6>
+                                        <small class="text-muted">$${opportunity.current_cost_per_query.toFixed(4)} per query</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center">
+                                    <div class="me-3">
+                                        <span class="badge bg-success p-2">Recommended</span>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0">${opportunity.recommended_model}</h6>
+                                        <small class="text-muted">$${(opportunity.current_cost_per_query - opportunity.average_cost_difference).toFixed(4)} per query</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <div class="card bg-light">
+                                    <div class="card-body py-2 px-3">
+                                        <small class="text-muted">Cost Reduction</small>
+                                        <h5 class="mb-0 text-success">${savingsPercentage}%</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card bg-light">
+                                    <div class="card-body py-2 px-3">
+                                        <small class="text-muted">Affected Queries</small>
+                                        <h5 class="mb-0">${opportunity.affected_queries.toLocaleString()}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card bg-light">
+                                    <div class="card-body py-2 px-3">
+                                        <small class="text-muted">Confidence</small>
+                                        <h5 class="mb-0">${(opportunity.confidence * 100).toFixed(0)}%</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-end">
+                            <button class="btn btn-primary btn-sm implement-optimization" 
+                                data-current="${opportunity.current_model}" 
+                                data-recommended="${opportunity.recommended_model}" 
+                                data-query-type="${opportunity.query_type}">
+                                <i class="fas fa-check me-1"></i> Implement This Optimization
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+            
+            // Add event listeners to implement buttons
+            document.querySelectorAll('.implement-optimization').forEach(button => {
+                button.addEventListener('click', function() {
+                    const currentModel = this.getAttribute('data-current');
+                    const recommendedModel = this.getAttribute('data-recommended');
+                    const queryType = this.getAttribute('data-query-type');
+                    
+                    // In a production environment, this would make an API call to implement the change
+                    alert(`Implementation of optimization (switching from ${currentModel} to ${recommendedModel} for ${queryType} queries) will be available in the next release.`);
+                });
+            });
+        }
+        
+        // Helper function to get priority class for styling
+        function getPriorityClass(priority) {
+            switch(priority.toLowerCase()) {
+                case 'high': return 'danger';
+                case 'medium': return 'warning';
+                case 'low': return 'success';
+                default: return 'info';
+            }
+        }
+        
+        // Helper function to get priority color
+        function getPriorityColor(priority) {
+            switch(priority.toLowerCase()) {
+                case 'high': return '#e74a3b';
+                case 'medium': return '#f6c23e';
+                case 'low': return '#1cc88a';
+                default: return '#36b9cc';
+            }
+        }
+        
+        // Function to export cost report
+        function exportCostReport() {
+            const format = 'csv'; // Default format
+            const period = document.getElementById('timeRangeSelector').value;
+            
+            // Generate export URL
+            const exportUrl = `/api/usage/export-cost-data?period=${period}&format=${format}`;
+            
+            // Open in new tab
+            window.open(exportUrl, '_blank');
+        }
+        
+        // Function to load cost optimization recommendations
+        function loadCostOptimizationRecommendations() {
+            const optimizerSection = document.getElementById('optimizer');
+            if (!optimizerSection) return;
+            
+            // Create or get recommendations container
+            let recommendationsContainer = optimizerSection.querySelector('.optimization-recommendations');
+            if (!recommendationsContainer) {
+                optimizerSection.innerHTML = '<h3 class="mb-4">Cost Optimization</h3>';
+                recommendationsContainer = document.createElement('div');
+                recommendationsContainer.className = 'optimization-recommendations';
+                optimizerSection.appendChild(recommendationsContainer);
+            }
+            
+            // Show loading indicator
+            recommendationsContainer.innerHTML = '<div class="d-flex justify-content-center py-4"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div></div>';
+            
+            // Fetch optimization opportunities
+            fetch('/api/usage/optimization-opportunities')
+                .then(response => response.json())
+                .then(result => {
+                    if (result.status === 'success') {
+                        renderOptimizationRecommendations(recommendationsContainer, result.data);
+                    } else {
+                        recommendationsContainer.innerHTML = '<div class="alert alert-warning">Unable to generate optimization recommendations at this time.</div>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading optimization opportunities:', error);
+                    recommendationsContainer.innerHTML = '<div class="alert alert-danger">Failed to load optimization recommendations.</div>';
+                });
+        }
+        
+        // Function to render optimization recommendations
+        function renderOptimizationRecommendations(container, opportunities) {
+            if (!opportunities || opportunities.length === 0) {
+                container.innerHTML = `
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <strong>Good news!</strong> Your current model selection strategy is already optimized for cost efficiency.
+                    </div>
+                `;
+                return;
+            }
+            
+            // Clear container
+            container.innerHTML = '';
+            
+            // Sort opportunities by estimated savings (highest first)
+            opportunities.sort((a, b) => b.estimated_monthly_savings - a.estimated_monthly_savings);
+            
+            // Create recommendations
+            opportunities.forEach(opportunity => {
+                const card = document.createElement('div');
+                card.className = `card mb-4 shadow-sm border-left-${getPriorityClass(opportunity.priority)}`;
+                card.style.borderLeft = `4px solid ${getPriorityColor(opportunity.priority)}`;
+                
+                const savings = opportunity.estimated_monthly_savings;
+                const savingsPercentage = opportunity.savings_percentage || Math.round((opportunity.average_cost_difference / opportunity.current_cost_per_query) * 100);
+                
+                card.innerHTML = `
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <span class="badge bg-${getPriorityClass(opportunity.priority)}">${opportunity.priority.toUpperCase()}</span>
+                            ${opportunity.query_type} Queries Optimization
+                        </h5>
+                        <span class="badge bg-success">$${savings.toFixed(2)} monthly savings</span>
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-3">${opportunity.description || `Switch from ${opportunity.current_model} to ${opportunity.recommended_model} for ${opportunity.query_type} queries.`}</p>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center">
+                                    <div class="me-3">
+                                        <span class="badge bg-danger p-2">Current</span>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0">${opportunity.current_model}</h6>
+                                        <small class="text-muted">$${opportunity.current_cost_per_query.toFixed(4)} per query</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center">
+                                    <div class="me-3">
+                                        <span class="badge bg-success p-2">Recommended</span>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0">${opportunity.recommended_model}</h6>
+                                        <small class="text-muted">$${(opportunity.current_cost_per_query - opportunity.average_cost_difference).toFixed(4)} per query</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <div class="card bg-light">
+                                    <div class="card-body py-2 px-3">
+                                        <small class="text-muted">Cost Reduction</small>
+                                        <h5 class="mb-0 text-success">${savingsPercentage}%</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card bg-light">
+                                    <div class="card-body py-2 px-3">
+                                        <small class="text-muted">Affected Queries</small>
+                                        <h5 class="mb-0">${opportunity.affected_queries.toLocaleString()}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card bg-light">
+                                    <div class="card-body py-2 px-3">
+                                        <small class="text-muted">Confidence</small>
+                                        <h5 class="mb-0">${(opportunity.confidence * 100).toFixed(0)}%</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-end">
+                            <button class="btn btn-primary btn-sm implement-optimization" 
+                                data-current="${opportunity.current_model}" 
+                                data-recommended="${opportunity.recommended_model}" 
+                                data-query-type="${opportunity.query_type}">
+                                <i class="fas fa-check me-1"></i> Implement This Optimization
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+            
+            // Add event listeners to implement buttons
+            document.querySelectorAll('.implement-optimization').forEach(button => {
+                button.addEventListener('click', function() {
+                    const currentModel = this.getAttribute('data-current');
+                    const recommendedModel = this.getAttribute('data-recommended');
+                    const queryType = this.getAttribute('data-query-type');
+                    
+                    // Show confirmation before implementing
+                    if (confirm(`Are you sure you want to implement this optimization? This will switch from ${currentModel} to ${recommendedModel} for ${queryType} queries.`)) {
+                        // In a production environment, this would make an API call to implement the change
+                        showSuccessToast(`Implementation request submitted. The system will now use ${recommendedModel} for ${queryType} queries.`);
+                        this.closest('.card').remove();
+                    }
+                });
+            });
+        }
+        
+        // Function to implement what-if scenarios
+        function loadWhatIfScenarios() {
+            const scenariosSection = document.getElementById('scenarios');
+            if (!scenariosSection) return;
+            
+            // Create scenarios UI if it doesn't exist
+            if (!scenariosSection.querySelector('.scenarios-container')) {
+                scenariosSection.innerHTML = `
+                    <h3 class="mb-4">What-If Scenarios</h3>
+                    
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                            <h6 class="m-0 font-weight-bold text-primary">Create Cost Scenario</h6>
+                        </div>
+                        <div class="card-body">
+                            <form id="scenario-form" class="mb-4">
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="scenario-name" class="form-label">Scenario Name</label>
+                                        <input type="text" class="form-control" id="scenario-name" 
+                                            placeholder="e.g., Increased Usage" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="time-horizon" class="form-label">Time Horizon</label>
+                                        <select class="form-select" id="time-horizon" required>
+                                            <option value="1">1 Month</option>
+                                            <option value="3">3 Months</option>
+                                            <option value="6">6 Months</option>
+                                            <option value="12">12 Months</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="usage-change" class="form-label">Usage Change</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="usage-change" 
+                                                placeholder="e.g., 20" required>
+                                            <span class="input-group-text">%</span>
+                                        </div>
+                                        <div class="form-text">Enter positive value for increase, negative for decrease</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="model-mix" class="form-label">Change Model Mix</label>
+                                        <select class="form-select" id="model-mix">
+                                            <option value="">No change</option>
+                                            <option value="cheaper">More cheaper models</option>
+                                            <option value="balanced">Balanced mix</option>
+                                            <option value="premium">More premium models</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="efficiency-gain" class="form-label">Efficiency Improvements</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="efficiency-gain" 
+                                                placeholder="e.g., 10" value="0">
+                                            <span class="input-group-text">%</span>
+                                        </div>
+                                        <div class="form-text">Expected reduction in tokens due to prompt optimization</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="budget-cap" class="form-label">Budget Cap</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">$</span>
+                                            <input type="number" class="form-control" id="budget-cap" 
+                                                placeholder="e.g., 1000" value="0">
+                                        </div>
+                                        <div class="form-text">Set to 0 for no budget cap</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="text-end">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-calculator me-1"></i> Calculate Scenario
+                                    </button>
+                                </div>
+                            </form>
+                            
+                            <hr>
+                            
+                            <div id="scenario-results" class="d-none">
+                                <h5 class="mb-3">Scenario Results</h5>
+                                <div id="scenario-chart" class="chart-container mb-4" style="height: 300px;"></div>
+                                
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="card bg-light mb-3">
+                                            <div class="card-body py-2 px-3">
+                                                <small class="text-muted">Current Monthly Cost</small>
+                                                <h5 class="mb-0" id="current-cost">$0.00</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card bg-light mb-3">
+                                            <div class="card-body py-2 px-3">
+                                                <small class="text-muted">Projected Cost</small>
+                                                <h5 class="mb-0" id="projected-cost">$0.00</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card bg-light mb-3">
+                                            <div class="card-body py-2 px-3">
+                                                <small class="text-muted">Difference</small>
+                                                <h5 class="mb-0" id="cost-difference">$0.00</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="alert alert-info" id="scenario-recommendations">
+                                    Loading recommendations...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card shadow">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Saved Scenarios</h6>
+                        </div>
+                        <div class="card-body">
+                            <div id="saved-scenarios" class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Scenario</th>
+                                            <th>Time Horizon</th>
+                                            <th>Usage Change</th>
+                                            <th>Projected Cost</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="5" class="text-center">No saved scenarios yet</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Add event listener for scenario form submission
+                scenariosSection.querySelector('#scenario-form').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    calculateScenario();
+                });
+            }
+        }
+        
+        // Function to calculate what-if scenario
+        function calculateScenario() {
+            const scenarioName = document.getElementById('scenario-name').value;
+            const timeHorizon = parseInt(document.getElementById('time-horizon').value);
+            const usageChange = parseInt(document.getElementById('usage-change').value);
+            const modelMixElement = document.getElementById('model-mix');
+            const efficiencyGain = parseInt(document.getElementById('efficiency-gain').value) || 0;
+            const budgetCap = parseFloat(document.getElementById('budget-cap').value) || 0;
+            
+            // Get model mix change value based on selection
+            let modelMixChange = 0;
+            const modelMix = modelMixElement.value;
+            if (modelMix === 'cheaper') {
+                modelMixChange = 50; // 50% shift to cheaper models
+            } else if (modelMix === 'premium') {
+                modelMixChange = -50; // -50% shift (towards premium models)
+            } else if (modelMix === 'balanced') {
+                modelMixChange = 20; // 20% shift to cheaper models
+            }
+            
+            // Show loading state
+            document.getElementById('scenario-results').classList.remove('d-none');
+            document.getElementById('scenario-chart').innerHTML = '<div class="text-center py-5"><i class="fas fa-circle-notch fa-spin fa-2x text-primary"></i><p class="mt-2">Calculating scenario...</p></div>';
+            document.getElementById('scenario-recommendations').innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Analyzing scenario...';
+            
+            // Get the current monthly cost from the dashboard
+            let currentCost = 0;
+            try {
+                const costText = document.getElementById('total-monthly-cost').textContent;
+                currentCost = parseFloat(costText.replace(/[^0-9.]/g, ''));
+            } catch (e) {
+                console.error('Error getting current cost:', e);
+                currentCost = 500; // Fallback value
+            }
+            
+            // Prepare data for API
+            const scenarioData = {
+                current_cost: currentCost,
+                scenario_name: scenarioName,
+                usage_change: usageChange,
+                model_mix_change: modelMixChange,
+                efficiency_gains: efficiencyGain, 
+                time_horizon: timeHorizon,
+                budget_cap: budgetCap > 0 ? budgetCap : null
+            };
+            
+            // Call the API to calculate the scenario
+            fetch('/api/usage/simulate-scenario', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(scenarioData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    const scenarioResults = data.data;
+                    
+                    // Update the results UI
+                    document.getElementById('current-cost').textContent = `$${scenarioResults.current_monthly_cost.toFixed(2)}`;
+                    document.getElementById('projected-cost').textContent = `$${scenarioResults.projected_monthly_cost.toFixed(2)}`;
+                    
+                    // Calculate the difference
+                    const difference = scenarioResults.projected_monthly_cost - scenarioResults.current_monthly_cost;
+                    const differenceElement = document.getElementById('cost-difference');
+                    differenceElement.textContent = `${difference >= 0 ? '+' : ''}$${difference.toFixed(2)}`;
+                    differenceElement.classList.remove('text-success', 'text-danger');
+                    differenceElement.classList.add(difference >= 0 ? 'text-danger' : 'text-success');
+                    
+                    // Generate recommendations HTML
+                    let recommendationsHtml = `<h5 class="mb-3">Recommendations</h5><ul class="mb-0">`;
+                    
+                    scenarioResults.recommendations.forEach(rec => {
+                        let iconClass = 'info-circle';
+                        let textClass = 'info';
+                        
+                        if (rec.type === 'warning') {
+                            iconClass = 'exclamation-triangle';
+                            textClass = 'warning';
+                        } else if (rec.type === 'model_mix' || rec.type === 'efficiency') {
+                            iconClass = 'check-circle';
+                            textClass = 'success';
+                        } else if (rec.type === 'cost_increase') {
+                            iconClass = 'arrow-up';
+                            textClass = 'danger';
+                        }
+                        
+                        recommendationsHtml += `<li class="mb-2"><i class="fas fa-${iconClass} text-${textClass} me-2"></i>${rec.text}</li>`;
+                    });
+                    
+                    recommendationsHtml += `</ul>`;
+                    document.getElementById('scenario-recommendations').innerHTML = recommendationsHtml;
+                    
+                    // Generate the chart
+                    generateScenarioChart(
+                        scenarioName, 
+                        scenarioResults.time_horizon, 
+                        scenarioResults.monthly_projections
+                    );
+                    
+                    // Check if we should add this to saved scenarios
+                    const saveElement = document.createElement('div');
+                    saveElement.className = 'text-end mt-3';
+                    saveElement.innerHTML = `
+                        <button class="btn btn-outline-primary btn-sm" id="save-scenario-btn">
+                            <i class="fas fa-save me-1"></i> Save Scenario
+                        </button>
+                    `;
+                    document.getElementById('scenario-recommendations').appendChild(saveElement);
+                    
+                    // Add event listener to save button
+                    document.getElementById('save-scenario-btn').addEventListener('click', function() {
+                        addSavedScenario(
+                            scenarioName,
+                            timeHorizon,
+                            usageChange,
+                            scenarioResults.projected_monthly_cost,
+                            scenarioResults
+                        );
+                        this.disabled = true;
+                        this.innerHTML = '<i class="fas fa-check me-1"></i> Saved';
+                    });
+                } else {
+                    // Show error
+                    document.getElementById('scenario-recommendations').innerHTML = `
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            <strong>Error:</strong> ${data.message || 'Failed to calculate scenario'}
+                        </div>
+                    `;
+                    document.getElementById('scenario-chart').innerHTML = '';
+                }
+            })
+            .catch(error => {
+                console.error('Error calculating scenario:', error);
+                document.getElementById('scenario-recommendations').innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        <strong>Error:</strong> Failed to calculate scenario. Please try again.
+                    </div>
+                `;
+                document.getElementById('scenario-chart').innerHTML = '';
+            });
+        }
+        // Helper function to format currency values
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 2
+            }).format(value);
+        }
+            
+        // Function to generate basic recommendations
+        function generateBasicRecommendations(usageChange, modelMixType, efficiencyGain, currentCost, projectedCost, budgetCap) {
+            let recommendations = '';
+            const difference = projectedCost - currentCost;
+            
+            if (usageChange > 20 && !budgetCap) {
+                recommendations += '<p>⚠️ <strong>High Growth Alert:</strong> Consider setting a budget cap to prevent unexpected costs.</p>';
+            }
+            
+            if (difference > currentCost * 0.3) {
+                recommendations += '<p>💰 <strong>Significant Cost Increase:</strong> Consider implementing additional cost optimization measures.</p>';
+            }
+            
+            if (modelMixType === 'premium' && usageChange > 0) {
+                recommendations += '<p>🔄 <strong>Model Mix Optimization:</strong> Consider using a balanced model mix for a better cost-performance ratio.</p>';
+            }
+            
+            if (efficiencyGain < 10 && projectedCost > currentCost) {
+                recommendations += '<p>⚡ <strong>Efficiency Opportunity:</strong> Implement prompt optimization to reduce token usage.</p>';
+            }
+            
+            return recommendations;
+        }
+
+        // Helper function to show recommendations in the UI
+        function displayRecommendations(recommendations) {
+            if (!recommendations || recommendations === '') {
+                recommendations = '<p>✅ Your scenario looks balanced. No specific recommendations at this time.</p>';
+            }
+            
+            document.getElementById('scenario-recommendations').innerHTML = recommendations;
+        }
+            
+        // This closing brace ends the loadWhatIfScenarios function
+        }
+        
+        // Function to generate scenario chart
+        function generateScenarioChart(scenarioName, timeHorizon, monthlyProjections) {
+            const chartDiv = document.getElementById('scenario-chart');
+            
+            if (!monthlyProjections || monthlyProjections.length === 0) {
+                chartDiv.innerHTML = '<div class="alert alert-warning">No projection data available</div>';
+                return;
+            }
+            
+            // Extract months and costs from the projections
+            const months = monthlyProjections.map(month => {
+                return `Month ${month.month}`;
+            });
+            
+            const baselineCosts = monthlyProjections.map(month => month.baseline_cost);
+            const projectedCosts = monthlyProjections.map(month => month.projected_cost);
+            
+            // Generate chart with two traces
+            const data = [
+                {
+                    x: months,
+                    y: baselineCosts,
+                    type: 'scatter',
+                    mode: 'lines+markers',
+                    name: 'Current Trajectory',
+                    line: {
+                        color: '#4e73df',
+                        width: 3
+                    },
+                    marker: {
+                        size: 6
+                    }
+                },
+                {
+                    x: months,
+                    y: projectedCosts,
+                    type: 'scatter',
+                    mode: 'lines+markers',
+                    name: 'Projected Costs',
+                    line: {
+                        color: '#1cc88a',
+                        width: 3
+                    },
+                    marker: {
+                        size: 6
+                    }
+                }
+            ];
+            
+            const layout = {
+                title: `${timeHorizon}-Month Cost Projection: ${scenarioName}`,
+                xaxis: {
+                    title: 'Month'
+                },
+                yaxis: {
+                    title: 'Cost ($)'
+                },
+                margin: {
+                    l: 60,
+                    r: 20,
+                    t: 50,
+                    b: 50
+                },
+                legend: {
+                    orientation: 'h',
+                    xanchor: 'center',
+                    y: -0.2,
+                    x: 0.5
+                }
+            };
+            
+            Plotly.newPlot(chartDiv, data, layout);
+        }
+        
+        // Function to add saved scenario to the table
+        function addSavedScenario(name, timeHorizon, usageChange, projectedCost, scenarioData) {
+            const savedScenariosTable = document.querySelector('#saved-scenarios table tbody');
+            
+            // Clear the 'no scenarios' row if it exists
+            if (savedScenariosTable.querySelector('tr td[colspan="5"]')) {
+                savedScenariosTable.innerHTML = '';
+            }
+            
+            // Create a new row
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${name}</td>
+                <td>${timeHorizon} month${timeHorizon > 1 ? 's' : ''}</td>
+                <td>${usageChange > 0 ? '+' : ''}${usageChange}%</td>
+                <td>$${projectedCost.toFixed(2)}</td>
+                <td>
+                    <button class="btn btn-sm btn-outline-primary view-scenario">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger delete-scenario ms-2">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            `;
+            
+            // Store the complete scenario data for future reference
+            if (scenarioData) {
+                row.dataset.scenarioData = JSON.stringify(scenarioData);
+            }
+            
+            // Add event listeners to the buttons
+            row.querySelector('.view-scenario').addEventListener('click', function() {
+                // Check if we have stored scenario data
+                if (row.dataset.scenarioData) {
+                    try {
+                        const data = JSON.parse(row.dataset.scenarioData);
+                        
+                        // Populate form with saved values
+                        document.getElementById('scenario-name').value = data.scenario_name;
+                        document.getElementById('time-horizon').value = data.time_horizon;
+                        document.getElementById('usage-change').value = data.parameters.usage_change;
+                        document.getElementById('efficiency-gain').value = data.parameters.efficiency_gains;
+                        
+                        // Set the model mix dropdown based on model_mix_change value
+                        const modelMixSelect = document.getElementById('model-mix');
+                        if (data.parameters.model_mix_change >= 40) {
+                            modelMixSelect.value = 'cheaper';
+                        } else if (data.parameters.model_mix_change <= -40) {
+                            modelMixSelect.value = 'premium';
+                        } else if (data.parameters.model_mix_change > 0) {
+                            modelMixSelect.value = 'balanced';
+                        } else {
+                            modelMixSelect.value = 'current';
+                        }
+                        
+                        // Set budget cap if present
+                        if (data.parameters.budget_cap) {
+                            document.getElementById('budget-cap').value = data.parameters.budget_cap;
+                        }
+                        
+                        // Show results section
+                        document.getElementById('scenario-results').classList.remove('d-none');
+                        
+                        // Update metrics
+                        document.getElementById('current-cost').textContent = `$${data.current_monthly_cost.toFixed(2)}`;
+                        document.getElementById('projected-cost').textContent = `$${data.projected_monthly_cost.toFixed(2)}`;
+                        
+                        // Calculate and display the difference
+                        const difference = data.projected_monthly_cost - data.current_monthly_cost;
+                        const differenceElement = document.getElementById('cost-difference');
+                        differenceElement.textContent = `${difference >= 0 ? '+' : ''}$${difference.toFixed(2)}`;
+                        differenceElement.classList.remove('text-success', 'text-danger');
+                        differenceElement.classList.add(difference >= 0 ? 'text-danger' : 'text-success');
+                        
+                        // Generate the chart
+                        generateScenarioChart(data.scenario_name, data.time_horizon, data.monthly_projections);
+                        
+                        // Generate recommendations
+                        let recommendationsHtml = `<h5 class="mb-3">Recommendations</h5><ul class="mb-0">`;
+                        data.recommendations.forEach(rec => {
+                            let iconClass = 'info-circle';
+                            let textClass = 'info';
+                            
+                            if (rec.type === 'warning') {
+                                iconClass = 'exclamation-triangle';
+                                textClass = 'warning';
+                            } else if (rec.type === 'model_mix' || rec.type === 'efficiency') {
+                                iconClass = 'check-circle';
+                                textClass = 'success';
+                            } else if (rec.type === 'cost_increase') {
+                                iconClass = 'arrow-up';
+                                textClass = 'danger';
+                            }
+                            
+                            recommendationsHtml += `<li class="mb-2"><i class="fas fa-${iconClass} text-${textClass} me-2"></i>${rec.text}</li>`;
+                        });
+                        recommendationsHtml += `</ul>`;
+                        document.getElementById('scenario-recommendations').innerHTML = recommendationsHtml;
+                        
+                        // Scroll to scenario form
+                        document.getElementById('scenario-form').scrollIntoView({behavior: 'smooth'});
+                        
+                        showSuccessToast('Loaded scenario: ' + data.scenario_name);
+                    } catch (error) {
+                        console.error('Error parsing scenario data:', error);
+                        alert(`Error loading scenario details for "${name}". Please try again.`);
+                    }
+                } else {
+                    alert(`Viewing scenario details for "${name}" requires regenerating the scenario.`);
+                }
+            });
+            
+            row.querySelector('.delete-scenario').addEventListener('click', function() {
+                if (confirm(`Are you sure you want to delete the scenario "${name}"?`)) {
+                    row.remove();
+                    
+                    // If no more scenarios, add the 'no scenarios' row back
+                    if (savedScenariosTable.querySelectorAll('tr').length === 0) {
+                        savedScenariosTable.innerHTML = '<tr><td colspan="5" class="text-center">No saved scenarios yet</td></tr>';
+                    }
+                    
+                    showSuccessToast(`Deleted scenario: ${name}`);
+                }
+            });
+            
+            savedScenariosTable.appendChild(row);
+            showSuccessToast(`Saved scenario: ${name}`);
+        }
+        
+        // Function to show success toast message
+        function showSuccessToast(message) {
+            const toastContainer = document.getElementById('toast-container');
+            if (!toastContainer) {
+                const container = document.createElement('div');
+                container.id = 'toast-container';
+                container.className = 'position-fixed bottom-0 end-0 p-3';
+                container.style.zIndex = '1050';
+                document.body.appendChild(container);
+            }
+            
+            const toastId = 'toast-' + Date.now();
+            const toastHtml = `
+                <div id="${toastId}" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header bg-success text-white">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <strong class="me-auto">Success</strong>
+                        <small>Just now</small>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('toast-container').innerHTML += toastHtml;
+            
+            // Initialize and show the toast
+            const toastElement = document.getElementById(toastId);
+            const toast = new bootstrap.Toast(toastElement, { delay: 5000 });
+            toast.show();
+            
+            // Remove toast after it's hidden
+            toastElement.addEventListener('hidden.bs.toast', function() {
+                toastElement.remove();
+            });
+        }
+        
+        // Function to export cost report
+        function exportCostReport() {
+            const format = 'csv'; // Default format
+            const period = document.getElementById('timeRangeSelector').value;
+            
+            // Generate export URL
+            const exportUrl = `/api/usage/export-cost-data?period=${period}&format=${format}`;
+            
+            // Open in new tab
+            window.open(exportUrl, '_blank');
+        }
+        
+        // Helper function to show error message
+        function showErrorMessage(message) {
+            // Show error toast
+            const toastContainer = document.createElement('div');
+            toastContainer.className = 'position-fixed bottom-0 end-0 p-3';
+            toastContainer.style.zIndex = '11';
+            toastContainer.innerHTML = `
+                <div class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            <i class="fas fa-exclamation-circle me-2"></i> ${message}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(toastContainer);
+            
+            const toast = new bootstrap.Toast(toastContainer.querySelector('.toast'), {
+                delay: 5000
+            });
+            toast.show();
+        }
+        
+        // Function to load budget prediction data
+        function loadBudgetPrediction() {
+            // Show loading state
+            document.getElementById('budget-prediction-loading').classList.remove('d-none');
+            document.getElementById('budget-prediction-content').classList.add('d-none');
+            document.getElementById('budget-prediction-error').classList.add('d-none');
+            
+            // Fetch budget prediction data from API
+            fetch('/api/usage/budget-prediction')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        renderBudgetPrediction(data.data);
+                    } else {
+                        showBudgetPredictionError(data.message || 'Failed to load budget prediction');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading budget prediction:', error);
+                    showBudgetPredictionError('Network error. Please try again.');
+                });
+        }
+        
+        // Function to render budget prediction data
+        function renderBudgetPrediction(data) {
+            // Hide loading state and show content
+            document.getElementById('budget-prediction-loading').classList.add('d-none');
+            document.getElementById('budget-prediction-content').classList.remove('d-none');
+            
+            // Update current budget status
+            const budgetPercentage = Math.min(100, (data.current_spend / data.monthly_budget) * 100);
+            document.getElementById('budget-progress-bar').style.width = `${budgetPercentage}%`;
+            document.getElementById('budget-progress-bar').setAttribute('aria-valuenow', budgetPercentage);
+            document.getElementById('budget-progress-bar').className = `progress-bar ${budgetPercentage > 90 ? 'bg-danger' : budgetPercentage > 70 ? 'bg-warning' : 'bg-success'}`;
+            document.getElementById('budget-percentage').textContent = `${Math.round(budgetPercentage)}%`;
+            document.getElementById('budget-spent').textContent = formatCurrency(data.current_spend);
+            document.getElementById('budget-total').textContent = formatCurrency(data.monthly_budget);
+            
+            // Update prediction data
+            if (data.days_until_depletion !== null) {
+                // Set prediction icon
+                let iconClass = 'text-success';
+                if (data.days_until_depletion < 7) {
+                    iconClass = 'text-danger';
+                } else if (data.days_until_depletion < 14) {
+                    iconClass = 'text-warning';
+                }
+                document.getElementById('prediction-icon').className = `fas fa-circle me-2 ${iconClass}`;
+                
+                // Set prediction days and message
+                document.getElementById('prediction-days').textContent = `${data.days_until_depletion} days remaining`;
+                
+                if (data.days_until_depletion < 7) {
+                    document.getElementById('prediction-message').textContent = 'Critical budget status. Immediate action recommended.';
+                } else if (data.days_until_depletion < 14) {
+                    document.getElementById('prediction-message').textContent = 'Budget depleting faster than expected. Consider optimization.';
+                } else {
+                    document.getElementById('prediction-message').textContent = 'Budget on track. No immediate action needed.';
+                }
+                
+                // Set prediction date
+                const depletionDate = new Date();
+                depletionDate.setDate(depletionDate.getDate() + data.days_until_depletion);
+                document.getElementById('prediction-date').textContent = `Predicted depletion: ${depletionDate.toLocaleDateString()}`;
+            } else {
+                document.getElementById('prediction-icon').className = 'fas fa-circle me-2 text-success';
+                document.getElementById('prediction-days').textContent = 'On Track';
+                document.getElementById('prediction-message').textContent = 'Current spending is within budget limits.';
+                document.getElementById('prediction-date').textContent = 'No depletion predicted within this billing cycle';
+            }
+            
+            // Update recommendations
+            const recommendationsElement = document.getElementById('cost-recommendations');
+            if (data.recommendations && data.recommendations.length > 0) {
+                let recommendationsHtml = '';
+                data.recommendations.forEach(rec => {
+                    let iconClass = 'info-circle text-info';
+                    
+                    if (rec.priority === 'high') {
+                        iconClass = 'exclamation-triangle text-danger';
+                    } else if (rec.priority === 'medium') {
+                        iconClass = 'exclamation-circle text-warning';
+                    } else if (rec.priority === 'low') {
+                        iconClass = 'lightbulb text-success';
+                    }
+                    
+                    recommendationsHtml += `
+                        <li class="list-group-item">
+                            <div class="d-flex">
+                                <div>
+                                    <i class="fas fa-${iconClass} me-3 mt-1"></i>
+                                </div>
+                                <div>
+                                    <strong>${rec.title}</strong>
+                                    <p class="mb-0 text-muted">${rec.description}</p>
+                                </div>
+                            </div>
+                        </li>
+                    `;
+                });
+                recommendationsElement.innerHTML = recommendationsHtml;
+            } else {
+                recommendationsElement.innerHTML = '<li class="list-group-item text-center text-muted">No recommendations available</li>';
+            }
+        }
+        
+        // Function to show budget prediction error
+        function showBudgetPredictionError(message) {
+            document.getElementById('budget-prediction-loading').classList.add('d-none');
+            document.getElementById('budget-prediction-content').classList.add('d-none');
+            document.getElementById('budget-prediction-error').classList.remove('d-none');
+            document.getElementById('budget-prediction-error').textContent = message;
+        }
+        
+        // Function to load model switching statistics
+        function loadModelSwitchStats() {
+            // Show loading state
+            document.getElementById('model-switching-loading').classList.remove('d-none');
+            document.getElementById('model-switching-content').classList.add('d-none');
+            document.getElementById('model-switching-error').classList.add('d-none');
+            
+            // Fetch model switching stats from API
+            fetch('/api/usage/model-switch-stats')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        renderModelSwitchStats(data.data);
+                    } else {
+                        showModelSwitchError(data.message || 'Failed to load model switching statistics');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading model switching stats:', error);
+                    showModelSwitchError('Network error. Please try again.');
+                });
+        }
+        
+        // Function to render model switching statistics
+        function renderModelSwitchStats(data) {
+            // Hide loading state and show content
+            document.getElementById('model-switching-loading').classList.add('d-none');
+            document.getElementById('model-switching-content').classList.remove('d-none');
+            
+            // Update summary data
+            document.getElementById('total-switches').textContent = data.total_switches.toLocaleString();
+            document.getElementById('cost-savings').textContent = formatCurrency(data.estimated_savings);
+            document.getElementById('efficiency-score').textContent = `${Math.round(data.efficiency_score)}%`;
+            document.getElementById('optimization-rate').textContent = `${Math.round(data.optimization_rate)}%`;
+            
+            // Update recent switches table
+            const recentSwitchesElement = document.getElementById('recent-switches');
+            if (data.recent_switches && data.recent_switches.length > 0) {
+                let switchesHtml = '';
+                data.recent_switches.forEach(switchItem => {
+                    switchesHtml += `
+                        <tr>
+                            <td><span class="badge bg-secondary">${switchItem.query_type}</span></td>
+                            <td>${switchItem.original_model}</td>
+                            <td>${switchItem.switched_to}</td>
+                            <td>${switchItem.reason}</td>
+                            <td class="text-success">${formatCurrency(switchItem.savings)}</td>
+                        </tr>
+                    `;
+                });
+                recentSwitchesElement.innerHTML = switchesHtml;
+            } else {
+                recentSwitchesElement.innerHTML = '<tr><td colspan="5" class="text-center">No recent switches found</td></tr>';
+            }
+        }
+        
+        // Function to show model switching error
+        function showModelSwitchError(message) {
+            document.getElementById('model-switching-loading').classList.add('d-none');
+            document.getElementById('model-switching-content').classList.add('d-none');
+            document.getElementById('model-switching-error').classList.remove('d-none');
+            document.getElementById('model-switching-error').textContent = message;
+        }
+        
+        // Initialize budget prediction and model switching sections
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load initial budget prediction
+            setTimeout(() => loadBudgetPrediction(), 500);
+            
+            // Load initial model switching statistics
+            setTimeout(() => loadModelSwitchStats(), 1000);
+            
+            // Set up refresh button handlers
+            document.getElementById('refresh-budget-alerts').addEventListener('click', loadBudgetPrediction);
+            document.getElementById('refresh-model-switches').addEventListener('click', loadModelSwitchStats);
+        });
+    </script>
+</body>
+</html>

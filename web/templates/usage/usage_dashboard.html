@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minerva AI - Usage Analytics</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Plotly.js for charts -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+        }
+        
+        .page-header {
+            background-color: #343a40;
+            color: white;
+            padding: 1.5rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .card {
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+            border: none;
+        }
+        
+        .card-header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #eee;
+            font-weight: 600;
+        }
+        
+        .stats-card {
+            text-align: center;
+            padding: 1rem;
+            border-left: 4px solid #0d6efd;
+        }
+        
+        .stats-card.cost {
+            border-left-color: #dc3545;
+        }
+        
+        .stats-card.tokens {
+            border-left-color: #198754;
+        }
+        
+        .stats-card.models {
+            border-left-color: #6f42c1;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 0.5rem 0;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .chart-container {
+            height: 400px;
+            width: 100%;
+        }
+        
+        .suggestion-card {
+            border-left: 4px solid #ffc107;
+        }
+        
+        .suggestion-card.high {
+            border-left-color: #dc3545;
+        }
+        
+        .suggestion-card.medium {
+            border-left-color: #fd7e14;
+        }
+        
+        .suggestion-card.low {
+            border-left-color: #20c997;
+        }
+        
+        .filter-container {
+            background-color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+        
+        footer {
+            margin-top: 3rem;
+            padding: 1.5rem 0;
+            background-color: #f1f1f1;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h1><i class="fas fa-chart-line me-2"></i> Minerva AI Usage Analytics</h1>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <span class="text-light">
+                        <i class="fas fa-calendar-alt me-1"></i> 
+                        <span id="current-date">Loading...</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Filters -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="filter-container">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label for="dateRange" class="form-label">Date Range</label>
+                            <select class="form-select" id="dateRange">
+                                <option value="7">Last 7 days</option>
+                                <option value="30" selected>Last 30 days</option>
+                                <option value="90">Last 90 days</option>
+                                <option value="custom">Custom range</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4" id="customDateContainer" style="display: none;">
+                            <label for="startDate" class="form-label">Start Date</label>
+                            <input type="date" class="form-control" id="startDate">
+                        </div>
+                        <div class="col-md-4" id="customDateEndContainer" style="display: none;">
+                            <label for="endDate" class="form-label">End Date</label>
+                            <input type="date" class="form-control" id="endDate">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="modelFilter" class="form-label">Model</label>
+                            <select class="form-select" id="modelFilter">
+                                <option value="" selected>All Models</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end">
+                            <button class="btn btn-primary w-100" id="applyFilters">
+                                <i class="fas fa-filter me-1"></i> Apply Filters
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Summary Stats -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card stats-card cost">
+                    <div class="stat-label">Total Cost</div>
+                    <div class="stat-value" id="total-cost">$0.00</div>
+                    <small class="text-muted" id="cost-period">for selected period</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <div class="stat-label">API Requests</div>
+                    <div class="stat-value" id="total-requests">0</div>
+                    <small class="text-muted" id="requests-period">for selected period</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card tokens">
+                    <div class="stat-label">Total Tokens</div>
+                    <div class="stat-value" id="total-tokens">0</div>
+                    <small class="text-muted" id="tokens-period">for selected period</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card models">
+                    <div class="stat-label">Models Used</div>
+                    <div class="stat-value" id="models-used">0</div>
+                    <small class="text-muted" id="models-period">for selected period</small>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Dashboard Tabs -->
+        <ul class="nav nav-tabs mb-4" id="dashboardTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview" type="button" role="tab" aria-controls="overview" aria-selected="true">
+                    <i class="fas fa-tachometer-alt me-2"></i>Overview
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="historical-tab" data-bs-toggle="tab" data-bs-target="#historical" type="button" role="tab" aria-controls="historical" aria-selected="false">
+                    <i class="fas fa-history me-2"></i>Historical Comparison
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="budget-tab" data-bs-toggle="tab" data-bs-target="#budget" type="button" role="tab" aria-controls="budget" aria-selected="false">
+                    <i class="fas fa-money-bill-wave me-2"></i>Budget Controls
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="optimization-tab" data-bs-toggle="tab" data-bs-target="#optimization" type="button" role="tab" aria-controls="optimization" aria-selected="false">
+                    <i class="fas fa-lightbulb me-2"></i>Optimization
+                </button>
+            </li>
+        </ul>
+        
+        <!-- Tab Content -->
+        <div class="tab-content" id="dashboardTabContent">
+            <!-- Overview Tab -->
+            <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
+                <!-- Charts Row -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <div>
+                                    <i class="fas fa-chart-pie me-2"></i> Cost by Model
+                                </div>
+                                <div>
+                                    <button class="btn btn-sm btn-outline-secondary download-chart" data-chart="model-distribution">
+                                        <i class="fas fa-download me-1"></i> Export
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div id="model-distribution-chart" class="chart-container">
+                                    <div class="loading">
+                                        <i class="fas fa-spinner fa-spin me-2"></i> Loading chart...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <div>
+                                    <i class="fas fa-chart-line me-2"></i> Daily Cost Trend
+                                </div>
+                                <div>
+                                    <button class="btn btn-sm btn-outline-secondary download-chart" data-chart="daily-trend">
+                                        <i class="fas fa-download me-1"></i> Export
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div id="daily-trend-chart" class="chart-container">
+                                    <div class="loading">
+                                        <i class="fas fa-spinner fa-spin me-2"></i> Loading chart...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Historical Comparison Tab -->
+            <div class="tab-pane fade" id="historical" role="tabpanel" aria-labelledby="historical-tab">
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="fas fa-calendar-alt me-2"></i> Period Comparison
+                            </div>
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-md-10">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <label class="form-label">Period 1</label>
+                                                <div class="input-group">
+                                                    <select class="form-select" id="period1-type">
+                                                        <option value="last-7">Last 7 days</option>
+                                                        <option value="last-30" selected>Last 30 days</option>
+                                                        <option value="last-90">Last 90 days</option>
+                                                        <option value="custom">Custom range</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-5">
+                                                <label class="form-label">Period 2</label>
+                                                <div class="input-group">
+                                                    <select class="form-select" id="period2-type">
+                                                        <option value="last-7">Last 7 days</option>
+                                                        <option value="last-30">Last 30 days</option>
+                                                        <option value="previous-period" selected>Previous period</option>
+                                                        <option value="custom">Custom range</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 d-flex align-items-end">
+                                                <button id="compare-periods" class="btn btn-primary w-100">
+                                                    <i class="fas fa-sync-alt me-1"></i> Compare
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div id="period-comparison-container">
+                                    <div class="row mb-4">
+                                        <div class="col-12">
+                                            <div class="card">
+                                                <div class="card-header">Summary Comparison</div>
+                                                <div class="card-body">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered" id="comparison-table">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Metric</th>
+                                                                    <th class="period-1-name">Period 1</th>
+                                                                    <th class="period-2-name">Period 2</th>
+                                                                    <th>Change</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>Total Cost</td>
+                                                                    <td id="period1-cost">$0.00</td>
+                                                                    <td id="period2-cost">$0.00</td>
+                                                                    <td id="cost-change">0%</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>API Requests</td>
+                                                                    <td id="period1-requests">0</td>
+                                                                    <td id="period2-requests">0</td>
+                                                                    <td id="requests-change">0%</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Total Tokens</td>
+                                                                    <td id="period1-tokens">0</td>
+                                                                    <td id="period2-tokens">0</td>
+                                                                    <td id="tokens-change">0%</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Avg. Cost per Request</td>
+                                                                    <td id="period1-avg-cost">$0.00</td>
+                                                                    <td id="period2-avg-cost">$0.00</td>
+                                                                    <td id="avg-cost-change">0%</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-4">
+                                        <div class="col-md-6">
+                                            <div class="card">
+                                                <div class="card-header">Cost Trend Comparison</div>
+                                                <div class="card-body">
+                                                    <div id="cost-comparison-chart" class="chart-container">
+                                                        <div class="loading">
+                                                            <i class="fas fa-spinner fa-spin me-2"></i> Loading chart...
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="card">
+                                                <div class="card-header">Model Usage Comparison</div>
+                                                <div class="card-body">
+                                                    <div id="model-comparison-chart" class="chart-container">
+                                                        <div class="loading">
+                                                            <i class="fas fa-spinner fa-spin me-2"></i> Loading chart...
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Budget Controls Tab -->
+            <div class="tab-pane fade" id="budget" role="tabpanel" aria-labelledby="budget-tab">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="fas fa-money-bill-wave me-2"></i> Budget Thresholds
+                            </div>
+                            <div class="card-body">
+                                <form id="budget-settings-form">
+                                    <div class="mb-3">
+                                        <label for="daily-budget" class="form-label">Daily Budget (USD)</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">$</span>
+                                            <input type="number" class="form-control" id="daily-budget" min="0" step="0.01" value="25.00">
+                                        </div>
+                                        <div class="form-text">Alert when daily AI costs reach 80% of this amount</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="weekly-budget" class="form-label">Weekly Budget (USD)</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">$</span>
+                                            <input type="number" class="form-control" id="weekly-budget" min="0" step="0.01" value="150.00">
+                                        </div>
+                                        <div class="form-text">Alert when weekly AI costs reach 80% of this amount</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="monthly-budget" class="form-label">Monthly Budget (USD)</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">$</span>
+                                            <input type="number" class="form-control" id="monthly-budget" min="0" step="0.01" value="500.00">
+                                        </div>
+                                        <div class="form-text">Alert when monthly AI costs reach 80% of this amount</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="emergency-budget" class="form-label">Emergency Threshold (USD)</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">$</span>
+                                            <input type="number" class="form-control" id="emergency-budget" min="0" step="0.01" value="1000.00">
+                                        </div>
+                                        <div class="form-text">When reached, system will switch to emergency cost-cutting mode</div>
+                                    </div>
+                                    <div class="d-grid gap-2">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-save me-1"></i> Save Budget Settings
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="fas fa-bell me-2"></i> Alert Settings
+                            </div>
+                            <div class="card-body">
+                                <form id="alert-settings-form">
+                                    <div class="mb-3 form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="enable-alerts" checked>
+                                        <label class="form-check-label" for="enable-alerts">Enable Cost Alerts</label>
+                                    </div>
+                                    
+                                    <hr>
+                                    <h6 class="mb-3">Notification Channels</h6>
+                                    
+                                    <div class="mb-3 form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="enable-email-alerts">
+                                        <label class="form-check-label" for="enable-email-alerts">Email Alerts</label>
+                                    </div>
+                                    
+                                    <div id="email-settings" class="mb-3 ps-4 d-none">
+                                        <div class="mb-2">
+                                            <label for="email-recipients" class="form-label">Recipients (comma-separated)</label>
+                                            <input type="text" class="form-control" id="email-recipients" placeholder="admin@example.com,manager@example.com">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3 form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="enable-slack-alerts">
+                                        <label class="form-check-label" for="enable-slack-alerts">Slack Alerts</label>
+                                    </div>
+                                    
+                                    <div id="slack-settings" class="mb-3 ps-4 d-none">
+                                        <div class="mb-2">
+                                            <label for="slack-webhook" class="form-label">Webhook URL</label>
+                                            <input type="text" class="form-control" id="slack-webhook" placeholder="https://hooks.slack.com/services/...">
+                                        </div>
+                                    </div>
+                                    
+                                    <hr>
+                                    <h6 class="mb-3">Alert Thresholds</h6>
+                                    
+                                    <div class="mb-3">
+                                        <label for="budget-alert-threshold" class="form-label">Budget Alert Threshold (%)</label>
+                                        <input type="number" class="form-control" id="budget-alert-threshold" min="1" max="100" value="80">
+                                        <div class="form-text">Send alerts when budget usage reaches this percentage</div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="alert-cooldown" class="form-label">Alert Cooldown (minutes)</label>
+                                        <input type="number" class="form-control" id="alert-cooldown" min="5" value="60">
+                                        <div class="form-text">Minimum time between repeated alerts</div>
+                                    </div>
+                                    
+                                    <div class="d-grid gap-2">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-save me-1"></i> Save Alert Settings
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="fas fa-tachometer-alt me-2"></i> Current Budget Status
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="card mb-3">
+                                            <div class="card-body text-center p-3">
+                                                <h6 class="text-muted mb-2">Daily Budget</h6>
+                                                <div class="progress mb-2" style="height: 10px;">
+                                                    <div id="daily-budget-progress" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                                </div>
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <span id="daily-spent">$0.00</span>
+                                                    <span class="text-muted">of</span>
+                                                    <span id="daily-limit">$25.00</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card mb-3">
+                                            <div class="card-body text-center p-3">
+                                                <h6 class="text-muted mb-2">Weekly Budget</h6>
+                                                <div class="progress mb-2" style="height: 10px;">
+                                                    <div id="weekly-budget-progress" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                                </div>
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <span id="weekly-spent">$0.00</span>
+                                                    <span class="text-muted">of</span>
+                                                    <span id="weekly-limit">$150.00</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card mb-3">
+                                            <div class="card-body text-center p-3">
+                                                <h6 class="text-muted mb-2">Monthly Budget</h6>
+                                                <div class="progress mb-2" style="height: 10px;">
+                                                    <div id="monthly-budget-progress" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                                </div>
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <span id="monthly-spent">$0.00</span>
+                                                    <span class="text-muted">of</span>
+                                                    <span id="monthly-limit">$500.00</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="emergency-mode-alert" class="alert alert-danger d-none mt-3" role="alert">
+                                    <i class="fas fa-exclamation-triangle me-2"></i> <strong>Emergency Cost-Cutting Mode Active!</strong> The system is automatically switching to lower-cost models to prevent budget overruns.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Optimization Tab -->
+            <div class="tab-pane fade" id="optimization" role="tabpanel" aria-labelledby="optimization-tab">
+        
+        <!-- Optimization Suggestions -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-lightbulb me-2"></i> Cost Optimization Suggestions
+                    </div>
+                    <div class="card-body">
+                        <div id="suggestions-container">
+                            <div class="loading">
+                                <i class="fas fa-spinner fa-spin me-2"></i> Analyzing your usage data...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Export Options -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-file-export me-2"></i> Export Data
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p>Export detailed usage data for the selected period.</p>
+                            </div>
+                            <div class="col-md-6 text-md-end">
+                                <button class="btn btn-outline-primary me-2" id="export-csv">
+                                    <i class="fas fa-file-csv me-1"></i> Export CSV
+                                </button>
+                                <button class="btn btn-outline-primary" id="export-json">
+                                    <i class="fas fa-file-code me-1"></i> Export JSON
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>Minerva AI Usage Analytics &copy; 2025 | All usage data is stored locally</p>
+        </div>
+    </footer>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Dashboard JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Display current date
+            const now = new Date();
+            document.getElementById('current-date').textContent = now.toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            // Handle date range selection
+            const dateRangeSelect = document.getElementById('dateRange');
+            const customDateContainer = document.getElementById('customDateContainer');
+            const customDateEndContainer = document.getElementById('customDateEndContainer');
+            
+            dateRangeSelect.addEventListener('change', function() {
+                if (this.value === 'custom') {
+                    customDateContainer.style.display = 'block';
+                    customDateEndContainer.style.display = 'block';
+                } else {
+                    customDateContainer.style.display = 'none';
+                    customDateEndContainer.style.display = 'none';
+                }
+            });
+            
+            // Set default dates for custom range
+            const startDateInput = document.getElementById('startDate');
+            const endDateInput = document.getElementById('endDate');
+            
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+            
+            startDateInput.value = formatDate(thirtyDaysAgo);
+            endDateInput.value = formatDate(now);
+            
+            // Get date range based on selection
+            function getDateRange() {
+                const selection = dateRangeSelect.value;
+                
+                if (selection === 'custom') {
+                    return {
+                        start_date: startDateInput.value,
+                        end_date: endDateInput.value
+                    };
+                }
+                
+                const end = new Date();
+                const start = new Date();
+                start.setDate(end.getDate() - parseInt(selection));
+                
+                return {
+                    start_date: formatDate(start),
+                    end_date: formatDate(end)
+                };
+            }
+            
+            // Format date as YYYY-MM-DD
+            function formatDate(date) {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            }
+            
+            // Load summary data
+            function loadSummaryData() {
+                const dateRange = getDateRange();
+                const modelFilter = document.getElementById('modelFilter').value;
+                
+                // Update period labels
+                const periodText = `${dateRange.start_date} to ${dateRange.end_date}`;
+                document.getElementById('cost-period').textContent = periodText;
+                document.getElementById('requests-period').textContent = periodText;
+                document.getElementById('tokens-period').textContent = periodText;
+                document.getElementById('models-period').textContent = periodText;
+                
+                // Build query params
+                let period = 'week';
+                if (dateRange.start_date && dateRange.end_date) {
+                    // Convert the date range to a period if possible
+                    const startDate = new Date(dateRange.start_date);
+                    const endDate = new Date(dateRange.end_date);
+                    const today = new Date();
+                    
+                    // Calculate days difference
+                    const diffTime = Math.abs(endDate - startDate);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    
+                    if (diffDays <= 1) {
+                        period = 'today';
+                    } else if (diffDays <= 7) {
+                        period = 'week';
+                    } else if (diffDays <= 30) {
+                        period = 'month';
+                    } else {
+                        period = 'all';
+                    }
+                }
+                
+                let params = new URLSearchParams({
+                    period: period
+                });
+                
+                if (modelFilter && modelFilter !== 'all') {
+                    params.append('model', modelFilter);
+                }
+                
+                // Fetch summary data
+                fetch(`/api/usage-data?${params.toString()}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status !== 'success') {
+                            console.error('Error in API response:', data.message);
+                            return;
+                        }
+                        
+                        const stats = data.data.summary || {};
+                        
+                        // Update summary stats
+                        document.getElementById('total-cost').textContent = 
+                            `$${(stats.total_cost || 0).toFixed(2)}`;
+                            
+                        document.getElementById('total-requests').textContent = 
+                            (stats.total_requests || 0).toLocaleString();
+                            
+                        const totalTokens = (stats.total_input_tokens || 0) + 
+                                          (stats.total_output_tokens || 0);
+                        document.getElementById('total-tokens').textContent = 
+                            totalTokens.toLocaleString();
+                            
+                        const modelsUsed = data.data.available_models ? data.data.available_models.length : 0;
+                        document.getElementById('models-used').textContent = modelsUsed;
+                        
+                        // Populate model filter if needed
+                        const modelSelect = document.getElementById('modelFilter');
+                        if (modelSelect.options.length <= 1 && data.data.available_models) {
+                            data.data.available_models.forEach(model => {
+                                const option = document.createElement('option');
+                                option.value = model;
+                                option.textContent = model;
+                                modelSelect.appendChild(option);
+                            });
+                        }
+                        
+                        // Populate query type filter if needed
+                        const queryTypeSelect = document.getElementById('query-type-filter');
+                        if (queryTypeSelect && queryTypeSelect.options.length <= 1 && data.data.available_query_types) {
+                            data.data.available_query_types.forEach(type => {
+                                const option = document.createElement('option');
+                                option.value = type;
+                                option.textContent = type;
+                                queryTypeSelect.appendChild(option);
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error loading summary data:', error);
+                    });
+            }
+            
+            // Load chart data
+            function loadCharts() {
+                const dateRange = getDateRange();
+                const modelFilter = document.getElementById('modelFilter').value;
+                const queryTypeFilter = document.getElementById('query-type-filter') ? 
+                                       document.getElementById('query-type-filter').value : null;
+                
+                // Convert date range to period
+                let period = 'week';
+                if (dateRange.start_date && dateRange.end_date) {
+                    const startDate = new Date(dateRange.start_date);
+                    const endDate = new Date(dateRange.end_date);
+                    const diffTime = Math.abs(endDate - startDate);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    
+                    if (diffDays <= 1) {
+                        period = 'today';
+                    } else if (diffDays <= 7) {
+                        period = 'week';
+                    } else if (diffDays <= 30) {
+                        period = 'month';
+                    } else {
+                        period = 'all';
+                    }
+                }
+                
+                // Build query params
+                let params = new URLSearchParams({
+                    period: period
+                });
+                
+                if (modelFilter && modelFilter !== 'all') {
+                    params.append('model', modelFilter);
+                }
+                
+                if (queryTypeFilter && queryTypeFilter !== 'all') {
+                    params.append('query_type', queryTypeFilter);
+                }
+                
+                // Fetch all chart data in a single API call
+                fetch(`/api/usage-data?${params.toString()}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status !== 'success') {
+                            console.error('Error in API response:', data.message);
+                            document.getElementById('model-distribution-chart').innerHTML = 
+                                `<div class="alert alert-danger">Error loading chart data.</div>`;
+                            return;
+                        }
+                        
+                        const chartData = data.data;
+                        
+                        // If no models data, show message
+                        if (!chartData.models || Object.keys(chartData.models).length === 0) {
+                            document.getElementById('model-distribution-chart').innerHTML = 
+                                `<div class="alert alert-info">No model data available for the selected period.</div>`;
+                            return;
+                        }
+                        
+                        // Process model distribution data
+                        const models = Object.keys(chartData.models);
+                        const usageCounts = models.map(model => chartData.models[model].count || 0);
+                        
+                        const modelDistData = [{
+                            labels: models,
+                            values: usageCounts,
+                            type: 'pie',
+                            marker: {
+                                colors: ['#0d6efd', '#6f42c1', '#d63384', '#fd7e14', '#20c997', '#ffc107', '#0dcaf0']
+                            }
+                        }];
+                        
+                        const modelDistLayout = {
+                            title: 'Model Usage Distribution',
+                            height: 400,
+                            margin: {l: 20, r: 20, t: 50, b: 20},
+                            paper_bgcolor: 'rgba(0,0,0,0)',
+                            plot_bgcolor: 'rgba(0,0,0,0)'
+                        };
+                        
+                        Plotly.newPlot('model-distribution-chart', modelDistData, modelDistLayout, {responsive: true});
+                        
+                        // Process daily trend data
+                        const dailyData = chartData.daily_usage || {};
+                        const dates = Object.keys(dailyData).sort();
+                        const costs = dates.map(date => dailyData[date].cost || 0);
+                        const tokenCounts = dates.map(date => 
+                            (dailyData[date].input_tokens || 0) + (dailyData[date].output_tokens || 0));
+                            
+                        const costData = [{
+                            x: dates,
+                            y: costs,
+                            type: 'scatter',
+                            mode: 'lines+markers',
+                            name: 'Daily Cost ($)',
+                            line: {color: '#dc3545'}
+                        }];
+                        
+                        const costLayout = {
+                            title: 'API Cost Trend',
+                            xaxis: {title: 'Date'},
+                            yaxis: {title: 'Cost ($)'},
+                            height: 400,
+                            margin: {l: 50, r: 20, t: 50, b: 50},
+                            paper_bgcolor: 'rgba(0,0,0,0)',
+                            plot_bgcolor: 'rgba(0,0,0,0)'
+                        };
+                        
+                        Plotly.newPlot('daily-trend-chart', costData, costLayout, {responsive: true});
+                        
+                        // Create token usage chart
+                        const tokenLabels = models;
+                        const inputTokens = models.map(model => chartData.models[model].input_tokens || 0);
+                        const outputTokens = models.map(model => chartData.models[model].output_tokens || 0);
+                        
+                        const tokenData = [
+                            {
+                                x: tokenLabels,
+                                y: inputTokens,
+                                name: 'Input Tokens',
+                                type: 'bar',
+                                marker: {color: '#0d6efd'}
+                            },
+                            {
+                                x: tokenLabels,
+                                y: outputTokens,
+                                name: 'Output Tokens',
+                                type: 'bar',
+                                marker: {color: '#198754'}
+                            }
+                        ];
+                        
+                        const tokenLayout = {
+                            title: 'Token Usage by Model',
+                            barmode: 'group',
+                            xaxis: {title: 'Model'},
+                            yaxis: {title: 'Tokens'},
+                            height: 400,
+                            margin: {l: 50, r: 20, t: 50, b: 50},
+                            paper_bgcolor: 'rgba(0,0,0,0)',
+                            plot_bgcolor: 'rgba(0,0,0,0)'
+                        };
+                        
+                        const tokenChartDiv = document.getElementById('token-usage-chart');
+                        if (tokenChartDiv) {
+                            Plotly.newPlot('token-usage-chart', tokenData, tokenLayout, {responsive: true});
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error loading chart data:', error);
+                        document.getElementById('model-distribution-chart').innerHTML = 
+                            `<div class="alert alert-danger">Error loading chart data: ${error.message}</div>`;
+                        document.getElementById('daily-trend-chart').innerHTML = 
+                            `<div class="alert alert-danger">Error loading chart data: ${error.message}</div>`;
+                        const tokenChartDiv = document.getElementById('token-usage-chart');
+                        if (tokenChartDiv) {
+                            tokenChartDiv.innerHTML = 
+                                `<div class="alert alert-danger">Error loading chart data: ${error.message}</div>`;
+                        }
+                    });
+            }
+            
+            // Load optimization suggestions
+            function loadSuggestions() {
+                const dateRange = getDateRange();
+                const modelFilter = document.getElementById('modelFilter').value;
+                const queryTypeFilter = document.getElementById('query-type-filter') ? 
+                                       document.getElementById('query-type-filter').value : null;
+                
+                // Convert date range to period
+                let period = 'week';
+                if (dateRange.start_date && dateRange.end_date) {
+                    const startDate = new Date(dateRange.start_date);
+                    const endDate = new Date(dateRange.end_date);
+                    const diffTime = Math.abs(endDate - startDate);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    
+                    if (diffDays <= 1) {
+                        period = 'today';
+                    } else if (diffDays <= 7) {
+                        period = 'week';
+                    } else if (diffDays <= 30) {
+                        period = 'month';
+                    } else {
+                        period = 'all';
+                    }
+                }
+                
+                // Build query params
+                let params = new URLSearchParams({
+                    period: period
+                });
+                
+                if (modelFilter && modelFilter !== 'all') {
+                    params.append('model', modelFilter);
+                }
+                
+                if (queryTypeFilter && queryTypeFilter !== 'all') {
+                    params.append('query_type', queryTypeFilter);
+                }
+                
+                fetch(`/api/usage-data?${params.toString()}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const container = document.getElementById('suggestions-container');
+                        
+                        if (data.status !== 'success' || !data.data.optimization_suggestions || data.data.optimization_suggestions.length === 0) {
+                            container.innerHTML = `
+                                <div class="alert alert-info">
+                                    No optimization suggestions available at this time.
+                                </div>
+                            `;
+                            return;
+                        }
+                        
+                        let html = '';
+                        
+                        data.data.optimization_suggestions.forEach(suggestion => {
+                            const impactClass = suggestion.impact || 'medium';
+                            let iconClass = 'fa-lightbulb';
+                            let suggestionType = 'General Suggestion';
+                            
+                            if (suggestion.suggestion.toLowerCase().includes('model') || 
+                                suggestion.suggestion.toLowerCase().includes('switch to')) {
+                                iconClass = 'fa-exchange-alt';
+                                suggestionType = 'Model Substitution';
+                            } else if (suggestion.suggestion.toLowerCase().includes('token') || 
+                                      suggestion.suggestion.toLowerCase().includes('prompt')) {
+                                iconClass = 'fa-compress-alt';
+                                suggestionType = 'Token Optimization';
+                            }
+                            
+                            html += `
+                                <div class="card suggestion-card ${impactClass} mb-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            <i class="fas ${iconClass} me-2"></i> ${suggestionType}
+                                        </h5>
+                                        <p class="card-text">${suggestion.suggestion}</p>
+                                        ${suggestion.impact ? `<p class="card-text text-muted">Impact: ${suggestion.impact}</p>` : ''}
+                                        ${suggestion.estimated_savings ? 
+                                            `<p class="card-text text-success">Estimated savings: ${suggestion.estimated_savings}</p>` : ''}
+                                        ${suggestion.details ? `<p class="card-text small">${suggestion.details}</p>` : ''}
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        
+                        container.innerHTML = html;
+                    })
+                    .catch(error => {
+                        console.error('Error loading suggestions:', error);
+                    });
+            }
+            
+            // Handle export buttons
+            document.getElementById('export-csv').addEventListener('click', function() {
+                const dateRange = getDateRange();
+                const modelFilter = document.getElementById('modelFilter').value;
+                const queryTypeFilter = document.getElementById('query-type-filter') ? 
+                                       document.getElementById('query-type-filter').value : null;
+                
+                // Convert date range to period
+                let period = 'week';
+                if (dateRange.start_date && dateRange.end_date) {
+                    const startDate = new Date(dateRange.start_date);
+                    const endDate = new Date(dateRange.end_date);
+                    const diffTime = Math.abs(endDate - startDate);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    
+                    if (diffDays <= 1) {
+                        period = 'today';
+                    } else if (diffDays <= 7) {
+                        period = 'week';
+                    } else if (diffDays <= 30) {
+                        period = 'month';
+                    } else {
+                        period = 'all';
+                    }
+                }
+                
+                // Build query params
+                let params = new URLSearchParams({
+                    period: period,
+                    format: 'csv'
+                });
+                
+                if (modelFilter && modelFilter !== 'all') {
+                    params.append('model', modelFilter);
+                }
+                
+                if (queryTypeFilter && queryTypeFilter !== 'all') {
+                    params.append('query_type', queryTypeFilter);
+                }
+                
+                // Redirect to CSV export endpoint
+                window.location.href = `/api/usage-data/export?${params.toString()}`;
+            });
+            
+            document.getElementById('export-json').addEventListener('click', function() {
+                const dateRange = getDateRange();
+                const modelFilter = document.getElementById('modelFilter').value;
+                
+                // Build query params
+                let params = new URLSearchParams({
+                    start_date: dateRange.start_date,
+                    end_date: dateRange.end_date
+                });
+                
+                if (modelFilter) {
+                    params.append('model', modelFilter);
+                }
+                
+                // Fetch JSON data and trigger download
+                fetch(`/usage/api/summary?${params.toString()}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `minerva_api_usage_${new Date().toISOString().slice(0,10)}.json`;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
+                    })
+                    .catch(error => {
+                        console.error('Error exporting JSON:', error);
+                    });
+            });
+            
+            // Apply filters button
+            document.getElementById('applyFilters').addEventListener('click', function() {
+                loadSummaryData();
+                loadCharts();
+            });
+            
+            // Budget controls event listeners
+            document.getElementById('budget-settings-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveBudgetSettings();
+            });
+            
+            document.getElementById('alert-settings-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveAlertSettings();
+            });
+            
+            // Toggle email settings visibility
+            document.getElementById('enable-email-alerts').addEventListener('change', function() {
+                document.getElementById('email-settings').classList.toggle('d-none', !this.checked);
+            });
+            
+            // Toggle slack settings visibility
+            document.getElementById('enable-slack-alerts').addEventListener('change', function() {
+                document.getElementById('slack-settings').classList.toggle('d-none', !this.checked);
+            });
+            
+            // Historical comparison
+            document.getElementById('compare-periods').addEventListener('click', function() {
+                loadHistoricalComparison();
+            });
+            
+            // Initial data load
+            loadSummaryData();
+            loadCharts();
+            loadSuggestions();
+            loadBudgetStatus();
+            loadSavedBudgetSettings();
+            loadSavedAlertSettings();
+        });
+        
+        // Historical comparison functions
+        function loadHistoricalComparison() {
+            const period1Type = document.getElementById('period1-type').value;
+            const period2Type = document.getElementById('period2-type').value;
+            
+            // Get date ranges for both periods
+            const period1Dates = getComparisonDateRange(period1Type);
+            let period2Dates;
+            
+            if (period2Type === 'previous-period') {
+                // Calculate previous period based on period 1
+                const p1Duration = (period1Dates.end - period1Dates.start) / (1000 * 60 * 60 * 24);
+                const p2End = new Date(period1Dates.start);
+                p2End.setDate(p2End.getDate() - 1);
+                const p2Start = new Date(p2End);
+                p2Start.setDate(p2Start.getDate() - p1Duration);
+                
+                period2Dates = {
+                    start: p2Start,
+                    end: p2End
+                };
+            } else {
+                period2Dates = getComparisonDateRange(period2Type);
+            }
+            
+            // Update period labels
+            document.querySelectorAll('.period-1-name').forEach(el => {
+                el.textContent = formatDateRange(period1Dates.start, period1Dates.end);
+            });
+            
+            document.querySelectorAll('.period-2-name').forEach(el => {
+                el.textContent = formatDateRange(period2Dates.start, period2Dates.end);
+            });
+            
+            // Fetch data for both periods
+            Promise.all([
+                fetch(`/api/usage/stats?start=${formatDate(period1Dates.start)}&end=${formatDate(period1Dates.end)}`)
+                    .then(response => response.json()),
+                fetch(`/api/usage/stats?start=${formatDate(period2Dates.start)}&end=${formatDate(period2Dates.end)}`)
+                    .then(response => response.json())
+            ])
+            .then(([period1Data, period2Data]) => {
+                // Update comparison table
+                updateComparisonTable(period1Data, period2Data);
+                
+                // Update comparison charts
+                createCostComparisonChart(period1Data, period2Data, period1Dates, period2Dates);
+                createModelComparisonChart(period1Data, period2Data);
+            })
+            .catch(error => {
+                console.error('Error loading comparison data:', error);
+            });
+        }
+        
+        function getComparisonDateRange(periodType) {
+            const today = new Date();
+            const end = new Date(today);
+            let start;
+            
+            switch(periodType) {
+                case 'last-7':
+                    start = new Date(today);
+                    start.setDate(today.getDate() - 7);
+                    break;
+                case 'last-30':
+                    start = new Date(today);
+                    start.setDate(today.getDate() - 30);
+                    break;
+                case 'last-90':
+                    start = new Date(today);
+                    start.setDate(today.getDate() - 90);
+                    break;
+                case 'custom':
+                    // TODO: Implement custom date range
+                    start = new Date(today);
+                    start.setDate(today.getDate() - 30);
+                    break;
+            }
+            
+            return { start, end };
+        }
+        
+        function formatDateRange(start, end) {
+            return `${start.toLocaleDateString()} - ${end.toLocaleDateString()}`;
+        }
+        
+        function updateComparisonTable(period1Data, period2Data) {
+            // Calculate percentage changes
+            const costChange = calculatePercentageChange(period1Data.total_cost, period2Data.total_cost);
+            const requestsChange = calculatePercentageChange(period1Data.total_requests, period2Data.total_requests);
+            const tokensChange = calculatePercentageChange(period1Data.total_tokens, period2Data.total_tokens);
+            
+            const avgCost1 = period1Data.total_requests > 0 ? period1Data.total_cost / period1Data.total_requests : 0;
+            const avgCost2 = period2Data.total_requests > 0 ? period2Data.total_cost / period2Data.total_requests : 0;
+            const avgCostChange = calculatePercentageChange(avgCost1, avgCost2);
+            
+            // Update the table
+            document.getElementById('period1-cost').textContent = `$${period1Data.total_cost.toFixed(2)}`;
+            document.getElementById('period2-cost').textContent = `$${period2Data.total_cost.toFixed(2)}`;
+            document.getElementById('cost-change').textContent = formatChangeWithArrow(costChange);
+            document.getElementById('cost-change').className = getChangeClass(costChange, true);
+            
+            document.getElementById('period1-requests').textContent = period1Data.total_requests;
+            document.getElementById('period2-requests').textContent = period2Data.total_requests;
+            document.getElementById('requests-change').textContent = formatChangeWithArrow(requestsChange);
+            document.getElementById('requests-change').className = getChangeClass(requestsChange, false);
+            
+            document.getElementById('period1-tokens').textContent = period1Data.total_tokens;
+            document.getElementById('period2-tokens').textContent = period2Data.total_tokens;
+            document.getElementById('tokens-change').textContent = formatChangeWithArrow(tokensChange);
+            document.getElementById('tokens-change').className = getChangeClass(tokensChange, false);
+            
+            document.getElementById('period1-avg-cost').textContent = `$${avgCost1.toFixed(4)}`;
+            document.getElementById('period2-avg-cost').textContent = `$${avgCost2.toFixed(4)}`;
+            document.getElementById('avg-cost-change').textContent = formatChangeWithArrow(avgCostChange);
+            document.getElementById('avg-cost-change').className = getChangeClass(avgCostChange, true);
+        }
+        
+        function calculatePercentageChange(current, previous) {
+            if (previous === 0) return current > 0 ? 100 : 0;
+            return ((current - previous) / previous) * 100;
+        }
+        
+        function formatChangeWithArrow(percentChange) {
+            const prefix = percentChange > 0 ? '↑ ' : percentChange < 0 ? '↓ ' : '';
+            return `${prefix}${Math.abs(percentChange).toFixed(1)}%`;
+        }
+        
+        function getChangeClass(percentChange, isCost) {
+            // For cost, decrease is good (green)
+            // For usage, increase might be good (depends on business goals)
+            if (isCost) {
+                return percentChange > 5 ? 'text-danger' : percentChange < -5 ? 'text-success' : 'text-muted';
+            } else {
+                return percentChange > 10 ? 'text-primary' : percentChange < -10 ? 'text-warning' : 'text-muted';
+            }
+        }
+        
+        function createCostComparisonChart(period1Data, period2Data, period1Dates, period2Dates) {
+            const container = document.getElementById('cost-comparison-chart');
+            container.innerHTML = '';
+            
+            // Sample data for demonstration
+            // In a real implementation, we would use daily cost data from the API
+            const period1Trend = generateSampleTrendData(period1Dates.start, period1Dates.end, period1Data.total_cost);
+            const period2Trend = generateSampleTrendData(period2Dates.start, period2Dates.end, period2Data.total_cost);
+            
+            // Normalize dates for comparison (day 1, day 2, etc.)
+            const days = period1Trend.x.map((_, i) => `Day ${i+1}`);
+            
+            const trace1 = {
+                x: days,
+                y: period1Trend.y,
+                type: 'scatter',
+                mode: 'lines+markers',
+                name: document.querySelector('.period-1-name').textContent,
+                line: { color: '#4e73df' }
+            };
+            
+            const trace2 = {
+                x: days.slice(0, period2Trend.y.length),
+                y: period2Trend.y,
+                type: 'scatter',
+                mode: 'lines+markers',
+                name: document.querySelector('.period-2-name').textContent,
+                line: { color: '#1cc88a' }
+            };
+            
+            const layout = {
+                autosize: true,
+                margin: { l: 50, r: 20, t: 30, b: 50 },
+                xaxis: { title: 'Day' },
+                yaxis: { title: 'Cost (USD)' },
+                hovermode: 'closest',
+                legend: { orientation: 'h', y: -0.2 }
+            };
+            
+            Plotly.newPlot(container, [trace1, trace2], layout, {responsive: true});
+        }
+        
+        function createModelComparisonChart(period1Data, period2Data) {
+            const container = document.getElementById('model-comparison-chart');
+            container.innerHTML = '';
+            
+            // In a real implementation, we would use model usage data from the API
+            // This is sample data for demonstration
+            const period1Models = generateSampleModelData(period1Data);
+            const period2Models = generateSampleModelData(period2Data);
+            
+            const trace1 = {
+                x: period1Models.models,
+                y: period1Models.costs,
+                type: 'bar',
+                name: document.querySelector('.period-1-name').textContent,
+                marker: { color: '#4e73df' }
+            };
+            
+            const trace2 = {
+                x: period2Models.models,
+                y: period2Models.costs,
+                type: 'bar',
+                name: document.querySelector('.period-2-name').textContent,
+                marker: { color: '#1cc88a' }
+            };
+            
+            const layout = {
+                autosize: true,
+                barmode: 'group',
+                margin: { l: 50, r: 20, t: 30, b: 100 },
+                xaxis: { title: 'Model' },
+                yaxis: { title: 'Cost (USD)' },
+                legend: { orientation: 'h', y: -0.3 }
+            };
+            
+            Plotly.newPlot(container, [trace1, trace2], layout, {responsive: true});
+        }
+        
+        // Helper function to generate sample trend data
+        function generateSampleTrendData(start, end, totalCost) {
+            const dates = [];
+            const costs = [];
+            const days = Math.round((end - start) / (1000 * 60 * 60 * 24));
+            const avgCost = totalCost / days;
+            
+            for (let i = 0; i < days; i++) {
+                const date = new Date(start);
+                date.setDate(start.getDate() + i);
+                dates.push(formatDate(date));
+                
+                // Generate slightly random daily cost around the average
+                const randomFactor = 0.5 + Math.random();
+                costs.push(avgCost * randomFactor);
+            }
+            
+            return { x: dates, y: costs };
+        }
+        
+        // Helper function to generate sample model data
+        function generateSampleModelData(periodData) {
+            // Sample models
+            const models = ['GPT-4', 'Claude-3', 'Gemini', 'GPT-3.5', 'Llama-2'];
+            const costs = [];
+            
+            // Generate random cost distribution that adds up to total_cost
+            let remainingCost = periodData.total_cost;
+            for (let i = 0; i < models.length - 1; i++) {
+                const modelCost = remainingCost * (0.1 + Math.random() * 0.3);
+                costs.push(parseFloat(modelCost.toFixed(2)));
+                remainingCost -= modelCost;
+            }
+            costs.push(parseFloat(remainingCost.toFixed(2))); // Last model gets the remainder
+            
+            return { models, costs };
+        }
+        
+        // Budget management functions
+        function saveBudgetSettings() {
+            const settings = {
+                daily_budget: parseFloat(document.getElementById('daily-budget').value),
+                weekly_budget: parseFloat(document.getElementById('weekly-budget').value),
+                monthly_budget: parseFloat(document.getElementById('monthly-budget').value),
+                emergency_threshold: parseFloat(document.getElementById('emergency-budget').value)
+            };
+            
+            // Send to server
+            fetch('/api/usage/budget-settings', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(settings)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('Budget settings saved successfully!', 'success');
+                    loadBudgetStatus(); // Reload budget status display
+                } else {
+                    showToast('Error saving budget settings: ' + data.error, 'danger');
+                }
+            })
+            .catch(error => {
+                showToast('Error saving budget settings: ' + error, 'danger');
+            });
+        }
+        
+        function saveAlertSettings() {
+            const settings = {
+                enabled: document.getElementById('enable-alerts').checked,
+                email: {
+                    enabled: document.getElementById('enable-email-alerts').checked,
+                    recipients: document.getElementById('email-recipients').value.split(',')
+                        .map(email => email.trim())
+                        .filter(email => email.length > 0)
+                },
+                slack: {
+                    enabled: document.getElementById('enable-slack-alerts').checked,
+                    webhook_url: document.getElementById('slack-webhook').value
+                },
+                threshold_percentage: parseInt(document.getElementById('budget-alert-threshold').value),
+                cooldown_minutes: parseInt(document.getElementById('alert-cooldown').value)
+            };
+            
+            // Send to server
+            fetch('/api/usage/alert-settings', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(settings)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('Alert settings saved successfully!', 'success');
+                } else {
+                    showToast('Error saving alert settings: ' + data.error, 'danger');
+                }
+            })
+            .catch(error => {
+                showToast('Error saving alert settings: ' + error, 'danger');
+            });
+        }
+        
+        function loadSavedBudgetSettings() {
+            fetch('/api/usage/budget-settings')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.settings) {
+                        document.getElementById('daily-budget').value = data.settings.daily_budget;
+                        document.getElementById('weekly-budget').value = data.settings.weekly_budget;
+                        document.getElementById('monthly-budget').value = data.settings.monthly_budget;
+                        document.getElementById('emergency-budget').value = data.settings.emergency_threshold;
+                        
+                        // Update display values
+                        document.getElementById('daily-limit').textContent = `$${data.settings.daily_budget.toFixed(2)}`;
+                        document.getElementById('weekly-limit').textContent = `$${data.settings.weekly_budget.toFixed(2)}`;
+                        document.getElementById('monthly-limit').textContent = `$${data.settings.monthly_budget.toFixed(2)}`;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading budget settings:', error);
+                });
+        }
+        
+        function loadSavedAlertSettings() {
+            fetch('/api/usage/alert-settings')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.settings) {
+                        document.getElementById('enable-alerts').checked = data.settings.enabled;
+                        
+                        document.getElementById('enable-email-alerts').checked = data.settings.email.enabled;
+                        document.getElementById('email-settings').classList.toggle('d-none', !data.settings.email.enabled);
+                        document.getElementById('email-recipients').value = data.settings.email.recipients.join(', ');
+                        
+                        document.getElementById('enable-slack-alerts').checked = data.settings.slack.enabled;
+                        document.getElementById('slack-settings').classList.toggle('d-none', !data.settings.slack.enabled);
+                        document.getElementById('slack-webhook').value = data.settings.slack.webhook_url;
+                        
+                        document.getElementById('budget-alert-threshold').value = data.settings.threshold_percentage;
+                        document.getElementById('alert-cooldown').value = data.settings.cooldown_minutes;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading alert settings:', error);
+                });
+        }
+        
+        function loadBudgetStatus() {
+            fetch('/api/usage/budget-status')
+                .then(response => response.json())
+                .then(data => {
+                    // Update progress bars and values
+                    updateBudgetDisplay('daily', data.daily);
+                    updateBudgetDisplay('weekly', data.weekly);
+                    updateBudgetDisplay('monthly', data.monthly);
+                    
+                    // Show/hide emergency mode alert
+                    document.getElementById('emergency-mode-alert').classList.toggle('d-none', !data.emergency_mode);
+                })
+                .catch(error => {
+                    console.error('Error loading budget status:', error);
+                });
+        }
+        
+        function updateBudgetDisplay(period, data) {
+            const progressBar = document.getElementById(`${period}-budget-progress`);
+            const spentEl = document.getElementById(`${period}-spent`);
+            
+            const percentage = Math.min(100, (data.spent / data.limit) * 100);
+            progressBar.style.width = `${percentage}%`;
+            progressBar.setAttribute('aria-valuenow', percentage);
+            
+            // Set color based on percentage
+            if (percentage >= 90) {
+                progressBar.className = 'progress-bar bg-danger';
+            } else if (percentage >= 75) {
+                progressBar.className = 'progress-bar bg-warning';
+            } else {
+                progressBar.className = 'progress-bar bg-success';
+            }
+            
+            spentEl.textContent = `$${data.spent.toFixed(2)}`;
+        }
+        
+        function showToast(message, type = 'info') {
+            // Create toast container if it doesn't exist
+            let toastContainer = document.querySelector('.toast-container');
+            if (!toastContainer) {
+                toastContainer = document.createElement('div');
+                toastContainer.className = 'toast-container position-fixed bottom-0 end-0 p-3';
+                document.body.appendChild(toastContainer);
+            }
+            
+            // Create toast
+            const toastEl = document.createElement('div');
+            toastEl.className = `toast align-items-center text-white bg-${type} border-0`;
+            toastEl.setAttribute('role', 'alert');
+            toastEl.setAttribute('aria-live', 'assertive');
+            toastEl.setAttribute('aria-atomic', 'true');
+            
+            const toastBody = document.createElement('div');
+            toastBody.className = 'd-flex';
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'toast-body';
+            messageDiv.textContent = message;
+            
+            const closeButton = document.createElement('button');
+            closeButton.type = 'button';
+            closeButton.className = 'btn-close btn-close-white me-2 m-auto';
+            closeButton.setAttribute('data-bs-dismiss', 'toast');
+            closeButton.setAttribute('aria-label', 'Close');
+            
+            toastBody.appendChild(messageDiv);
+            toastBody.appendChild(closeButton);
+            toastEl.appendChild(toastBody);
+            toastContainer.appendChild(toastEl);
+            
+            // Initialize and show toast
+            const toast = new bootstrap.Toast(toastEl, { delay: 5000 });
+            toast.show();
+            
+            // Remove after hidden
+            toastEl.addEventListener('hidden.bs.toast', function () {
+                toastEl.remove();
+            });
+        }
+        
+    </script>
+</body>
+</html>

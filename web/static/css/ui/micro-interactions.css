@@ -1,0 +1,241 @@
+/**
+ * Minerva Micro-interactions
+ * Adds subtle animations and effects to improve the feel of interactive UI elements
+ */
+
+/* Button Hover and Click Effects */
+.button, 
+button:not(.no-animation),
+.interactive-element {
+    position: relative;
+    transition: all 0.2s ease-out, background-color 0.2s ease, color 0.2s ease;
+    overflow: hidden;
+}
+
+/* Hover lift effect */
+.button:hover, 
+button:not(.no-animation):hover,
+.interactive-element:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(var(--shadow-color-rgb), 0.3);
+}
+
+/* Active press effect */
+.button:active, 
+button:not(.no-animation):active,
+.interactive-element:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 3px rgba(var(--shadow-color-rgb), 0.2);
+}
+
+/* Focus styles for accessibility */
+.button:focus, 
+button:not(.no-animation):focus,
+.interactive-element:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(var(--primary-accent-rgb), 0.4);
+}
+
+/* Ripple effect for buttons */
+.button::after,
+button:not(.no-animation)::after,
+.interactive-element::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%, -50%);
+    transform-origin: 50% 50%;
+}
+
+.button:active::after,
+button:not(.no-animation):active::after,
+.interactive-element:active::after {
+    animation: ripple 0.5s ease-out;
+}
+
+@keyframes ripple {
+    0% {
+        opacity: 0.5;
+        transform: scale(0, 0) translate(-50%, -50%);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(20, 20) translate(-50%, -50%);
+    }
+}
+
+/* Tab/Selection effects */
+.tab-button, .nav-item {
+    position: relative;
+    transition: all 0.25s ease;
+}
+
+.tab-button::after, .nav-item::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: var(--primary-accent);
+    transition: width 0.25s ease;
+}
+
+.tab-button:hover::after, .nav-item:hover::after {
+    width: 100%;
+}
+
+.tab-button.active::after, .nav-item.active::after {
+    width: 100%;
+}
+
+/* Project card effects */
+.project-card {
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 2px 5px rgba(var(--shadow-color-rgb), 0.1);
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(var(--shadow-color-rgb), 0.15);
+}
+
+.project-card:active {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(var(--shadow-color-rgb), 0.1);
+}
+
+/* Selected/active project highlight */
+.project-card.active, .branch-node.active {
+    position: relative;
+    overflow: hidden;
+}
+
+.project-card.active::before, .branch-node.active::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--primary-accent);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 0.6;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.6;
+    }
+}
+
+/* Input field animations */
+input:not([type="checkbox"]):not([type="radio"]), 
+textarea, 
+select {
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+input:not([type="checkbox"]):not([type="radio"]):focus, 
+textarea:focus, 
+select:focus {
+    border-color: var(--primary-accent);
+    box-shadow: 0 0 0 3px rgba(var(--primary-accent-rgb), 0.2);
+}
+
+/* Card/Panel transitions */
+.card, .panel {
+    transition: all 0.3s ease;
+}
+
+.card:hover, .panel:hover {
+    box-shadow: 0 8px 16px rgba(var(--shadow-color-rgb), 0.15);
+}
+
+/* Toggle switches */
+.toggle-switch {
+    transition: background-color 0.3s ease;
+}
+
+.toggle-switch::before {
+    transition: transform 0.3s ease;
+}
+
+.toggle-switch:checked::before {
+    transform: translateX(1.5em);
+}
+
+/* Toast notifications */
+.toast {
+    animation: slideInRight 0.3s ease, fadeOut 0.5s ease 3s forwards;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Collapsible elements */
+.collapsible-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.collapsible.open .collapsible-content {
+    max-height: 1000px; /* Arbitrary large value */
+}
+
+.collapsible-toggle {
+    transition: transform 0.3s ease;
+}
+
+.collapsible.open .collapsible-toggle {
+    transform: rotate(180deg);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--background-secondary);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--scroll-thumb);
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--scroll-thumb-hover);
+}
+
+/* Reduce animations for users who prefer reduced motion */
+@media (prefers-reduced-motion) {
+    *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        transition-duration: 0.001ms !important;
+    }
+}

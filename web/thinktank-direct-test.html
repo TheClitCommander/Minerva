@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Think Tank Direct Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #1a1a2e;
+            color: #e6e6e6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgba(30, 30, 60, 0.7);
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            color: #4a6bdf;
+            text-align: center;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background-color: rgba(50, 50, 80, 0.5);
+        }
+        .connected {
+            background-color: rgba(50, 150, 50, 0.3);
+        }
+        .error {
+            background-color: rgba(150, 50, 50, 0.3);
+        }
+        .warning {
+            background-color: rgba(150, 150, 50, 0.3);
+        }
+        .chat-history {
+            height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background-color: rgba(40, 40, 70, 0.5);
+        }
+        .input-area {
+            display: flex;
+            margin-top: 10px;
+        }
+        #message-input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px 0 0 5px;
+            background-color: rgba(60, 60, 90, 0.5);
+            color: white;
+        }
+        #send-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 0 5px 5px 0;
+            background-color: #4a6bdf;
+            color: white;
+            cursor: pointer;
+        }
+        #send-button:hover {
+            background-color: #3a5bcf;
+        }
+        .message {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+        .user-message {
+            background-color: rgba(74, 107, 223, 0.3);
+            align-self: flex-end;
+            margin-left: 20%;
+        }
+        .bot-message {
+            background-color: rgba(50, 50, 80, 0.5);
+            align-self: flex-start;
+            margin-right: 20%;
+        }
+        .system-message {
+            background-color: rgba(100, 100, 100, 0.3);
+            font-style: italic;
+            text-align: center;
+        }
+        .model-info {
+            font-size: 0.8em;
+            margin-top: 5px;
+            color: #aaa;
+        }
+        .endpoints {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .endpoint {
+            padding: 10px;
+            border-radius: 5px;
+            background-color: rgba(50, 50, 80, 0.5);
+            cursor: pointer;
+        }
+        .endpoint.active {
+            background-color: rgba(74, 107, 223, 0.5);
+        }
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 30px;
+        }
+        .dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #aaa;
+            margin: 0 3px;
+            animation: bounce 1.5s infinite;
+        }
+        .dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        @keyframes bounce {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-5px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Think Tank Direct Test</h1>
+        
+        <div id="status" class="status">Initializing connection...</div>
+        
+        <div class="endpoints">
+            <div class="endpoint active" data-url="http://localhost:7070/api/think-tank">localhost:7070</div>
+            <div class="endpoint" data-url="http://localhost:8080/api/think-tank">localhost:8080</div>
+            <div class="endpoint" data-url="/api/think-tank-mock">Local Mock API</div>
+        </div>
+        
+        <div id="chat-history" class="chat-history"></div>
+        
+        <div class="input-area">
+            <input type="text" id="message-input" placeholder="Type your message here...">
+            <button id="send-button">Send</button>
+        </div>
+    </div>
+    
+    <script>
+        // DOM Elements
+        const statusEl = document.getElementById('status');
+        const chatHistory = document.getElementById('chat-history');
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+        const endpoints = document.querySelectorAll('.endpoint');
+        
+        // State variables
+        let conversationId = localStorage.getItem('tt_conversation_id') || 'conv-' + Date.now();
+        let apiUrl = localStorage.getItem('tt_api_url') || 'http://localhost:7070/api/think-tank';
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set active endpoint
+            setActiveEndpoint(apiUrl);
+            
+            // Test connection
+            testConnection(apiUrl)
+                .then(success => {
+                    if (success) {
+                        updateStatus('Connected to Think Tank API', 'connected');
+                        addSystemMessage('Connected to Think Tank API. Ready to chat!');
+                    } else {
+                        updateStatus('Failed to connect to Think Tank API', 'error');
+                        addSystemMessage('Could not connect to Think Tank API. You can still try sending messages.');
+                    }
+                });
+            
+            // Add event listeners
+            messageInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+            
+            sendButton.addEventListener('click', sendMessage);
+            
+            // Endpoint selection
+            endpoints.forEach(endpoint => {
+                endpoint.addEventListener('click', function() {
+                    const url = this.getAttribute('data-url');
+                    apiUrl = url;
+                    localStorage.setItem('tt_api_url', url);
+                    
+                    // Update UI
+                    setActiveEndpoint(url);
+                    
+                    // Test new connection
+                    testConnection(url)
+                        .then(success => {
+                            if (success) {
+                                updateStatus(`Connected to ${url}`, 'connected');
+                                addSystemMessage(`Switched to ${url}`);
+                            } else {
+                                updateStatus(`Warning: Could not connect to ${url}`, 'warning');
+                                addSystemMessage(`Switched to ${url} but couldn't establish connection.`);
+                            }
+                        });
+                });
+            });
+            
+            // Add welcome message
+            addSystemMessage('Welcome to the Think Tank direct test interface. This page tests direct connections to the Think Tank API.');
+        });
+        
+        // Functions
+        function setActiveEndpoint(url) {
+            endpoints.forEach(endpoint => {
+                endpoint.classList.remove('active');
+                if (endpoint.getAttribute('data-url') === url) {
+                    endpoint.classList.add('active');
+                }
+            });
+        }
+        
+        async function testConnection(url) {
+            try {
+                const response = await fetch(url.includes('mock') ? '/api/think-tank-mock' : `${url.split('/api')[0]}/api/health`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                return response.ok;
+            } catch (error) {
+                console.error('Connection test failed:', error);
+                return false;
+            }
+        }
+        
+        function updateStatus(message, type = '') {
+            statusEl.textContent = message;
+            statusEl.className = 'status';
+            
+            if (type) {
+                statusEl.classList.add(type);
+            }
+        }
+        
+        function addSystemMessage(message) {
+            const msgEl = document.createElement('div');
+            msgEl.className = 'message system-message';
+            msgEl.textContent = message;
+            
+            chatHistory.appendChild(msgEl);
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+        
+        function addUserMessage(message) {
+            const msgEl = document.createElement('div');
+            msgEl.className = 'message user-message';
+            msgEl.textContent = message;
+            
+            chatHistory.appendChild(msgEl);
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+        
+        function addBotMessage(message, modelInfo) {
+            const msgEl = document.createElement('div');
+            msgEl.className = 'message bot-message';
+            
+            const textEl = document.createElement('div');
+            textEl.textContent = message;
+            msgEl.appendChild(textEl);
+            
+            // Add model info if available
+            if (modelInfo && modelInfo.models) {
+                const infoEl = document.createElement('div');
+                infoEl.className = 'model-info';
+                
+                let infoText = 'Models: ';
+                modelInfo.models.forEach((model, index) => {
+                    infoText += `${model.name} (${model.contribution}%)`;
+                    if (index < modelInfo.models.length - 1) {
+                        infoText += ', ';
+                    }
+                });
+                
+                infoEl.textContent = infoText;
+                msgEl.appendChild(infoEl);
+            }
+            
+            chatHistory.appendChild(msgEl);
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+        
+        function showTypingIndicator() {
+            const indicatorEl = document.createElement('div');
+            indicatorEl.className = 'message bot-message typing-indicator';
+            indicatorEl.innerHTML = `
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            `;
+            indicatorEl.id = 'typing-indicator';
+            
+            chatHistory.appendChild(indicatorEl);
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+        
+        function hideTypingIndicator() {
+            const indicator = document.getElementById('typing-indicator');
+            if (indicator) {
+                indicator.remove();
+            }
+        }
+        
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            if (!message) return;
+            
+            // Clear input
+            messageInput.value = '';
+            
+            // Add user message
+            addUserMessage(message);
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            // Prepare payload
+            const payload = {
+                message: message,
+                conversation_id: conversationId,
+                store_in_memory: true
+            };
+            
+            // Send to API
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                mode: 'cors',
+                body: JSON.stringify(payload)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Hide typing indicator
+                hideTypingIndicator();
+                
+                // Add bot response
+                addBotMessage(data.response, data.model_info);
+                
+                // Store conversation ID
+                if (data.conversation_id) {
+                    conversationId = data.conversation_id;
+                    localStorage.setItem('tt_conversation_id', conversationId);
+                }
+                
+                updateStatus('Connected to Think Tank API', 'connected');
+            })
+            .catch(error => {
+                console.error('API Error:', error);
+                hideTypingIndicator();
+                
+                updateStatus(`Error: ${error.message}`, 'error');
+                
+                // Create fallback response
+                addBotMessage('Sorry, I encountered an error while processing your message. Please try again or switch to a different API endpoint.', null);
+                
+                // Try fallback to mock API if using primary endpoints
+                if (!apiUrl.includes('mock')) {
+                    addSystemMessage('Attempting to use mock API as fallback...');
+                    
+                    // Send to mock API
+                    fetch('/api/think-tank-mock', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    })
+                    .then(response => response.json())
+                    .then(mockData => {
+                        addBotMessage(`[MOCK API] ${mockData.response}`, mockData.model_info);
+                        updateStatus('Connected to Mock API (fallback)', 'warning');
+                    })
+                    .catch(mockError => {
+                        console.error('Mock API Error:', mockError);
+                        addSystemMessage('Failed to connect to mock API as well.');
+                    });
+                }
+            });
+        }
+    </script>
+</body>
+</html>

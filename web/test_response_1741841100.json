@@ -1,0 +1,37 @@
+{
+  "response": "I'm sorry, but I couldn't process your request properly.",
+  "model_info": {
+    "selected_model": "bard",
+    "is_api_model": true,
+    "score": 0.5700000000000001,
+    "query_type": "factual",
+    "processing_time": 9.059906005859375e-06,
+    "used_blending": true,
+    "model_rankings": [
+      {
+        "model": "bard",
+        "score": 0.5700000000000001,
+        "is_api_model": true
+      },
+      {
+        "model": "gpt-3.5-turbo",
+        "score": 0.52,
+        "is_api_model": true
+      },
+      {
+        "model": "palm2",
+        "score": 0.52,
+        "is_api_model": true
+      },
+      {
+        "model": "claude-instant",
+        "score": 0.51,
+        "is_api_model": true
+      }
+    ],
+    "conversation_id": "minerva-fc208e64-7bcb-4d97-ac7a-9e12f05b476a"
+  },
+  "web_research": null,
+  "conversation_id": "minerva-fc208e64-7bcb-4d97-ac7a-9e12f05b476a",
+  "status": "success"
+}

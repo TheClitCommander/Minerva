@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minerva Think Tank UI - Simple</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: radial-gradient(circle at center, #131c2e 0%, #0a0e17 100%);
+            color: #e0e0e0;
+        }
+        
+        #app {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .think-tank-panel {
+            width: 500px;
+            backdrop-filter: blur(8px);
+            background: rgba(10, 10, 30, 0.75);
+            box-shadow: 0 0 20px rgba(111, 66, 193, 0.6);
+            border: 1px solid rgba(111, 66, 193, 0.4);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .think-tank-header {
+            background: linear-gradient(90deg, rgba(111, 66, 193, 0.8) 0%, rgba(74, 107, 223, 0.8) 100%);
+            padding: 12px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(111, 66, 193, 0.6);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .think-tank-title {
+            font-weight: bold;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            color: white;
+            text-shadow: 0 0 10px rgba(111, 66, 193, 0.8);
+        }
+        
+        .think-tank-content {
+            padding: 15px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        
+        .section-title {
+            margin: 0 0 10px 0;
+            font-size: 14px;
+            color: #a892e0;
+            font-weight: bold;
+        }
+        
+        .model-card {
+            margin-bottom: 12px;
+            padding: 10px;
+            background: rgba(20, 20, 40, 0.4);
+            border-radius: 8px;
+            border: 1px solid rgba(111, 66, 193, 0.4);
+        }
+        
+        .model-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+        
+        .model-name {
+            font-weight: bold;
+            color: #a892e0;
+            font-size: 13px;
+        }
+        
+        .model-score {
+            color: #a892e0;
+            background: rgba(111, 66, 193, 0.2);
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .metrics-container {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .metric {
+            font-size: 10px;
+            background: rgba(40, 40, 60, 0.5);
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+        
+        .capabilities-container {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .capability {
+            font-size: 9px;
+            background: rgba(74, 107, 223, 0.2);
+            border: 1px solid rgba(74, 107, 223, 0.4);
+            padding: 1px 4px;
+            border-radius: 4px;
+            color: #a0b0f0;
+        }
+        
+        .reasoning {
+            font-size: 11px;
+            color: #8899aa;
+            line-height: 1.4;
+            padding: 5px;
+            background: rgba(30, 30, 50, 0.3);
+            border-radius: 4px;
+        }
+        
+        .blend-container {
+            background: rgba(20, 20, 40, 0.4);
+            border-radius: 8px;
+            padding: 10px;
+            border: 1px solid rgba(74, 107, 223, 0.4);
+        }
+        
+        .blend-item {
+            margin-bottom: 8px;
+        }
+        
+        .blend-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            margin-bottom: 3px;
+        }
+        
+        .blend-name, .blend-percentage {
+            color: #a0b0e0;
+        }
+        
+        .blend-bar-bg {
+            background: rgba(40, 40, 60, 0.5);
+            border-radius: 4px;
+            height: 6px;
+            overflow: hidden;
+        }
+        
+        .blend-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="think-tank-panel">
+            <div class="think-tank-header">
+                <div class="think-tank-title">
+                    <i class="fas fa-brain" style="margin-right: 10px; font-size: 16px;"></i>
+                    Think Tank Insights
+                </div>
+            </div>
+            
+            <div class="think-tank-content">
+                <div style="margin-bottom: 20px;">
+                    <h3 class="section-title">Model Evaluation</h3>
+                    
+                    <!-- Claude 3 Opus -->
+                    <div class="model-card">
+                        <div class="model-header">
+                            <div class="model-name">Claude 3 Opus</div>
+                            <div class="model-score">9.4</div>
+                        </div>
+                        
+                        <div class="metrics-container">
+                            <div class="metric" style="color: #72e872;">Quality: 94</div>
+                            <div class="metric" style="color: #72e872;">Relevance: 93</div>
+                            <div class="metric" style="color: #72e872;">Technical: 91</div>
+                            <div class="metric" style="color: #72e872;">Coherence: 95</div>
+                            <div class="metric" style="color: #72e872;">Helpfulness: 92</div>
+                        </div>
+                        
+                        <div class="capabilities-container">
+                            <div class="capability">Research</div>
+                            <div class="capability">Analysis</div>
+                            <div class="capability">Reasoning</div>
+                        </div>
+                        
+                        <div class="reasoning">
+                            Best overall quality with excellent structure and coherence. Strong technical accuracy with minimal AI self-references.
+                        </div>
+                    </div>
+                    
+                    <!-- GPT-4 Turbo -->
+                    <div class="model-card">
+                        <div class="model-header">
+                            <div class="model-name">GPT-4 Turbo</div>
+                            <div class="model-score">9.2</div>
+                        </div>
+                        
+                        <div class="metrics-container">
+                            <div class="metric" style="color: #72e872;">Quality: 92</div>
+                            <div class="metric" style="color: #72e872;">Relevance: 95</div>
+                            <div class="metric" style="color: #72e872;">Technical: 89</div>
+                            <div class="metric" style="color: #a0e0a0;">Coherence: 87</div>
+                            <div class="metric" style="color: #72e872;">Helpfulness: 94</div>
+                        </div>
+                        
+                        <div class="capabilities-container">
+                            <div class="capability">Code</div>
+                            <div class="capability">Creative</div>
+                            <div class="capability">Problem-Solving</div>
+                        </div>
+                        
+                        <div class="reasoning">
+                            Highest relevance and excellent code examples. Used for technical sections of the blended response.
+                        </div>
+                    </div>
+                    
+                    <!-- Gemini Pro -->
+                    <div class="model-card">
+                        <div class="model-header">
+                            <div class="model-name">Gemini Pro</div>
+                            <div class="model-score">8.7</div>
+                        </div>
+                        
+                        <div class="metrics-container">
+                            <div class="metric" style="color: #a0e0a0;">Quality: 87</div>
+                            <div class="metric" style="color: #a0e0a0;">Relevance: 89</div>
+                            <div class="metric" style="color: #a0e0a0;">Technical: 85</div>
+                            <div class="metric" style="color: #a0e0a0;">Coherence: 84</div>
+                            <div class="metric" style="color: #a0e0a0;">Helpfulness: 86</div>
+                        </div>
+                        
+                        <div class="capabilities-container">
+                            <div class="capability">Fast</div>
+                            <div class="capability">Concise</div>
+                            <div class="capability">Web Knowledge</div>
+                        </div>
+                        
+                        <div class="reasoning">
+                            Contributed supplementary information and alternative perspectives to the blended response.
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Response Blending Visualization -->
+                <div>
+                    <h3 class="section-title">Response Blending</h3>
+                    
+                    <div class="blend-container">
+                        <!-- Claude 3 Opus -->
+                        <div class="blend-item">
+                            <div class="blend-header">
+                                <span class="blend-name">Claude 3 Opus</span>
+                                <span class="blend-percentage">34%</span>
+                            </div>
+                            <div class="blend-bar-bg">
+                                <div class="blend-bar-fill" style="width: 34%; background: rgba(156, 93, 219, 0.8);"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- GPT-4 Turbo -->
+                        <div class="blend-item">
+                            <div class="blend-header">
+                                <span class="blend-name">GPT-4 Turbo</span>
+                                <span class="blend-percentage">33%</span>
+                            </div>
+                            <div class="blend-bar-bg">
+                                <div class="blend-bar-fill" style="width: 33%; background: rgba(25, 195, 125, 0.8);"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Gemini Pro -->
+                        <div class="blend-item">
+                            <div class="blend-header">
+                                <span class="blend-name">Gemini Pro</span>
+                                <span class="blend-percentage">33%</span>
+                            </div>
+                            <div class="blend-bar-bg">
+                                <div class="blend-bar-fill" style="width: 33%; background: rgba(66, 133, 244, 0.8);"></div>
+                            </div>
+                        </div>
+                        
+                        <div style="font-size: 11px; color: #8899aa; margin-top: 10px; padding: 5px; background: rgba(30, 30, 50, 0.3); border-radius: 4px; line-height: 1.4;">
+                            Blended response combines Claude's coherence, GPT-4's code sections, and Gemini's supplementary information.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Load Font Awesome -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,298 @@
+/**
+ * Minerva Loading States & Skeleton Loaders
+ * Provides visual feedback during loading operations
+ */
+
+/* Skeleton loading animation */
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* Base skeleton loader styles */
+.skeleton-loader {
+    display: inline-block;
+    height: 1em;
+    position: relative;
+    overflow: hidden;
+    background-color: var(--skeleton-base);
+    border-radius: 4px;
+}
+
+.skeleton-loader::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transform: translateX(-100%);
+    background-image: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0,
+        rgba(255, 255, 255, 0.2) 20%,
+        rgba(255, 255, 255, 0.5) 60%,
+        rgba(255, 255, 255, 0)
+    );
+    animation: shimmer 2s infinite;
+    content: '';
+    background-size: 200% 100%;
+}
+
+/* Different skeleton loader types */
+.skeleton-loader.message {
+    height: 80px;
+    width: 80%;
+    margin: 10px 0;
+}
+
+.skeleton-loader.message.user-message {
+    margin-left: auto;
+    margin-right: 10px;
+    width: 60%;
+}
+
+.skeleton-loader.message.bot-message {
+    margin-right: auto;
+    margin-left: 10px;
+    width: 70%;
+}
+
+.skeleton-loader.line {
+    height: 1em;
+    width: 100%;
+    margin: 5px 0;
+}
+
+.skeleton-loader.line.short {
+    width: 60%;
+}
+
+.skeleton-loader.line.medium {
+    width: 80%;
+}
+
+.skeleton-loader.avatar {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+}
+
+.skeleton-loader.button {
+    height: 2.5em;
+    width: 100px;
+    border-radius: 4px;
+}
+
+/* Message skeleton with multiple lines */
+.message-skeleton {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 10px;
+    background-color: var(--background-secondary);
+    max-width: 80%;
+}
+
+.message-skeleton.user-message {
+    margin-left: auto;
+    align-items: flex-end;
+}
+
+.message-skeleton.bot-message {
+    margin-right: auto;
+    align-items: flex-start;
+}
+
+.message-skeleton .line {
+    margin: 5px 0;
+}
+
+/* Conversation history skeleton */
+.conversation-skeleton {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 15px;
+}
+
+/* Custom Think Tank processing spinner */
+.processing-spinner {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border: 3px solid rgba(var(--primary-accent-rgb), 0.3);
+    border-radius: 50%;
+    border-top-color: var(--primary-accent);
+    animation: spinner 1s ease-in-out infinite;
+}
+
+@keyframes spinner {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Thinking animation (dots) */
+.thinking-animation {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 2em;
+}
+
+.thinking-animation .dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin: 0 3px;
+    border-radius: 50%;
+    background-color: var(--text-color);
+    opacity: 0.6;
+    animation: thinking 1.4s infinite ease-in-out both;
+}
+
+.thinking-animation .dot:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.thinking-animation .dot:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+@keyframes thinking {
+    0%, 80%, 100% { 
+        transform: scale(0);
+    } 
+    40% { 
+        transform: scale(1);
+    }
+}
+
+/* Progress bar animation */
+.progress-bar {
+    width: 100%;
+    height: 4px;
+    background-color: var(--background-secondary);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 30%;
+    background-color: var(--primary-accent);
+    animation: progressAnimation 2s infinite ease-in-out;
+}
+
+@keyframes progressAnimation {
+    0% {
+        left: -30%;
+    }
+    100% {
+        left: 100%;
+    }
+}
+
+/* AI Response loading effect */
+.ai-response-loading {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    background-color: var(--background-secondary);
+    border-radius: 10px;
+    margin: 10px 0 10px 10px;
+    width: fit-content;
+    max-width: 60%;
+}
+
+.ai-response-loading .avatar {
+    margin-right: 12px;
+}
+
+.ai-response-loading .content {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Project card skeleton loader */
+.project-card-skeleton {
+    width: 100%;
+    height: 120px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+/* Dark theme adjustments */
+.dark-theme .skeleton-loader::after {
+    background-image: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0,
+        rgba(255, 255, 255, 0.05) 20%,
+        rgba(255, 255, 255, 0.2) 60%,
+        rgba(255, 255, 255, 0)
+    );
+}
+
+/* Loading overlay for whole sections */
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(var(--background-primary-rgb), 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    backdrop-filter: blur(2px);
+}
+
+.loading-overlay .loading-content {
+    text-align: center;
+}
+
+.loading-overlay .loading-content .title {
+    margin-top: 15px;
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.loading-overlay .loading-content .subtitle {
+    margin-top: 5px;
+    font-size: 0.9em;
+    color: var(--text-color-secondary);
+}
+
+/* Preference for reduced motion */
+@media (prefers-reduced-motion) {
+    .skeleton-loader::after {
+        animation: none;
+    }
+    
+    .processing-spinner {
+        animation: none;
+        border: 3px solid var(--primary-accent);
+        opacity: 0.5;
+    }
+    
+    .thinking-animation .dot {
+        animation: none;
+    }
+    
+    .progress-bar::after {
+        animation: none;
+        width: 100%;
+        opacity: 0.5;
+    }
+}

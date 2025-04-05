@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minerva AI - API Analytics</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Main Styles */
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            background-color: #f8f9fa; 
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Improved Container */
+        .container { 
+            width: 100%; 
+            padding: 20px 15px;
+            margin: 0;
+        }
+        
+        /* Canvas Styling */
+        canvas { 
+            max-width: 100%; 
+            margin-bottom: 25px; 
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            background: white;
+        }
+        
+        /* Stats Cards Layout */
+        .stats-cards { 
+            display: flex; 
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px; 
+        }
+        
+        /* Individual Stats Cards */
+        .stats-card { 
+            flex: 1; 
+            min-width: 200px;
+            padding: 20px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+            text-align: center; 
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+        }
+        
+        /* Card Colors */
+        .card-blue { background: linear-gradient(135deg, #0d6efd, #0a58ca); color: white; }
+        .card-red { background: linear-gradient(135deg, #dc3545, #b02a37); color: white; }
+        .card-green { background: linear-gradient(135deg, #198754, #157347); color: white; }
+        .card-purple { background: linear-gradient(135deg, #6f42c1, #5a32a3); color: white; }
+        .card-orange { background: linear-gradient(135deg, #fd7e14, #ca6510); color: white; }
+        .card-teal { background: linear-gradient(135deg, #20c997, #17a379); color: white; }
+        
+        /* Stats Values */
+        .stats-value { 
+            font-size: 28px; 
+            font-weight: 700; 
+            margin: 12px 0; 
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        /* Chart Containers */
+        .chart-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .chart-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #343a40;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 10px;
+        }
+        
+        /* Think Tank Section */
+        .think-tank-section {
+            background: linear-gradient(to right, rgba(33, 37, 41, 0.03), rgba(33, 37, 41, 0.01));
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .think-tank-section h3 {
+            color: #343a40;
+            border-left: 4px solid #0d6efd;
+            padding-left: 15px;
+            margin-bottom: 20px;
+        }
+        
+        /* Sidebar improvements */
+        .nav-link {
+            border-radius: 8px;
+            margin-bottom: 5px;
+            transition: all 0.2s;
+        }
+        
+        .nav-link:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        .nav-link.active {
+            background-color: #0d6efd !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- New sidebar navigation layout -->
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 280px; height: 100vh;">
+            <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                <i class="fas fa-brain me-2 fs-4"></i>
+                <span class="fs-4">Minerva</span>
+            </a>
+            <hr>
+            <ul class="nav nav-pills flex-column mb-auto">
+                <li class="nav-item">
+                    <a href="/" class="nav-link text-white" aria-current="page">
+                        <i class="fas fa-comments me-2"></i>
+                        Chat
+                    </a>
+                </li>
+                <li>
+                    <a href="/analytics-dashboard" class="nav-link active text-white">
+                        <i class="fas fa-chart-line me-2"></i>
+                        Analytics
+                    </a>
+                </li>
+                <li>
+                    <a href="/memories" class="nav-link text-white">
+                        <i class="fas fa-brain me-2"></i>
+                        Memories
+                    </a>
+                </li>
+                <li>
+                    <a href="/knowledge" class="nav-link text-white">
+                        <i class="fas fa-book me-2"></i>
+                        Knowledge
+                    </a>
+                </li>
+                <li>
+                    <a href="/model-insights" class="nav-link text-white">
+                        <i class="fas fa-lightbulb me-2"></i>
+                        Model Insights
+                    </a>
+                </li>
+                <li>
+                    <a href="/think-tank-insights" class="nav-link text-white">
+                        <i class="fas fa-code-branch me-2"></i>
+                        Think Tank
+                    </a>
+                </li>
+            </ul>
+            <hr>
+            <div class="dropdown">
+                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-cog me-2"></i>
+                    <strong>Settings</strong>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+                    <li><a class="dropdown-item" href="/plugins"><i class="fas fa-puzzle-piece me-2"></i>Plugins</a></li>
+                    <li><a class="dropdown-item" href="/settings"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                </ul>
+            </div>
+            <div class="mt-2 small">
+                <i class="fas fa-sync-alt me-1"></i>Auto-refreshing every 5s
+            </div>
+        </div>
+        
+        <!-- Main content -->
+        <div class="flex-grow-1 p-3 overflow-auto" style="height: 100vh;">
+
+    <div class="container">
+        <h2 class="text-center mb-4">Minerva Think Tank Analytics Dashboard</h2>
+        
+        <!-- Date Range Filter -->
+        <div class="card mb-4">
+            <div class="card-header bg-dark text-white">
+                <i class="fas fa-filter me-1"></i>Date Range Filter
+            </div>
+            <div class="card-body d-flex align-items-center">
+                <div class="me-2">From:</div>
+                <input type="date" id="start-date" class="form-control me-3">
+                <div class="me-2">To:</div>
+                <input type="date" id="end-date" class="form-control me-3">
+                <button class="btn btn-primary" onclick="filterByDate()">
+                    <i class="fas fa-search me-1"></i>Filter
+                </button>
+            </div>
+        </div>
+        
+        <!-- Key Metrics Cards -->
+        <div class="stats-cards">
+            <div class="stats-card card-blue">
+                <div><i class="fas fa-server fa-2x"></i></div>
+                <div class="stats-value" id="total-requests">0</div>
+                <div>Total Requests</div>
+            </div>
+            <div class="stats-card card-red">
+                <div><i class="fas fa-exclamation-triangle fa-2x"></i></div>
+                <div class="stats-value" id="failures">0</div>
+                <div>Failures</div>
+            </div>
+            <div class="stats-card card-green">
+                <div><i class="fas fa-clock fa-2x"></i></div>
+                <div class="stats-value" id="latency">0 ms</div>
+                <div>Avg Latency</div>
+            </div>
+            <div class="stats-card" style="background-color: #9966ff; color: white;">
+                <div><i class="fas fa-brain fa-2x"></i></div>
+                <div class="stats-value" id="avg-complexity">0.0</div>
+                <div>Avg Complexity</div>
+            </div>
+            <div class="stats-card" style="background-color: #ff9900; color: white;">
+                <div><i class="fas fa-thumbs-up fa-2x"></i></div>
+                <div class="stats-value" id="feedback-score">0%</div>
+                <div>Positive Feedback</div>
+            </div>
+        </div>
+        
+        <!-- Think Tank Performance Metrics -->
+        <div class="card mb-4 shadow border-0">
+            <div class="card-header bg-gradient" style="background: linear-gradient(135deg, #343a40, #212529); color: white;">
+                <i class="fas fa-brain me-2"></i>Think Tank Intelligence Performance
+            </div>
+            <div class="card-body p-4">
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <p class="text-muted">These metrics showcase the performance of your advanced model routing, ranking, and blending systems:</p>
+                    </div>
+                </div>
+                <div class="stats-cards">
+                    <div class="stats-card" style="background: linear-gradient(135deg, #5658dd, #4042c4); color: white;">
+                        <div class="mb-2"><i class="fas fa-object-group fa-2x"></i></div>
+                        <div class="stats-value" id="blending-percentage">0%</div>
+                        <div>Blending Accuracy</div>
+                        <div class="mt-2 small">Multi-model response integration</div>
+                    </div>
+                    <div class="stats-card" style="background: linear-gradient(135deg, #17a2b8, #138496); color: white;">
+                        <div class="mb-2"><i class="fas fa-sort-amount-up fa-2x"></i></div>
+                        <div class="stats-value" id="rank-accuracy">0%</div>
+                        <div>Ranking Precision</div>
+                        <div class="mt-2 small">Response quality evaluation</div>
+                    </div>
+                    <div class="stats-card" style="background: linear-gradient(135deg, #20c997, #17a379); color: white;">
+                        <div class="mb-2"><i class="fas fa-route fa-2x"></i></div>
+                        <div class="stats-value" id="routing-efficiency">0%</div>
+                        <div>Routing Efficiency</div>
+                        <div class="mt-2 small">Query-based model selection</div>
+                    </div>
+                    <div class="stats-card" style="background: linear-gradient(135deg, #6f42c1, #5a32a3); color: white;">
+                        <div class="mb-2"><i class="fas fa-check-circle fa-2x"></i></div>
+                        <div class="stats-value" id="validation-rate">0%</div>
+                        <div>Validation Success</div>
+                        <div class="mt-2 small">Quality threshold achievement</div>
+                    </div>
+                    <div class="stats-card" style="background: linear-gradient(135deg, #fd7e14, #ca6510); color: white;">
+                        <div class="mb-2"><i class="fas fa-puzzle-piece fa-2x"></i></div>
+                        <div class="stats-value" id="capability-match">0%</div>
+                        <div>Capability Matching</div>
+                        <div class="mt-2 small">Query-model capability alignment</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Performance Timeline -->
+        <div class="card mb-4 shadow border-0">
+            <div class="card-header bg-gradient" style="background: linear-gradient(135deg, #0d6efd, #0a58ca); color: white;">
+                <i class="fas fa-chart-line me-2"></i>Real-Time Performance Metrics
+            </div>
+            <div class="card-body p-3">
+                <p class="text-muted small mb-3">Track key performance indicators over time</p>
+                <canvas id="timelineChart" height="120"></canvas>
+            </div>
+        </div>
+        
+        <!-- Two charts in a row -->
+        <div class="row mb-4">
+            <!-- Model Usage Chart -->
+            <div class="col-md-6">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="card-header" style="background: linear-gradient(135deg, #20c997, #17a379); color: white;">
+                        <i class="fas fa-robot me-2"></i>Model Usage Distribution
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted small mb-3">Percentage of requests handled by each AI model</p>
+                        <canvas id="modelChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quality Scores Chart -->
+            <div class="col-md-6">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="card-header" style="background: linear-gradient(135deg, #0d6efd, #0a58ca); color: white;">
+                        <i class="fas fa-star me-2"></i>Model Quality Scores
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted small mb-3">Quality assessment scores for each AI model response</p>
+                        <canvas id="qualityScoreChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Think Tank Intelligence Insights -->
+        <div class="card mb-4 shadow border-0">
+            <div class="card-header bg-gradient" style="background: linear-gradient(135deg, #343a40, #212529); color: white;">
+                <i class="fas fa-brain me-2"></i>Think Tank Intelligence Insights
+            </div>
+            <div class="card-body p-4">
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <p class="text-muted">Detailed analytics on your intelligent query processing and multi-model response blending systems:</p>
+                    </div>
+                </div>
+                
+                <div class="row mb-4">
+                    <!-- Query Tags Distribution -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100 shadow-sm border-0">
+                            <div class="card-header bg-gradient" style="background: linear-gradient(135deg, #6f42c1, #5a32a3); color: white;">
+                                <i class="fas fa-tags me-2"></i>Query Tagging System
+                            </div>
+                            <div class="card-body">
+                                <p class="text-muted small mb-3">Distribution of content domains and query types detected by your tagging system</p>
+                                <canvas id="queryTagsChart"></canvas>
+                                <div class="mt-3 small text-muted">
+                                    <i class="fas fa-info-circle me-1"></i> Shows effectiveness of content domain detection (code, math, science) and request type classification (explanation, comparison, procedure, evaluation)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Response Blending Stats -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100 shadow-sm border-0">
+                            <div class="card-header bg-gradient" style="background: linear-gradient(135deg, #5658dd, #4042c4); color: white;">
+                                <i class="fas fa-object-group me-2"></i>Response Blending Strategies
+                            </div>
+                            <div class="card-body">
+                                <p class="text-muted small mb-3">Usage frequency of specialized blending strategies by query type</p>
+                                <canvas id="blendingStrategyChart"></canvas>
+                                <div class="mt-3 small text-muted">
+                                    <i class="fas fa-info-circle me-1"></i> Tracks usage of different blending methods: comparison, technical, explanation, and general responses
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Complexity Distribution -->
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-gradient" style="background: linear-gradient(135deg, #9966ff, #7a50cc); color: white;">
+                        <i class="fas fa-puzzle-piece me-2"></i>Query Complexity Analysis
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted small mb-3">Distribution of query complexity scores used for dynamic routing thresholds</p>
+                        <canvas id="complexityChart" height="200"></canvas>
+                        <div class="mt-3 small text-muted">
+                            <i class="fas fa-info-circle me-1"></i> Complexity scoring affects model selection priorities and confidence thresholds
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <script>
+        // Store historical data for time-based charts
+        let timeSeriesData = {
+            timestamps: [],
+            requests: [],
+            failures: [],
+            latency: []
+        };
+
+        // Charts objects
+        let modelUsageChart = null;
+        let timelineChart = null;
+        let qualityScoreChart = null;
+        let complexityChart = null;
+
+        // Initialize date filter
+        const now = new Date();
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString().split('T')[0];
+        document.getElementById('start-date').value = today;
+        document.getElementById('end-date').value = today;
+
+        // Format numbers with commas
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        // Update all charts with the latest data
+        async function fetchAnalytics() {
+            try {
+                console.log("📊 Fetching analytics data...");
+                const response = await fetch('/analytics');
+                const data = await response.json();
+                console.log("✅ Analytics data received:", data);
+                
+                // Update stat cards
+                document.getElementById("total-requests").innerText = formatNumber(data.requests);
+                document.getElementById("failures").innerText = formatNumber(data.failures);
+                document.getElementById("latency").innerText = data.average_latency.toFixed(2);
+                
+                // Update new stat cards
+                if (data.avg_complexity) {
+                    document.getElementById("avg-complexity").innerText = data.avg_complexity.toFixed(2);
+                }
+                if (data.positive_feedback_percentage) {
+                    document.getElementById("feedback-score").innerText = data.positive_feedback_percentage.toFixed(1) + '%';
+                }
+
+                // Store time series data
+                const timestamp = new Date().toLocaleTimeString();
+                timeSeriesData.timestamps.push(timestamp);
+                timeSeriesData.requests.push(data.requests);
+                timeSeriesData.failures.push(data.failures);
+                timeSeriesData.latency.push(data.average_latency);
+                
+                // Keep only the last 20 data points
+                if (timeSeriesData.timestamps.length > 20) {
+                    timeSeriesData.timestamps.shift();
+                    timeSeriesData.requests.shift();
+                    timeSeriesData.failures.shift();
+                    timeSeriesData.latency.shift();
+                }
+
+                // Update model usage chart
+                updateModelUsageChart(data);
+                
+                // Update timeline chart
+                updateTimelineChart();
+                
+                // Update quality score chart if data available
+                if (data.quality_scores) {
+                    updateQualityScoreChart(data.quality_scores);
+                }
+                
+                // Update model complexity insights
+                updateComplexityChart(data);
+                
+                // Update Think Tank metrics
+                if (data.think_tank_metrics) {
+                    console.log("✅ Think Tank metrics found:", data.think_tank_metrics);
+                    
+                    // Update metric cards with proper error handling
+                    try {
+                        document.getElementById('blending-percentage').innerText = 
+                            data.think_tank_metrics.blending_accuracy.toFixed(1) + '%';
+                        document.getElementById('rank-accuracy').innerText = 
+                            data.think_tank_metrics.ranking_precision.toFixed(1) + '%';
+                        document.getElementById('routing-efficiency').innerText = 
+                            data.think_tank_metrics.routing_efficiency.toFixed(1) + '%';
+                        document.getElementById('validation-rate').innerText = 
+                            data.think_tank_metrics.validation_success.toFixed(1) + '%';
+                        document.getElementById('capability-match').innerText = 
+                            data.think_tank_metrics.capability_match.toFixed(1) + '%';
+                        console.log("✅ Think Tank metric cards updated");
+                    } catch (metricError) {
+                        console.error("❌ Error updating Think Tank metric cards:", metricError);
+                    }
+                    
+                    // Update additional Think Tank charts with proper error handling
+                    try {
+                        if (data.think_tank_metrics.query_tags) {
+                            console.log("Updating Query Tags Chart with:", data.think_tank_metrics.query_tags);
+                            window.updateQueryTagsChart(data.think_tank_metrics.query_tags);
+                        } else {
+                            console.warn("⚠️ No query_tags data available");
+                        }
+                        
+                        if (data.think_tank_metrics.blending_strategies) {
+                            console.log("Updating Blending Strategy Chart with:", data.think_tank_metrics.blending_strategies);
+                            window.updateBlendingStrategyChart(data.think_tank_metrics.blending_strategies);
+                        } else {
+                            console.warn("⚠️ No blending_strategies data available");
+                        }
+                        console.log("✅ Think Tank charts updated");
+                    } catch (chartError) {
+                        console.error("❌ Error updating Think Tank charts:", chartError);
+                    }
+                } else {
+                    console.warn("⚠️ No Think Tank metrics found in the API response");
+                }
+                
+            } catch (error) {
+                console.error('Error fetching analytics data:', error);
+                document.getElementById("total-requests").innerText = "N/A";
+                document.getElementById("failures").innerText = "N/A";
+                document.getElementById("latency").innerText = "N/A";
+            }
+        }
+        // Update model usage chart
+        function updateModelUsageChart(data) {
+            const ctx = document.getElementById('modelChart').getContext('2d');
+            
+            // Create random but consistent usage data for now
+            // In a real implementation, this would come from the API
+            const usageData = data.active_models.map((model, index) => {
+                // Use hash-like function to generate consistent random data based on model name
+                const hash = model.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+                return (hash % 100) + 50; // Generate values between 50-150
+            });
+            
+            // Destroy existing chart before creating a new one
+            if (modelUsageChart) modelUsageChart.destroy();
+            
+            modelUsageChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.active_models,
+                    datasets: [{
+                        label: 'Model Usage',
+                        data: usageData,
+                        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Model Usage Distribution'
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Update timeline chart showing requests, failures and latency over time
+        function updateTimelineChart() {
+            const ctx = document.getElementById('timelineChart').getContext('2d');
+            
+            // Destroy existing chart before creating a new one
+            if (timelineChart) timelineChart.destroy();
+            
+            timelineChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: timeSeriesData.timestamps,
+                    datasets: [
+                        {
+                            label: 'Requests',
+                            data: timeSeriesData.requests,
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderWidth: 2,
+                            tension: 0.4,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Failures',
+                            data: timeSeriesData.failures,
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderWidth: 2,
+                            tension: 0.4,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Latency (ms)',
+                            data: timeSeriesData.latency,
+                            borderColor: 'rgba(255, 206, 86, 1)',
+                            backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                            borderWidth: 2,
+                            tension: 0.4,
+                            yAxisID: 'y1'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    stacked: false,
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'Requests/Failures'
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: 'Latency (ms)'
+                            },
+                            grid: {
+                                drawOnChartArea: false,
+                            },
+                        },
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Performance Metrics Over Time'
+                        },
+                    }
+                }
+            });
+        }
+        
+        // Update quality score chart
+        function updateQualityScoreChart(qualityScores) {
+            const ctx = document.getElementById('qualityScoreChart').getContext('2d');
+            
+            const models = Object.keys(qualityScores);
+            const scores = Object.values(qualityScores);
+            
+            // Destroy existing chart before creating a new one
+            if (qualityScoreChart) qualityScoreChart.destroy();
+            
+            qualityScoreChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: models,
+                    datasets: [{
+                        label: 'Quality Score',
+                        data: scores,
+                        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        borderWidth: 1,
+                        pointBackgroundColor: 'rgba(153, 102, 255, 1)',
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 1,
+                            ticks: {
+                                stepSize: 0.2
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Model Quality Scores'
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Update complexity chart
+        function updateComplexityChart(data) {
+            const ctx = document.getElementById('complexityChart').getContext('2d');
+            
+            // Create sample complexity data if not provided
+            // This would be replaced with real data from the API
+            const complexityData = {
+                labels: ['Simple', 'Moderate', 'Complex', 'Very Complex', 'Expert'],
+                datasets: [{
+                    label: 'Query Complexity Distribution',
+                    data: [30, 40, 20, 8, 2],  // Sample data
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.5)',
+                        'rgba(54, 162, 235, 0.5)',
+                        'rgba(153, 102, 255, 0.5)',
+                        'rgba(255, 159, 64, 0.5)',
+                        'rgba(255, 99, 132, 0.5)'
+                    ],
+                    borderWidth: 1
+                }]
+            };
+            
+            // Destroy existing chart before creating a new one
+            if (complexityChart) complexityChart.destroy();
+            
+            complexityChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: complexityData,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Query Complexity Distribution'
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Filter data by date range
+        function filterByDate() {
+            const startDate = document.getElementById('start-date').value;
+            const endDate = document.getElementById('end-date').value;
+            
+            // In a real implementation, this would fetch data for the specific date range
+            console.log(`Filtering data from ${startDate} to ${endDate}`);
+            
+            // For now, just refresh the current view
+            fetchAnalytics();
+        }
+        
+        // Function to update query tags chart - explicitly added to window object
+        window.updateQueryTagsChart = function(queryTags) {
+            // Default data if not provided
+            if (!queryTags) {
+                queryTags = {
+                    'code': 35,
+                    'math': 15,
+                    'science': 20,
+                    'explanation': 25,
+                    'comparison': 18,
+                    'evaluation': 12,
+                    'procedure': 10
+                };
+            }
+            
+            // Destroy previous chart if it exists
+            if (window.queryTagsChart) {
+                window.queryTagsChart.destroy();
+            }
+            
+            // Create the query tags chart
+            const queryTagsCtx = document.getElementById('queryTagsChart').getContext('2d');
+            window.queryTagsChart = new Chart(queryTagsCtx, {
+                type: 'polarArea',
+                data: {
+                    labels: Object.keys(queryTags),
+                    datasets: [{
+                        data: Object.values(queryTags),
+                        backgroundColor: [
+                            'rgba(111, 66, 193, 0.7)',
+                            'rgba(32, 201, 151, 0.7)',
+                            'rgba(23, 162, 184, 0.7)',
+                            'rgba(253, 126, 20, 0.7)',
+                            'rgba(220, 53, 69, 0.7)',
+                            'rgba(0, 123, 255, 0.7)',
+                            'rgba(40, 167, 69, 0.7)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Function to update blending strategy chart - explicitly added to window object
+        window.updateBlendingStrategyChart = function(blendingData) {
+            // Default data if not provided
+            if (!blendingData) {
+                blendingData = {
+                    'comparison_blending': 25,
+                    'technical_blending': 35,
+                    'explanation_blending': 30,
+                    'general_blending': 10,
+                };
+            }
+            
+            // Destroy previous chart if it exists
+            if (window.blendingStrategyChart) {
+                window.blendingStrategyChart.destroy();
+            }
+            
+            // Create the blending strategy chart
+            const blendingCtx = document.getElementById('blendingStrategyChart').getContext('2d');
+            window.blendingStrategyChart = new Chart(blendingCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(blendingData).map(label => label.replace('_', ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')),
+                    datasets: [{
+                        data: Object.values(blendingData),
+                        backgroundColor: [
+                            'rgba(86, 88, 221, 0.7)',
+                            'rgba(40, 167, 69, 0.7)',
+                            'rgba(23, 162, 184, 0.7)',
+                            'rgba(108, 117, 125, 0.7)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Function to properly initialize all charts after data is available
+        async function initializeCharts() {
+            console.log("🚀 Initializing Think Tank dashboard...");
+            try {
+                // Fetch initial data to ensure charts have data to work with
+                await fetchAnalytics();
+                console.log("✅ Initial dashboard data loaded");
+                
+                // Set up auto-refresh after initial load is complete
+                setInterval(fetchAnalytics, 5000); // Update every 5 seconds
+                console.log("⏱️ Auto-refresh enabled (every 5 seconds)");
+            } catch (error) {
+                console.error("❌ Error initializing charts:", error);
+            }
+        }
+        
+        // Initialize all charts when document is ready
+        document.addEventListener('DOMContentLoaded', initializeCharts);
+        
+        // Fallback initialization if DOMContentLoaded already fired
+        if (document.readyState === 'complete') {
+            console.log("📝 Document already loaded, running initialization now");
+            initializeCharts();
+        }
+    </script>
+    
+            </div> <!-- Close main content div -->
+        </div> <!-- Close d-flex wrapper -->
+    
+        <!-- Dashboard Debugging Tool -->
+        <script src="/static/js/dashboard_debug.js"></script>
+    </body>
+    </html>

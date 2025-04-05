@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minerva Chat Diagnostic</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a1a2e;
+            color: #e6e6e6;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #16213e;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        h1 {
+            color: #4a6bdf;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        button {
+            background-color: #4a6bdf;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #3a5ac9;
+        }
+        .panel {
+            background-color: #0f3460;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #4a6bdf40;
+        }
+        #logs {
+            height: 300px;
+            overflow-y: auto;
+            background-color: #061b33;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin-top: 20px;
+            border: 1px solid #4a6bdf30;
+        }
+        .success {
+            color: #4CD964;
+        }
+        .error {
+            color: #FF3B30;
+        }
+        .warning {
+            color: #FFCC00;
+        }
+        .info {
+            color: #5AC8FA;
+        }
+        .step-title {
+            font-weight: bold;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            color: #8cabff;
+        }
+        .message-container {
+            display: flex;
+            flex-direction: column;
+            margin-top: 20px;
+        }
+        #messageInput {
+            padding: 12px;
+            border-radius: 5px;
+            border: 1px solid #4a6bdf40;
+            background-color: #061b33;
+            color: #e6e6e6;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .log-entry {
+            margin-bottom: 5px;
+            border-bottom: 1px solid #16213e;
+            padding-bottom: 5px;
+        }
+        .timestamp {
+            color: #888;
+            font-size: 0.8em;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Minerva Chat Diagnostic Tool</h1>
+
+        <div class="panel">
+            <div class="step-title">Step 1: Check Server Status</div>
+            <button id="checkUiServer">Check UI Server (8080)</button>
+            <button id="checkBridgeServer">Check Bridge Server (8090)</button>
+        </div>
+
+        <div class="panel">
+            <div class="step-title">Step 2: Test CORS Configuration</div>
+            <button id="testCors">Test CORS Headers</button>
+        </div>
+
+        <div class="panel">
+            <div class="step-title">Step 3: Test Direct Connector</div>
+            <button id="initConnector">Initialize Direct Connector</button>
+        </div>
+
+        <div class="panel">
+            <div class="step-title">Step 4: Send Test Message</div>
+            <div class="message-container">
+                <input type="text" id="messageInput" placeholder="Enter a test message..." value="Hello Minerva, are you connected?">
+                <button id="sendMessage">Send Message</button>
+            </div>
+        </div>
+
+        <div id="logs"></div>
+    </div>
+
+    <script>
+        // Helper function to add logs
+        function addLog(message, type = 'info') {
+            const logContainer = document.getElementById('logs');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.classList.add('log-entry', type);
+            logEntry.innerHTML = `<span class="timestamp">[${timestamp}]</span> ${message}`;
+            logContainer.appendChild(logEntry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        // Direct connector instance
+        let directConnector = null;
+
+        // Check UI server
+        document.getElementById('checkUiServer').addEventListener('click', function() {
+            addLog('Checking UI server status...', 'info');
+            fetch('http://localhost:8080/index.html', {
+                method: 'HEAD'
+            })
+            .then(response => {
+                if (response.ok) {
+                    addLog('✅ UI server is running on port 8080', 'success');
+                } else {
+                    addLog(`❌ UI server returned status: ${response.status}`, 'error');
+                }
+            })
+            .catch(error => {
+                addLog(`❌ Error connecting to UI server: ${error.message}`, 'error');
+            });
+        });
+
+        // Check Bridge server
+        document.getElementById('checkBridgeServer').addEventListener('click', function() {
+            addLog('Checking Bridge server status...', 'info');
+            fetch('http://localhost:8090/api/think-tank', {
+                method: 'HEAD',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                addLog(`Bridge server response status: ${response.status}`, response.ok ? 'success' : 'warning');
+                if (response.ok || response.status === 405) {
+                    // 405 is OK for HEAD method if server only accepts POST
+                    addLog('✅ Bridge server is running on port 8090', 'success');
+                } else {
+                    addLog(`❌ Bridge server returned unexpected status: ${response.status}`, 'error');
+                }
+            })
+            .catch(error => {
+                addLog(`❌ Error connecting to bridge server: ${error.message}`, 'error');
+            });
+        });
+
+        // Test CORS configuration
+        document.getElementById('testCors').addEventListener('click', function() {
+            addLog('Testing CORS configuration...', 'info');
+            fetch('http://localhost:8090/api/think-tank', {
+                method: 'OPTIONS',
+                headers: {
+                    'Origin': 'http://localhost:8080',
+                    'Access-Control-Request-Method': 'POST',
+                    'Access-Control-Request-Headers': 'Content-Type'
+                }
+            })
+            .then(response => {
+                const accessControlHeader = response.headers.get('Access-Control-Allow-Origin');
+                const accessControlMethods = response.headers.get('Access-Control-Allow-Methods');
+                
+                addLog(`CORS response status: ${response.status}`, response.ok ? 'success' : 'warning');
+                addLog(`Access-Control-Allow-Origin: ${accessControlHeader || 'not set'}`, 
+                       accessControlHeader ? 'success' : 'error');
+                addLog(`Access-Control-Allow-Methods: ${accessControlMethods || 'not set'}`,
+                       accessControlMethods ? 'success' : 'warning');
+                
+                if (accessControlHeader && (accessControlHeader === '*' || accessControlHeader.includes('localhost:8080'))) {
+                    addLog('✅ CORS configuration appears correct', 'success');
+                } else {
+                    addLog('❌ CORS configuration might be missing or incorrect', 'error');
+                }
+            })
+            .catch(error => {
+                addLog(`❌ Error testing CORS: ${error.message}`, 'error');
+            });
+        });
+
+        // Initialize Direct Connector
+        document.getElementById('initConnector').addEventListener('click', function() {
+            addLog('Loading Direct Connector script...', 'info');
+            
+            // Check if already loaded
+            if (typeof MinervaDirectConnector !== 'undefined') {
+                addLog('Direct Connector script already loaded', 'info');
+                initializeConnector();
+                return;
+            }
+            
+            // Load the script
+            const script = document.createElement('script');
+            script.src = '/static/js/minerva-direct-connector.js';
+            script.onload = function() {
+                addLog('✅ Direct Connector script loaded successfully', 'success');
+                initializeConnector();
+            };
+            script.onerror = function() {
+                addLog('❌ Failed to load Direct Connector script', 'error');
+            };
+            document.head.appendChild(script);
+        });
+
+        function initializeConnector() {
+            try {
+                addLog('Initializing Direct Connector...', 'info');
+                directConnector = new MinervaDirectConnector({
+                    debug: true,
+                    primaryEndpoint: 'http://localhost:8090/api/think-tank',
+                    retryAttempts: 3
+                });
+                addLog('✅ Direct Connector initialized successfully', 'success');
+                addLog(`Endpoint: ${directConnector.primaryEndpoint}`, 'info');
+                addLog(`Retry attempts: ${directConnector.retryAttempts}`, 'info');
+            } catch (error) {
+                addLog(`❌ Error initializing Direct Connector: ${error.message}`, 'error');
+                console.error(error);
+            }
+        }
+
+        // Send test message
+        document.getElementById('sendMessage').addEventListener('click', function() {
+            const message = document.getElementById('messageInput').value.trim();
+            
+            if (!message) {
+                addLog('⚠️ Please enter a message', 'warning');
+                return;
+            }
+            
+            if (!directConnector) {
+                addLog('⚠️ Direct Connector not initialized. Initializing now...', 'warning');
+                initializeConnector();
+            }
+            
+            addLog(`Sending message: "${message}"`, 'info');
+            
+            try {
+                directConnector.sendMessage(
+                    message,
+                    // Success callback
+                    function(response) {
+                        addLog('✅ Received response from server:', 'success');
+                        addLog(`Response: ${JSON.stringify(response)}`, 'info');
+                        
+                        if (response && response.response) {
+                            addLog(`AI: ${response.response}`, 'success');
+                        } else {
+                            addLog('⚠️ Received empty response', 'warning');
+                        }
+                    },
+                    // Error callback
+                    function(error) {
+                        addLog(`❌ Error sending message: ${error.message || error}`, 'error');
+                        console.error(error);
+                    }
+                );
+            } catch (error) {
+                addLog(`❌ Exception sending message: ${error.message}`, 'error');
+                console.error(error);
+            }
+        });
+
+        // Run initial checks automatically
+        window.addEventListener('load', function() {
+            addLog('Diagnostic tool loaded. Running initial checks...', 'info');
+            document.getElementById('checkUiServer').click();
+            
+            // Wait a bit before checking bridge server
+            setTimeout(() => {
+                document.getElementById('checkBridgeServer').click();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

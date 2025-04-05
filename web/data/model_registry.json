@@ -1,0 +1,308 @@
+{
+    "gpt4": {
+        "capabilities": {
+            "text": 0.95,
+            "reasoning": 0.95,
+            "conversation": 0.95,
+            "code": 0.92,
+            "research": 0.9,
+            "math": 0.88,
+            "creativity": 0.85
+        },
+        "api_config": {
+            "provider": "plugin",
+            "model_identifier": "gpt4",
+            "registered_time": "2025-03-15T02:46:45.230552"
+        },
+        "weight": 0.7,
+        "priority": 10,
+        "tags": [
+            "plugin",
+            "dynamic"
+        ],
+        "registered_at": "2025-03-15T02:46:45.230564"
+    },
+    "claude-3": {
+        "capabilities": {
+            "technical_expertise": 0.7,
+            "creative_writing": 0.7,
+            "reasoning": 0.7,
+            "math_reasoning": 0.7,
+            "long_context": 0.5,
+            "instruction_following": 0.7
+        },
+        "api_config": {
+            "provider": "plugin",
+            "model_identifier": "claude-3",
+            "registered_time": "2025-03-13T12:06:55.345725"
+        },
+        "weight": 0.81826,
+        "priority": 10,
+        "tags": [
+            "plugin",
+            "dynamic"
+        ],
+        "registered_at": "2025-03-13T12:06:55.345727"
+    },
+    "gemini-pro": {
+        "capabilities": {
+            "technical_expertise": 0.9,
+            "creative_writing": 0.85,
+            "reasoning": 0.85,
+            "mathematical_reasoning": 0.85,
+            "long_context": 0.8,
+            "instruction_following": 0.85,
+            "factual_accuracy": 0.85
+        },
+        "api_config": {
+            "provider": "google",
+            "model_identifier": "gemini-pro",
+            "max_tokens": 8192
+        },
+        "weight": 0.9,
+        "priority": 3,
+        "tags": [
+            "premium",
+            "general-purpose"
+        ]
+    },
+    "gpt-3.5-turbo": {
+        "capabilities": {
+            "technical_expertise": 0.8,
+            "creative_writing": 0.85,
+            "reasoning": 0.8,
+            "mathematical_reasoning": 0.7,
+            "long_context": 0.65,
+            "instruction_following": 0.8,
+            "factual_accuracy": 0.75
+        },
+        "api_config": {
+            "provider": "openai",
+            "model_identifier": "gpt-3.5-turbo",
+            "max_tokens": 4096
+        },
+        "weight": 0.8,
+        "priority": 4,
+        "tags": [
+            "standard",
+            "general-purpose"
+        ]
+    },
+    "mistral7b": {
+        "capabilities": {
+            "text": 0.88,
+            "reasoning": 0.84,
+            "conversation": 0.86,
+            "code": 0.79,
+            "research": 0.76,
+            "math": 0.72,
+            "creativity": 0.8
+        },
+        "api_config": {
+            "provider": "plugin",
+            "model_identifier": "mistral7b",
+            "registered_time": "2025-03-15T02:46:45.232530"
+        },
+        "weight": 0.7,
+        "priority": 10,
+        "tags": [
+            "plugin",
+            "dynamic"
+        ],
+        "registered_at": "2025-03-15T02:46:45.232533"
+    },
+    "gpt4all": {
+        "capabilities": {
+            "technical_expertise": 0.9,
+            "creative_writing": 0.85,
+            "reasoning": 0.9,
+            "math_reasoning": 0.9,
+            "long_context": 0.8,
+            "instruction_following": 0.9
+        },
+        "api_config": {
+            "provider": "plugin",
+            "model_identifier": "gpt4all",
+            "registered_time": "2025-03-16T01:13:26.642289"
+        },
+        "weight": 0.7,
+        "priority": 10,
+        "tags": [
+            "plugin",
+            "dynamic"
+        ],
+        "registered_at": "2025-03-16T01:13:26.642293"
+    },
+    "claude3": {
+        "capabilities": {
+            "text": 0.93,
+            "reasoning": 0.92,
+            "conversation": 0.94,
+            "code": 0.85,
+            "research": 0.9,
+            "math": 0.83,
+            "creativity": 0.9
+        },
+        "api_config": {
+            "provider": "plugin",
+            "model_identifier": "claude3",
+            "registered_time": "2025-03-15T02:46:45.232059"
+        },
+        "weight": 0.7,
+        "priority": 10,
+        "tags": [
+            "plugin",
+            "dynamic"
+        ],
+        "registered_at": "2025-03-15T02:46:45.232068"
+    },
+    "mistral": {
+        "capabilities": {
+            "technical_expertise": 0.7,
+            "creative_writing": 0.7,
+            "reasoning": 0.7,
+            "math_reasoning": 0.7,
+            "long_context": 0.5,
+            "instruction_following": 0.7
+        },
+        "api_config": {
+            "provider": "plugin",
+            "model_identifier": "mistral",
+            "registered_time": "2025-03-13T12:06:55.342248"
+        },
+        "weight": 0.7,
+        "priority": 10,
+        "tags": [
+            "plugin",
+            "dynamic"
+        ],
+        "registered_at": "2025-03-13T12:06:55.342251"
+    },
+    "gemini": {
+        "capabilities": {
+            "technical_expertise": 0.8,
+            "creative_writing": 0.8,
+            "reasoning": 0.85,
+            "math_reasoning": 0.85,
+            "long_context": 0.7,
+            "instruction_following": 0.85
+        },
+        "api_config": {
+            "provider": "plugin",
+            "model_identifier": "gemini",
+            "registered_time": "2025-03-13T12:06:55.342878"
+        },
+        "weight": 0.7,
+        "priority": 10,
+        "tags": [
+            "plugin",
+            "dynamic"
+        ],
+        "registered_at": "2025-03-13T12:06:55.342881"
+    },
+    "cohere": {
+        "capabilities": {
+            "technical_expertise": 0.7,
+            "creative_writing": 0.7,
+            "reasoning": 0.7,
+            "math_reasoning": 0.7,
+            "long_context": 0.5,
+            "instruction_following": 0.7
+        },
+        "api_config": {
+            "provider": "plugin",
+            "model_identifier": "cohere",
+            "registered_time": "2025-03-13T12:06:55.343435"
+        },
+        "weight": 0.7,
+        "priority": 10,
+        "tags": [
+            "plugin",
+            "dynamic"
+        ],
+        "registered_at": "2025-03-13T12:06:55.343437"
+    },
+    "gpt-4": {
+        "capabilities": {
+            "technical_expertise": 0.7,
+            "creative_writing": 0.7,
+            "reasoning": 0.7,
+            "math_reasoning": 0.7,
+            "long_context": 0.5,
+            "instruction_following": 0.7
+        },
+        "api_config": {
+            "provider": "plugin",
+            "model_identifier": "gpt-4",
+            "registered_time": "2025-03-13T12:06:55.345110"
+        },
+        "weight": 0.7,
+        "priority": 10,
+        "tags": [
+            "plugin",
+            "dynamic"
+        ],
+        "registered_at": "2025-03-13T12:06:55.345113"
+    },
+    "gpt4o": {
+        "capabilities": {},
+        "api_config": {
+            "provider": "plugin",
+            "model_identifier": "gpt4o",
+            "registered_time": "2025-03-15T02:46:45.231475"
+        },
+        "weight": 0.7,
+        "priority": 10,
+        "tags": [
+            "plugin",
+            "dynamic"
+        ],
+        "registered_at": "2025-03-15T02:46:45.231479"
+    },
+    "llama2": {
+        "capabilities": {
+            "text": 0.85,
+            "reasoning": 0.81,
+            "conversation": 0.83,
+            "code": 0.75,
+            "research": 0.72,
+            "math": 0.69,
+            "creativity": 0.78
+        },
+        "api_config": {
+            "provider": "plugin",
+            "model_identifier": "llama2",
+            "registered_time": "2025-03-15T02:46:45.233023"
+        },
+        "weight": 0.7,
+        "priority": 10,
+        "tags": [
+            "plugin",
+            "dynamic"
+        ],
+        "registered_at": "2025-03-15T02:46:45.233026"
+    },
+    "falcon": {
+        "capabilities": {
+            "text": 0.82,
+            "reasoning": 0.78,
+            "conversation": 0.8,
+            "code": 0.7,
+            "research": 0.75,
+            "math": 0.68,
+            "creativity": 0.85
+        },
+        "api_config": {
+            "provider": "plugin",
+            "model_identifier": "falcon",
+            "registered_time": "2025-03-15T02:46:45.240434"
+        },
+        "weight": 0.7,
+        "priority": 10,
+        "tags": [
+            "plugin",
+            "dynamic"
+        ],
+        "registered_at": "2025-03-15T02:46:45.240437"
+    }
+}

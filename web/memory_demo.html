@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Minerva Think Tank + Memory Integration</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        
+        body {
+            padding: 20px;
+            background-color: #0f172a;
+            color: #e2e8f0;
+            height: 100vh;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            gap: 20px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #1e293b;
+        }
+        
+        h1 {
+            font-size: 1.5rem;
+            color: #94a3b8;
+        }
+        
+        .memory-badge {
+            background-color: #155e75;
+            color: #e2e8f0;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        main {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 20px;
+            overflow: hidden;
+        }
+        
+        .chat-container {
+            background-color: #1e293b;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .message {
+            max-width: 80%;
+            padding: 10px 15px;
+            border-radius: 18px;
+            line-height: 1.5;
+            position: relative;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .user-message {
+            align-self: flex-end;
+            background-color: #2563eb;
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .assistant-message {
+            align-self: flex-start;
+            background-color: #334155;
+            color: #e2e8f0;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .system-message {
+            align-self: center;
+            background-color: #475569;
+            color: #e2e8f0;
+            font-size: 0.9rem;
+            padding: 8px 12px;
+            border-radius: 5px;
+            opacity: 0.9;
+        }
+        
+        .memory-tag {
+            font-size: 0.75rem;
+            background-color: #6d28d9;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin-top: 5px;
+            display: inline-block;
+        }
+        
+        .model-info {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            margin-top: 2px;
+            align-self: flex-start;
+        }
+        
+        .input-container {
+            display: flex;
+            padding: 10px;
+            background-color: #334155;
+            border-top: 1px solid #475569;
+        }
+        
+        input {
+            flex: 1;
+            padding: 12px 15px;
+            background-color: #1e293b;
+            border: 1px solid #475569;
+            border-radius: 5px;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+        }
+        
+        button {
+            margin-left: 10px;
+            padding: 0 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #3b82f6;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        button:hover {
+            background-color: #2563eb;
+        }
+        
+        .memory-panel {
+            background-color: #1e293b;
+            border-radius: 8px;
+            padding: 15px;
+            overflow-y: auto;
+        }
+        
+        .memory-panel h2 {
+            font-size: 1.1rem;
+            color: #94a3b8;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #334155;
+        }
+        
+        .memory-item {
+            background-color: #334155;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+        
+        .memory-content {
+            color: #e2e8f0;
+            margin-bottom: 8px;
+        }
+        
+        .memory-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+        
+        .memory-tag-pill {
+            background-color: #6d28d9;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.7rem;
+        }
+        
+        footer {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #64748b;
+            padding-top: 10px;
+            border-top: 1px solid #1e293b;
+        }
+        
+        .typing-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .typing-indicator span {
+            width: 7px;
+            height: 7px;
+            background-color: #94a3b8;
+            border-radius: 50%;
+            animation: typing 1s infinite ease-in-out alternate;
+        }
+        
+        .typing-indicator span:nth-child(1) { animation-delay: 0s; }
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes typing {
+            from { transform: translateY(0); opacity: 0.2; }
+            to { transform: translateY(-5px); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Minerva Think Tank Memory Integration</h1>
+        <div class="memory-badge">
+            🧠 Conversation Memory Active
+        </div>
+    </header>
+    
+    <main>
+        <div class="chat-container">
+            <div class="chat-messages" id="chat-messages">
+                <div class="system-message">
+                    Welcome to Minerva! I'm your AI assistant with conversation memory. Try telling me something about yourself.
+                </div>
+            </div>
+            
+            <div class="input-container">
+                <input type="text" id="user-input" placeholder="Type your message..." autocomplete="off">
+                <button id="send-button">Send</button>
+            </div>
+        </div>
+        
+        <div class="memory-panel">
+            <h2>Memory System</h2>
+            <div id="memory-items">
+                <!-- Memory items will be dynamically added here -->
+                <div class="system-message">
+                    No memories stored yet. Try telling me something about yourself!
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        Minerva Think Tank with Memory Integration • Created using the progressive enhancement approach
+    </footer>
+    
+    <script>
+        // DOM elements
+        const chatMessages = document.getElementById('chat-messages');
+        const userInput = document.getElementById('user-input');
+        const sendButton = document.getElementById('send-button');
+        const memoryItems = document.getElementById('memory-items');
+        
+        // Memory storage (simulates database)
+        let memories = [];
+        let conversationHistory = [
+            { role: 'system', content: 'You are Minerva, an AI assistant with memory capabilities.' }
+        ];
+        
+        // Event listeners
+        sendButton.addEventListener('click', handleUserInput);
+        userInput.addEventListener('keydown', e => {
+            if (e.key === 'Enter') handleUserInput();
+        });
+        
+        // Function to handle user input
+        function handleUserInput() {
+            const message = userInput.value.trim();
+            if (!message) return;
+            
+            // Add user message to chat
+            addMessage(message, 'user');
+            
+            // Add to conversation history
+            conversationHistory.push({
+                role: 'user',
+                content: message,
+                timestamp: new Date().toISOString()
+            });
+            
+            // Clear input
+            userInput.value = '';
+            
+            // Show typing indicator
+            const typingIndicator = showTypingIndicator();
+            
+            // Simulate processing with Think Tank + memory system
+            setTimeout(() => {
+                // Remove typing indicator
+                typingIndicator.remove();
+                
+                // Process message with memory system
+                processChatMessage(message);
+            }, 1500);
+        }
+        
+        // Process chat message with memory + Think Tank
+        function processChatMessage(message) {
+            // Extract facts for memory storage
+            const extractedFacts = extractFacts(message);
+            
+            // Check if message is requesting information
+            const isMemoryQuery = checkIfMemoryQuery(message);
+            
+            // Get relevant memories
+            const relevantMemories = isMemoryQuery ? getRelevantMemories(message) : [];
+            
+            // Generate response with Think Tank
+            const { response, usedMemories, modelInfo } = simulateThinkTank(
+                message, 
+                conversationHistory,
+                relevantMemories
+            );
+            
+            // Add assistant response to chat
+            addMessage(response, 'assistant');
+            
+            // Add model info
+            addModelInfo(modelInfo);
+            
+            // Add to conversation history
+            conversationHistory.push({
+                role: 'assistant',
+                content: response,
+                timestamp: new Date().toISOString()
+            });
+            
+            // Store extracted facts in memory
+            if (extractedFacts.length > 0) {
+                extractedFacts.forEach(fact => storeMemory(fact));
+                updateMemoryDisplay();
+            }
+            
+            // Tag response with memory usage if applicable
+            if (usedMemories > 0) {
+                addMemoryTag(
+                    document.querySelector('.assistant-message:last-child'),
+                    `Used ${usedMemories} ${usedMemories === 1 ? 'memory' : 'memories'}`
+                );
+            }
+        }
+        
+        // Add message to chat
+        function addMessage(content, type) {
+            const message = document.createElement('div');
+            message.className = `message ${type}-message`;
+            message.textContent = content;
+            chatMessages.appendChild(message);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            return message;
+        }
+        
+        // Add memory tag to message
+        function addMemoryTag(messageElement, text) {
+            const tag = document.createElement('div');
+            tag.className = 'memory-tag';
+            tag.textContent = `🧠 ${text}`;
+            messageElement.appendChild(tag);
+        }
+        
+        // Add model info
+        function addModelInfo(text) {
+            const info = document.createElement('div');
+            info.className = 'model-info';
+            info.textContent = text;
+            chatMessages.appendChild(info);
+        }
+        
+        // Show typing indicator
+        function showTypingIndicator() {
+            const typing = document.createElement('div');
+            typing.className = 'message assistant-message';
+            typing.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+            chatMessages.appendChild(typing);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            return typing;
+        }
+        
+        // Extract facts from message
+        function extractFacts(message) {
+            const facts = [];
+            
+            // Simple extraction rules
+            if (message.toLowerCase().includes('my name is') || message.toLowerCase().includes("i'm called")) {
+                const match = message.match(/(my name is|i'm called) ([\w\s]+)/i);
+                if (match && match[2]) {
+                    facts.push({
+                        content: `User's name is ${match[2].trim()}`,
+                        category: 'personal_info',
+                        tags: ['name', 'user_info']
+                    });
+                }
+            }
+            
+            if (message.toLowerCase().includes('i like') || message.toLowerCase().includes('i love')) {
+                const match = message.match(/i (like|love) ([\w\s]+)/i);
+                if (match && match[2]) {
+                    facts.push({
+                        content: `User likes ${match[2].trim()}`,
+                        category: 'preferences',
+                        tags: ['likes', 'preferences']
+                    });
+                }
+            }
+            
+            if (message.toLowerCase().includes('i work') || message.toLowerCase().includes('my job')) {
+                const match = message.match(/(i work|my job is|i am a) ([\w\s]+)/i);
+                if (match && match[2]) {
+                    facts.push({
+                        content: `User works as ${match[2].trim()}`,
+                        category: 'professional',
+                        tags: ['work', 'career']
+                    });
+                }
+            }
+            
+            return facts;
+        }
+        
+        // Check if the message is a memory query
+        function checkIfMemoryQuery(message) {
+            const queryTerms = [
+                'who am i', 'what is my name', 'what do i like', 
+                'what do i do', 'where do i work', 'remember',
+                'recall', 'told you', 'earlier', 'before'
+            ];
+            
+            return queryTerms.some(term => message.toLowerCase().includes(term));
+        }
+        
+        // Get relevant memories based on query
+        function getRelevantMemories(query) {
+            // Basic keyword matching (simulates vector search)
+            return memories.filter(memory => {
+                const queryWords = query.toLowerCase().split(/\s+/);
+                const memoryWords = memory.content.toLowerCase().split(/\s+/);
+                
+                const matches = queryWords.filter(qword => 
+                    memoryWords.some(mword => mword.includes(qword) || qword.includes(mword))
+                );
+                
+                return matches.length > 0;
+            });
+        }
+        
+        // Store memory
+        function storeMemory(fact) {
+            const id = generateId();
+            const memory = {
+                id,
+                content: fact.content,
+                category: fact.category,
+                tags: fact.tags,
+                created_at: Date.now(),
+                last_accessed: Date.now(),
+                access_count: 1
+            };
+            
+            memories.push(memory);
+            
+            // Notify user
+            setTimeout(() => {
+                addMessage(`I've remembered that ${fact.content.toLowerCase()}.`, 'system');
+            }, 1000);
+        }
+        
+        // Simulate Think Tank processing
+        function simulateThinkTank(message, history, relevantMemories) {
+            // Update memory access stats
+            relevantMemories.forEach(memory => {
+                const index = memories.findIndex(m => m.id === memory.id);
+                if (index !== -1) {
+                    memories[index].last_accessed = Date.now();
+                    memories[index].access_count += 1;
+                }
+            });
+            
+            // Format memory context for response
+            let memoryContext = '';
+            if (relevantMemories.length > 0) {
+                memoryContext = relevantMemories
+                    .map(memory => memory.content)
+                    .join('. ');
+            }
+            
+            // Generate response based on query and memories
+            let response = '';
+            
+            if (message.toLowerCase().includes('who am i') || message.toLowerCase().includes('my name')) {
+                const nameMemory = memories.find(m => m.content.toLowerCase().includes('name'));
+                if (nameMemory) {
+                    response = `Based on our conversation, ${nameMemory.content}. How can I help you today?`;
+                } else {
+                    response = "I don't have your name stored in my memory yet. Would you like to introduce yourself?";
+                }
+            }
+            else if (message.toLowerCase().includes('what do i like')) {
+                const preferences = memories.filter(m => m.content.toLowerCase().includes('like'));
+                if (preferences.length > 0) {
+                    const preferencesList = preferences.map(p => p.content).join('. ');
+                    response = `According to my memory, ${preferencesList}. Is there anything else you'd like to know?`;
+                } else {
+                    response = "I don't have information about your preferences in my memory yet. Feel free to tell me about things you like!";
+                }
+            }
+            else if (message.toLowerCase().includes('work') || message.toLowerCase().includes('job')) {
+                const workMemory = memories.find(m => m.content.toLowerCase().includes('work'));
+                if (workMemory) {
+                    response = `I recall that ${workMemory.content}. Is there something specific about your work you'd like to discuss?`;
+                } else {
+                    response = "I don't have information about your work in my memory. Would you like to tell me about your profession?";
+                }
+            }
+            else if (relevantMemories.length > 0) {
+                // Use memories in response
+                response = `Based on what I remember (${memoryContext}), I can provide a personalized response to your question about "${message}".`;
+                
+                if (message.toLowerCase().includes('project')) {
+                    response += " Would you like me to help organize this into a new project?";
+                }
+            }
+            else {
+                response = `Thank you for your message. I'm processing it using the Think Tank's multi-model blending to give you the best possible response.`;
+                
+                // Add variations
+                if (message.toLowerCase().includes('project')) {
+                    response += " Would you like me to help organize this into a new project?";
+                } else if (message.toLowerCase().includes('remember')) {
+                    response += " I'll remember this information for our future conversations.";
+                }
+            }
+            
+            // If it's a greeting, personalize with name if available
+            if (message.toLowerCase().match(/^(hi|hello|hey)/)) {
+                const nameMemory = memories.find(m => m.content.toLowerCase().includes('name'));
+                if (nameMemory) {
+                    const name = nameMemory.content.split('is ')[1];
+                    response = `Hello ${name}! It's good to see you again. How can I help you today?`;
+                }
+            }
+            
+            return {
+                response,
+                usedMemories: relevantMemories.length,
+                modelInfo: 'Think Tank: gpt-4o + claude-3-sonnet (blended)'
+            };
+        }
+        
+        // Update memory display
+        function updateMemoryDisplay() {
+            memoryItems.innerHTML = '';
+            
+            if (memories.length === 0) {
+                const emptyMessage = document.createElement('div');
+                emptyMessage.className = 'system-message';
+                emptyMessage.textContent = 'No memories stored yet. Try telling me something about yourself!';
+                memoryItems.appendChild(emptyMessage);
+                return;
+            }
+            
+            // Sort by last accessed
+            const sortedMemories = [...memories].sort((a, b) => b.last_accessed - a.last_accessed);
+            
+            // Add each memory
+            sortedMemories.forEach(memory => {
+                const item = document.createElement('div');
+                item.className = 'memory-item';
+                
+                const content = document.createElement('div');
+                content.className = 'memory-content';
+                content.textContent = memory.content;
+                
+                const meta = document.createElement('div');
+                meta.className = 'memory-meta';
+                
+                const category = document.createElement('span');
+                category.textContent = `Category: ${memory.category}`;
+                
+                const accessCount = document.createElement('span');
+                accessCount.textContent = `Used: ${memory.access_count}x`;
+                
+                const tags = document.createElement('div');
+                memory.tags.forEach(tag => {
+                    const pill = document.createElement('span');
+                    pill.className = 'memory-tag-pill';
+                    pill.textContent = tag;
+                    tags.appendChild(pill);
+                });
+                
+                meta.appendChild(category);
+                meta.appendChild(accessCount);
+                meta.appendChild(tags);
+                
+                item.appendChild(content);
+                item.appendChild(meta);
+                memoryItems.appendChild(item);
+            });
+        }
+        
+        // Helper function to generate ID
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+        
+        // Initialize
+        updateMemoryDisplay();
+    </script>
+</body>
+</html>

@@ -1,0 +1,156 @@
+/**
+ * Project Context Indicator Styles
+ * Visual indicators for when project context is being used in AI responses
+ */
+
+/* Default variables if CSS vars aren't supported */
+:root {
+    --highlight-bg-color: rgba(77, 156, 237, 0.1);
+    --highlight-color: #4d9ced;
+    --highlight-hover-bg-color: rgba(77, 156, 237, 0.15);
+    --text-secondary-color: #758190;
+    --text-primary-color: #3a4554;
+}
+
+/* Fallback class to ensure visibility regardless of theme */
+.minerva-ai-message .project-context-indicator,
+.ai-message .project-context-indicator,
+.project-context-indicator {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: 8px;
+    margin-bottom: 12px;
+    padding: 8px 12px;
+    background-color: var(--highlight-bg-color, rgba(77, 156, 237, 0.1));
+    border-left: 3px solid var(--highlight-color, #4d9ced);
+    border-radius: 4px;
+    font-size: 13px;
+    color: var(--text-secondary-color, #758190);
+    animation: fadeIn 0.3s ease-in-out;
+    transition: background-color 0.2s ease;
+    /* Ensure this stands out */
+    z-index: 10;
+    position: relative;
+}
+
+.project-context-indicator:hover {
+    background-color: var(--highlight-hover-bg-color, rgba(77, 156, 237, 0.15));
+}
+
+.project-context-icon {
+    margin-right: 6px;
+    font-size: 14px;
+}
+
+.project-context-text {
+    font-weight: 500;
+}
+
+/* Debug mode details */
+.project-context-details {
+    width: 100%;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed rgba(77, 156, 237, 0.3);
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.project-context-details div {
+    margin-bottom: 4px;
+}
+
+.project-context-details strong {
+    color: var(--text-primary-color, #3a4554);
+}
+
+/* Visual indicator for assigned conversations */
+.conversation-item.has-project {
+    border-left: 3px solid var(--highlight-color, #4d9ced);
+}
+
+.conversation-item.has-project .conversation-item-project {
+    display: flex;
+    align-items: center;
+    padding-top: 4px;
+    font-size: 12px;
+    color: var(--highlight-color, #4d9ced);
+}
+
+.conversation-item.has-project .conversation-item-project-icon {
+    margin-right: 4px;
+}
+
+/* Project context toolbar in chat */
+.project-context-toolbar {
+    display: flex;
+    align-items: center;
+    padding: 8px 15px;
+    background-color: var(--highlight-bg-color, rgba(77, 156, 237, 0.1));
+    border-bottom: 1px solid var(--border-color, #e0e5eb);
+    font-size: 14px;
+    animation: slideDown 0.3s ease-in-out;
+}
+
+.project-context-toolbar.hidden {
+    display: none;
+}
+
+.project-context-toolbar-icon {
+    margin-right: 8px;
+    font-size: 16px;
+    color: var(--highlight-color, #4d9ced);
+}
+
+.project-context-toolbar-title {
+    font-weight: 600;
+    margin-right: 8px;
+    color: var(--text-primary-color, #333);
+}
+
+.project-context-toolbar-description {
+    color: var(--text-secondary-color, #758190);
+    font-size: 13px;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.project-context-toolbar-actions {
+    display: flex;
+    align-items: center;
+}
+
+.project-context-toolbar-button {
+    background: transparent;
+    border: none;
+    padding: 4px 8px;
+    cursor: pointer;
+    color: var(--text-muted-color, #b9bdc3);
+    font-size: 13px;
+    border-radius: 4px;
+    margin-left: 8px;
+    transition: all 0.2s ease;
+}
+
+.project-context-toolbar-button:hover {
+    background-color: var(--highlight-color, #4d9ced);
+    color: white;
+}
+
+.project-context-toolbar-button.settings {
+    color: var(--text-secondary-color, #758190);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideDown {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}

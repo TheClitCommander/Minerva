@@ -1,0 +1,285 @@
+{% extends "base.html" %}
+
+{% block title %}Minerva - 3D Orbital UI (Fixed){% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/orb-ui/orb-style.css') }}">
+<!-- Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Add custom styling for React components -->
+<style>
+    /* Full screen container for the orbital UI */
+    #react-orbital-ui {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: radial-gradient(circle at center, #131c2e 0%, #0a0e17 100%);
+        overflow: hidden;
+    }
+    
+    /* Styling for toggles in settings panels */
+    .toggle {
+        position: relative;
+        display: inline-block;
+        width: 40px;
+        height: 20px;
+    }
+    
+    .toggle input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+    
+    .toggle-slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #374151;
+        transition: .4s;
+        border-radius: 34px;
+    }
+    
+    .toggle-slider:before {
+        position: absolute;
+        content: "";
+        height: 16px;
+        width: 16px;
+        left: 2px;
+        bottom: 2px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+    }
+    
+    .toggle input:checked + .toggle-slider {
+        background-color: #4a6bdf;
+    }
+    
+    .toggle input:checked + .toggle-slider:before {
+        transform: translateX(20px);
+    }
+    
+    /* Debug overlay */
+    #jsx-debug-overlay {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        background: rgba(0,0,0,0.8);
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+        font-family: monospace;
+        z-index: 9999;
+        font-size: 12px;
+        display: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="jsx-debug-overlay"></div>
+
+<!-- Loading screen -->
+<div id="loading-screen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #0a0e17; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease-in-out;">
+    <img src="{{ url_for('static', filename='images/minerva_logo.png') }}" alt="Minerva Logo" style="width: 120px; margin-bottom: 20px;">
+    <div style="width: 200px; height: 4px; background-color: #1a202c; border-radius: 2px; overflow: hidden;">
+        <div id="loading-bar" style="width: 0%; height: 100%; background: linear-gradient(to right, #4a6bdf, #6f42c1); transition: width 2s ease-in-out;"></div>
+    </div>
+    <div style="margin-top: 15px; color: #a0aec0; font-size: 14px;">
+        Launching Orbital Interface...
+    </div>
+</div>
+
+<!-- Root container for React -->
+<div id="react-orbital-ui"></div>
+
+<!-- Think Tank panel (will be replaced by React component) -->
+<div id="think-tank-panel" style="display: none; position: absolute; top: 20px; right: 20px; background: rgba(10, 14, 23, 0.7); border-radius: 10px; padding: 15px; width: 300px; z-index: 1000;">
+    <h3 style="margin-top: 0; color: #4a6bdf; border-bottom: 1px solid rgba(74, 107, 223, 0.3); padding-bottom: 10px; margin-bottom: 15px;">Think Tank Models</h3>
+    <div class="model-item">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+            <span style="font-weight: bold;">GPT-4 Turbo</span>
+            <span>92%</span>
+        </div>
+        <div style="width: 100%; height: 10px; background: rgba(255, 255, 255, 0.1); border-radius: 5px; overflow: hidden;">
+            <div style="width: 92%; height: 100%; background: #4a6bdf; border-radius: 5px;"></div>
+        </div>
+    </div>
+</div>
+
+<!-- User input area (will be replaced by React component) -->
+<div id="user-input-area" style="display: none; position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); width: 80%; max-width: 800px; z-index: 1000;">
+    <div style="display: flex; background: rgba(10, 14, 23, 0.7); border-radius: 10px; padding: 15px;">
+        <textarea style="width: 100%; background: rgba(255, 255, 255, 0.1); border: none; border-radius: 5px; color: white; padding: 10px; resize: none; height: 50px;" placeholder="Ask Minerva..."></textarea>
+        <button style="background: #4a6bdf; border: none; border-radius: 5px; color: white; padding: 0 15px; margin-left: 10px;">
+            <i class="fas fa-paper-plane"></i>
+        </button>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- React and Three.js Dependencies -->
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/three@0.159.0/build/three.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<!-- React Three Fiber and Drei -->
+<script src="https://unpkg.com/@react-three/fiber@8.15.12/dist/react-three-fiber.min.js"></script>
+<script src="https://unpkg.com/@react-three/drei@9.92.3/index.min.js"></script>
+
+<!-- Debug script to verify library loading -->
+<script>
+// Debug function to verify library loading
+document.addEventListener('DOMContentLoaded', function() {
+    const debugOverlay = document.getElementById('jsx-debug-overlay');
+    
+    // For development/debugging - toggle with Ctrl+D
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && e.key === 'd') {
+            debugOverlay.style.display = debugOverlay.style.display === 'none' ? 'block' : 'none';
+            e.preventDefault();
+        }
+    });
+    
+    // Check if libraries are loaded
+    const libs = {
+        'React': typeof React !== 'undefined' ? React.version : 'Not loaded',
+        'ReactDOM': typeof ReactDOM !== 'undefined' ? ReactDOM.version : 'Not loaded',
+        'THREE': typeof THREE !== 'undefined' ? THREE.version : 'Not loaded',
+        'Babel': typeof Babel !== 'undefined' ? 'Loaded' : 'Not loaded',
+        'ReactThreeF': typeof ReactThreeF !== 'undefined' ? 'Loaded' : 'Not loaded',
+        'drei': typeof drei !== 'undefined' ? 'Loaded' : 'Not loaded'
+    };
+    
+    let debugHtml = '<h3>Library Status:</h3>';
+    for (const [lib, status] of Object.entries(libs)) {
+        const color = status === 'Not loaded' ? '#ff6b6b' : '#69db7c';
+        debugHtml += `<div>${lib}: <span style="color: ${color}">${status}</span></div>`;
+    }
+    
+    debugHtml += '<div style="margin-top: 10px;">Press Ctrl+D to toggle this overlay</div>';
+    debugOverlay.innerHTML = debugHtml;
+    
+    // Loading animation
+    const loadingBar = document.getElementById('loading-bar');
+    loadingBar.style.width = '100%';
+});
+</script>
+
+<!-- Import our React components -->
+<script type="text/babel" src="{{ url_for('static', filename='js/orb-ui/react-three/MinervaUI.jsx') }}"></script>
+<script type="text/babel" src="{{ url_for('static', filename='js/orb-ui/react-three/MinervaOrb.jsx') }}"></script>
+<script type="text/babel" src="{{ url_for('static', filename='js/orb-ui/react-three/ProjectOrb.jsx') }}"></script>
+<script type="text/babel" src="{{ url_for('static', filename='js/orb-ui/react-three/AgentOrb.jsx') }}"></script>
+<script type="text/babel" src="{{ url_for('static', filename='js/orb-ui/react-three/SpeedTabs.jsx') }}"></script>
+<script type="text/babel" src="{{ url_for('static', filename='js/orb-ui/react-three/Widgets.jsx') }}"></script>
+
+<!-- Main application script -->
+<script type="text/babel">
+  const { useState, useEffect, useRef } = React;
+  const { Canvas, useThree, useFrame } = ReactThreeF;
+  const { OrbitControls, Html } = drei;
+
+  document.addEventListener('DOMContentLoaded', function() {
+    // Simulate loading time
+    setTimeout(() => {
+      const loadingScreen = document.getElementById('loading-screen');
+      loadingScreen.style.opacity = 0;
+      setTimeout(() => {
+        loadingScreen.style.display = 'none';
+      }, 500);
+    }, 2000);
+    
+    // Configure the Think Tank model data
+    const thinkTankModels = [
+      { 
+        position: [3, 1, 0], 
+        color: '#4a6bdf', // Blue
+        name: "GPT-4 Turbo",
+        agents: [
+          { color: '#dc3545' }, // Red - Code capability
+          { color: '#28a745' }, // Green - Reasoning capability
+          { color: '#ffc107' }  // Yellow - Creative capability
+        ]
+      },
+      { 
+        position: [-3, 1, 0], 
+        color: '#6f42c1', // Purple
+        name: "Claude 3 Opus",
+        agents: [
+          { color: '#28a745' }, // Green - Reasoning capability
+          { color: '#ffc107' }, // Yellow - Creative capability
+          { color: '#17a2b8' }  // Cyan - Research capability
+        ]
+      },
+      { 
+        position: [0, 1, 3], 
+        color: '#fd7e14', // Orange
+        name: "Gemini Pro",
+        agents: [
+          { color: '#dc3545' }, // Red - Code capability
+          { color: '#17a2b8' }, // Cyan - Research capability
+          { color: '#6f42c1' }  // Purple - Language capability
+        ]
+      }
+    ];
+    
+    // Sample user messages to demonstrate UI
+    const sampleMessages = [
+      {
+        id: 1,
+        sender: 'user',
+        content: 'What are the key differences between transformers and RNNs?',
+        timestamp: new Date(Date.now() - 60000 * 5)
+      },
+      {
+        id: 2,
+        sender: 'assistant',
+        content: 'Transformers and RNNs (Recurrent Neural Networks) differ in several key ways:\n\n**1. Parallelization**\n- Transformers: Process all tokens in parallel, enabling faster training on modern hardware\n- RNNs: Process tokens sequentially, making them slower to train\n\n**2. Attention Mechanism**\n- Transformers: Use self-attention to weigh the importance of different parts of the input\n- RNNs: Lack explicit attention, though variants like LSTM have memory cells\n\n**3. Long-range Dependencies**\n- Transformers: Excel at capturing long-range dependencies through direct connections\n- RNNs: Struggle with long-range dependencies due to vanishing/exploding gradients\n\n**4. Context Window**\n- Transformers: Have a fixed context window determined at training time\n- RNNs: Theoretically can process infinite sequence lengths\n\n**5. Memory Usage**\n- Transformers: Higher memory requirements that scale quadratically with sequence length\n- RNNs: More memory-efficient for very long sequences\n\nTransformers have largely replaced RNNs in NLP tasks due to their superior performance and training efficiency.',
+        timestamp: new Date(Date.now() - 60000 * 4)
+      }
+    ];
+    
+    try {
+      // Render the main application
+      const container = document.getElementById('react-orbital-ui');
+      if (typeof ReactDOM.createRoot === 'function') {
+        // React 18+
+        const root = ReactDOM.createRoot(container);
+        root.render(
+          <MinervaUI 
+            thinkTankModels={thinkTankModels}
+            messages={sampleMessages}
+          />
+        );
+      } else {
+        // Older React versions
+        ReactDOM.render(
+          <MinervaUI 
+            thinkTankModels={thinkTankModels}
+            messages={sampleMessages}
+          />,
+          container
+        );
+      }
+      console.log("Minerva Orbital UI rendered successfully!");
+    } catch (error) {
+      console.error("Error rendering Minerva UI:", error);
+      document.getElementById('jsx-debug-overlay').style.display = 'block';
+      document.getElementById('jsx-debug-overlay').innerHTML += `
+        <div style="color: #ff6b6b; margin-top: 15px;">
+          <strong>Error:</strong> ${error.message}
+        </div>
+      `;
+    }
+  });
+</script>
+{% endblock %}

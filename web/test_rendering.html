@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Basic Test Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #4a6bdf;
+        }
+        .section {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        button {
+            background: #4a6bdf;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Minerva Browser Rendering Test</h1>
+        
+        <div class="section">
+            <h2>HTML Rendering Test</h2>
+            <p>This text should be rendered properly by your browser.</p>
+            <p>If you see nicely formatted text in a white container with a blue heading, HTML rendering is working.</p>
+            <p>If you see raw HTML code, your browser is not rendering HTML properly.</p>
+        </div>
+        
+        <div class="section">
+            <h2>JavaScript Test</h2>
+            <p>Click the button below to test if JavaScript is working:</p>
+            <button onclick="testJavaScript()">Test JavaScript</button>
+            <div id="js-result"></div>
+        </div>
+        
+        <div class="section">
+            <h2>Browser Information</h2>
+            <div id="browser-info">
+                JavaScript must be enabled to display browser information.
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>Next Steps</h2>
+            <ol>
+                <li>If this page renders correctly but the React page doesn't, there's likely an issue with the React/Babel setup.</li>
+                <li>If this page shows as raw HTML, your browser might be configured to display source code instead of rendering HTML.</li>
+                <li>Try opening this page in a different browser (Safari, Firefox, or Chrome).</li>
+                <li>Check if your browser has any extensions or settings that force displaying page source.</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        function testJavaScript() {
+            const resultDiv = document.getElementById('js-result');
+            resultDiv.className = 'success';
+            resultDiv.innerHTML = 'JavaScript is working! ✅ Current time: ' + new Date().toLocaleTimeString();
+        }
+        
+        // Display browser information
+        document.addEventListener('DOMContentLoaded', function() {
+            const browserInfoDiv = document.getElementById('browser-info');
+            browserInfoDiv.innerHTML = `
+                <ul>
+                    <li><strong>Browser:</strong> ${navigator.userAgent}</li>
+                    <li><strong>Browser Language:</strong> ${navigator.language}</li>
+                    <li><strong>Screen Resolution:</strong> ${window.screen.width} x ${window.screen.height}</li>
+                    <li><strong>JavaScript Enabled:</strong> Yes ✅</li>
+                </ul>
+            `;
+        });
+    </script>
+</body>
+</html>

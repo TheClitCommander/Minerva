@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minerva Simplified Interface</title>
+    
+    <!-- Socket.IO for real-time communication -->
+    <script src="https://cdn.socket.io/4.4.1/socket.io.min.js"></script>
+    
+    <!-- Import Three.js from ES module CDN with explicit orbit controls import -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.150.1/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.150.1/examples/jsm/",
+                "three/examples/jsm/controls/OrbitControls": "https://unpkg.com/three@0.150.1/examples/jsm/controls/OrbitControls.js"
+            }
+        }
+    </script>
+    
+    <style>
+        body { 
+            margin: 0; 
+            overflow: hidden; 
+            background: #000;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: #fff;
+        }
+        
+        /* Model selector styling */
+        .model-selector {
+            background: rgba(51, 65, 85, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 0.8rem;
+            margin-right: 8px;
+            outline: none;
+        }
+        
+        /* 3D Visualization Container */
+        #visualization-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        
+        /* Chat Interface */
+        .chat-container {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            width: 400px;
+            height: 500px;
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            z-index: 10;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            transition: height 0.3s ease, transform 0.3s ease;
+        }
+        
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: rgba(51, 65, 85, 0.7);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: move;
+        }
+        
+        .chat-header h3 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+        
+        .chat-controls button {
+            background: none;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            margin-left: 8px;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        
+        .chat-controls button:hover {
+            opacity: 1;
+        }
+        
+        /* Settings panel styling */
+        .settings-panel {
+            background: rgba(51, 65, 85, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 12px;
+            position: absolute;
+            top: 50px;
+            right: 10px;
+            width: 250px;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            display: none;
+        }
+        
+        .settings-panel.visible {
+            display: block;
+            animation: fadeIn 0.2s ease-in-out;
+        }
+        
+        .settings-section {
+            margin-bottom: 12px;
+        }
+        
+        .settings-section h4 {
+            margin: 0 0 8px 0;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+        }
+        
+        .settings-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        /* Toggle switch styling */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 36px;
+            height: 20px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #374151;
+            transition: .4s;
+            border-radius: 20px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: #3b82f6;
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(16px);
+        }
+        
+        /* Small button styling */
+        .small-btn {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            color: #e2e8f0;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .small-btn:hover {
+            background: rgba(59, 130, 246, 0.3);
+            border-color: rgba(59, 130, 246, 0.6);
+        }
+        
+        /* Animation for panel */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .message {
+            margin-bottom: 12px;
+            max-width: 85%;
+            padding: 10px 14px;
+            border-radius: 12px;
+            word-wrap: break-word;
+        }
+        
+        .message.user {
+            align-self: flex-end;
+            background: #3b82f6;
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+        
+        .message.ai {
+            align-self: flex-start;
+            background: rgba(51, 65, 85, 0.7);
+            color: white;
+            border-bottom-left-radius: 4px;
+        }
+        
+        .model-info {
+            align-self: center;
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin: 4px 0;
+            padding: 2px 6px;
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 4px;
+        }
+        
+        .chat-input {
+            display: flex;
+            padding: 10px;
+            background: rgba(51, 65, 85, 0.5);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 10px 14px;
+            border: none;
+            border-radius: 20px;
+            background: rgba(30, 41, 59, 0.7);
+            color: white;
+            outline: none;
+        }
+        
+        .chat-input button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 16px;
+            margin-left: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .chat-input button:hover {
+            background: #2563eb;
+        }
+        
+        /* Metrics Panel */
+        .metrics-panel {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 8px;
+            padding: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            font-size: 0.9rem;
+            width: 200px;
+        }
+        
+        .metrics-panel h4 {
+            margin: 0 0 8px 0;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+        
+        .metric-value {
+            font-weight: 500;
+            color: #3b82f6;
+        }
+        
+        /* Minimize/Maximize */
+        .chat-container.minimized {
+            height: 48px;
+        }
+        
+        .chat-container.minimized .chat-messages,
+        .chat-container.minimized .chat-input {
+            display: none;
+        }
+        
+        /* Custom scrollbar */
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .chat-messages::-webkit-scrollbar-track {
+            background: rgba(30, 41, 59, 0.5);
+        }
+        
+        .chat-messages::-webkit-scrollbar-thumb {
+            background-color: rgba(100, 116, 139, 0.5);
+            border-radius: 6px;
+        }
+        
+        /* Enhanced metrics panel styling */
+        .metrics-panel {
+            width: 250px;
+        }
+        
+        .metric-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 8px 0;
+        }
+        
+        .think-tank-metrics h5,
+        .model-contributions h5 {
+            margin: 8px 0;
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+        
+        .model-contribution {
+            margin-bottom: 6px;
+        }
+        
+        .contribution-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            margin-bottom: 2px;
+        }
+        
+        .contribution-bar {
+            height: 4px;
+            background: rgba(59, 130, 246, 0.5);
+            border-radius: 2px;
+        }
+        
+        .model-info-panel {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(30, 41, 59, 0.9);
+            border-radius: 8px;
+            padding: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+            z-index: 20;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            font-size: 0.9rem;
+            width: 300px;
+            max-height: 80vh;
+            overflow-y: auto;
+            display: none;
+        }
+        
+        .model-info-panel h4 {
+            margin: 0 0 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 6px;
+        }
+        
+        .model-info-panel h5 {
+            margin: 12px 0 4px 0;
+            opacity: 0.8;
+            font-size: 0.85rem;
+        }
+        
+        .model-info-section {
+            margin-bottom: 10px;
+        }
+        
+        /* Model info badge that appears with responses */
+        .model-info {
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .model-info:hover {
+            background: rgba(51, 65, 85, 0.7);
+        }
+    </style>
+</head>
+<body>
+    <!-- 3D Visualization Container -->
+    <div id="visualization-container"></div>
+    
+    <!-- Chat Interface -->
+    <div class="chat-container" id="chat-window">
+        <div class="chat-header" id="chat-header">
+            <h3>Minerva Think Tank</h3>
+            <div class="chat-controls">
+                <select id="model-select" class="model-selector">
+                    <option value="blend">Blended Response (Recommended)</option>
+                    <option value="gpt4">GPT-4</option>
+                    <option value="claude">Claude-3</option>
+                    <option value="gemini">Gemini</option>
+                    <option value="llama">Llama-3</option>
+                </select>
+                <button id="settings-btn" title="Chat Settings">⚙️</button>
+                <button id="minimize-btn">−</button>
+            </div>
+        </div>
+        
+        <!-- Settings Panel -->
+        <div class="settings-panel" id="settings-panel">
+            <div class="settings-section">
+                <h4>Web Research</h4>
+                <div class="settings-row">
+                    <span>Enable Web Research</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="web-research-toggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="settings-row">
+                    <span>Research Depth</span>
+                    <select id="research-depth" class="model-selector">
+                        <option value="light">Light</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="deep">Deep</option>
+                    </select>
+                </div>
+            </div>
+            <div class="settings-section">
+                <h4>Session Management</h4>
+                <div class="settings-row">
+                    <span>Session ID</span>
+                    <span id="session-id-display">New Session</span>
+                </div>
+                <div class="settings-row">
+                    <button id="new-session-btn" class="small-btn">New Session</button>
+                    <button id="save-session-btn" class="small-btn">Save Session</button>
+                </div>
+            </div>
+        </div>
+        <div class="chat-messages" id="chat-messages"></div>
+        <div class="chat-input">
+            <input type="text" id="user-input" placeholder="Ask Minerva anything..." />
+            <button id="send-btn">Send</button>
+        </div>
+    </div>
+    
+    <!-- Metrics Panel -->
+    <div class="metrics-panel" id="metrics-panel">
+        <h4>AI Model Metrics</h4>
+        <!-- Default metrics that will be updated dynamically -->
+        <div class="metric">
+            <span>Active Models</span>
+            <span class="metric-value" id="active-models">GPT4All</span>
+        </div>
+        <div class="metric">
+            <span>Response Time</span>
+            <span class="metric-value" id="response-time">--</span>
+        </div>
+        <div class="metric">
+            <span>Mode</span>
+            <span class="metric-value" id="response-mode">Blended</span>
+        </div>
+        <div class="metric-divider"></div>
+        
+        <!-- Think Tank Metrics (shown only for blended responses) -->
+        <div class="think-tank-metrics" id="think-tank-metrics">
+            <h5>Think Tank Metrics</h5>
+            <div class="metric">
+                <span>Top Model</span>
+                <span class="metric-value" id="top-model">--</span>
+            </div>
+            <div class="metric">
+                <span>Blend Strategy</span>
+                <span class="metric-value" id="blend-strategy">--</span>
+            </div>
+            <div class="metric">
+                <span>Query Type</span>
+                <span class="metric-value" id="query-type">--</span>
+            </div>
+        </div>
+        
+        <!-- Model Contributions (for blended responses) -->
+        <div class="model-contributions" id="model-contributions">
+            <h5>Model Contributions</h5>
+            <div id="contribution-bars"></div>
+        </div>
+    </div>
+    
+    <!-- Model Info Panel (shows on hover over model-info) -->
+    <div class="model-info-panel" id="model-info-panel">
+        <h4>Response Details</h4>
+        <div id="model-info-content">
+            <!-- Will be populated dynamically -->
+        </div>
+    </div>
+    
+    <!-- ES Module Scripts -->
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+        
+        // Session management variables
+        let sessionId = localStorage.getItem('minerva_session_id') || generateSessionId();
+        let userId = localStorage.getItem('minerva_user_id') || generateUserId();
+        
+        // Create session ID if needed
+        function generateSessionId() {
+            return 'session_' + Math.random().toString(36).substring(2, 15);
+        }
+        
+        function generateUserId() {
+            return 'user_' + Math.random().toString(36).substring(2, 15);
+        }
+        
+        // Save session info to storage
+        localStorage.setItem('minerva_session_id', sessionId);
+        localStorage.setItem('minerva_user_id', userId);
+        
+        // User preferences
+        let userPreferences = loadUserPreferences();
+        
+        // Socket.IO Connection with explicit origin and session parameters
+        const socket = io('http://127.0.0.1:8080', {
+            transports: ['websocket', 'polling'],
+            reconnection: true,
+            reconnectionAttempts: 5,
+            reconnectionDelay: 1000,
+            query: {
+                'session_id': sessionId,
+                'user_id': userId
+            }
+        });
+        let socketConnected = false;
+        
+        // User preferences management
+        function loadUserPreferences() {
+            const storedPrefs = localStorage.getItem('minerva_preferences');
+            if (storedPrefs) {
+                try {
+                    return JSON.parse(storedPrefs);
+                } catch (e) {
+                    console.error('Failed to parse stored preferences:', e);
+                }
+            }
+            
+            // Default preferences
+            return {
+                selected_model: 'blend',  // blend, gpt-4, claude-3, gemini
+                web_research: false,      // true/false
+                research_depth: 'medium'  // light, medium, deep
+            };
+        }
+        
+        function saveUserPreferences() {
+            localStorage.setItem('minerva_preferences', JSON.stringify(userPreferences));
+            
+            // Also notify server about preference change
+            if (socketConnected) {
+                socket.emit('update_preferences', {
+                    session_id: sessionId,
+                    user_id: userId,
+                    preferences: userPreferences
+                });
+            }
+        }
+        
+        // Update UI with current preferences
+        function updatePreferencesUI() {
+            // Set model dropdown
+            if (document.getElementById('model-select')) {
+                document.getElementById('model-select').value = userPreferences.selected_model;
+            }
+            
+            // Set web research toggle
+            if (document.getElementById('web-research-toggle')) {
+                document.getElementById('web-research-toggle').checked = userPreferences.web_research;
+            }
+            
+            // Set research depth
+            if (document.getElementById('research-depth')) {
+                document.getElementById('research-depth').value = userPreferences.research_depth;
+            }
+            
+            // Display session ID if available
+            if (sessionId && document.getElementById('session-id')) {
+                document.getElementById('session-id').textContent = sessionId;
+            }
+            if (userId && document.getElementById('user-id')) {
+                document.getElementById('user-id').textContent = userId;
+            }
+            
+            // Toggle research depth visibility
+            toggleResearchDepthVisibility();
+        }
+        
+        function toggleResearchDepthVisibility() {
+            const depthSelect = document.getElementById('research-depth-container');
+            if (depthSelect) {
+                if (userPreferences.web_research) {
+                    depthSelect.style.display = 'block';
+                } else {
+                    depthSelect.style.display = 'none';
+                }
+            }
+        }
+        
+        // Socket connection events
+        socket.on('connect', function() {
+            console.log('Connected to server via WebSocket');
+            socketConnected = true;
+            
+            // Update UI with preferences
+            updatePreferencesUI();
+            
+            // Join or create session
+            joinChatSession();
+            
+            // Add welcome message
+            addAIMessage("Hello! I'm Minerva. How can I assist you today?");
+        });
+        
+        socket.on('disconnect', function() {
+            console.log('Disconnected from server');
+            socketConnected = false;
+            // Add system message about disconnection
+            addSystemMessage('Disconnected from server. Trying to reconnect...', 'error');
+        });
+        
+        // Session events
+        socket.on('session_joined', function(data) {
+            console.log('Joined session:', data);
+            sessionId = data.session_id;
+            localStorage.setItem('minerva_session_id', sessionId);
+            
+            // Update session display
+            if (document.getElementById('session-id')) {
+                document.getElementById('session-id').textContent = sessionId;
+            }
+            
+            // Add system message
+            addSystemMessage(`Connected to session: ${sessionId.substring(0, 8)}...`, 'success');
+            
+            // Load previous messages if provided
+            if (data.messages && data.messages.length > 0) {
+                loadChatHistory(data.messages);
+            }
+            
+            // Load user preferences if provided
+            if (data.preferences) {
+                userPreferences = data.preferences;
+                localStorage.setItem('minerva_preferences', JSON.stringify(userPreferences));
+                updatePreferencesUI();
+            }
+        });
+        
+        // AI response handling
+        socket.on('ai_response', function(data) {
+            console.log('Received AI response:', data);
+            
+            // Extract model info if available
+            let modelInfo = null;
+            if (data.model_info) {
+                modelInfo = data.model_info;
+                // Store for later use
+                localStorage.setItem('last_model_info', JSON.stringify(modelInfo));
+                // Update think tank metrics
+                updateMetricsPanel(modelInfo);
+            }
+            
+            // Handle different response formats
+            let responseText = '';
+            if (data.response) {
+                responseText = data.response;
+            } else if (data.message) {
+                responseText = data.message;
+            } else if (data.content) {
+                responseText = data.content;
+            } else if (data.text) {
+                responseText = data.text;
+            } else {
+                responseText = 'Received response with unknown format.';
+            }
+            
+            // Add to chat
+            addAIMessage(responseText, modelInfo);
+        });
+        
+        // System message events
+        socket.on('system_message', function(data) {
+            console.log('System message:', data);
+            addSystemMessage(data.message, data.status || 'info');
+        });
+        
+        // Join or create a chat session
+        function joinChatSession() {
+            if (!socketConnected) return;
+            
+            console.log('Joining chat session with ID:', sessionId);
+            
+            socket.emit('join', {
+                session_id: sessionId,
+                user_id: userId,
+                preferences: userPreferences
+            });
+        }
+        
+        // Load chat history
+        function loadChatHistory(messages) {
+            console.log('Loading chat history:', messages);
+            // Clear current messages
+            document.getElementById('chat-messages').innerHTML = '';
+            
+            // Add each message to the chat
+            messages.forEach(msg => {
+                if (msg.sender_type === 'user') {
+                    addUserMessage(msg.content, false); // Don't send to server again
+                } else if (msg.sender_type === 'ai') {
+                    addAIMessage(msg.content, msg.metadata);
+                } else if (msg.sender_type === 'system') {
+                    addSystemMessage(msg.content, msg.status || 'info');
+                }
+            });
+        }
+        
+        // Update metrics panel with model info from response
+        function updateMetricsPanel(modelInfo) {
+            // If we don't have model info, try to get from storage
+            if (!modelInfo || Object.keys(modelInfo).length === 0) {
+                const storedInfo = localStorage.getItem('last_model_info');
+                if (storedInfo) {
+                    try {
+                        modelInfo = JSON.parse(storedInfo);
+                    } catch (e) {
+                        console.error('Failed to parse stored model info:', e);
+                        return;
+                    }
+                } else {
+                    return; // No info available
+                }
+            }
+            
+            // Store the model info for future reference
+            localStorage.setItem('last_model_info', JSON.stringify(modelInfo));
+            
+            // Store the full model info for hover panel
+            if (document.getElementById('model-info-content')) {
+                document.getElementById('model-info-content').dataset.fullInfo = JSON.stringify(modelInfo);
+            }
+            
+            // Update active models display
+            if (modelInfo.models_used && document.getElementById('active-models')) {
+                document.getElementById('active-models').textContent = 
+                    Array.isArray(modelInfo.models_used) ? modelInfo.models_used.join(', ') : modelInfo.models_used;
+            }
+            
+            // Update response mode
+            if (document.getElementById('response-mode')) {
+                document.getElementById('response-mode').textContent = modelInfo.selected_mode || 'Blend';
+            }
+            
+            // Update response time if available
+            if (document.getElementById('response-time')) {
+                document.getElementById('response-time').textContent = 
+                    modelInfo.response_time ? 
+                    (typeof modelInfo.response_time === 'number' ? 
+                    modelInfo.response_time.toFixed(2) + 's' : modelInfo.response_time) :
+                    Math.round(Math.random() * 2 * 10) / 10 + 's'; // Simulate if not provided
+            }
+            
+            // Update Think Tank metrics if available
+            const thinkTankSection = document.getElementById('think-tank-metrics');
+            const contributionsSection = document.getElementById('model-contributions');
+            const contributionBars = document.getElementById('contribution-bars');
+            
+            if (thinkTankSection && contributionsSection) {
+                // Show sections
+                thinkTankSection.style.display = 'block';
+                contributionsSection.style.display = 'block';
+                
+                // Update top model
+                if (modelInfo.top_model && document.getElementById('top-model')) {
+                    document.getElementById('top-model').textContent = modelInfo.top_model;
+                } else if (document.getElementById('top-model')) {
+                    document.getElementById('top-model').textContent = '--';
+                }
+                
+                // Update blend strategy
+                if (modelInfo.blend_strategy && document.getElementById('blend-strategy')) {
+                    document.getElementById('blend-strategy').textContent = modelInfo.blend_strategy;
+                } else if (modelInfo.blending_strategy && document.getElementById('blend-strategy')) {
+                    document.getElementById('blend-strategy').textContent = modelInfo.blending_strategy;
+                } else if (document.getElementById('blend-strategy')) {
+                    document.getElementById('blend-strategy').textContent = 'general';
+                }
+                
+                // Update query type
+                if (modelInfo.query_type && document.getElementById('query-type')) {
+                    document.getElementById('query-type').textContent = modelInfo.query_type;
+                } else if (document.getElementById('query-type')) {
+                    document.getElementById('query-type').textContent = 'general';
+                }
+                
+                // Update model contributions
+                if (contributionBars) {
+                    contributionBars.innerHTML = '';
+                    
+                    // Handle different contribution formats
+                    if (Array.isArray(modelInfo.contributions)) {
+                        // Array format
+                        modelInfo.contributions.forEach(contribution => {
+                            const modelName = contribution.model;
+                            const weight = contribution.weight;
+                            const sections = contribution.sections || [];
+                            
+                            const contributionDiv = document.createElement('div');
+                            contributionDiv.className = 'model-contribution';
+                            contributionDiv.innerHTML = `
+                                <div class="contribution-label">
+                                    <span>${modelName}</span>
+                                    <span>${Math.round(weight * 100)}%</span>
+                                </div>
+                                <div class="contribution-bar" style="width: ${weight * 100}%"></div>
+                                <div class="contribution-sections" style="font-size: 0.7rem; opacity: 0.7">
+                                    ${sections.join(', ')}
+                                </div>
+                            `;
+                            contributionBars.appendChild(contributionDiv);
+                        });
+                    } else if (typeof modelInfo.contributions === 'object') {
+                        // Object format with model:percentage pairs
+                        Object.entries(modelInfo.contributions).forEach(([model, percentage]) => {
+                            const contributionDiv = document.createElement('div');
+                            contributionDiv.className = 'model-contribution';
+                            
+                            // Convert percentage to number if it's a string
+                            let percentNum = typeof percentage === 'string' ? 
+                                parseFloat(percentage.replace('%', '')) : 
+                                typeof percentage === 'number' ? 
+                                    percentage * 100 : percentage;
+                                    
+                            contributionDiv.innerHTML = `
+                                <div class="contribution-label">
+                                    <span>${model}</span>
+                                    <span>${Math.round(percentNum)}%</span>
+                                </div>
+                                <div class="contribution-bar" style="width: ${percentNum}%"></div>
+                            `;
+                            contributionBars.appendChild(contributionDiv);
+                        });
+                    }
+                }
+            } else {
+                // Hide think tank sections for single model responses
+                if (thinkTankSection) thinkTankSection.style.display = 'none';
+                if (contributionsSection) contributionsSection.style.display = 'none';
+            }
+        }
+        
+        // User preferences management
+        function loadUserPreferences() {
+            const storedPrefs = localStorage.getItem('minerva_preferences');
+            if (storedPrefs) {
+                try {
+                    return JSON.parse(storedPrefs);
+                } catch (e) {
+                    console.error('Failed to parse stored preferences:', e);
+                }
+            }
+            
+            // Default preferences
+            return {
+                selected_model: 'blend',  // blend, gpt-4, claude-3, gemini
+                web_research: false,      // true/false
+                research_depth: 'medium'  // light, medium, deep
+            };
+        }
+        
+        function saveUserPreferences() {
+            localStorage.setItem('minerva_preferences', JSON.stringify(userPreferences));
+            socket.emit('update_preferences', {
+                session_id: sessionId,
+                user_id: userId,
+                preferences: userPreferences
+            });
+        }
+        
+        // Session management helpers
+        function generateSessionId() {
+            return 'session_' + Math.random().toString(36).substring(2, 15);
+        }
+        
+        function generateUserId() {
+            return 'user_' + Math.random().toString(36).substring(2, 15);
+        }
+        
+        function updateSessionInfo() {
+            // Update session panel with current info
+            if (document.getElementById('session-id')) {
+                document.getElementById('session-id').textContent = sessionId;
+            }
+            if (document.getElementById('user-id')) {
+                document.getElementById('user-id').textContent = userId;
+            }
+            
+            // Update settings panel with current preferences
+            if (document.getElementById('model-select')) {
+                document.getElementById('model-select').value = userPreferences.selected_model;
+            }
+            if (document.getElementById('web-research-toggle')) {
+                document.getElementById('web-research-toggle').checked = userPreferences.web_research;
+            }
+            if (document.getElementById('research-depth')) {
+                document.getElementById('research-depth').value = userPreferences.research_depth;
+            }
+            
+            // Update web research depth visibility based on toggle
+            toggleResearchDepthVisibility();
+        }
+        
+        // 3D Visualization
+        function initVisualization() {
+            // Create scene
+            const scene = new THREE.Scene();
+            
+            // Create camera
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 0, 6);
+            
+            // Create renderer
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            document.getElementById('visualization-container').appendChild(renderer.domElement);
+            
+            // Add lights
+            const ambientLight = new THREE.AmbientLight(0x404040, 2);
+            scene.add(ambientLight);
+            
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+            directionalLight.position.set(5, 3, 5);
+            scene.add(directionalLight);
+            
+            // Create planet
+            const planetGeometry = new THREE.SphereGeometry(2, 64, 64);
+            const planetMaterial = new THREE.MeshPhongMaterial({
+                color: 0x4a6bdf,
+                emissive: 0x172554,
+                shininess: 25,
+                transparent: true,
+                opacity: 0.9
+            });
+            
+            const planet = new THREE.Mesh(planetGeometry, planetMaterial);
+            scene.add(planet);
+            
+            // Create atmosphere
+            const atmosphereGeometry = new THREE.SphereGeometry(2.15, 64, 64);
+            const atmosphereMaterial = new THREE.MeshPhongMaterial({
+                color: 0x6366f1,
+                emissive: 0x818cf8,
+                shininess: 10,
+                transparent: true,
+                opacity: 0.3,
+                side: THREE.BackSide
+            });
+            
+            const atmosphere = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial);
+            scene.add(atmosphere);
+            
+            // Create orbit controls
+            console.log('OrbitControls availability:', typeof OrbitControls);
+            const controls = new OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.enableZoom = false;
+            controls.autoRotate = true;
+            controls.autoRotateSpeed = 0.5;
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+            
+            // Animation loop
+            function animate() {
+                requestAnimationFrame(animate);
+                controls.update();
+                renderer.render(scene, camera);
+            }
+            
+            animate();
+        }
+        
+        // Chat Interface Functions
+        function addUserMessage(text, sendToServer = true) {
+            const messagesContainer = document.getElementById('chat-messages');
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', 'user');
+            messageElement.textContent = text;
+            messagesContainer.appendChild(messageElement);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            
+            // If this is a new message (not from history), send to server
+            if (sendToServer && socketConnected) {
+                // Send message with user preferences
+                socket.emit('user_message', { 
+                    message: text,
+                    session_id: sessionId,
+                    user_id: userId,
+                    preferences: userPreferences
+                });
+            }
+        }
+        
+        function addAIMessage(text, modelInfo) {
+            const messagesContainer = document.getElementById('chat-messages');
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', 'ai');
+            messageElement.textContent = text;
+            messagesContainer.appendChild(messageElement);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            
+            // Update metrics panel if model info provided
+            if (modelInfo) {
+                updateMetricsPanel(modelInfo);
+            }
+        }
+        
+        // Send message to server
+        function sendMessage() {
+            const inputElement = document.getElementById('user-input');
+            const message = inputElement.value.trim();
+            
+            if (message) {
+                // Clear input field
+                inputElement.value = '';
+                
+                // Display which model is being used
+                const messagesContainer = document.getElementById('chat-messages');
+                const modelInfoElement = document.createElement('div');
+                modelInfoElement.classList.add('model-info');
+                modelInfoElement.textContent = userPreferences.selected_model === 'blend' 
+                    ? 'Using Model Blending' 
+                    : `Using ${userPreferences.selected_model.toUpperCase()}`;
+                    
+                if (userPreferences.web_research) {
+                    modelInfoElement.textContent += ` with ${userPreferences.research_depth} web research`;
+                }
+                
+                // First add the user message
+                addUserMessage(message, false); // Don't emit from here, we'll do it below
+                
+                // Then add the model info element
+                messagesContainer.appendChild(modelInfoElement);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                
+                if (socketConnected) {
+                    // Send message with user preferences
+                    socket.emit('user_message', { 
+                        message: message,
+                        session_id: sessionId,
+                        user_id: userId,
+                        preferences: userPreferences
+                    });
+                    console.log('Sent message to server:', message, 'preferences:', userPreferences);
+                } else {
+                    console.log('Socket not connected, using simulated response');
+                    // Simulate AI response if socket is not connected
+                    setTimeout(() => {
+                        addAIMessage("I'm currently in simulation mode because the WebSocket connection is inactive. Your message was: \"" + message + "\"");
+                    }, 1000);
+                }
+            }
+        }
+        
+        // Setup send button
+        document.getElementById('send-btn').addEventListener('click', sendMessage);
+        
+        // Setup enter key to send
+        document.getElementById('user-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+        
+        // Minimize/Maximize chat window
+        document.getElementById('minimize-btn').addEventListener('click', function() {
+            const chatWindow = document.getElementById('chat-window');
+            chatWindow.classList.toggle('minimized');
+            
+            // Change button text based on state
+            this.textContent = chatWindow.classList.contains('minimized') ? '+' : '−';
+        });
+        
+        // Make chat window draggable
+        function setupDraggableChat() {
+            const chatWindow = document.getElementById('chat-window');
+            const chatHeader = document.getElementById('chat-header');
+            
+            let isDragging = false;
+            let offsetX, offsetY;
+            
+            chatHeader.addEventListener('mousedown', function(e) {
+                isDragging = true;
+                
+                // Get the current position of the chat window
+                const rect = chatWindow.getBoundingClientRect();
+                
+                // Calculate the offset from the mouse position to the top-left corner of the window
+                offsetX = e.clientX - rect.left;
+                offsetY = e.clientY - rect.top;
+            });
+            
+            document.addEventListener('mousemove', function(e) {
+                if (isDragging) {
+                    // Calculate new position
+                    const newLeft = e.clientX - offsetX;
+                    const newTop = e.clientY - offsetY;
+                    
+                    // Apply new position
+                    chatWindow.style.left = newLeft + 'px';
+                    chatWindow.style.top = newTop + 'px';
+                    chatWindow.style.right = 'auto';
+                    chatWindow.style.bottom = 'auto';
+                }
+            });
+            
+            document.addEventListener('mouseup', function() {
+                isDragging = false;
+            });
+        }
+        
+        // Initialize everything when DOM is loaded
+        // Function to show model info panel
+        function setupModelInfoPanel() {
+            document.addEventListener('click', function(e) {
+                // Check if clicked element has model-info class
+                if (e.target.classList.contains('model-info')) {
+                    const infoPanel = document.getElementById('model-info-panel');
+                    const infoContent = document.getElementById('model-info-content');
+                    
+                    // Get stored model info from the latest response
+                    const modelInfoString = infoContent.dataset.fullInfo;
+                    if (modelInfoString) {
+                        try {
+                            const modelInfo = JSON.parse(modelInfoString);
+                            
+                            // Generate formatted HTML content
+                            let html = '';
+                            
+                            // Basic info
+                            html += `<div class="model-info-section">
+                                <h5>Response Mode</h5>
+                                <div>${modelInfo.selected_mode || 'Standard'}</div>
+                            </div>`;
+                            
+                            // Models used
+                            if (Array.isArray(modelInfo.models_used)) {
+                                html += `<div class="model-info-section">
+                                    <h5>Models Used</h5>
+                                    <div>${modelInfo.models_used.join(', ')}</div>
+                                </div>`;
+                            }
+                            
+                            // Top model and confidence
+                            if (modelInfo.top_model) {
+                                html += `<div class="model-info-section">
+                                    <h5>Top Model</h5>
+                                    <div>${modelInfo.top_model}</div>
+                                </div>`;
+                            }
+                            
+                            // Quality metrics
+                            if (modelInfo.quality_metrics) {
+                                html += `<div class="model-info-section">
+                                    <h5>Quality Metrics</h5>
+                                    <ul style="margin: 0; padding-left: 16px;">`;
+                                for (const [metric, value] of Object.entries(modelInfo.quality_metrics)) {
+                                    html += `<li>${metric}: ${typeof value === 'number' ? value.toFixed(2) : value}</li>`;
+                                }
+                                html += `</ul></div>`;
+                            }
+                            
+                            // Blending info
+                            if (modelInfo.blending_strategy) {
+                                html += `<div class="model-info-section">
+                                    <h5>Blending Strategy</h5>
+                                    <div>${modelInfo.blending_strategy}</div>
+                                </div>`;
+                            }
+                            
+                            // Rankings if available
+                            if (Array.isArray(modelInfo.rankings)) {
+                                html += `<div class="model-info-section">
+                                    <h5>Model Rankings</h5>
+                                    <ol style="margin: 0; padding-left: 16px;">`;
+                                modelInfo.rankings.forEach(rank => {
+                                    html += `<li>${rank.model}: ${rank.score.toFixed(2)}
+                                        ${rank.reason ? `<div style="font-size: 0.75rem; opacity: 0.8">${rank.reason}</div>` : ''}
+                                    </li>`;
+                                });
+                                html += `</ol></div>`;
+                            }
+                            
+                            infoContent.innerHTML = html;
+                            infoPanel.style.display = 'block';
+                            
+                            // Position the panel near the click
+                            const rect = e.target.getBoundingClientRect();
+                            infoPanel.style.top = (rect.bottom + 10) + 'px';
+                            infoPanel.style.right = (window.innerWidth - rect.right) + 'px';
+                            
+                            // Hide panel when clicking outside
+                            const clickOutsideHandler = function(event) {
+                                if (!infoPanel.contains(event.target) && event.target !== e.target) {
+                                    infoPanel.style.display = 'none';
+                                    document.removeEventListener('click', clickOutsideHandler);
+                                }
+                            };
+                            setTimeout(() => {
+                                document.addEventListener('click', clickOutsideHandler);
+                            }, 100);
+                        } catch (err) {
+                            console.error('Error parsing model info:', err);
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Add event listeners for settings panel controls
+        function setupSettingsListeners() {
+            // Model selection dropdown
+            document.getElementById('model-select').addEventListener('change', function(e) {
+                userPreferences.selected_model = e.target.value;
+                saveUserPreferences();
+                console.log('Model preference updated:', userPreferences.selected_model);
+            });
+            
+            // Web research toggle
+            document.getElementById('web-research-toggle').addEventListener('change', function(e) {
+                userPreferences.web_research = e.target.checked;
+                saveUserPreferences();
+                toggleResearchDepthVisibility();
+                console.log('Web research updated:', userPreferences.web_research);
+            });
+            
+            // Research depth dropdown
+            document.getElementById('research-depth').addEventListener('change', function(e) {
+                userPreferences.research_depth = e.target.value;
+                saveUserPreferences();
+                console.log('Research depth updated:', userPreferences.research_depth);
+            });
+            
+            // Toggle settings panel button
+            document.getElementById('settings-toggle').addEventListener('click', function() {
+                const settingsPanel = document.getElementById('settings-panel');
+                settingsPanel.classList.toggle('show-settings');
+            });
+            
+            // Copy session ID button
+            document.getElementById('copy-session').addEventListener('click', function() {
+                navigator.clipboard.writeText(sessionId).then(() => {
+                    addSystemMessage('Session ID copied to clipboard', 'success');
+                }).catch(err => {
+                    console.error('Failed to copy session ID:', err);
+                    addSystemMessage('Failed to copy session ID', 'error');
+                });
+            });
+            
+            // New session button
+            document.getElementById('new-session').addEventListener('click', function() {
+                if (confirm('Create a new session? Current chat history will no longer be visible.')) {
+                    sessionId = generateSessionId();
+                    localStorage.setItem('minerva_session_id', sessionId);
+                    
+                    // Clear chat messages
+                    document.getElementById('chat-messages').innerHTML = '';
+                    
+                    // Update session info
+                    if (document.getElementById('session-id')) {
+                        document.getElementById('session-id').textContent = sessionId;
+                    }
+                    
+                    // Add system message about new session
+                    addSystemMessage(`Created new session: ${sessionId.substring(0, 8)}...`, 'success');
+                    
+                    // Join new session
+                    joinChatSession();
+                }
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, initializing...');
+            initVisualization();
+            setupDraggableChat();
+            setupModelInfoPanel();
+            setupSettingsListeners();
+            updatePreferencesUI();
+            console.log('Initialization complete');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minerva Memory Chat</title>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #1a1a2e;
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Chat Interface Styling */
+        #chat-interface {
+            width: 400px;
+            height: 500px;
+            background-color: rgba(30, 30, 50, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        #chat-header {
+            padding: 15px;
+            background-color: #4a6bdf;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: move;
+        }
+        
+        #chat-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        #chat-controls {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .chat-control-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+        
+        .chat-control-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        #chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .system-message {
+            background-color: rgba(90, 90, 120, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            text-align: center;
+            color: #d1d1e0;
+            max-width: 80%;
+            align-self: center;
+        }
+        
+        .user-message {
+            background-color: #4a6bdf;
+            padding: 10px 15px;
+            border-radius: 18px 18px 0 18px;
+            max-width: 80%;
+            align-self: flex-end;
+            word-break: break-word;
+        }
+        
+        .assistant-message {
+            background-color: #2d2d44;
+            padding: 10px 15px;
+            border-radius: 18px 18px 18px 0;
+            max-width: 80%;
+            align-self: flex-start;
+            word-break: break-word;
+        }
+        
+        .user-message.memory, .assistant-message.memory {
+            opacity: 0.7;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+        
+        .assistant-message.loading {
+            background-color: #2d2d44;
+            min-width: 60px;
+        }
+        
+        .assistant-message.fallback {
+            background-color: #413d63;
+            border-left: 3px solid #f45b69;
+        }
+        
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .typing-indicator span {
+            height: 8px;
+            width: 8px;
+            background: #d1d1e0;
+            border-radius: 50%;
+            display: inline-block;
+            animation: bounce 1.3s linear infinite;
+        }
+        
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.15s;
+        }
+        
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+        
+        @keyframes bounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-5px); }
+        }
+        
+        #chat-input-container {
+            padding: 15px;
+            display: flex;
+            gap: 10px;
+            border-top: 1px solid rgba(156, 93, 219, 0.3);
+        }
+        
+        #chat-input {
+            flex: 1;
+            padding: 10px 15px;
+            border-radius: 18px;
+            border: 1px solid #4a4a6a;
+            background-color: #2d2d44;
+            color: white;
+            resize: none;
+            outline: none;
+            height: 20px;
+            max-height: 120px;
+        }
+        
+        #send-message {
+            background-color: #4a6bdf;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        #send-message:hover {
+            background-color: #3d5cce;
+        }
+        
+        #send-message:active {
+            transform: scale(0.95);
+        }
+        
+        /* Project selector styles */
+        #project-selector {
+            padding: 10px 15px;
+            background-color: #2d2d44;
+            border-bottom: 1px solid rgba(156, 93, 219, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        #project-selector select {
+            flex: 1;
+            padding: 5px 10px;
+            background-color: #1a1a2e;
+            color: white;
+            border: 1px solid #4a4a6a;
+            border-radius: 5px;
+        }
+        
+        #create-project-btn {
+            background-color: #9c5ddb;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        
+        /* Memory indicator styles */
+        .memory-indicator {
+            font-size: 0.75rem;
+            margin-top: 5px;
+            display: inline-block;
+        }
+        
+        .memory-badge {
+            background-color: rgba(139, 92, 246, 0.6);
+            color: #fff;
+            border-radius: 12px;
+            padding: 3px 8px;
+            font-size: 0.7rem;
+            display: inline-block;
+            cursor: help; /* Shows a help cursor to indicate tooltip */
+            transition: all 0.2s ease;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+        
+        .memory-badge:hover {
+            background-color: rgba(139, 92, 246, 0.8);
+            box-shadow: 0 0 8px rgba(139, 92, 246, 0.5);
+        }
+        
+        /* Minimized state */
+        #chat-interface.minimized {
+            height: 60px;
+        }
+        
+        #chat-interface.minimized #chat-messages,
+        #chat-interface.minimized #chat-input-container,
+        #chat-interface.minimized #project-selector {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Chat Interface (Think Tank) with Project Support -->
+    <div id="chat-interface">
+        <!-- Chat header with controls -->
+        <div id="chat-header">
+            <div id="chat-title">Minerva Think Tank</div>
+            <div id="chat-controls">
+                <button class="chat-control-btn" id="minimize-chat" title="Minimize chat"><i class="fas fa-minus"></i></button>
+            </div>
+        </div>
+        
+        <!-- Project selector -->
+        <div id="project-selector">
+            <select id="project-select">
+                <option value="general">General Conversation</option>
+                <option value="create-new">+ Create New Project</option>
+            </select>
+            <button id="create-project-btn" title="Convert this conversation to a project"><i class="fas fa-project-diagram"></i> New</button>
+        </div>
+        
+        <div id="chat-messages">
+            <div class="system-message">Welcome to Minerva's Think Tank with Conversation Memory. How can I assist you today?</div>
+        </div>
+        <div id="chat-input-container">
+            <textarea id="chat-input" placeholder="Ask Minerva anything..."></textarea>
+            <button id="send-message"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function to make element draggable
+            function makeDraggable(element, handle) {
+                let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+                
+                if (handle) {
+                    handle.style.cursor = 'move';
+                    handle.onmousedown = dragMouseDown;
+                } else {
+                    element.onmousedown = dragMouseDown;
+                }
+                
+                function dragMouseDown(e) {
+                    e = e || window.event;
+                    if (e.target.tagName === 'BUTTON' || e.target.tagName === 'TEXTAREA' || 
+                        e.target.tagName === 'INPUT' || e.target.tagName === 'I' || 
+                        e.target.tagName === 'SELECT') {
+                        return;
+                    }
+                    
+                    e.preventDefault();
+                    pos3 = e.clientX;
+                    pos4 = e.clientY;
+                    
+                    document.onmouseup = closeDragElement;
+                    document.onmousemove = elementDrag;
+                }
+                
+                function elementDrag(e) {
+                    e = e || window.event;
+                    e.preventDefault();
+                    
+                    pos1 = pos3 - e.clientX;
+                    pos2 = pos4 - e.clientY;
+                    pos3 = e.clientX;
+                    pos4 = e.clientY;
+                    
+                    // Calculate new position
+                    let newTop = element.offsetTop - pos2;
+                    let newLeft = element.offsetLeft - pos1;
+                    
+                    // Apply constraints to keep in viewport
+                    if (newTop < 0) newTop = 0;
+                    if (newLeft < 0) newLeft = 0;
+                    if (newTop > window.innerHeight - 100) newTop = window.innerHeight - 100;
+                    if (newLeft > window.innerWidth - 100) newLeft = window.innerWidth - 100;
+                    
+                    element.style.top = newTop + 'px';
+                    element.style.left = newLeft + 'px';
+                }
+                
+                function closeDragElement() {
+                    document.onmouseup = null;
+                    document.onmousemove = null;
+                }
+            }
+            
+            console.log('Initializing Minerva Memory Chat...');
+            
+            // Initialize chat interface
+            const chatInterface = document.getElementById('chat-interface');
+            const chatHeader = document.getElementById('chat-header');
+            const chatMessages = document.getElementById('chat-messages');
+            const chatInput = document.getElementById('chat-input');
+            const sendButton = document.getElementById('send-message');
+            const minimizeBtn = document.getElementById('minimize-chat');
+            const projectSelect = document.getElementById('project-select');
+            const createProjectBtn = document.getElementById('create-project-btn');
+            
+            // Make chat interface draggable
+            makeDraggable(chatInterface, chatHeader);
+            
+            // Initialize memory storage with project support
+            window.minervaMemory = window.minervaMemory || [];
+            window.minervaProjects = window.minervaProjects || {
+                general: { name: 'General Conversation', conversations: [] }
+            };
+            
+            // Active project tracking
+            let activeProject = 'general';
+            
+            // Handle minimize/maximize
+            minimizeBtn.addEventListener('click', function() {
+                chatInterface.classList.toggle('minimized');
+                
+                const icon = this.querySelector('i');
+                if (icon) {
+                    if (chatInterface.classList.contains('minimized')) {
+                        icon.classList.remove('fa-minus');
+                        icon.classList.add('fa-expand');
+                        this.setAttribute('title', 'Expand chat');
+                    } else {
+                        icon.classList.remove('fa-expand');
+                        icon.classList.add('fa-minus');
+                        this.setAttribute('title', 'Minimize chat');
+                    }
+                }
+            });
+            
+            // Handle project selection change
+            projectSelect.addEventListener('change', function() {
+                const selectedValue = this.value;
+                
+                if (selectedValue === 'create-new') {
+                    // Reset selection
+                    this.value = activeProject;
+                    
+                    // Prompt for new project name
+                    const projectName = prompt('Enter name for the new project:');
+                    if (projectName && projectName.trim()) {
+                        // Create a new project ID
+                        const projectId = 'project_' + Date.now();
+                        
+                        // Add to projects
+                        window.minervaProjects[projectId] = {
+                            name: projectName.trim(),
+                            conversations: [],
+                            created: new Date().toISOString()
+                        };
+                        
+                        // Add option to select
+                        const option = document.createElement('option');
+                        option.value = projectId;
+                        option.textContent = projectName.trim();
+                        
+                        // Insert before the "Create New" option
+                        const createNewOption = projectSelect.querySelector('option[value="create-new"]');
+                        projectSelect.insertBefore(option, createNewOption);
+                        
+                        // Select the new project
+                        projectSelect.value = projectId;
+                        activeProject = projectId;
+                        
+                        // Save projects to localStorage
+                        localStorage.setItem('minervaProjects', JSON.stringify(window.minervaProjects));
+                        
+                        // Add notification message
+                        addSystemMessage(`Created new project: ${projectName.trim()}`);
+                    }
+                } else {
+                    activeProject = selectedValue;
+                    loadProjectConversation(activeProject);
+                }
+            });
+            
+            // Handle create project from conversation
+            createProjectBtn.addEventListener('click', function() {
+                // Check if there are messages to convert
+                if (window.minervaMemory.length < 2) {
+                    alert('Have a conversation first before creating a project from it.');
+                    return;
+                }
+                
+                // Prompt for project name
+                const projectName = prompt('Enter name for the new project based on this conversation:');
+                if (projectName && projectName.trim()) {
+                    // Create new project ID
+                    const projectId = 'project_' + Date.now();
+                    
+                    // Create project with current conversation
+                    window.minervaProjects[projectId] = {
+                        name: projectName.trim(),
+                        conversations: [...window.minervaMemory], // Copy current memory
+                        created: new Date().toISOString()
+                    };
+                    
+                    // Add option to select
+                    const option = document.createElement('option');
+                    option.value = projectId;
+                    option.textContent = projectName.trim();
+                    
+                    // Insert before the "Create New" option
+                    const createNewOption = projectSelect.querySelector('option[value="create-new"]');
+                    projectSelect.insertBefore(option, createNewOption);
+                    
+                    // Select the new project
+                    projectSelect.value = projectId;
+                    activeProject = projectId;
+                    
+                    // Save projects to localStorage
+                    localStorage.setItem('minervaProjects', JSON.stringify(window.minervaProjects));
+                    
+                    // Add notification message
+                    addSystemMessage(`Current conversation converted to project: ${projectName.trim()}`);
+                }
+            });
+            
+            // Helper function to add system message
+            function addSystemMessage(text) {
+                const msgElement = document.createElement('div');
+                msgElement.className = 'system-message';
+                msgElement.textContent = text;
+                chatMessages.appendChild(msgElement);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Function to load conversation from a project
+            function loadProjectConversation(projectId) {
+                if (!window.minervaProjects[projectId]) return;
+                
+                // Clear chat messages
+                chatMessages.innerHTML = '';
+                
+                // Set memory to the project's conversations
+                if (window.minervaProjects[projectId].conversations && 
+                    window.minervaProjects[projectId].conversations.length > 0) {
+                    
+                    window.minervaMemory = [...window.minervaProjects[projectId].conversations];
+                    
+                    // Add project context message
+                    addSystemMessage(`Loaded project: ${window.minervaProjects[projectId].name}`);
+                    
+                    // Display the last few messages (up to 5)
+                    const recentMessages = window.minervaMemory.slice(-5);
+                    for (const msg of recentMessages) {
+                        const messageElem = document.createElement('div');
+                        messageElem.className = msg.role === 'user' ? 'user-message memory' : 'assistant-message memory';
+                        messageElem.textContent = msg.content;
+                        
+                        if (msg.role === 'assistant') {
+                            const memoryIndicator = document.createElement('div');
+                            memoryIndicator.className = 'memory-indicator';
+                            memoryIndicator.innerHTML = '<span class="memory-badge" title="From project memory">Project Memory</span>';
+                            messageElem.appendChild(memoryIndicator);
+                        }
+                        
+                        chatMessages.appendChild(messageElem);
+                    }
+                    
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                } else {
+                    window.minervaMemory = [];
+                    addSystemMessage(`Started new conversation in project: ${window.minervaProjects[projectId].name}`);
+                }
+            }
+            
+            // Send message function
+            async function sendMessage() {
+                const message = chatInput.value.trim();
+                if (!message) return;
+                
+                // Clear input
+                chatInput.value = '';
+                
+                // Add user message to chat
+                const userMessageElem = document.createElement('div');
+                userMessageElem.className = 'user-message';
+                userMessageElem.textContent = message;
+                chatMessages.appendChild(userMessageElem);
+                
+                // Scroll to bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // Add to memory with project context
+                window.minervaMemory.push({
+                    role: 'user',
+                    content: message,
+                    project: activeProject,
+                    timestamp: new Date().toISOString()
+                });
+                
+                // Update project's conversation array
+                if (window.minervaProjects[activeProject]) {
+                    window.minervaProjects[activeProject].conversations = [...window.minervaMemory];
+                    localStorage.setItem('minervaProjects', JSON.stringify(window.minervaProjects));
+                }
+                
+                // Add loading indicator
+                const loadingElem = document.createElement('div');
+                loadingElem.className = 'assistant-message loading';
+                loadingElem.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+                chatMessages.appendChild(loadingElem);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                try {
+                    // Try to get a response from the server
+                    const response = await fetchThinkTankResponse(message);
+                    
+                    // Remove loading indicator
+                    chatMessages.removeChild(loadingElem);
+                    
+                    // Add assistant response to chat
+                    const assistantMessageElem = document.createElement('div');
+                    assistantMessageElem.className = 'assistant-message';
+                    assistantMessageElem.textContent = response.message;
+                    
+                    // Add memory indicator
+                    const memoryIndicator = document.createElement('div');
+                    memoryIndicator.className = 'memory-indicator';
+                    memoryIndicator.innerHTML = '<span class="memory-badge" title="Minerva is using conversation memory">Memory Active</span>';
+                    assistantMessageElem.appendChild(memoryIndicator);
+                    
+                    chatMessages.appendChild(assistantMessageElem);
+                    
+                    // Add to memory
+                    window.minervaMemory.push({
+                        role: 'assistant',
+                        content: response.message,
+                        project: activeProject,
+                        timestamp: new Date().toISOString()
+                    });
+                    
+                    // Update project's conversation array
+                    if (window.minervaProjects[activeProject]) {
+                        window.minervaProjects[activeProject].conversations = [...window.minervaMemory];
+                        localStorage.setItem('minervaProjects', JSON.stringify(window.minervaProjects));
+                    }
+                } catch (error) {
+                    console.error('Error fetching response:', error);
+                    
+                    // Remove loading indicator
+                    chatMessages.removeChild(loadingElem);
+                    
+                    // Create fallback response based on input
+                    fallbackToSimulation(message);
+                }
+                
+                // Scroll to bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Fallback response function
+            function fallbackToSimulation(userMessage) {
+                // Create a fallback response
+                let responseText = "I'm operating in offline mode. ";
+                
+                // Simple keyword matching to seem responsive
+                if (userMessage.toLowerCase().includes('hello') || userMessage.toLowerCase().includes('hi')) {
+                    responseText += "Hello! I'm Minerva's Think Tank with memory capabilities. I can remember our conversation context and organize discussions into projects.";
+                } else if (userMessage.toLowerCase().includes('project')) {
+                    responseText += "Projects allow you to organize conversations by topic. You can create a new project or convert this conversation into a project using the controls above.";
+                } else if (userMessage.toLowerCase().includes('memory')) {
+                    responseText += "My conversation memory system allows me to maintain context between messages and across sessions. I store this locally on your device.";
+                } else {
+                    responseText += "I've stored your message in my conversation memory. When online, I can provide more detailed responses while maintaining context.";
+                }
+                
+                // Add response to chat
+                const assistantMessageElem = document.createElement('div');
+                assistantMessageElem.className = 'assistant-message fallback';
+                assistantMessageElem.textContent = responseText;
+                
+                // Add fallback indicator
+                const memoryIndicator = document.createElement('div');
+                memoryIndicator.className = 'memory-indicator';
+                memoryIndicator.innerHTML = '<span class="memory-badge" title="Using offline mode">Offline Mode</span>';
+                assistantMessageElem.appendChild(memoryIndicator);
+                
+                chatMessages.appendChild(assistantMessageElem);
+                
+                // Add to memory
+                window.minervaMemory.push({
+                    role: 'assistant',
+                    content: responseText,
+                    project: activeProject,
+                    timestamp: new Date().toISOString(),
+                    fallback: true
+                });
+                
+                // Update project's conversation array
+                if (window.minervaProjects[activeProject]) {
+                    window.minervaProjects[activeProject].conversations = [...window.minervaMemory];
+                    localStorage.setItem('minervaProjects', JSON.stringify(window.minervaProjects));
+                }
+            }
+            
+            // Function to fetch response from server
+            async function fetchThinkTankResponse(message) {
+                try {
+                    const response = await fetch('/api/think-tank', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            message: message,
+                            project: activeProject,
+                            conversation_history: window.minervaMemory
+                        })
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    
+                    return await response.json();
+                } catch (error) {
+                    console.error('Error in fetchThinkTankResponse:', error);
+                    throw error;
+                }
+            }
+            
+            // Load saved projects from localStorage
+            const savedProjects = localStorage.getItem('minervaProjects');
+            if (savedProjects) {
+                try {
+                    window.minervaProjects = JSON.parse(savedProjects);
+                    
+                    // Create options for each project
+                    for (const projectId in window.minervaProjects) {
+                        if (projectId === 'general') continue; // Skip general, it's already in the HTML
+                        
+                        const project = window.minervaProjects[projectId];
+                        const option = document.createElement('option');
+                        option.value = projectId;
+                        option.textContent = project.name;
+                        
+                        // Insert before the "Create New" option
+                        const createNewOption = projectSelect.querySelector('option[value="create-new"]');
+                        projectSelect.insertBefore(option, createNewOption);
+                    }
+                    
+                    console.log('Loaded projects:', Object.keys(window.minervaProjects).length);
+                } catch (error) {
+                    console.error('Error loading projects:', error);
+                    window.minervaProjects = {
+                        general: { name: 'General Conversation', conversations: [] }
+                    };
+                }
+            }
+            
+            // Load initial conversation for general project
+            loadProjectConversation('general');
+            
+            // Event listeners for sending messages
+            sendButton.addEventListener('click', sendMessage);
+            chatInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+            
+            // Auto-expand input when typing
+            chatInput.addEventListener('input', function() {
+                this.style.height = 'auto';
+                let newHeight = this.scrollHeight;
+                if (newHeight > 120) newHeight = 120;
+                if (newHeight < 40) newHeight = 40;
+                this.style.height = newHeight + 'px';
+            });
+            
+            // Focus input field
+            chatInput.focus();
+            
+            console.log('Minerva Memory Chat initialized successfully');
+        });
+    </script>
+</body>
+</html>

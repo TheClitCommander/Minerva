@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minerva - Milky Way</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .ui-info {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+            user-select: none;
+            pointer-events: none;
+        }
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 24px;
+            z-index: 1000;
+        }
+        .chat-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(25, 25, 50, 0.7);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(100, 149, 237, 0.8);
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+        .chat-toggle:hover {
+            background: rgba(100, 149, 237, 0.9);
+            box-shadow: 0 0 20px rgba(100, 149, 237, 1);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="loading" id="loading">Loading Minerva Galaxy...</div>
+    <canvas id="space-canvas"></canvas>
+    <button class="chat-toggle" id="chat-toggle">💬</button>
+    <div class="ui-info">
+        <p>Zoom: <span id="zoom-level">-2</span></p>
+        <p>Controls: Two finger pinch/mouse wheel to zoom, click and drag to move</p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Canvas setup
+            const canvas = document.getElementById('space-canvas');
+            const ctx = canvas.getContext('2d');
+            const zoomDisplay = document.getElementById('zoom-level');
+            const loadingScreen = document.getElementById('loading');
+            
+            // Set canvas to full browser window
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                draw(); // Redraw when resized
+            }
+            
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+            
+            // Galaxy and space parameters
+            let stars = [];
+            let dustParticles = [];
+            let nebulaPatches = [];
+            const numStars = 8000;
+            const numDustParticles = 3000;
+            const numNebulae = 15;
+            let currentZoom = -2; // Starting zoom level
+            const minZoom = -10;  // Max zoom out
+            const maxZoom = 0.5;    // Max zoom in
+            
+            // Milky Way spiral parameters
+            const spiralArms = 5;
+            const spiralTightness = 0.3;
+            const spiralRandomness = 0.2;
+            
+            // View position (for panning)
+            let viewX = 0;
+            let viewY = 0;
+            
+            // Mouse/touch interaction
+            let isDragging = false;
+            let lastX = 0;
+            let lastY = 0;
+            
+            // Minerva orb parameters
+            const minervaOrb = {
+                x: 0,
+                y: 0,
+                baseRadius: 80,
+                glowRadius: 120,
+                color: '#4a7ee7',
+                glowColor: 'rgba(74, 126, 231, 0.4)',
+                pulseSpeed: 0.02,
+                pulseAmount: 0.2,
+                rotation: 0,
+                rotationSpeed: 0.001
+            };
+            
+            // Preload galaxy image
+            const milkyWayTexture = new Image();
+            milkyWayTexture.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
+            
+            // Generate stars with random positions and colors - in a spiral galaxy pattern
+            function generateGalaxyElements() {
+                stars = [];
+                dustParticles = [];
+                nebulaPatches = [];
+                
+                // Generate stars in a spiral pattern
+                for (let i = 0; i < numStars; i++) {
+                    // Spiral galaxy pattern
+                    const distance = Math.random() * 800 + 100; // Distance from center
+                    const angle = Math.random() * Math.PI * 2; // Random angle
+                    const armOffset = Math.floor(Math.random() * spiralArms) * (Math.PI * 2 / spiralArms);
+                    
+                    // Create spiral effect
+                    const spiralAngle = angle + spiralTightness * distance / 100 + armOffset;
+                    
+                    // Add some randomness to make it look natural
+                    const randX = (Math.random() - 0.5) * distance * spiralRandomness;
+                    const randY = (Math.random() - 0.5) * distance * spiralRandomness;
+                    
+                    const x = Math.cos(spiralAngle) * distance + randX;
+                    const y = Math.sin(spiralAngle) * distance + randY;
+                    
+                    // Make the galaxy slightly elliptical
+                    const squish = 0.7; // Vertical squish factor
+                    
+                    stars.push({
+                        x: x,
+                        y: y * squish,
+                        z: (1.0 - Math.random() * 0.2) * 500, // Z distance for parallax effect
+                        size: Math.random() * 2 + 0.5,
+                        color: getStarColor(distance)
+                    });
+                }
+                
+                // Generate dust particles (smaller and more numerous)
+                for (let i = 0; i < numDustParticles; i++) {
+                    const distance = Math.random() * 1000 + 100;
+                    const angle = Math.random() * Math.PI * 2;
+                    const armOffset = Math.floor(Math.random() * spiralArms) * (Math.PI * 2 / spiralArms);
+                    
+                    const spiralAngle = angle + spiralTightness * distance / 100 + armOffset;
+                    
+                    const randX = (Math.random() - 0.5) * distance * spiralRandomness * 1.5; // More randomness
+                    const randY = (Math.random() - 0.5) * distance * spiralRandomness * 1.5;
+                    
+                    const x = Math.cos(spiralAngle) * distance + randX;
+                    const y = Math.sin(spiralAngle) * distance + randY;
+                    
+                    // Make the galaxy slightly elliptical
+                    const squish = 0.7;
+                    
+                    dustParticles.push({
+                        x: x,
+                        y: y * squish,
+                        size: Math.random() * 0.7 + 0.1,
+                        alpha: Math.random() * 0.3 + 0.1,
+                        color: getDustColor(distance)
+                    });
+                }
+                
+                // Generate nebula patches
+                for (let i = 0; i < numNebulae; i++) {
+                    // Place nebulae along spiral arms
+                    const distance = Math.random() * 700 + 200;
+                    const armIndex = Math.floor(Math.random() * spiralArms);
+                    const armOffset = armIndex * (Math.PI * 2 / spiralArms);
+                    const angleOnArm = Math.random() * Math.PI * 0.4; // Limited angle on the arm
+                    
+                    const spiralAngle = angleOnArm + spiralTightness * distance / 100 + armOffset;
+                    
+                    const x = Math.cos(spiralAngle) * distance;
+                    const y = Math.sin(spiralAngle) * distance * 0.7; // Apply squish
+                    
+                    // Create different colored nebulae
+                    let nebulaColor;
+                    const colorRand = Math.random();
+                    if (colorRand < 0.3) {
+                        nebulaColor = 'rgba(237, 87, 87, 0.1)'; // Red
+                    } else if (colorRand < 0.6) {
+                        nebulaColor = 'rgba(100, 149, 237, 0.1)'; // Blue
+                    } else {
+                        nebulaColor = 'rgba(162, 87, 237, 0.1)'; // Purple
+                    }
+                    
+                    nebulaPatches.push({
+                        x: x,
+                        y: y,
+                        radius: Math.random() * 150 + 100,
+                        color: nebulaColor
+                    });
+                }
+            }
+            
+            // Generate a star color based on position in galaxy
+            function getStarColor(distance) {
+                // Colors change based on distance from center
+                if (distance < 200) {
+                    // Center stars - more blue/white
+                    const colors = ['#FFFFFF', '#EEEEFF', '#DDDDFF', '#AAAAFF', '#99CCFF'];
+                    return colors[Math.floor(Math.random() * colors.length)];
+                } else if (distance < 500) {
+                    // Mid-galaxy - mixed colors
+                    const colors = ['#FFFFFF', '#FFFFEE', '#FFDDDD', '#EEEEFF', '#FFEECC'];
+                    return colors[Math.floor(Math.random() * colors.length)];
+                } else {
+                    // Outer reaches - more red/yellow
+                    const colors = ['#FFFFFF', '#FFFFDD', '#FFDDDD', '#FFCCCC', '#FFFF99'];
+                    return colors[Math.floor(Math.random() * colors.length)];
+                }
+            }
+            
+            // Generate a dust color
+            function getDustColor(distance) {
+                // Dust gets more blue/green in center, more red in outer
+                if (distance < 300) {
+                    return `rgba(100, 149, 237, ${Math.random() * 0.1 + 0.05})`; // Blueish
+                } else if (distance < 600) {
+                    return `rgba(130, 130, 180, ${Math.random() * 0.1 + 0.05})`; // Purplish
+                } else {
+                    return `rgba(237, 100, 100, ${Math.random() * 0.1 + 0.05})`; // Reddish
+                }
+            }
+            
+            // Draw the Milky Way galaxy scene
+            function draw() {
+                // Animation variables
+                const time = Date.now() * 0.001; // Current time in seconds
+                
+                // Clear canvas with black background
+                ctx.fillStyle = '#000000';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // Calculate center of the screen
+                const centerX = canvas.width / 2;
+                const centerY = canvas.height / 2;
+                
+                // Apply zoom to the scale calculation
+                const zoomFactor = Math.pow(1.5, currentZoom);
+                
+                // Draw background galaxy glow
+                const galaxyGradient = ctx.createRadialGradient(
+                    centerX + viewX * zoomFactor, 
+                    centerY + viewY * zoomFactor, 
+                    0, 
+                    centerX + viewX * zoomFactor, 
+                    centerY + viewY * zoomFactor, 
+                    700 * zoomFactor
+                );
+                galaxyGradient.addColorStop(0, 'rgba(100, 120, 255, 0.2)');
+                galaxyGradient.addColorStop(0.3, 'rgba(80, 60, 150, 0.05)');
+                galaxyGradient.addColorStop(1, 'rgba(20, 0, 40, 0)');
+                
+                ctx.fillStyle = galaxyGradient;
+                ctx.beginPath();
+                ctx.arc(centerX + viewX * zoomFactor, centerY + viewY * zoomFactor, 700 * zoomFactor, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Draw the nebula patches
+                nebulaPatches.forEach(nebula => {
+                    const drawX = centerX + nebula.x * zoomFactor + viewX * zoomFactor;
+                    const drawY = centerY + nebula.y * zoomFactor + viewY * zoomFactor;
+                    const scaledRadius = nebula.radius * zoomFactor;
+                    
+                    // Only draw if on screen
+                    if (drawX + scaledRadius > 0 && drawX - scaledRadius < canvas.width &&
+                        drawY + scaledRadius > 0 && drawY - scaledRadius < canvas.height) {
+                        
+                        // Create a glow effect with multiple layers
+                        for (let i = 0; i < 5; i++) {
+                            const size = scaledRadius * (1 - i * 0.15);
+                            const alpha = 0.04 - (i * 0.006);
+                            const nebColor = nebula.color.replace(/[^,]+(?=\))/, alpha.toString());
+                            
+                            ctx.beginPath();
+                            ctx.fillStyle = nebColor;
+                            ctx.arc(drawX, drawY, size, 0, Math.PI * 2);
+                            ctx.fill();
+                        }
+                    }
+                });
+                
+                // Draw dust particles
+                dustParticles.forEach(dust => {
+                    const drawX = centerX + dust.x * zoomFactor + viewX * zoomFactor;
+                    const drawY = centerY + dust.y * zoomFactor + viewY * zoomFactor;
+                    const scaledSize = dust.size * zoomFactor;
+                    
+                    // Only draw if on screen with margin
+                    if (drawX > -20 && drawX < canvas.width + 20 &&
+                        drawY > -20 && drawY < canvas.height + 20) {
+                        
+                        ctx.beginPath();
+                        ctx.fillStyle = dust.color;
+                        ctx.globalAlpha = dust.alpha;
+                        ctx.arc(drawX, drawY, scaledSize, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.globalAlpha = 1.0;
+                    }
+                });
+                
+                // Draw each star
+                stars.forEach(star => {
+                    // Calculate position with zoom and pan
+                    const scaledX = star.x * zoomFactor;
+                    const scaledY = star.y * zoomFactor;
+                    
+                    // Add small parallax effect based on mouse/touch movement
+                    const parallaxX = (viewX / canvas.width) * 10 * (star.z / 500);
+                    const parallaxY = (viewY / canvas.height) * 10 * (star.z / 500);
+                    
+                    // Scale star size based on zoom
+                    const scaledSize = star.size * (zoomFactor * 0.5);
+                    
+                    // Apply the view position (panning)
+                    const drawX = centerX + scaledX + (viewX + parallaxX) * zoomFactor;
+                    const drawY = centerY + scaledY + (viewY + parallaxY) * zoomFactor;
+                    
+                    // Only draw stars within the canvas (with some margin)
+                    if (drawX > -20 && drawX < canvas.width + 20 &&
+                        drawY > -20 && drawY < canvas.height + 20) {
+                        
+                        // Draw the star
+                        ctx.fillStyle = star.color;
+                        
+                        // For larger stars, add a glow effect
+                        if (scaledSize > 1.2) {
+                            ctx.shadowBlur = scaledSize * 2;
+                            ctx.shadowColor = star.color;
+                        } else {
+                            ctx.shadowBlur = 0;
+                        }
+                        
+                        ctx.beginPath();
+                        ctx.arc(drawX, drawY, scaledSize, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                });
+                
+                // Turn off shadow for performance
+                ctx.shadowBlur = 0;
+                
+                // Draw the Minerva orb at the center
+                drawMinervaOrb(centerX, centerY, time, zoomFactor);
+                
+                // Update zoom display
+                zoomDisplay.textContent = currentZoom.toFixed(1);
+            }
+            
+            // Draw the Minerva orb at the center of the galaxy
+            function drawMinervaOrb(centerX, centerY, time, zoomFactor) {
+                // Calculate pulsing size effect
+                const pulseEffect = Math.sin(time * minervaOrb.pulseSpeed) * minervaOrb.pulseAmount;
+                const orbRadius = (minervaOrb.baseRadius * (1 + pulseEffect)) * zoomFactor;
+                const glowRadius = (minervaOrb.glowRadius * (1 + pulseEffect * 0.7)) * zoomFactor;
+                
+                // Position with view offset
+                const drawX = centerX + viewX * zoomFactor;
+                const drawY = centerY + viewY * zoomFactor;
+                
+                // Draw multiple glow layers
+                for (let i = 0; i < 5; i++) {
+                    const glowSize = glowRadius * (1 - i * 0.1);
+                    const alpha = 0.15 - (i * 0.02);
+                    
+                    ctx.beginPath();
+                    ctx.fillStyle = `rgba(74, 126, 231, ${alpha})`;
+                    ctx.arc(drawX, drawY, glowSize, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                
+                // Create radial gradient for the orb
+                const gradient = ctx.createRadialGradient(
+                    drawX - orbRadius * 0.3, drawY - orbRadius * 0.3, 0,
+                    drawX, drawY, orbRadius
+                );
+                gradient.addColorStop(0, '#FFFFFF');
+                gradient.addColorStop(0.3, '#ADD8E6');
+                gradient.addColorStop(0.6, '#4a7ee7');
+                gradient.addColorStop(1, '#1E3E7B');
+                
+                // Draw the main orb
+                ctx.beginPath();
+                ctx.fillStyle = gradient;
+                ctx.arc(drawX, drawY, orbRadius, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Add surface detail with arc segments
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+                ctx.lineWidth = 2 * zoomFactor;
+                
+                // Rotating arcs on the surface
+                for (let i = 0; i < 3; i++) {
+                    const arcAngle = (Math.PI * 2 / 3) * i + time * 0.1;
+                    const arcRadius = orbRadius * 0.8;
+                    
+                    ctx.beginPath();
+                    ctx.arc(drawX, drawY, arcRadius, arcAngle, arcAngle + Math.PI * 0.5);
+                    ctx.stroke();
+                }
+                
+                // Add highlight reflection
+                ctx.beginPath();
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+                ctx.arc(drawX - orbRadius * 0.4, drawY - orbRadius * 0.4, orbRadius * 0.2, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            
+            // Mouse wheel zoom
+            canvas.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                
+                // Calculate zoom amount based on wheel delta
+                const zoomDelta = e.deltaY * -0.001;
+                
+                // Apply zoom limits
+                currentZoom = Math.max(minZoom, Math.min(maxZoom, currentZoom + zoomDelta));
+                
+                draw();
+            });
+            
+            // Touch events for mobile
+            let lastTouchDistance = null;
+            
+            canvas.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                
+                if (e.touches.length === 1) {
+                    // Single touch for panning
+                    isDragging = true;
+                    lastX = e.touches[0].clientX;
+                    lastY = e.touches[0].clientY;
+                } else if (e.touches.length === 2) {
+                    // Two finger touch for zooming - store initial distance
+                    lastTouchDistance = Math.hypot(
+                        e.touches[0].clientX - e.touches[1].clientX,
+                        e.touches[0].clientY - e.touches[1].clientY
+                    );
+                }
+            });
+            
+            canvas.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                
+                if (e.touches.length === 1 && isDragging) {
+                    // Single touch panning
+                    const touchX = e.touches[0].clientX;
+                    const touchY = e.touches[0].clientY;
+                    
+                    viewX += (touchX - lastX) * 0.5;
+                    viewY += (touchY - lastY) * 0.5;
+                    
+                    lastX = touchX;
+                    lastY = touchY;
+                    
+                    draw();
+                } else if (e.touches.length === 2) {
+                    // Two finger pinch zooming
+                    const currentDistance = Math.hypot(
+                        e.touches[0].clientX - e.touches[1].clientX,
+                        e.touches[0].clientY - e.touches[1].clientY
+                    );
+                    
+                    if (lastTouchDistance) {
+                        const zoomDelta = (currentDistance - lastTouchDistance) * 0.01;
+                        currentZoom = Math.max(minZoom, Math.min(maxZoom, currentZoom + zoomDelta));
+                        draw();
+                    }
+                    
+                    lastTouchDistance = currentDistance;
+                }
+            });
+            
+            canvas.addEventListener('touchend', () => {
+                isDragging = false;
+                lastTouchDistance = null;
+            });
+            
+            canvas.addEventListener('touchcancel', () => {
+                isDragging = false;
+                lastTouchDistance = null;
+            });
+            
+            // Mouse events for desktop
+            canvas.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                lastX = e.clientX;
+                lastY = e.clientY;
+            });
+            
+            canvas.addEventListener('mousemove', (e) => {
+                if (isDragging) {
+                    viewX += (e.clientX - lastX) * 0.5;
+                    viewY += (e.clientY - lastY) * 0.5;
+                    
+                    lastX = e.clientX;
+                    lastY = e.clientY;
+                    
+                    draw();
+                }
+            });
+            
+            canvas.addEventListener('mouseup', () => {
+                isDragging = false;
+            });
+            
+            canvas.addEventListener('mouseleave', () => {
+                isDragging = false;
+            });
+            
+            // Keep track of initialization to prevent errors
+            let galaxyInitialized = false;
+
+            // Safer initialization function with error handling
+            function initializeGalaxy() {
+                try {
+                    console.log('Initializing galaxy elements...');
+                    // Initialize stars array if it doesn't exist
+                    if (!stars) stars = [];
+                    if (!dustParticles) dustParticles = [];
+                    if (!nebulaPatches) nebulaPatches = [];
+                    
+                    // Create the galaxy elements
+                    generateGalaxyElements();
+                    console.log('Galaxy elements generated successfully! Stars:', stars.length);
+                    
+                    // Mark as initialized
+                    galaxyInitialized = true;
+                    
+                    // Start the animation sequence
+                    startAnimation();
+                } catch (error) {
+                    console.error('Error during galaxy initialization:', error);
+                    // Show error on loading screen
+                    if (loadingScreen) {
+                        loadingScreen.textContent = 'Error loading galaxy: ' + error.message;
+                    }
+                }
+            }
+            
+            // Animation starter function
+            function startAnimation() {
+                // Start with initial zoom level
+                currentZoom = -2;
+                let initialZoom = -2;
+                
+                console.log('Starting galaxy animation...');
+                
+                // Smooth zoom out animation 
+                function startupAnimation() {
+                    if (initialZoom > -7) {
+                        initialZoom -= 0.05;
+                        currentZoom = initialZoom;
+                        draw();
+                        requestAnimationFrame(startupAnimation);
+                    } else {
+                        // Hide loading screen once animation is complete
+                        if (loadingScreen) {
+                            loadingScreen.style.display = 'none';
+                        }
+                        
+                        // Start continuous animation
+                        requestAnimationFrame(animateScene);
+                    }
+                }
+                
+                // Begin the startup animation
+                startupAnimation();
+            }
+            
+            // Continuous animation loop
+            function animateScene() {
+                draw();
+                requestAnimationFrame(animateScene);
+            }
+            
+            // Initialize the galaxy and handle chat toggle
+            initializeGalaxy();
+            
+            // Handle chat toggle button
+            const chatToggle = document.getElementById('chat-toggle');
+            chatToggle.addEventListener('click', () => {
+                console.log('Chat toggle clicked - would open chat interface');
+                // In the future, this would toggle a chat interface overlay
+                // that integrates with the conversation memory functionality
+            });
+        });
+    </script>
+</body>
+</html>

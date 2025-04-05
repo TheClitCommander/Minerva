@@ -1,0 +1,302 @@
+{
+  "generated_at": "2025-02-28T22:58:50.259459",
+  "time_range": "last_30_days",
+  "lookback_days": 30,
+  "summary": {
+    "total_feedback_count": 450,
+    "positive_ratio": 0.78,
+    "response_quality_score": 80.2,
+    "most_common_issues": [
+      {
+        "category": "relevance",
+        "issue": "highly_relevant",
+        "count": 324
+      },
+      {
+        "category": "relevance",
+        "issue": "partially_relevant",
+        "count": 76
+      },
+      {
+        "category": "length",
+        "issue": "too_long",
+        "count": 63
+      },
+      {
+        "category": "detail",
+        "issue": "too_vague",
+        "count": 58
+      },
+      {
+        "category": "formatting",
+        "issue": "poor_formatting",
+        "count": 54
+      }
+    ]
+  },
+  "feedback_patterns": {
+    "overall": {
+      "positive_count": 351,
+      "negative_count": 99,
+      "positive_ratio": 0.78
+    },
+    "length": {
+      "too_long": 63,
+      "too_short": 22,
+      "just_right": 364
+    },
+    "relevance": {
+      "irrelevant": 49,
+      "partially_relevant": 76,
+      "highly_relevant": 324
+    },
+    "detail": {
+      "too_detailed": 40,
+      "too_vague": 58,
+      "good_detail_level": 351
+    },
+    "tone": {
+      "too_formal": 31,
+      "too_casual": 22,
+      "good_tone": 396
+    },
+    "formatting": {
+      "poor_formatting": 54,
+      "hard_to_read": 36,
+      "good_formatting": 360
+    }
+  },
+  "model_performance": {
+    "overall": {
+      "model_name": "all_models",
+      "sample_count": 150,
+      "performance_metrics": {
+        "positive_ratio": 0.85,
+        "relevance_score": 0.83,
+        "completion_rate": 0.9199999999999999,
+        "avg_response_time": 2.0,
+        "category_scores": {
+          "informational": 0.87,
+          "creative": 0.7699999999999999,
+          "analytical": 0.84,
+          "conversational": 0.86
+        }
+      },
+      "timestamp": "2025-02-28T22:58:50.259409"
+    },
+    "by_model": {
+      "openai_gpt4": {
+        "model_name": "openai_gpt4",
+        "sample_count": 150,
+        "performance_metrics": {
+          "positive_ratio": 0.86,
+          "relevance_score": 0.84,
+          "completion_rate": 0.9299999999999999,
+          "avg_response_time": 2.3,
+          "category_scores": {
+            "informational": 0.88,
+            "creative": 0.7799999999999999,
+            "analytical": 0.85,
+            "conversational": 0.87
+          }
+        },
+        "timestamp": "2025-02-28T22:58:50.259413"
+      },
+      "anthropic_claude": {
+        "model_name": "anthropic_claude",
+        "sample_count": 150,
+        "performance_metrics": {
+          "positive_ratio": 0.79,
+          "relevance_score": 0.77,
+          "completion_rate": 0.86,
+          "avg_response_time": 2.8,
+          "category_scores": {
+            "informational": 0.81,
+            "creative": 0.71,
+            "analytical": 0.78,
+            "conversational": 0.8
+          }
+        },
+        "timestamp": "2025-02-28T22:58:50.259416"
+      },
+      "local_model": {
+        "model_name": "local_model",
+        "sample_count": 150,
+        "performance_metrics": {
+          "positive_ratio": 0.79,
+          "relevance_score": 0.77,
+          "completion_rate": 0.86,
+          "avg_response_time": 0.9,
+          "category_scores": {
+            "informational": 0.81,
+            "creative": 0.71,
+            "analytical": 0.78,
+            "conversational": 0.8
+          }
+        },
+        "timestamp": "2025-02-28T22:58:50.259418"
+      }
+    }
+  },
+  "feedback_trends": {
+    "positive_ratio": {
+      "data": [
+        {
+          "date": "2025-01-30",
+          "value": 0.75
+        },
+        {
+          "date": "2025-01-31",
+          "value": 0.6266666666666667
+        },
+        {
+          "date": "2025-02-01",
+          "value": 0.7033333333333333
+        },
+        {
+          "date": "2025-02-02",
+          "value": 0.69
+        },
+        {
+          "date": "2025-02-03",
+          "value": 0.7166666666666666
+        },
+        {
+          "date": "2025-02-04",
+          "value": 0.7833333333333333
+        },
+        {
+          "date": "2025-02-05",
+          "value": 0.85
+        },
+        {
+          "date": "2025-02-06",
+          "value": 0.7966666666666666
+        },
+        {
+          "date": "2025-02-07",
+          "value": 0.7633333333333332
+        },
+        {
+          "date": "2025-02-08",
+          "value": 0.77
+        },
+        {
+          "date": "2025-02-09",
+          "value": 0.8466666666666666
+        },
+        {
+          "date": "2025-02-10",
+          "value": 0.8333333333333333
+        },
+        {
+          "date": "2025-02-11",
+          "value": 0.8399999999999999
+        },
+        {
+          "date": "2025-02-12",
+          "value": 0.8966666666666666
+        },
+        {
+          "date": "2025-02-13",
+          "value": 0.8933333333333333
+        },
+        {
+          "date": "2025-02-14",
+          "value": 0.9199999999999999
+        },
+        {
+          "date": "2025-02-15",
+          "value": 0.9466666666666665
+        },
+        {
+          "date": "2025-02-16",
+          "value": 0.95
+        },
+        {
+          "date": "2025-02-17",
+          "value": 0.92
+        },
+        {
+          "date": "2025-02-18",
+          "value": 0.95
+        },
+        {
+          "date": "2025-02-19",
+          "value": 0.95
+        },
+        {
+          "date": "2025-02-20",
+          "value": 0.95
+        },
+        {
+          "date": "2025-02-21",
+          "value": 0.95
+        },
+        {
+          "date": "2025-02-22",
+          "value": 0.95
+        },
+        {
+          "date": "2025-02-23",
+          "value": 0.95
+        },
+        {
+          "date": "2025-02-24",
+          "value": 0.95
+        },
+        {
+          "date": "2025-02-25",
+          "value": 0.95
+        },
+        {
+          "date": "2025-02-26",
+          "value": 0.95
+        },
+        {
+          "date": "2025-02-27",
+          "value": 0.95
+        },
+        {
+          "date": "2025-02-28",
+          "value": 0.95
+        }
+      ],
+      "trend": "improving"
+    }
+  },
+  "improvement_metrics": {
+    "response_quality": {
+      "current": 0.82,
+      "previous": 0.76,
+      "change": 0.06,
+      "change_percent": 7.9
+    },
+    "feedback_volume": {
+      "current": 250,
+      "previous": 200,
+      "change": 50,
+      "change_percent": 25.0
+    },
+    "average_response_time": {
+      "current": 1.8,
+      "previous": 2.2,
+      "change": -0.4,
+      "change_percent": -18.2
+    }
+  },
+  "recommendations": {
+    "high_priority": [
+      "Reduce response length for complex topics",
+      "Improve formatting for code examples"
+    ],
+    "medium_priority": [
+      "Add more specific examples in responses",
+      "Improve relevance for technical questions"
+    ],
+    "low_priority": [
+      "Adjust tone for educational contexts",
+      "Include more bullet points for readability"
+    ]
+  }
+}
