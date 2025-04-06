@@ -1,0 +1,688 @@
+/* Project Memory Viewer CSS */
+
+/* Task Suggestion Styles */
+.task-suggestion-container {
+    margin-bottom: 20px;
+}
+
+.suggestion-card {
+    background-color: var(--suggestion-bg-color, #f0f7ff);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    border-left: 4px solid var(--primary-color, #5468ff);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.suggestion-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.suggestion-card.blocked {
+    border-left-color: var(--warning-color, #ffc107);
+    background-color: var(--blocked-bg-color, #fff9e6);
+}
+
+.suggestion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background-color: rgba(0, 0, 0, 0.03);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.suggestion-title {
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--primary-color, #5468ff);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.suggestion-title i {
+    color: #ffc107;
+}
+
+.suggestion-refresh {
+    background: none;
+    border: none;
+    color: var(--text-muted-color, #888);
+    cursor: pointer;
+    font-size: 14px;
+    padding: 5px;
+    border-radius: 50%;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.suggestion-refresh:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: var(--primary-color, #5468ff);
+}
+
+.suggestion-content {
+    padding: 16px;
+}
+
+.suggested-task {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    color: var(--text-color, #333);
+}
+
+.suggestion-reasoning {
+    font-size: 14px;
+    color: var(--text-muted-color, #666);
+    margin-bottom: 10px;
+}
+
+.reason-label {
+    font-weight: 600;
+    color: var(--accent-color, #5468ff);
+}
+
+.suggestion-explanation {
+    font-size: 14px;
+    background-color: rgba(0, 0, 0, 0.03);
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    color: var(--text-muted-color, #666);
+    border-left: 3px solid var(--accent-color, #5468ff);
+}
+
+.suggestion-blocked-by {
+    margin-top: 12px;
+    font-size: 14px;
+    color: var(--warning-color, #ffc107);
+}
+
+.blocked-label {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.blocked-tasks-list {
+    margin: 8px 0 0 0;
+    padding-left: 25px;
+    color: var(--text-muted-color, #666);
+}
+
+.suggestion-actions {
+    display: flex;
+    gap: 10px;
+    padding: 0 16px 16px 16px;
+    flex-wrap: wrap;
+}
+
+.suggestion-action-button {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s, transform 0.2s;
+    border: none;
+}
+
+.suggestion-action-button:hover {
+    transform: translateY(-1px);
+}
+
+.suggestion-action-button.accept {
+    background-color: var(--success-color, #4caf50);
+    color: white;
+}
+
+.suggestion-action-button.accept:hover {
+    background-color: var(--success-dark-color, #3d8b40);
+}
+
+.suggestion-action-button.edit {
+    background-color: var(--primary-color, #5468ff);
+    color: white;
+}
+
+.suggestion-action-button.edit:hover {
+    background-color: var(--primary-dark-color, #4050e6);
+}
+
+.suggestion-action-button.view-all {
+    background-color: transparent;
+    color: var(--text-color, #333);
+    border: 1px solid var(--border-color, #ddd);
+}
+
+.suggestion-action-button.view-all:hover {
+    background-color: var(--light-bg-color, #f0f0f0);
+}
+
+/* All Suggestions Dialog */
+.all-suggestions-container {
+    max-width: 100%;
+}
+
+.suggestions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.suggestion-list-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px;
+    background-color: var(--card-bg-color, #f8f8f8);
+    border-radius: 6px;
+    align-items: center;
+    border-left: 3px solid var(--primary-color, #5468ff);
+}
+
+.suggestion-list-item.blocked {
+    border-left-color: var(--warning-color, #ffc107);
+}
+
+.suggestion-list-rank {
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--primary-color, #5468ff);
+    min-width: 30px;
+}
+
+.suggestion-list-content {
+    flex-grow: 1;
+}
+
+.suggestion-list-task {
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 4px;
+}
+
+.suggestion-list-reason {
+    font-size: 13px;
+    color: var(--text-muted-color, #888);
+}
+
+.suggestion-list-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.suggestion-list-actions button {
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.2s;
+}
+
+.suggestion-list-actions button:first-child {
+    background-color: var(--success-color, #4caf50);
+    color: white;
+}
+
+.suggestion-list-actions button:first-child:hover {
+    background-color: var(--success-dark-color, #3d8b40);
+}
+
+.suggestion-list-actions button:last-child {
+    background-color: var(--primary-color, #5468ff);
+    color: white;
+}
+
+.suggestion-list-actions button:last-child:hover {
+    background-color: var(--primary-dark-color, #4050e6);
+}
+
+/* Active Task Styling */
+.project-memory-task.active {
+    border-left-color: var(--active-task-color, #ffc107);
+    background-color: var(--active-task-bg, rgba(255, 193, 7, 0.1));
+}
+
+.project-memory-task.active::before {
+    content: '▶️ Currently Active';
+    display: block;
+    font-size: 12px;
+    color: var(--active-task-color, #ffc107);
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+/* Tasks styling with enhanced features */
+.project-memory-task {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 12px;
+    padding: 10px;
+    background-color: var(--card-bg-color, #f8f8f8);
+    border-radius: 6px;
+    border-left: 3px solid var(--primary-color, #5468ff);
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.project-memory-task:hover {
+    background-color: var(--card-hover-color, #f0f0f0);
+    transform: translateY(-1px);
+}
+
+.project-memory-task.completed {
+    background-color: var(--completed-task-bg, #f0f0f0);
+    border-left-color: var(--success-color, #4caf50);
+    opacity: 0.8;
+}
+
+.task-main-content {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.project-memory-task-checkbox {
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    border: 2px solid var(--primary-color, #5468ff);
+    border-radius: 4px;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.project-memory-task.completed .project-memory-task-checkbox {
+    background-color: var(--success-color, #4caf50);
+    border-color: var(--success-color, #4caf50);
+    color: white;
+}
+
+.project-memory-task-text {
+    flex-grow: 1;
+    margin-right: 10px;
+    word-break: break-word;
+}
+
+.completed .project-memory-task-text {
+    text-decoration: line-through;
+    color: var(--text-muted-color, #888);
+}
+
+/* Task priority badges */
+.task-badges {
+    display: flex;
+    gap: 8px;
+    margin-left: auto;
+    flex-wrap: wrap;
+}
+
+.priority-badge {
+    padding: 3px 6px;
+    border-radius: 12px;
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+}
+
+.priority-badge.high {
+    background-color: rgba(255, 76, 76, 0.1);
+    color: #ff4c4c;
+    border: 1px solid rgba(255, 76, 76, 0.3);
+}
+
+.priority-badge.medium {
+    background-color: rgba(255, 187, 0, 0.1);
+    color: #ffbb00;
+    border: 1px solid rgba(255, 187, 0, 0.3);
+}
+
+.priority-badge.low {
+    background-color: rgba(128, 128, 128, 0.1);
+    color: #808080;
+    border: 1px solid rgba(128, 128, 128, 0.3);
+}
+
+/* Deadline badge */
+.deadline-badge {
+    padding: 3px 6px;
+    border-radius: 12px;
+    font-size: 12px;
+    background-color: rgba(84, 104, 255, 0.1);
+    color: var(--primary-color, #5468ff);
+    border: 1px solid rgba(84, 104, 255, 0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+}
+
+.deadline-badge.overdue {
+    background-color: rgba(255, 76, 76, 0.1);
+    color: #ff4c4c;
+    border: 1px solid rgba(255, 76, 76, 0.3);
+}
+
+/* Task Dependencies */
+.task-dependencies {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--text-muted-color, #888);
+    padding-left: 30px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.dependency-list {
+    font-style: italic;
+}
+
+/* Task edit buttons */
+.task-edit-buttons {
+    display: flex;
+    gap: 5px;
+    margin-left: 10px;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.project-memory-task:hover .task-edit-buttons {
+    opacity: 1;
+}
+
+.task-edit-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--text-muted-color, #888);
+    padding: 2px;
+    border-radius: 3px;
+    transition: color 0.2s, background-color 0.2s;
+}
+
+.task-edit-button:hover {
+    color: var(--primary-color, #5468ff);
+    background-color: rgba(84, 104, 255, 0.1);
+}
+
+/* Task Legend */
+.project-memory-task-legend {
+    display: flex;
+    gap: 10px;
+    margin-left: auto;
+    font-size: 12px;
+}
+
+/* Dialog styles */
+.project-memory-dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+
+.project-memory-dialog-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.project-memory-dialog {
+    background-color: var(--card-bg-color, white);
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    width: 90%;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+    transform: translateY(-20px);
+    transition: transform 0.3s;
+}
+
+.project-memory-dialog-overlay.visible .project-memory-dialog {
+    transform: translateY(0);
+}
+
+.dialog-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-color, #eee);
+}
+
+.dialog-title {
+    font-weight: 600;
+    font-size: 18px;
+    color: var(--text-color, #333);
+}
+
+.dialog-close-button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    color: var(--text-muted-color, #888);
+    transition: color 0.2s;
+}
+
+.dialog-close-button:hover {
+    color: var(--danger-color, #ff4c4c);
+}
+
+.dialog-content {
+    padding: 20px;
+}
+
+.dialog-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.dialog-form input, .dialog-form select {
+    padding: 10px;
+    border: 1px solid var(--border-color, #ddd);
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.dialog-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.dialog-primary-button, .dialog-secondary-button {
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.dialog-primary-button {
+    background-color: var(--primary-color, #5468ff);
+    color: white;
+    border: none;
+}
+
+.dialog-primary-button:hover {
+    background-color: var(--primary-dark-color, #4050e6);
+}
+
+.dialog-secondary-button {
+    background-color: transparent;
+    color: var(--text-color, #333);
+    border: 1px solid var(--border-color, #ddd);
+}
+
+.dialog-secondary-button:hover {
+    background-color: var(--light-bg-color, #f0f0f0);
+}
+
+/* Dialog-specific styles */
+.dialog-priority-options {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.priority-option {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid var(--border-color, #ddd);
+    border-radius: 4px;
+    background: none;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.priority-option.high {
+    color: #ff4c4c;
+}
+
+.priority-option.medium {
+    color: #ffbb00;
+}
+
+.priority-option.low {
+    color: #808080;
+}
+
+.priority-option:hover {
+    background-color: var(--light-bg-color, #f8f8f8);
+    transform: translateY(-2px);
+}
+
+.current-dependencies {
+    margin-top: 20px;
+}
+
+.current-dependencies ul {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0 0;
+}
+
+.current-dependencies li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 10px;
+    background-color: var(--light-bg-color, #f8f8f8);
+    border-radius: 4px;
+    margin-bottom: 5px;
+}
+
+.remove-dependency {
+    background: none;
+    border: none;
+    color: var(--danger-color, #ff4c4c);
+    cursor: pointer;
+    font-size: 16px;
+    padding: 0 5px;
+}
+
+/* Toast notifications */
+.project-memory-toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 12px 16px;
+    background-color: var(--toast-bg-color, #333);
+    color: white;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1100;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: transform 0.3s, opacity 0.3s;
+}
+
+.project-memory-toast.visible {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.project-memory-toast.success {
+    background-color: var(--success-color, #4caf50);
+}
+
+.project-memory-toast.error {
+    background-color: var(--danger-color, #ff4c4c);
+}
+
+.toast-icon {
+    font-size: 18px;
+}
+
+.toast-message {
+    font-size: 14px;
+}
+
+/* Dark theme support */
+@media (prefers-color-scheme: dark) {
+    .project-memory-task {
+        background-color: var(--card-bg-color, #2a2a2a);
+    }
+    
+    .project-memory-task:hover {
+        background-color: var(--card-hover-color, #333);
+    }
+    
+    .project-memory-task.completed {
+        background-color: var(--completed-task-bg, #222);
+    }
+    
+    .project-memory-dialog {
+        background-color: var(--card-bg-color, #2a2a2a);
+    }
+    
+    .priority-option {
+        background-color: var(--card-bg-color, #2a2a2a);
+    }
+    
+    .priority-option:hover {
+        background-color: var(--light-bg-color, #333);
+    }
+    
+    .current-dependencies li {
+        background-color: var(--light-bg-color, #333);
+    }
+}

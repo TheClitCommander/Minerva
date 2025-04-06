@@ -10,6 +10,9 @@ from typing import Dict, List, Any, Optional
 from flask import Blueprint, request, jsonify
 from datetime import datetime
 
+# Import the chat handler to process messages with project context and intent detection
+from minerva.chat.chat_handler import process_message_with_intent_detection, INTENT_SUGGEST_TASKS
+
 # Import the memory system
 from integrations.memory import store_memory, retrieve_memory, enhance_with_memory, get_memory
 
@@ -75,9 +78,34 @@ def process_chat_message():
             # Log the detailed routing decision for analytics
             logger.info(f"Routing decision for message: {routing_info}")
             
+            # Process with project context and intent detection
+            session_data = {}
+            if project_id:
+                session_data['active_project'] = project_id
+                
+            # First check for project intents like task suggestions
+            enhanced_message_data = process_message_with_intent_detection(
+                message=user_message,
+                user_id=data.get('user_id', 'anonymous'),
+                session_data=session_data
+            )
+            
+            # Check if we have a task suggestion intent
+            task_suggestion_content = None
+            detected_intent = enhanced_message_data.get('detected_intent', {})
+            if detected_intent.get('action') == INTENT_SUGGEST_TASKS and 'task_suggestions' in enhanced_message_data:
+                task_suggs = enhanced_message_data['task_suggestions']
+                if task_suggs.get('success') and task_suggs.get('suggestions'):
+                    # Format task suggestions for display
+                    task_suggestion_content = {
+                        'type': 'task_suggestions',
+                        'message': task_suggs['message'],
+                        'suggestions': task_suggs['suggestions']
+                    }
+            
             # Process with Think Tank to get responses from multiple models
             think_tank_result = process_with_think_tank(
-                user_message, 
+                memory_enhanced_message, 
                 routing_info['model_priority'], 
                 complexity=routing_info['complexity_score'],
                 query_tags=query_tags
@@ -109,6 +137,21 @@ def process_chat_message():
                 }
             }
             
+            # If we have task suggestions, inject them into the response
+            if task_suggestion_content:
+                # Add task suggestions to the response
+                response = {
+                    'response': response_content,
+                    'model_info': model_info,
+                    'task_suggestions': task_suggestion_content
+                }
+            else:
+                # Regular response without task suggestions
+                response = {
+                    'response': response_content,
+                    'model_info': model_info
+                }
+            
             # Include memory information if it was used
             if memory_context:
                 model_info['memory'] = memory_context
@@ -118,7 +161,8 @@ def process_chat_message():
             return jsonify({
                 'error': 'AI processing components unavailable. Please check server configuration.'
             }), 500
-                # Save to conversation history (simplified version - would use DB in production)
+        
+        # Save to conversation history (simplified version - would use DB in production)
         timestamp = datetime.now().isoformat()
         conversation_id = f"{project_id}_{branch_id}" if project_id else f"default_{str(uuid.uuid4())[:8]}"
         user_id = data.get('user_id', 'default')
@@ -189,6 +233,10 @@ def process_chat_message():
         user_preferences = get_user_preferences(user_id)
         if user_preferences and user_preferences.get('preferences_detected', False):
             response['user_preferences'] = user_preferences
+            
+        # Add task suggestions if available
+        if task_suggestion_content:
+            response['task_suggestions'] = task_suggestion_content
             
         return jsonify(response)
         
