@@ -3968,7 +3968,31 @@
         var currentSession = null;
     </script>
     
+    <!-- Add our robust API client for proper API connections -->
+    <script src="/static/js/api/minerva-api.js" type="module"></script>
+    
     <!-- Include the enhanced orb UI implementation after DOM is loaded -->    
     <script src="/static/js/orb/orb-enhanced.js"></script>
+    
+    <!-- Initialize components with proper DOM checks -->
+    <script>
+    window.addEventListener('load', function() {
+        console.log('✅ Window fully loaded - ensuring DOM is ready');
+        
+        // Add additional event listener for API status changes
+        window.addEventListener('minerva-api-status', function(event) {
+            console.log('API Status changed:', event.detail.status);
+            
+            // Update the UI based on API status
+            const statusIndicator = document.querySelector('.minerva-status .status-indicator');
+            const statusText = document.querySelector('.minerva-status .status-text');
+            
+            if (statusIndicator && statusText) {
+                statusIndicator.className = 'status-indicator ' + event.detail.status;
+                statusText.textContent = event.detail.status.charAt(0).toUpperCase() + event.detail.status.slice(1);
+            }
+        });
+    });
+    </script>
 </body>
 </html>

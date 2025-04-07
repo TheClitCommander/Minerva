@@ -141,7 +141,7 @@ function switchSection(target) {
   }
 }
 
-// Create interactive orb visualization
+// Create interactive orb visualization with radial menu
 function initOrbVisualization() {
   // Find a suitable container
   const dashboard = document.getElementById('orb-dashboard');
@@ -159,27 +159,108 @@ function initOrbVisualization() {
     dashboard.prepend(orbVis);
   }
   
-  // Create orb elements
+  // Create orb elements with radial menu buttons
   const orbHTML = `
     <div class="orb-ring"></div>
     <div class="orb-ring"></div>
-    <div class="orb-sphere"></div>
+    <div class="orb-sphere" id="orb-button"></div>
     <div class="orb-label">M</div>
+    <div class="orb-menu" id="orb-radial-menu">
+      <button class="orb-menu-item" data-action="dashboard">
+        <i class="fas fa-chart-network"></i>
+        <span>Dashboard</span>
+      </button>
+      <button class="orb-menu-item" data-action="chat">
+        <i class="fas fa-comments"></i>
+        <span>Chat</span>
+      </button>
+      <button class="orb-menu-item" data-action="memory">
+        <i class="fas fa-brain"></i>
+        <span>Memory</span>
+      </button>
+      <button class="orb-menu-item" data-action="projects">
+        <i class="fas fa-project-diagram"></i>
+        <span>Projects</span>
+      </button>
+    </div>
   `;
   orbVis.innerHTML = orbHTML;
   
   // Make orb interactive
-  const orbSphere = orbVis.querySelector('.orb-sphere');
-  if (orbSphere) {
-    orbSphere.addEventListener('click', () => {
-      showToast("🧠 Minerva Orb activated", "info");
-      
-      // Trigger pulse effect
-      orbSphere.style.animation = 'none';
-      setTimeout(() => {
-        orbSphere.style.animation = 'pulse 4s ease-in-out infinite';
-      }, 10);
+  const orbButton = document.getElementById('orb-button');
+  const radialMenu = document.getElementById('orb-radial-menu');
+  
+  if (orbButton && radialMenu) {
+    // Add click event to toggle radial menu
+    orbButton.addEventListener('click', (e) => {
+      e.preventDefault();
+      toggleOrbMenu();
     });
+    
+    // Add click events to menu items
+    const menuItems = radialMenu.querySelectorAll('.orb-menu-item');
+    menuItems.forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        const action = item.getAttribute('data-action');
+        handleOrbAction(action);
+        toggleOrbMenu(false); // close menu after selection
+      });
+    });
+  }
+}
+
+// Toggle the radial menu around the orb
+function toggleOrbMenu(forcedState) {
+  const menu = document.getElementById('orb-radial-menu');
+  const orbButton = document.getElementById('orb-button');
+  
+  if (!menu || !orbButton) {
+    console.warn("Orb menu elements not found");
+    return;
+  }
+  
+  const isVisible = menu.classList.contains('active');
+  const newState = (forcedState !== undefined) ? forcedState : !isVisible;
+  
+  if (newState) {
+    // Show menu
+    menu.classList.add('active');
+    orbButton.classList.add('active');
+    showToast("🧠 Minerva Command Center", "info", { timeout: 1500 });
+    
+    // Trigger pulse effect
+    orbButton.style.animation = 'none';
+    setTimeout(() => {
+      orbButton.style.animation = 'pulse 4s ease-in-out infinite';
+    }, 10);
+  } else {
+    // Hide menu
+    menu.classList.remove('active');
+    orbButton.classList.remove('active');
+  }
+}
+
+// Handle actions from the orb menu
+function handleOrbAction(action) {
+  console.log(`Orb action: ${action}`);
+  
+  switch(action) {
+    case 'dashboard':
+    case 'chat':
+    case 'memory':
+    case 'projects':
+      switchSection(action);
+      showToast(`📊 ${action} view activated`, "info", { timeout: 1500 });
+      break;
+      
+    case 'think':
+      showToast("🧠 Thinking...", "info");
+      // Add think tank interaction here
+      break;
+      
+    default:
+      console.warn(`Unknown orb action: ${action}`);
   }
 }
 
@@ -207,35 +288,66 @@ function initApiStatusCheck() {
     oldStatus.remove();
   }
   
-  // Check API status
+  // Check API status using our new API client
   checkApiStatus();
+  
+  // Listen for API status changes
+  window.addEventListener('minerva-api-status', (event) => {
+    updateMinervaStatus(event.detail.status, event.detail.status.charAt(0).toUpperCase() + event.detail.status.slice(1));
+  });
 }
 
 // Check Think Tank API status
 function checkApiStatus() {
+  // First show a toast that we're checking
   showToast("🔌 Checking API connection...", "info", { id: 'api-check', timeout: false });
   
-  fetch('/api/think-tank')
-    .then(response => response.json())
-    .then(data => {
-      // Update toast
-      removeToast('api-check');
-      
-      if (data.status === 'success') {
-        showToast("✅ Think Tank API connected", "success", { timeout: 3000 });
-        updateMinervaStatus('online', 'Online');
-      } else {
-        showToast("⚠️ Limited API functionality", "warning", { timeout: 5000 });
-        updateMinervaStatus('limited', 'Limited');
-      }
-    })
-    .catch(error => {
-      // Update toast
-      removeToast('api-check');
-      showToast("🚫 API connection failed", "error", { timeout: 5000 });
-      updateMinervaStatus('offline', 'Offline');
-      console.error("API check error:", error);
-    });
+  // Use our robust API client if available
+  if (window.minervaAPI) {
+    window.minervaAPI.checkConnection()
+      .then(status => {
+        // Remove checking toast
+        removeToast('api-check');
+        
+        // Show appropriate status toast
+        if (status === 'online') {
+          showToast("✅ Think Tank API connected", "success", { timeout: 3000 });
+        } else if (status === 'limited') {
+          showToast("⚠️ Limited API functionality", "warning", { timeout: 5000 });
+        } else {
+          showToast("🚫 API in offline mode", "error", { timeout: 5000 });
+        }
+      })
+      .catch(error => {
+        console.error("Error checking API status:", error);
+        removeToast('api-check');
+        showToast("🚫 API connection failed", "error", { timeout: 5000 });
+        updateMinervaStatus('offline', 'Offline');
+      });
+  } else {
+    // Fallback to basic fetch if API client isn't available
+    fetch('/api/think-tank')
+      .then(response => response.json())
+      .then(data => {
+        // Update toast
+        removeToast('api-check');
+        
+        if (data.status === 'success') {
+          showToast("✅ Think Tank API connected", "success", { timeout: 3000 });
+          updateMinervaStatus('online', 'Online');
+        } else {
+          showToast("⚠️ Limited API functionality", "warning", { timeout: 5000 });
+          updateMinervaStatus('limited', 'Limited');
+        }
+      })
+      .catch(error => {
+        // Update toast
+        removeToast('api-check');
+        showToast("🚫 API connection failed", "error", { timeout: 5000 });
+        updateMinervaStatus('offline', 'Offline (fallback mode)');
+        console.error("API check error:", error);
+      });
+  }
 }
 
 // Update Minerva status indicator
@@ -249,6 +361,15 @@ function updateMinervaStatus(status, text) {
   
   if (statusText) {
     statusText.textContent = text;
+  }
+  
+  // Update orb appearance based on status
+  const orbButton = document.getElementById('orb-button');
+  if (orbButton) {
+    // Remove previous status classes
+    orbButton.classList.remove('status-online', 'status-limited', 'status-offline');
+    // Add new status class
+    orbButton.classList.add(`status-${status}`);
   }
 }
 
