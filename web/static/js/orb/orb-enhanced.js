@@ -10,44 +10,44 @@
 // More robust initialization that handles both DOMContentLoaded and window.onload
 function initOrb() {
   try {
-  console.log("🔄 Initializing Enhanced Minerva Orb UI...");
-  
-  // Initialize toast notification container
-  createToastContainer();
-  
-  // Check for required DOM elements
-  const orb = document.getElementById("orb-container");
-  if (!orb) {
-    return showFallback("Missing #orb-container element");
-  }
-
-  const interface = document.getElementById("orb-interface");
-  if (!interface) {
-    return showFallback("Missing #orb-interface element");
-  }
-
-  // Validate each required section
-  const sections = ["dashboard", "chat", "memory"];
-  let foundAll = true;
-
-  for (let sec of sections) {
-    if (!document.getElementById(`orb-${sec}`)) {
-      console.warn(`Missing #orb-${sec} section`);
-      foundAll = false;
+    console.log("🔄 Initializing Enhanced Minerva Orb UI...");
+    
+    // Initialize toast notification container
+    createToastContainer();
+    
+    // Check for required DOM elements
+    const orb = document.getElementById("orb-container");
+    if (!orb) {
+      return showFallback("Missing #orb-container element");
     }
-  }
 
-  if (!foundAll) {
-    return showFallback("Missing one or more orb sections");
-  }
+    const interface = document.getElementById("orb-interface");
+    if (!interface) {
+      return showFallback("Missing #orb-interface element");
+    }
 
-  // Initialize the UI components
-  initNav();
-  initOrbVisualization();
-  initApiStatusCheck();
-  initKeyboardShortcuts();
-  
-      console.log("✅ Enhanced Orb UI ready");
+    // Validate each required section
+    const sections = ["dashboard", "chat", "memory", "projects"];
+    let foundAll = true;
+
+    for (let sec of sections) {
+      if (!document.getElementById(`orb-${sec}`)) {
+        console.warn(`Missing #orb-${sec} section`);
+        foundAll = false;
+      }
+    }
+
+    if (!foundAll) {
+      console.warn("Some orb sections are missing, but we'll continue");
+    }
+
+    // Initialize the UI components
+    initNav();
+    initOrbVisualization();
+    initApiStatusCheck();
+    initKeyboardShortcuts();
+    
+    console.log("✅ Enhanced Orb UI ready");
   } catch (error) {
     console.error("Error initializing Orb UI:", error);
     showFallback("Error initializing UI: " + error.message);
@@ -143,107 +143,146 @@ function switchSection(target) {
 
 // Create interactive orb visualization with radial menu
 function initOrbVisualization() {
-  // Find a suitable container
-  const dashboard = document.getElementById('orb-dashboard');
+  // Find the existing orb visualization or create it if needed
+  let visualization = document.getElementById('orb-visualization');
+  let orbButton = document.getElementById('orb-button');
+  let orbMenu = document.getElementById('orb-menu');
   
-  if (!dashboard) {
-    console.warn("Dashboard section not found for orb visualization");
-    return;
+  // If the essential elements don't exist, show a fallback
+  if (!visualization) {
+    return showFallback('Orb visualization container not found');  
   }
   
-  // Create orb container if it doesn't exist
-  let orbVis = document.getElementById('orb-visualization');
-  if (!orbVis) {
-    orbVis = document.createElement('div');
-    orbVis.id = 'orb-visualization';
-    dashboard.prepend(orbVis);
+  // Make sure the orb button exists
+  if (!orbButton) {
+    orbButton = document.createElement('div');
+    orbButton.id = 'orb-button';
+    orbButton.className = 'orb-button';
+    visualization.appendChild(orbButton);
   }
   
-  // Create orb elements with radial menu buttons
-  const orbHTML = `
-    <div class="orb-ring"></div>
-    <div class="orb-ring"></div>
-    <div class="orb-sphere" id="orb-button"></div>
-    <div class="orb-label">M</div>
-    <div class="orb-menu" id="orb-radial-menu">
-      <button class="orb-menu-item" data-action="dashboard">
-        <i class="fas fa-chart-network"></i>
-        <span>Dashboard</span>
-      </button>
-      <button class="orb-menu-item" data-action="chat">
-        <i class="fas fa-comments"></i>
-        <span>Chat</span>
-      </button>
-      <button class="orb-menu-item" data-action="memory">
-        <i class="fas fa-brain"></i>
-        <span>Memory</span>
-      </button>
-      <button class="orb-menu-item" data-action="projects">
-        <i class="fas fa-project-diagram"></i>
-        <span>Projects</span>
-      </button>
-    </div>
-  `;
-  orbVis.innerHTML = orbHTML;
-  
-  // Make orb interactive
-  const orbButton = document.getElementById('orb-button');
-  const radialMenu = document.getElementById('orb-radial-menu');
-  
-  if (orbButton && radialMenu) {
-    // Add click event to toggle radial menu
-    orbButton.addEventListener('click', (e) => {
-      e.preventDefault();
-      toggleOrbMenu();
-    });
+  // Make sure the menu exists
+  if (!orbMenu) {
+    orbMenu = document.createElement('div');
+    orbMenu.id = 'orb-menu';
+    orbMenu.className = 'orb-menu';
+    visualization.appendChild(orbMenu);
     
-    // Add click events to menu items
-    const menuItems = radialMenu.querySelectorAll('.orb-menu-item');
+    // Create menu items
+    const menuItems = [
+      { action: 'dashboard', icon: 'fa-home', text: 'Dashboard' },
+      { action: 'chat', icon: 'fa-comment-alt', text: 'Chat' },
+      { action: 'memory', icon: 'fa-brain', text: 'Memory' },
+      { action: 'projects', icon: 'fa-project-diagram', text: 'Projects' }
+    ];
+    
     menuItems.forEach(item => {
-      item.addEventListener('click', (e) => {
-        e.preventDefault();
-        const action = item.getAttribute('data-action');
-        handleOrbAction(action);
-        toggleOrbMenu(false); // close menu after selection
-      });
+      const menuItem = document.createElement('div');
+      menuItem.className = 'orb-menu-item';
+      menuItem.dataset.action = item.action;
+      menuItem.innerHTML = `
+        <i class="fas ${item.icon}"></i>
+      orbMenu.appendChild(menuItem);
     });
   }
+  
+  // Apply pulse animation to orb button
+  orbButton.classList.add('pulse');
+  
+  // Add inner ring for visual depth if not present
+  let innerRing = visualization.querySelector('.orb-inner-ring');
+  if (!innerRing) {
+    innerRing = document.createElement('div');
+    innerRing.className = 'orb-inner-ring';
+    visualization.insertBefore(innerRing, orbMenu);
+  }
+  
+  // Add the outer rings if missing
+  const rings = visualization.querySelectorAll('.orb-ring');
+  if (rings.length < 2) {
+    // Clear existing and add two new rings
+    rings.forEach(ring => ring.remove());
+    
+    for (let i = 0; i < 2; i++) {
+      const ring = document.createElement('div');
+      ring.className = 'orb-ring';
+      if (i === 0) {
+        ring.style.animationDelay = '0s';
+      } else {
+        ring.style.animationDelay = '1s';
+      }
+      visualization.insertBefore(ring, orbMenu);
+    }
+  }
+  
+  // Make orb clickable to toggle menu and interface
+  orbButton.addEventListener('click', (e) => {
+    toggleOrbMenu();
+    handleOrbAction('toggle');
+    e.stopPropagation();
+  });
+  
+  // Add click handlers to the menu items
+  document.querySelectorAll('.orb-menu-item').forEach(item => {
+    item.addEventListener('click', (e) => {
+      const action = item.getAttribute('data-action');
+      if (action) {
+        handleOrbAction(action);
+      }
+      e.stopPropagation(); // Prevent bubbling up to document
+    });
+  });
+  
+  console.log('✅ Orb visualization initialized');
+    }
+  });
+  
+  console.log('✨ Orb visualization initialized with click behavior');
 }
 
 // Toggle the radial menu around the orb
 function toggleOrbMenu(forcedState) {
-  const menu = document.getElementById('orb-radial-menu');
+  const orbMenu = document.getElementById('orb-menu');
   const orbButton = document.getElementById('orb-button');
   
-  if (!menu || !orbButton) {
-    console.warn("Orb menu elements not found");
+  if (!orbMenu || !orbButton) {
+    console.error('Orb menu elements not found');
     return;
   }
   
-  const isVisible = menu.classList.contains('active');
-  const newState = (forcedState !== undefined) ? forcedState : !isVisible;
+  // If forcedState is provided, use it; otherwise toggle current state
+  const newState = (forcedState !== undefined) 
+    ? forcedState 
+    : !orbMenu.classList.contains('active');
   
   if (newState) {
-    // Show menu
-    menu.classList.add('active');
+    orbMenu.classList.add('active');
     orbButton.classList.add('active');
-    showToast("🧠 Minerva Command Center", "info", { timeout: 1500 });
-    
-    // Trigger pulse effect
-    orbButton.style.animation = 'none';
-    setTimeout(() => {
-      orbButton.style.animation = 'pulse 4s ease-in-out infinite';
-    }, 10);
+    console.log('🔵 Orb menu opened');
   } else {
-    // Hide menu
-    menu.classList.remove('active');
+    orbMenu.classList.remove('active');
     orbButton.classList.remove('active');
+    console.log('⚪ Orb menu closed');
   }
 }
 
 // Handle actions from the orb menu
 function handleOrbAction(action) {
-  console.log(`Orb action: ${action}`);
+  console.log(`🔘 Orb action: ${action}`);
+  
+  // Get the orb interface element
+  const orbInterface = document.getElementById('orb-interface');
+  
+  if (!orbInterface) {
+    console.error('Orb interface not found');
+    return showFallback('Missing orb interface element');
+  }
+  
+  // Show the interface if it's not already visible
+  if (!orbInterface.classList.contains('active')) {
+    orbInterface.classList.add('active');
+    orbInterface.style.display = 'block';
+  }
   
   switch(action) {
     case 'dashboard':
@@ -251,17 +290,30 @@ function handleOrbAction(action) {
     case 'memory':
     case 'projects':
       switchSection(action);
-      showToast(`📊 ${action} view activated`, "info", { timeout: 1500 });
       break;
-      
-    case 'think':
-      showToast("🧠 Thinking...", "info");
-      // Add think tank interaction here
+    
+    // Special case for the orb button click (toggle interface)
+    case 'toggle':
+      if (orbInterface.classList.contains('active')) {
+        orbInterface.classList.remove('active');
+        setTimeout(() => {
+          orbInterface.style.display = 'none';
+        }, 300); // Match transition duration in CSS
+      } else {
+        orbInterface.classList.add('active');
+        orbInterface.style.display = 'block';
+        // Default to dashboard section if no last active section
+        const lastSection = localStorage.getItem('minervaLastActiveSection') || 'dashboard';
+        switchSection(lastSection);
+      }
       break;
       
     default:
       console.warn(`Unknown orb action: ${action}`);
   }
+  
+  // Close the menu after an action
+  toggleOrbMenu(false);
 }
 
 // Initialize API status check and create status indicator
@@ -376,22 +428,24 @@ function updateMinervaStatus(status, text) {
 // Add keyboard shortcuts
 function initKeyboardShortcuts() {
   document.addEventListener('keydown', (e) => {
-    // Check if Ctrl key is pressed
-    if (e.ctrlKey) {
-      const sectionKeys = {
-        '1': 'dashboard',
-        '2': 'chat',
-        '3': 'memory'
-      };
-      
-      const key = e.key;
-      if (sectionKeys[key]) {
-        e.preventDefault();
-        switchSection(sectionKeys[key]);
-        
-        // Show shortcut toast
-        showToast(`⌨️ Shortcut: ${sectionKeys[key]}`, "info", { timeout: 1000 });
-      }
+    // Only respond to keyboard shortcuts if not typing in an input
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+      return;
+    }
+    
+    // ALT + D: Dashboard
+    if (e.altKey && e.key === 'd') {
+      switchSection('dashboard');
+    }
+    
+    // ALT + C: Chat
+    if (e.altKey && e.key === 'c') {
+      switchSection('chat');
+    }
+    
+    // ALT + M: Memory
+    if (e.altKey && e.key === 'm') {
+      switchSection('memory');
     }
   });
 }
@@ -400,17 +454,10 @@ function initKeyboardShortcuts() {
 let toastContainer = null;
 
 function createToastContainer() {
-  // If we already have a reference, verify it's still in the DOM
-  if (toastContainer) {
-    if (!document.body.contains(toastContainer)) {
-      toastContainer = null; // Reference is invalid, container was removed
-    }
-  }
-  
-  // Create new container if needed
   if (!toastContainer) {
     try {
       toastContainer = document.createElement('div');
+      toastContainer.id = 'toast-container';
       toastContainer.className = 'toast-container';
       document.body.appendChild(toastContainer);
     } catch (error) {
@@ -531,10 +578,6 @@ function showFallback(msg) {
   } catch (e) {
     // Last resort: alert
     console.error('Failed to show fallback UI:', e);
-    try {
-      alert('Minerva UI Error: ' + msg);
-    } catch (e2) {
-      // Nothing more we can do
-    }
+    alert('Minerva UI Error: ' + msg);
   }
 }

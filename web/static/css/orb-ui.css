@@ -3,12 +3,172 @@
  * Styles for the 3D orbital interface and Think Tank visualization
  */
 
-/* Container styling */
-.orbital-ui-container {
+/* Main Orbital UI structure */
+#minerva-orbital-ui {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+}
+
+/* Orb container styling */
+#orb-container {
     position: relative;
     background-color: #080815;
     border-radius: 4px;
     overflow: hidden;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 3D Container */
+#minerva-3d-container {
+    position: relative;
+    width: 100%;
+    height: 300px; /* Fixed height for the 3D interface */
+    background-color: rgba(0, 0, 0, 0.7);
+    overflow: hidden;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+/* Orbital container */
+#orbital-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    perspective: 1000px;
+}
+
+/* Space background with stars */
+#space-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(ellipse at center, #0d1a31 0%, #020515 100%);
+    overflow: hidden;
+}
+
+/* Add stars to the background */
+#space-background::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(white, rgba(255,255,255,0) 2px);
+    background-size: 100px 100px;
+    background-position: 0 0, 50px 50px;
+    animation: twinkling 8s linear infinite;
+}
+
+@keyframes twinkling {
+    from { opacity: 0.5; }
+    50% { opacity: 1; }
+    to { opacity: 0.5; }
+}
+
+/* Navigation ring */
+#nav-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 2px solid rgba(156, 93, 219, 0.6);
+    box-shadow: 0 0 20px rgba(156, 93, 219, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+}
+
+/* Navigation options */
+.nav-option {
+    position: absolute;
+    color: white;
+    background: rgba(30, 41, 59, 0.8);
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(156, 93, 219, 0.6);
+    z-index: 3;
+}
+
+.nav-option:hover {
+    background: rgba(156, 93, 219, 0.8);
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(156, 93, 219, 0.8);
+}
+
+/* Position navigation options around the ring */
+.nav-option[data-section="dashboard"] {
+    top: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.nav-option[data-section="chat"] {
+    top: 50%;
+    right: 15%;
+    transform: translateY(-50%);
+}
+
+.nav-option[data-section="memory"] {
+    bottom: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.nav-option[data-section="project"] {
+    top: 50%;
+    left: 15%;
+    transform: translateY(-50%);
+}
+
+.nav-option[data-section="settings"] {
+    top: 85%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Central orb */
+#minerva-orb {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #9c5ddb 0%, #342f6a 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    box-shadow: 0 0 20px rgba(156, 93, 219, 0.8);
+    cursor: pointer;
+    z-index: 4;
+    user-select: none;
+    transition: all 0.3s ease;
+}
+
+#minerva-orb:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+    box-shadow: 0 0 30px rgba(156, 93, 219, 1);
 }
 
 /* Loading indicator */
@@ -25,6 +185,105 @@
     background: rgba(0, 0, 0, 0.7);
     color: white;
     z-index: 10;
+}
+
+/* Orb interface - content display */
+#orb-interface {
+    position: relative;
+    flex: 1;
+    padding: 15px;
+    background-color: rgba(15, 20, 35, 0.95);
+    border-radius: 8px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+    overflow: auto;
+}
+
+/* Section styling */
+.orb-section {
+    display: none;
+    height: 100%;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.orb-section.active {
+    display: block;
+}
+
+/* Styling for each section type */
+.orb-section[data-section="dashboard"] {
+    background: rgba(20, 30, 50, 0.5);
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.orb-section[data-section="chat"] {
+    background: rgba(30, 20, 50, 0.5);
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.orb-section[data-section="memory"] {
+    background: rgba(40, 25, 60, 0.5);
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.orb-section[data-section="project"] {
+    background: rgba(25, 40, 60, 0.5);
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.orb-section[data-section="settings"] {
+    background: rgba(35, 35, 50, 0.5);
+    border-radius: 8px;
+    padding: 15px;
+}
+
+/* Offline banner */
+.offline-banner {
+    display: none;
+    padding: 8px 15px;
+    background-color: rgba(255, 69, 0, 0.8);
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.8; }
+    50% { opacity: 1; }
+    100% { opacity: 0.8; }
+}
+
+/* Status indicator */
+.status-indicator {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 12px;
+    color: white;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+}
+
+.status-indicator.online {
+    background-color: rgba(0, 128, 0, 0.8);
+}
+
+.status-indicator.offline {
+    background-color: rgba(128, 0, 0, 0.8);
 }
 
 /* React Three Fiber components styling */

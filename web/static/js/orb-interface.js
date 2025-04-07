@@ -45,7 +45,7 @@ window.enhancedErrorHandling = {
             setTimeout(() => {
                 console.log('Attempting reconnection to Think Tank API');
                 // Attempt a basic API test
-                fetch('http://localhost:8080/api/think-tank', {
+                fetch('/api/think-tank', {
                     method: 'OPTIONS',
                     headers: { 'Content-Type': 'application/json' }
                 }).catch(() => {
@@ -66,7 +66,8 @@ document.addEventListener("DOMContentLoaded", function() {
     // Rule #1: Progressive Enhancement - Preserve existing functionality
     // Check if orbital UI is needed on this page
     try {
-        if (!document.getElementById('orbital-container')) {
+        // Check for different possible container IDs (following Rule #1: Progressive Enhancement)
+        if (!document.getElementById('orbital-container') && !document.getElementById('orb-container') && !document.getElementById('minerva-orbital-ui')) {
             // Log with more user-friendly message per Rule #10
             console.log('Orbital UI not needed on this page - continuing with other functionality');
             // Initialize other components that don't depend on the orbital UI
@@ -91,14 +92,18 @@ document.addEventListener("DOMContentLoaded", function() {
     const ELLIPSE_Z_RATIO = 0.85; // Significantly increased for pronounced depth effect
     const OPTION_RADIUS = 200;    // Adjusted radius for proper orbital distance
     
-    // Get elements with error handling per Rule #10
+    // Get elements with error handling per Rule #10 (with fallbacks for different naming conventions)
+    const orb_container = document.getElementById("orbital-container") || 
+                        document.getElementById("orb-container") || 
+                        document.getElementById("minerva-orbital-ui");
     const navRing = document.getElementById("nav-ring");
-    const minervaOrb = document.getElementById("minerva-orb");
+    const minervaOrb = document.getElementById("minerva-orb") || 
+                      document.getElementById("orb-center");
     const contentDisplay = document.getElementById("content-display");
     const spaceBackground = document.getElementById("space-background");
     
     // Validate required elements exist before continuing
-    if (!navRing || !minervaOrb) {
+    if (!orb_container || !navRing || !minervaOrb) {
         // Use enhanced error handling with proper error object (Rule #10)
         window.enhancedErrorHandling.logError('DOM', {
             message: 'Minerva Orbital UI container not found in the DOM',
@@ -970,7 +975,9 @@ function initializeApiStatusTracking() {
     }
     
     // Actively check API availability for UI status syncing
-    const apiUrl = window.THINK_TANK_API_URL || 'http://localhost:8080/api/think-tank';
+    // Use relative URLs with port-agnostic approach (Rule #4) - works on any port
+    const apiUrl = window.THINK_TANK_API_URL || 
+              (window.location.protocol + '//' + window.location.host + '/api/think-tank');
     console.log('Checking Think Tank API availability at:', apiUrl);
     
     // Create a timeout for the fetch
