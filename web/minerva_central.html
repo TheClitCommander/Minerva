@@ -1038,22 +1038,11 @@
         <!-- Transparency controls removed as per user request -->
     </div>
     
-    <!-- Variable patches to prevent undefined errors -->
-    <script>
-      // Global variables that might be referenced by other scripts
-      var conversationId = null;
-      var activeProject = null;
-      var currentSession = null;
-    </script>
-
     <!-- Enhanced Orb UI Styling -->
     <link rel="stylesheet" href="/static/css/orb-enhanced.css">
     
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
-    
-    <!-- Include the enhanced orb UI implementation -->
-    <script src="/static/js/orb/orb-enhanced.js"></script>
     
     <!-- Load Socket.IO for real-time communication -->
     <script src="https://cdn.socket.io/4.4.1/socket.io.min.js"></script>
@@ -3971,5 +3960,15 @@
       console.log('💬 Minerva Chat initialized - Building on our established chat integration plan');
     });
     </script>
+    <!-- Global variable patches -->    
+    <script>
+        // Global variables that might be referenced by other scripts
+        var conversationId = null;
+        var activeProject = null;
+        var currentSession = null;
+    </script>
+    
+    <!-- Include the enhanced orb UI implementation after DOM is loaded -->    
+    <script src="/static/js/orb/orb-enhanced.js"></script>
 </body>
 </html>

@@ -7,8 +7,9 @@
  * - Rule #5: UI visibility and responsiveness
  */
 
-// Wait for DOM to be fully loaded
-document.addEventListener('DOMContentLoaded', () => {
+// More robust initialization that handles both DOMContentLoaded and window.onload
+function initOrb() {
+  try {
   console.log("🔄 Initializing Enhanced Minerva Orb UI...");
   
   // Initialize toast notification container
@@ -46,8 +47,20 @@ document.addEventListener('DOMContentLoaded', () => {
   initApiStatusCheck();
   initKeyboardShortcuts();
   
-  console.log("✅ Enhanced Orb UI ready");
-});
+      console.log("✅ Enhanced Orb UI ready");
+  } catch (error) {
+    console.error("Error initializing Orb UI:", error);
+    showFallback("Error initializing UI: " + error.message);
+  }
+}
+
+// Initialize on DOM content loaded
+document.addEventListener('DOMContentLoaded', initOrb);
+
+// Backup initialization with window.onload (in case DOMContentLoaded already fired)
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+  setTimeout(initOrb, 100);
+}
 
 // Initialize navigation between sections with icons
 function initNav() {
@@ -266,10 +279,23 @@ function initKeyboardShortcuts() {
 let toastContainer = null;
 
 function createToastContainer() {
+  // If we already have a reference, verify it's still in the DOM
+  if (toastContainer) {
+    if (!document.body.contains(toastContainer)) {
+      toastContainer = null; // Reference is invalid, container was removed
+    }
+  }
+  
+  // Create new container if needed
   if (!toastContainer) {
-    toastContainer = document.createElement('div');
-    toastContainer.className = 'toast-container';
-    document.body.appendChild(toastContainer);
+    try {
+      toastContainer = document.createElement('div');
+      toastContainer.className = 'toast-container';
+      document.body.appendChild(toastContainer);
+    } catch (error) {
+      console.error("Could not create toast container:", error);
+      return null;
+    }
   }
   return toastContainer;
 }
@@ -340,14 +366,54 @@ function removeToast(id) {
 // Show fallback UI when critical elements are missing
 function showFallback(msg) {
   console.error(`Orb UI Error: ${msg}`);
-  showToast(`🚨 ${msg}`, "error", { timeout: false });
   
-  const fallback = document.createElement("div");
-  fallback.style = "padding:2rem;color:white;background:rgba(15, 23, 42, 0.9);font-family:monospace;border-radius:8px;margin:20px;backdrop-filter:blur(10px);border:1px solid rgba(239, 68, 68, 0.3);";
-  fallback.innerHTML = `
-    <h2>⚠️ UI Error</h2>
-    <p>${msg}</p>
-    <p>Please check the browser console for more information.</p>
-  `;
-  document.body.prepend(fallback);
+  try {
+    // Try to show toast, but don't fail if it can't be shown
+    showToast(`🚨 ${msg}`, "error", { timeout: false });
+  } catch (e) {
+    console.warn('Could not show toast notification:', e);
+  }
+  
+  try {
+    // Create a standalone error message element that doesn't rely on existing DOM
+    const fallback = document.createElement("div");
+    fallback.id = 'minerva-fallback-message';
+    fallback.style = "position:fixed;top:20px;left:20px;right:20px;z-index:9999;padding:2rem;color:white;background:rgba(15, 23, 42, 0.9);font-family:sans-serif;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,0.3);backdrop-filter:blur(10px);border:1px solid rgba(239, 68, 68, 0.3);";
+    fallback.innerHTML = `
+      <h2 style="margin-top:0;margin-bottom:10px;color:#ef4444;">⚠️ Minerva UI Error</h2>
+      <p style="margin:0 0 15px 0;">${msg}</p>
+      <p style="margin:0;font-size:14px;opacity:0.7;">Please check the browser console for details</p>
+      <div style="margin-top:15px;">
+        <button id="minerva-error-dismiss" style="background:#ef4444;border:none;color:white;padding:8px 16px;border-radius:4px;cursor:pointer;">Dismiss</button>
+        <button id="minerva-error-retry" style="background:#3b82f6;border:none;color:white;padding:8px 16px;border-radius:4px;cursor:pointer;margin-left:10px;">Retry</button>
+      </div>
+    `;
+    
+    // Avoid duplicate error messages
+    const existingFallback = document.getElementById('minerva-fallback-message');
+    if (existingFallback) {
+      existingFallback.remove();
+    }
+    
+    // Append to body
+    document.body.appendChild(fallback);
+    
+    // Add event listeners to buttons
+    document.getElementById('minerva-error-dismiss')?.addEventListener('click', () => {
+      fallback.style.display = 'none';
+    });
+    
+    document.getElementById('minerva-error-retry')?.addEventListener('click', () => {
+      fallback.style.display = 'none';
+      location.reload();
+    });
+  } catch (e) {
+    // Last resort: alert
+    console.error('Failed to show fallback UI:', e);
+    try {
+      alert('Minerva UI Error: ' + msg);
+    } catch (e2) {
+      // Nothing more we can do
+    }
+  }
 }
