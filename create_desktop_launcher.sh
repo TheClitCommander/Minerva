@@ -90,8 +90,8 @@ case "$CHOICE" in
     "💬 AI Chat (Simulation)")
         osascript -e 'tell application "Terminal" to do script "cd '\''/Users/bendickinson/Desktop/Minerva'\'' && echo '\''🤖 Starting Minerva AI Chat (Simulation Mode)...'\'' && python3 bin/launch_minerva.py ai"'
         ;;
-    "🌐 Web Server")
-        osascript -e 'tell application "Terminal" to do script "cd '\''/Users/bendickinson/Desktop/Minerva'\'' && echo '\''🌐 Starting Minerva Web Server...'\'' && echo '\''Server will be available at: http://localhost:5000'\'' && python3 bin/launch_minerva.py server"'
+         "🌐 Web Server")
+         osascript -e 'tell application "Terminal" to do script "cd '\''/Users/bendickinson/Desktop/Minerva'\'' && echo '\''🌐 Starting Minerva Web Server...'\'' && echo '\''🌟 Cosmic UI: http://localhost:5000/portal'\'' && echo '\''📱 Simple UI: http://localhost:5000'\'' && python3 bin/launch_minerva.py server"'
         ;;
     "📊 System Status")
         osascript -e 'tell application "Terminal" to do script "cd '\''/Users/bendickinson/Desktop/Minerva'\'' && python3 bin/launch_minerva.py status && echo '\'''\'' && echo '\''Press any key to close this window...'\'' && read -n 1"'

@@ -33,7 +33,7 @@ The test launcher provides these options:
 2. **🧪 Test components** - Quick test of all refactored components
 3. **🔬 Run comprehensive tests** - Full test suite (20+ tests)
 4. **💬 Start AI chat** - Interactive AI assistant
-5. **🌐 Start web server** - Web interface (needs Flask)
+5. **🌐 Start web server** - Beautiful cosmic UI (needs Flask)
 6. **📊 Show system status** - Component availability
 7. **🚪 Exit** - Close the launcher
 
@@ -68,6 +68,23 @@ After refactoring, Minerva now has a clean structure:
 3. **Run full tests**: Choose option 3 to run the complete test suite
 4. **Try AI chat**: Choose option 4 for simulation mode (works without API keys)
 5. **Install Flask** (optional): For web interface functionality
+
+## 🎨 **Beautiful Existing UI**
+
+Minerva already has a **stunning cosmic interface**:
+
+- **🌟 Cosmic Portal**: `http://localhost:5000/portal`
+  - Animated starfield background with nebulae
+  - Draggable central Minerva orb
+  - Sliding chat panel with real-time messaging
+  - Orbital menu system
+  - Professional glassmorphism design
+
+- **📱 Simple Interface**: `http://localhost:5000`
+  - Clean, minimal design
+  - Direct chat functionality
+
+**To access**: Start the web server (option 5 in test launcher) then open your browser!
 
 ## ⚙️ Configuration
 

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minerva AI Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/minerva.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
+</head>
+<body>
+    <div class="minerva-container">
+        <!-- Header -->
+        <header class="minerva-header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <i class="fas fa-brain logo-icon"></i>
+                    <h1>Minerva AI</h1>
+                    <span class="version">v2.0</span>
+                </div>
+                <div class="status-section">
+                    <div class="status-indicator" id="connectionStatus">
+                        <i class="fas fa-circle"></i>
+                        <span>Connecting...</span>
+                    </div>
+                    <div class="model-selector">
+                        <select id="modelSelect">
+                            <option value="enhanced-simulation">Enhanced Simulation</option>
+                            <option value="openai">OpenAI GPT-4</option>
+                            <option value="anthropic">Claude</option>
+                            <option value="fallback">Fallback</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-cog"></i> Controls</h3>
+                    <button class="control-btn" id="clearChatBtn">
+                        <i class="fas fa-trash"></i> Clear Chat
+                    </button>
+                    <button class="control-btn" id="systemStatusBtn">
+                        <i class="fas fa-info-circle"></i> System Status
+                    </button>
+                    <button class="control-btn" id="memoryBtn">
+                        <i class="fas fa-database"></i> Memory Stats
+                    </button>
+                    <button class="control-btn" id="configBtn">
+                        <i class="fas fa-wrench"></i> Configuration
+                    </button>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-history"></i> Recent Chats</h3>
+                    <div class="chat-history" id="chatHistory">
+                        <!-- Chat history will be populated here -->
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-chart-line"></i> Stats</h3>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Messages:</span>
+                            <span class="stat-value" id="messageCount">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Uptime:</span>
+                            <span class="stat-value" id="uptime">00:00:00</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Memory:</span>
+                            <span class="stat-value" id="memoryCount">0</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Chat Area -->
+            <main class="chat-container">
+                <div class="chat-header">
+                    <h2><i class="fas fa-comments"></i> Chat with Minerva</h2>
+                    <div class="chat-controls">
+                        <button class="icon-btn" id="exportChatBtn" title="Export Chat">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button class="icon-btn" id="settingsBtn" title="Settings">
+                            <i class="fas fa-cog"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="chat-messages" id="chatMessages">
+                    <div class="welcome-message">
+                        <div class="welcome-content">
+                            <i class="fas fa-robot welcome-icon"></i>
+                            <h3>Welcome to Minerva AI!</h3>
+                            <p>I'm your intelligent assistant. Ask me anything or try these suggestions:</p>
+                            <div class="suggestion-chips">
+                                <button class="suggestion-chip" data-text="What can you help me with?">
+                                    <i class="fas fa-question-circle"></i> What can you do?
+                                </button>
+                                <button class="suggestion-chip" data-text="Tell me about the weather">
+                                    <i class="fas fa-cloud-sun"></i> Weather
+                                </button>
+                                <button class="suggestion-chip" data-text="Help me write code">
+                                    <i class="fas fa-code"></i> Code Help
+                                </button>
+                                <button class="suggestion-chip" data-text="Explain quantum computing">
+                                    <i class="fas fa-atom"></i> Explain Topics
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-input-container">
+                    <div class="input-wrapper">
+                        <textarea 
+                            id="messageInput" 
+                            placeholder="Type your message here... (Shift+Enter for new line)"
+                            rows="1"
+                        ></textarea>
+                        <div class="input-actions">
+                            <button class="icon-btn" id="attachBtn" title="Attach File">
+                                <i class="fas fa-paperclip"></i>
+                            </button>
+                            <button class="icon-btn" id="voiceBtn" title="Voice Input">
+                                <i class="fas fa-microphone"></i>
+                            </button>
+                            <button class="send-btn" id="sendBtn" title="Send Message">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="typing-indicator" id="typingIndicator" style="display: none;">
+                        <span>Minerva is thinking</span>
+                        <div class="typing-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Modals -->
+        <div class="modal" id="systemModal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-info-circle"></i> System Status</h3>
+                    <button class="close-btn" onclick="closeModal('systemModal')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body" id="systemModalBody">
+                    Loading system status...
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id="configModal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-wrench"></i> Configuration</h3>
+                    <button class="close-btn" onclick="closeModal('configModal')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body" id="configModalBody">
+                    <div class="config-section">
+                        <h4>AI Settings</h4>
+                        <div class="form-group">
+                            <label>Temperature:</label>
+                            <input type="range" id="temperatureSlider" min="0" max="1" step="0.1" value="0.7">
+                            <span id="temperatureValue">0.7</span>
+                        </div>
+                        <div class="form-group">
+                            <label>Max Tokens:</label>
+                            <input type="number" id="maxTokensInput" value="4000" min="100" max="8000">
+                        </div>
+                    </div>
+                    <div class="config-section">
+                        <h4>Interface Settings</h4>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="darkModeToggle"> Dark Mode
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="soundToggle" checked> Sound Effects
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/minerva-ui.js') }}"></script>
+</body>
+</html> 
