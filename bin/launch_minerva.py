@@ -81,12 +81,8 @@ def launch_web_server(args):
     print("🌐 Starting Minerva Web Server...")
     
     try:
-        # Import the server
-        import server
-        
-        # Get the app and socketio from the server module
-        app = server.app
-        socketio = server.socketio
+        # Import the new server class
+        from server import MinervaServer
         
         # Configure server settings
         host = args.host or '0.0.0.0'
@@ -96,15 +92,9 @@ def launch_web_server(args):
         print(f"🚀 Starting server on {host}:{port}")
         print(f"🔧 Debug mode: {'enabled' if debug else 'disabled'}")
         
-        # Start the server
-        socketio.run(
-            app,
-            host=host,
-            port=port,
-            debug=debug,
-            use_reloader=False,  # Disable reloader to prevent double startup
-            log_output=True
-        )
+        # Create and run server
+        server = MinervaServer(host=host, port=port, debug=debug)
+        server.run()
         
     except ImportError as e:
         print(f"❌ Error importing web server: {e}")
@@ -196,11 +186,11 @@ def show_status():
     
     # Check components
     components = {
-        "AI Assistant": "minerva_main.py",
-        "Web Server": "server.py", 
+        "AI Assistant": "core/minerva_main.py",
+        "Web Server": "server/minerva_server.py", 
         "CLI": "minerva_cli.py",
-        "Coordinator": "ai_coordinator_singleton.py",
-        "Memory Manager": "memory/memory_manager.py"
+        "Coordinator": "core/coordinator.py",
+        "Memory Manager": "memory/unified_memory_manager.py"
     }
     
     for name, file_path in components.items():
@@ -211,8 +201,8 @@ def show_status():
     
     # Check directories
     directories = [
-        "data", "web", "memory", "integrations", 
-        "frameworks", "utils", "tests"
+        "bin", "core", "models", "memory", "frameworks",
+        "server", "data", "web", "utils", "tests"
     ]
     
     print(f"\n📁 Directories:")

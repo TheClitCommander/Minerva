@@ -10,7 +10,16 @@ import os
 import logging
 from pathlib import Path
 from typing import Dict, Any, Optional
-from dotenv import load_dotenv
+
+# Optional dotenv import
+try:
+    from dotenv import load_dotenv
+    DOTENV_AVAILABLE = True
+except ImportError:
+    DOTENV_AVAILABLE = False
+    def load_dotenv(*args, **kwargs):
+        """Fallback function when dotenv is not available."""
+        pass
 
 
 class MinervaConfig:

@@ -150,6 +150,23 @@ class BaseModelClient(ABC):
         # Return user-friendly message
         return f"I apologize, but I'm having trouble connecting to {self.provider_name}. Please try again later."
     
+    def get_cost_estimate(self, prompt: str, model_name: str = None) -> float:
+        """
+        Get estimated cost for a prompt.
+        
+        Args:
+            prompt: The input prompt
+            model_name: Optional model name for specific pricing
+            
+        Returns:
+            Estimated cost in USD
+        """
+        # Default implementation - should be overridden by subclasses
+        # Rough estimate based on token count
+        estimated_tokens = self._estimate_tokens(prompt)
+        # Generic estimate: $0.002 per 1K tokens (GPT-3.5 rate)
+        return (estimated_tokens / 1000) * 0.002
+    
     def _validate_model_name(self, model_name: str) -> bool:
         """
         Validate that the model name is supported.
