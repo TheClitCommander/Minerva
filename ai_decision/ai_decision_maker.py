@@ -25,6 +25,18 @@ from ai_decision.ai_model_switcher import model_switcher
 from ai_decision.enhanced_coordinator import enhanced_coordinator
 from users.feedback_driven_refinements import feedback_driven_refinements
 
+# Import new enhanced AI capabilities
+try:
+    from ai_decision.role_based_switcher import RoleBasedSwitcher
+    from ai_decision.workflow_automation import WorkflowAutomation
+    from ai_decision.knowledge_manager import KnowledgeManager
+    from ai_decision.enhanced_ai_integration import EnhancedAIIntegration
+    ENHANCED_FEATURES_AVAILABLE = True
+    logger.info("Enhanced AI features successfully imported")
+except ImportError as e:
+    logger.warning(f"Some enhanced AI features are not available: {e}")
+    ENHANCED_FEATURES_AVAILABLE = False
+
 
 class AIDecisionMaker:
     """
@@ -38,6 +50,30 @@ class AIDecisionMaker:
         self.model_switcher = model_switcher
         self.coordinator = enhanced_coordinator
         self.refinements = feedback_driven_refinements
+        
+        # Initialize enhanced capabilities if available
+        self.enhanced_features_available = ENHANCED_FEATURES_AVAILABLE
+        if self.enhanced_features_available:
+            try:
+                # Initialize the role-based switcher for specialized agent roles
+                self.role_based_switcher = RoleBasedSwitcher()
+                
+                # Initialize workflow automation for complex multi-step tasks
+                self.workflow_automation = WorkflowAutomation()
+                
+                # Initialize knowledge management for RAG capabilities
+                self.knowledge_manager = KnowledgeManager()
+                
+                # Initialize the integration layer that manages feature toggling
+                self.enhanced_integration = EnhancedAIIntegration(
+                    role_based_switcher=self.role_based_switcher,
+                    workflow_automation=self.workflow_automation,
+                    knowledge_manager=self.knowledge_manager
+                )
+                logger.info("Enhanced AI features initialized successfully")
+            except Exception as e:
+                logger.error(f"Failed to initialize enhanced features: {e}")
+                self.enhanced_features_available = False
         
         logger.info("AI Decision Maker initialized")
     
@@ -63,8 +99,47 @@ class AIDecisionMaker:
         enhanced_params = self.coordinator.enhance_decision_parameters(user_id, message)
         logger.info(f"Enhanced parameters: {enhanced_params}")
         
-        # Step 3: Process message with the enhanced coordinator
-        coordination_result = await self.coordinator.process_message(user_id, message, message_id)
+        # Step 3: Apply enhanced AI capabilities if available
+        enhanced_result = None
+        if self.enhanced_features_available:
+            try:
+                # Check if this is part of an ongoing workflow
+                workflow_context = self.enhanced_integration.get_workflow_context(user_id)
+                
+                # Enhanced processing path with new capabilities
+                enhanced_result = await self.enhanced_integration.process_request(
+                    user_id=user_id,
+                    message=message,
+                    message_id=message_id,
+                    context_analysis=context_analysis,
+                    enhanced_params=enhanced_params,
+                    workflow_context=workflow_context
+                )
+                
+                logger.info(f"Enhanced AI processing completed: {enhanced_result.get('processing_type', 'standard')}")
+                
+                # If the request was fully handled by enhanced features, merge results and return
+                if enhanced_result.get('request_handled', False):
+                    logger.info("Request fully handled by enhanced AI features")
+                    # Still pass through the coordinator for consistent logging/tracking
+                    coordination_result = await self.coordinator.process_message(
+                        user_id, message, message_id, 
+                        override_response=enhanced_result.get('response'),
+                        override_model=enhanced_result.get('model_used')
+                    )
+                else:
+                    # Fall back to standard processing with enhancements applied to parameters
+                    coordination_result = await self.coordinator.process_message(
+                        user_id, message, message_id,
+                        context_hints=enhanced_result.get('context_hints', {})
+                    )
+            except Exception as e:
+                logger.error(f"Error in enhanced AI processing: {e}")
+                # Fall back to standard processing path
+                coordination_result = await self.coordinator.process_message(user_id, message, message_id)
+        else:
+            # Standard processing path (no enhanced features)
+            coordination_result = await self.coordinator.process_message(user_id, message, message_id)
         
         # Step 4: Apply feedback-driven refinements to optimize the response
         optimized_result = self.refinements.process_response(
@@ -93,6 +168,20 @@ class AIDecisionMaker:
                 "context_based_model": self.model_switcher.select_model(context_analysis)
             }
         }
+        
+        # Add enhanced results if available
+        if enhanced_result:
+            final_result["enhanced_features"] = {
+                "active": True,
+                "processing_type": enhanced_result.get("processing_type", "standard"),
+                "roles_used": enhanced_result.get("roles_used", []),
+                "workflow_active": enhanced_result.get("workflow_active", False),
+                "workflow_step": enhanced_result.get("workflow_step", None),
+                "knowledge_used": enhanced_result.get("knowledge_used", False),
+                "knowledge_sources": enhanced_result.get("knowledge_sources", [])
+            }
+        else:
+            final_result["enhanced_features"] = {"active": False}
         
         logger.info(f"Completed request processing for user {user_id}")
         return final_result

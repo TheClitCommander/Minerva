@@ -1,0 +1,1859 @@
+{
+  "1740956813082": {
+    "timestamp": 1740956813.0824919,
+    "query": "Explain quantum computing and its implications for AI.",
+    "query_tags": [
+      "explanation",
+      "short_query"
+    ],
+    "best_model": "claude3",
+    "models_compared": [
+      "gpt4",
+      "claude3",
+      "mistral7b",
+      "gpt4all"
+    ],
+    "scores": {
+      "gpt4": 0.7210000000000001,
+      "claude3": 0.7225,
+      "mistral7b": 0.682,
+      "gpt4all": 0.64
+    },
+    "detailed_scores": {
+      "gpt4": {
+        "relevance": 0.5,
+        "coherence": 0.5,
+        "accuracy": 0.87,
+        "completeness": 0.5,
+        "formatting": 0.55
+      },
+      "claude3": {
+        "relevance": 0.5,
+        "coherence": 0.5,
+        "accuracy": 0.875,
+        "completeness": 0.5,
+        "formatting": 0.55
+      },
+      "mistral7b": {
+        "relevance": 0.5,
+        "coherence": 0.5,
+        "accuracy": 0.74,
+        "completeness": 0.5,
+        "formatting": 0.55
+      },
+      "gpt4all": {
+        "relevance": 0.5,
+        "coherence": 0.5,
+        "accuracy": 0.6,
+        "completeness": 0.5,
+        "formatting": 0.55
+      }
+    },
+    "quality_score": 0.7225,
+    "query_complexity": 1.5
+  },
+  "1740956900524": {
+    "timestamp": 1740956900.524391,
+    "query": "Explain quantum computing and its implications for AI.",
+    "query_tags": [
+      "explanation",
+      "short_query"
+    ],
+    "best_model": "claude3",
+    "models_compared": [
+      "gpt4",
+      "claude3",
+      "mistral7b",
+      "gpt4all"
+    ],
+    "scores": {
+      "gpt4": 0.7210000000000001,
+      "claude3": 0.7225,
+      "mistral7b": 0.682,
+      "gpt4all": 0.64
+    },
+    "detailed_scores": {
+      "gpt4": {
+        "relevance": 0.5,
+        "coherence": 0.5,
+        "accuracy": 0.87,
+        "completeness": 0.5,
+        "formatting": 0.55
+      },
+      "claude3": {
+        "relevance": 0.5,
+        "coherence": 0.5,
+        "accuracy": 0.875,
+        "completeness": 0.5,
+        "formatting": 0.55
+      },
+      "mistral7b": {
+        "relevance": 0.5,
+        "coherence": 0.5,
+        "accuracy": 0.74,
+        "completeness": 0.5,
+        "formatting": 0.55
+      },
+      "gpt4all": {
+        "relevance": 0.5,
+        "coherence": 0.5,
+        "accuracy": 0.6,
+        "completeness": 0.5,
+        "formatting": 0.55
+      }
+    },
+    "quality_score": 0.7225,
+    "query_complexity": 1.5
+  },
+  "1740957099275": {
+    "timestamp": 1740957099.2755032,
+    "query": "Explain quantum computing and its implications for AI.",
+    "query_tags": [
+      "explanation",
+      "short_query"
+    ],
+    "best_model": "claude3",
+    "models_compared": [
+      "gpt4",
+      "claude3",
+      "mistral7b",
+      "gpt4all"
+    ],
+    "scores": {
+      "gpt4": 0.7210000000000001,
+      "claude3": 0.7225,
+      "mistral7b": 0.682,
+      "gpt4all": 0.64
+    },
+    "detailed_scores": {
+      "gpt4": {
+        "relevance": 0.5,
+        "coherence": 0.5,
+        "accuracy": 0.87,
+        "completeness": 0.5,
+        "formatting": 0.55
+      },
+      "claude3": {
+        "relevance": 0.5,
+        "coherence": 0.5,
+        "accuracy": 0.875,
+        "completeness": 0.5,
+        "formatting": 0.55
+      },
+      "mistral7b": {
+        "relevance": 0.5,
+        "coherence": 0.5,
+        "accuracy": 0.74,
+        "completeness": 0.5,
+        "formatting": 0.55
+      },
+      "gpt4all": {
+        "relevance": 0.5,
+        "coherence": 0.5,
+        "accuracy": 0.6,
+        "completeness": 0.5,
+        "formatting": 0.55
+      }
+    },
+    "quality_score": 0.7225,
+    "query_complexity": 1.5
+  },
+  "1740957239988": {
+    "timestamp": 1740957239.988283,
+    "query": "Explain quantum computing and its implications for AI.",
+    "query_tags": [
+      "explanation",
+      "short_query"
+    ],
+    "best_model": "claude3",
+    "models_compared": [
+      "gpt4",
+      "claude3",
+      "mistral7b",
+      "gpt4all"
+    ],
+    "scores": {
+      "gpt4": 0.7210000000000001,
+      "claude3": 0.7225,
+      "mistral7b": 0.682,
+      "gpt4all": 0.64
+    },
+    "detailed_scores": {
+      "gpt4": {
+        "relevance": 0.5,
+        "coherence": 0.5,
+        "accuracy": 0.87,
+        "completeness": 0.5,
+        "formatting": 0.55
+      },
+      "claude3": {
+        "relevance": 0.5,
+        "coherence": 0.5,
+        "accuracy": 0.875,
+        "completeness": 0.5,
+        "formatting": 0.55
+      },
+      "mistral7b": {
+        "relevance": 0.5,
+        "coherence": 0.5,
+        "accuracy": 0.74,
+        "completeness": 0.5,
+        "formatting": 0.55
+      },
+      "gpt4all": {
+        "relevance": 0.5,
+        "coherence": 0.5,
+        "accuracy": 0.6,
+        "completeness": 0.5,
+        "formatting": 0.55
+      }
+    },
+    "quality_score": 0.7225,
+    "query_complexity": 1.5
+  },
+  "1740963168849": {
+    "timestamp": 1740963168.8498619,
+    "query": "Explain quantum computing and its implications for AI.",
+    "query_tags": [
+      "explanation",
+      "short_query"
+    ],
+    "best_model": "gpt4",
+    "models_compared": [
+      "gpt4",
+      "claude3",
+      "mistral7b",
+      "gpt4all"
+    ],
+    "scores": {
+      "gpt4": 0.8585,
+      "claude3": 0.83,
+      "mistral7b": 0.7595000000000001,
+      "gpt4all": 0.705
+    },
+    "detailed_scores": {
+      "gpt4": {
+        "relevance": 0.9249999999999999,
+        "coherence": 0.6,
+        "accuracy": 0.87,
+        "completeness": 0.5,
+        "formatting": 0.5
+      },
+      "claude3": {
+        "relevance": 0.825,
+        "coherence": 0.6,
+        "accuracy": 0.875,
+        "completeness": 0.5,
+        "formatting": 0.5
+      },
+      "mistral7b": {
+        "relevance": 0.725,
+        "coherence": 0.6,
+        "accuracy": 0.74,
+        "completeness": 0.5,
+        "formatting": 0.5
+      },
+      "gpt4all": {
+        "relevance": 0.75,
+        "coherence": 0.5,
+        "accuracy": 0.6,
+        "completeness": 0.5,
+        "formatting": 0.5
+      }
+    },
+    "quality_score": 0.8585,
+    "query_complexity": 1.5
+  },
+  "1740963183807": {
+    "timestamp": 1740963183.807529,
+    "query": "Compare the economic theories of Keynes and Friedman",
+    "query_tags": [
+      "comparison",
+      "short_query"
+    ],
+    "best_model": "gpt4",
+    "models_compared": [
+      "gpt4",
+      "claude3",
+      "mistral7b",
+      "gpt4all"
+    ],
+    "scores": {
+      "gpt4": 0.797,
+      "claude3": 0.7685,
+      "mistral7b": 0.728,
+      "gpt4all": 0.648
+    },
+    "detailed_scores": {
+      "gpt4": {
+        "relevance": 0.72,
+        "coherence": 0.6,
+        "accuracy": 0.87,
+        "completeness": 0.5,
+        "formatting": 0.5
+      },
+      "claude3": {
+        "relevance": 0.62,
+        "coherence": 0.6,
+        "accuracy": 0.875,
+        "completeness": 0.5,
+        "formatting": 0.5
+      },
+      "mistral7b": {
+        "relevance": 0.62,
+        "coherence": 0.6,
+        "accuracy": 0.74,
+        "completeness": 0.5,
+        "formatting": 0.5
+      },
+      "gpt4all": {
+        "relevance": 0.56,
+        "coherence": 0.5,
+        "accuracy": 0.6,
+        "completeness": 0.5,
+        "formatting": 0.5
+      }
+    },
+    "quality_score": 0.797,
+    "query_complexity": 1
+  },
+  "1740964115346": {
+    "timestamp": 1740964115.346438,
+    "query": "What is the capital of France?",
+    "query_tags": [
+      "explanation",
+      "short_query"
+    ],
+    "best_model": "gpt4",
+    "models_compared": [
+      "gpt4",
+      "claude3",
+      "mistral7b",
+      "gpt4all"
+    ],
+    "scores": {
+      "gpt4": 0.821,
+      "claude3": 0.7925,
+      "mistral7b": 0.722,
+      "gpt4all": 0.69
+    },
+    "detailed_scores": {
+      "gpt4": {
+        "relevance": 0.7999999999999999,
+        "coherence": 0.6,
+        "accuracy": 0.87,
+        "completeness": 0.5,
+        "formatting": 0.5
+      },
+      "claude3": {
+        "relevance": 0.7,
+        "coherence": 0.6,
+        "accuracy": 0.875,
+        "completeness": 0.5,
+        "formatting": 0.5
+      },
+      "mistral7b": {
+        "relevance": 0.6,
+        "coherence": 0.6,
+        "accuracy": 0.74,
+        "completeness": 0.5,
+        "formatting": 0.5
+      },
+      "gpt4all": {
+        "relevance": 0.7,
+        "coherence": 0.5,
+        "accuracy": 0.6,
+        "completeness": 0.5,
+        "formatting": 0.5
+      }
+    },
+    "quality_score": 0.821,
+    "query_complexity": 1
+  },
+  "1740964328972": {
+    "timestamp": 1740964328.9728682,
+    "query": "What is the capital of France?",
+    "query_tags": [
+      "explanation",
+      "short_query"
+    ],
+    "best_model": "gpt4",
+    "models_compared": [
+      "gpt4",
+      "claude3",
+      "mistral7b",
+      "gpt4all"
+    ],
+    "scores": {
+      "gpt4": 0.821,
+      "claude3": 0.7925,
+      "mistral7b": 0.722,
+      "gpt4all": 0.69
+    },
+    "detailed_scores": {
+      "gpt4": {
+        "relevance": 0.7999999999999999,
+        "coherence": 0.6,
+        "accuracy": 0.87,
+        "completeness": 0.5,
+        "formatting": 0.5
+      },
+      "claude3": {
+        "relevance": 0.7,
+        "coherence": 0.6,
+        "accuracy": 0.875,
+        "completeness": 0.5,
+        "formatting": 0.5
+      },
+      "mistral7b": {
+        "relevance": 0.6,
+        "coherence": 0.6,
+        "accuracy": 0.74,
+        "completeness": 0.5,
+        "formatting": 0.5
+      },
+      "gpt4all": {
+        "relevance": 0.7,
+        "coherence": 0.5,
+        "accuracy": 0.6,
+        "completeness": 0.5,
+        "formatting": 0.5
+      }
+    },
+    "quality_score": 0.821,
+    "query_complexity": 1
+  },
+  "1740964341287": {
+    "timestamp": 1740964341.287555,
+    "query": "Explain quantum computing in simple terms",
+    "query_tags": [],
+    "best_model": "gpt4",
+    "models_compared": [
+      "gpt4",
+      "claude3",
+      "mistral7b",
+      "gpt4all"
+    ],
+    "scores": {
+      "gpt4": 0.815,
+      "claude3": 0.7865,
+      "mistral7b": 0.746,
+      "gpt4all": 0.666
+    },
+    "detailed_scores": {
+      "gpt4": {
+        "relevance": 0.7799999999999999,
+        "coherence": 0.6,
+        "accuracy": 0.87,
+        "completeness": 0.5,
+        "formatting": 0.5
+      },
+      "claude3": {
+        "relevance": 0.6799999999999999,
+        "coherence": 0.6,
+        "accuracy": 0.875,
+        "completeness": 0.5,
+        "formatting": 0.5
+      },
+      "mistral7b": {
+        "relevance": 0.6799999999999999,
+        "coherence": 0.6,
+        "accuracy": 0.74,
+        "completeness": 0.5,
+        "formatting": 0.5
+      },
+      "gpt4all": {
+        "relevance": 0.62,
+        "coherence": 0.5,
+        "accuracy": 0.6,
+        "completeness": 0.5,
+        "formatting": 0.5
+      }
+    },
+    "quality_score": 0.815,
+    "query_complexity": 5.0
+  },
+  "1740966835067": {
+    "timestamp": 1740966835.0676658,
+    "query": "Tell me a nonsense story that repeats itself over and over",
+    "query_tags": [],
+    "best_model": "claude3",
+    "models_compared": [
+      "gpt4",
+      "claude3",
+      "mistral7b",
+      "gpt4all"
+    ],
+    "scores": {
+      "gpt4": 0.930047619047619,
+      "claude3": 0.9467857142857143,
+      "mistral7b": 0.8667619047619047,
+      "gpt4all": 0.8457142857142856
+    },
+    "detailed_scores": {
+      "gpt4": {
+        "relevance": 0.5857142857142857,
+        "coherence": 0.9666666666666666,
+        "accuracy": 0.87,
+        "completeness": 0.7999999999999999,
+        "formatting": 0.7
+      },
+      "claude3": {
+        "relevance": 0.7142857142857143,
+        "coherence": 0.8999999999999999,
+        "accuracy": 0.875,
+        "completeness": 0.6,
+        "formatting": 0.85
+      },
+      "mistral7b": {
+        "relevance": 0.7714285714285714,
+        "coherence": 0.7666666666666666,
+        "accuracy": 0.74,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "gpt4all": {
+        "relevance": 0.5857142857142857,
+        "coherence": 0.8999999999999999,
+        "accuracy": 0.6,
+        "completeness": 0.85,
+        "formatting": 0.7
+      }
+    },
+    "quality_score": 0.9467857142857143,
+    "query_complexity": 1.1
+  },
+  "1740968317790": {
+    "timestamp": 1740968317.790263,
+    "query": "What are the main factors that influence climate change?",
+    "query_tags": [
+      "short_query"
+    ],
+    "best_model": "gpt4",
+    "models_compared": [
+      "gpt4",
+      "mistral7b",
+      "gpt4all"
+    ],
+    "scores": {
+      "gpt4": 0.9429047619047619,
+      "mistral7b": 0.8667619047619047,
+      "gpt4all": 0.8585714285714285
+    },
+    "detailed_scores": {
+      "gpt4": {
+        "relevance": 0.6285714285714286,
+        "coherence": 0.9666666666666666,
+        "accuracy": 0.87,
+        "completeness": 0.7999999999999999,
+        "formatting": 0.7
+      },
+      "mistral7b": {
+        "relevance": 0.7714285714285714,
+        "coherence": 0.7666666666666666,
+        "accuracy": 0.74,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "gpt4all": {
+        "relevance": 0.6285714285714286,
+        "coherence": 0.8999999999999999,
+        "accuracy": 0.6,
+        "completeness": 0.85,
+        "formatting": 0.7
+      }
+    },
+    "quality_score": 0.9429047619047619,
+    "query_complexity": 1
+  },
+  "1740969503011": {
+    "timestamp": 1740969503.0118132,
+    "query": "hey",
+    "query_tags": [
+      "short_query"
+    ],
+    "best_model": "gpt4",
+    "models_compared": [
+      "gpt4",
+      "mistral7b",
+      "gpt4all"
+    ],
+    "scores": {
+      "gpt4": 0.8843333333333333,
+      "mistral7b": 0.8453333333333333,
+      "gpt4all": 0.85
+    },
+    "detailed_scores": {
+      "gpt4": {
+        "relevance": 0.7,
+        "coherence": 0.7666666666666666,
+        "accuracy": 0.87,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "mistral7b": {
+        "relevance": 0.7,
+        "coherence": 0.7666666666666666,
+        "accuracy": 0.74,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "gpt4all": {
+        "relevance": 0.7,
+        "coherence": 0.8999999999999999,
+        "accuracy": 0.6,
+        "completeness": 0.85,
+        "formatting": 0.5499999999999999
+      }
+    },
+    "quality_score": 0.8843333333333333,
+    "query_complexity": 1
+  },
+  "1740969673279": {
+    "timestamp": 1740969673.279478,
+    "query": "hey",
+    "query_tags": [
+      "short_query"
+    ],
+    "best_model": "claude3",
+    "models_compared": [
+      "gpt4",
+      "claude3",
+      "mistral7b",
+      "gpt4all"
+    ],
+    "scores": {
+      "gpt4": 0.751,
+      "claude3": 0.7525000000000001,
+      "mistral7b": 0.712,
+      "gpt4all": 0.72
+    },
+    "detailed_scores": {
+      "gpt4": {
+        "relevance": 0.7,
+        "coherence": 0.4,
+        "accuracy": 0.87,
+        "completeness": 0.5,
+        "formatting": 0.5
+      },
+      "claude3": {
+        "relevance": 0.7,
+        "coherence": 0.4,
+        "accuracy": 0.875,
+        "completeness": 0.5,
+        "formatting": 0.5
+      },
+      "mistral7b": {
+        "relevance": 0.7,
+        "coherence": 0.4,
+        "accuracy": 0.74,
+        "completeness": 0.5,
+        "formatting": 0.5
+      },
+      "gpt4all": {
+        "relevance": 0.7,
+        "coherence": 0.7,
+        "accuracy": 0.6,
+        "completeness": 0.5,
+        "formatting": 0.44999999999999996
+      }
+    },
+    "quality_score": 0.7525000000000001,
+    "query_complexity": 1
+  },
+  "1740969897236": {
+    "timestamp": 1740969897.236982,
+    "query": "What is the meaning of life?",
+    "query_tags": [
+      "explanation",
+      "short_query"
+    ],
+    "best_model": "gpt4all",
+    "models_compared": [
+      "mistral7b",
+      "gpt4all"
+    ],
+    "scores": {
+      "mistral7b": 0.802,
+      "gpt4all": 0.87
+    },
+    "detailed_scores": {
+      "mistral7b": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.74,
+        "completeness": 0.5,
+        "formatting": 0.5
+      },
+      "gpt4all": {
+        "relevance": 0.7,
+        "coherence": 0.8999999999999999,
+        "accuracy": 0.6,
+        "completeness": 0.7999999999999999,
+        "formatting": 0.7
+      }
+    },
+    "quality_score": 0.87,
+    "query_complexity": 1
+  },
+  "1740970182824": {
+    "timestamp": 1740970182.824634,
+    "query": "hey",
+    "query_tags": [
+      "short_query"
+    ],
+    "best_model": "claude3",
+    "models_compared": [
+      "gpt4",
+      "claude3",
+      "mistral7b",
+      "gpt4all"
+    ],
+    "scores": {
+      "gpt4": 0.751,
+      "claude3": 0.7525000000000001,
+      "mistral7b": 0.712,
+      "gpt4all": 0.72
+    },
+    "detailed_scores": {
+      "gpt4": {
+        "relevance": 0.7,
+        "coherence": 0.4,
+        "accuracy": 0.87,
+        "completeness": 0.5,
+        "formatting": 0.5
+      },
+      "claude3": {
+        "relevance": 0.7,
+        "coherence": 0.4,
+        "accuracy": 0.875,
+        "completeness": 0.5,
+        "formatting": 0.5
+      },
+      "mistral7b": {
+        "relevance": 0.7,
+        "coherence": 0.4,
+        "accuracy": 0.74,
+        "completeness": 0.5,
+        "formatting": 0.5
+      },
+      "gpt4all": {
+        "relevance": 0.7,
+        "coherence": 0.7,
+        "accuracy": 0.6,
+        "completeness": 0.5,
+        "formatting": 0.44999999999999996
+      }
+    },
+    "quality_score": 0.7525000000000001,
+    "query_complexity": 1
+  },
+  "1740970441585": {
+    "timestamp": 1740970441.585711,
+    "query": "Tell me about the history of machine learning",
+    "query_tags": [
+      "short_query"
+    ],
+    "best_model": "claude3",
+    "models_compared": [
+      "gpt4",
+      "claude3",
+      "mistral7b",
+      "gpt4all"
+    ],
+    "scores": {
+      "gpt4": 0.8069999999999999,
+      "claude3": 0.8664999999999999,
+      "mistral7b": 0.746,
+      "gpt4all": 0.726
+    },
+    "detailed_scores": {
+      "gpt4": {
+        "relevance": 0.62,
+        "coherence": 0.7,
+        "accuracy": 0.87,
+        "completeness": 0.5,
+        "formatting": 0.6
+      },
+      "claude3": {
+        "relevance": 0.6799999999999999,
+        "coherence": 0.7,
+        "accuracy": 0.875,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "mistral7b": {
+        "relevance": 0.6799999999999999,
+        "coherence": 0.6,
+        "accuracy": 0.74,
+        "completeness": 0.5,
+        "formatting": 0.5
+      },
+      "gpt4all": {
+        "relevance": 0.62,
+        "coherence": 0.7,
+        "accuracy": 0.6,
+        "completeness": 0.5,
+        "formatting": 0.6
+      }
+    },
+    "quality_score": 0.8664999999999999,
+    "query_complexity": 1
+  },
+  "1741054992967": {
+    "timestamp": 1741054992.967486,
+    "query": "What is the capital of France?",
+    "query_tags": [
+      "explanation",
+      "short_query"
+    ],
+    "best_model": "claude3",
+    "models_compared": [
+      "gpt4",
+      "claude3",
+      "mistral7b",
+      "gpt4all"
+    ],
+    "scores": {
+      "gpt4": 0.901,
+      "claude3": 0.9025,
+      "mistral7b": 0.862,
+      "gpt4all": 0.82
+    },
+    "detailed_scores": {
+      "gpt4": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.87,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "claude3": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.875,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "mistral7b": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.74,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "gpt4all": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.6,
+        "completeness": 0.7,
+        "formatting": 0.6
+      }
+    },
+    "quality_score": 0.9025,
+    "query_complexity": 1
+  },
+  "1741054992978": {
+    "timestamp": 1741054992.978057,
+    "query": "Explain quantum computing in simple terms.",
+    "query_tags": [
+      "explanation",
+      "short_query"
+    ],
+    "best_model": "claude3",
+    "models_compared": [
+      "gpt4",
+      "claude3",
+      "mistral7b",
+      "gpt4all"
+    ],
+    "scores": {
+      "gpt4": 0.901,
+      "claude3": 0.9025,
+      "mistral7b": 0.862,
+      "gpt4all": 0.82
+    },
+    "detailed_scores": {
+      "gpt4": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.87,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "claude3": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.875,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "mistral7b": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.74,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "gpt4all": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.6,
+        "completeness": 0.7,
+        "formatting": 0.6
+      }
+    },
+    "quality_score": 0.9025,
+    "query_complexity": 1.5
+  },
+  "1741054992986": {
+    "timestamp": 1741054992.9865038,
+    "query": "Write a short poem about technology.",
+    "query_tags": [
+      "short_query"
+    ],
+    "best_model": "claude3",
+    "models_compared": [
+      "gpt4",
+      "claude3",
+      "mistral7b",
+      "gpt4all"
+    ],
+    "scores": {
+      "gpt4": 0.901,
+      "claude3": 0.9025,
+      "mistral7b": 0.862,
+      "gpt4all": 0.82
+    },
+    "detailed_scores": {
+      "gpt4": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.87,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "claude3": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.875,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "mistral7b": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.74,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "gpt4all": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.6,
+        "completeness": 0.7,
+        "formatting": 0.6
+      }
+    },
+    "quality_score": 0.9025,
+    "query_complexity": 1
+  },
+  "1741055415958": {
+    "timestamp": 1741055415.958857,
+    "query": "Hello there!",
+    "query_tags": [
+      "short_query"
+    ],
+    "best_model": "claude3",
+    "models_compared": [
+      "gpt4",
+      "claude3",
+      "mistral7b",
+      "gpt4all"
+    ],
+    "scores": {
+      "gpt4": 0.861,
+      "claude3": 0.8625,
+      "mistral7b": 0.822,
+      "gpt4all": 0.78
+    },
+    "detailed_scores": {
+      "gpt4": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.87,
+        "completeness": 0.5,
+        "formatting": 0.6
+      },
+      "claude3": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.875,
+        "completeness": 0.5,
+        "formatting": 0.6
+      },
+      "mistral7b": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.74,
+        "completeness": 0.5,
+        "formatting": 0.6
+      },
+      "gpt4all": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.6,
+        "completeness": 0.5,
+        "formatting": 0.6
+      }
+    },
+    "quality_score": 0.8625,
+    "query_complexity": 1
+  },
+  "1741055415000": {
+    "timestamp": "2025-03-03T21:30:15.996935",
+    "query": "Write a short poem about technology.",
+    "query_tags": [
+      "short_query"
+    ],
+    "best_model": "claude3",
+    "models_compared": [],
+    "scores": {
+      "gpt4": 0.901,
+      "claude3": 0.9025,
+      "mistral7b": 0.862,
+      "gpt4all": 0.82
+    },
+    "detailed_scores": {
+      "gpt4": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.87,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "claude3": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.875,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "mistral7b": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.74,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "gpt4all": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.6,
+        "completeness": 0.7,
+        "formatting": 0.6
+      }
+    },
+    "quality_score": 0.0,
+    "query_complexity": 1
+  },
+  "1741055415970": {
+    "timestamp": 1741055415.970765,
+    "query": "What is the capital of France?",
+    "query_tags": [
+      "explanation",
+      "short_query"
+    ],
+    "best_model": "claude3",
+    "models_compared": [
+      "gpt4",
+      "claude3",
+      "mistral7b",
+      "gpt4all"
+    ],
+    "scores": {
+      "gpt4": 0.901,
+      "claude3": 0.9025,
+      "mistral7b": 0.862,
+      "gpt4all": 0.82
+    },
+    "detailed_scores": {
+      "gpt4": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.87,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "claude3": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.875,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "mistral7b": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.74,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "gpt4all": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.6,
+        "completeness": 0.7,
+        "formatting": 0.6
+      }
+    },
+    "quality_score": 0.9025,
+    "query_complexity": 1
+  },
+  "1741055415981": {
+    "timestamp": 1741055415.981915,
+    "query": "Explain quantum computing in simple terms.",
+    "query_tags": [
+      "explanation",
+      "short_query"
+    ],
+    "best_model": "claude3",
+    "models_compared": [
+      "gpt4",
+      "claude3",
+      "mistral7b",
+      "gpt4all"
+    ],
+    "scores": {
+      "gpt4": 0.901,
+      "claude3": 0.9025,
+      "mistral7b": 0.862,
+      "gpt4all": 0.82
+    },
+    "detailed_scores": {
+      "gpt4": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.87,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "claude3": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.875,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "mistral7b": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.74,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "gpt4all": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.6,
+        "completeness": 0.7,
+        "formatting": 0.6
+      }
+    },
+    "quality_score": 0.9025,
+    "query_complexity": 1.5
+  },
+  "1741055415993": {
+    "timestamp": 1741055415.9934132,
+    "query": "Write a short poem about technology.",
+    "query_tags": [
+      "short_query"
+    ],
+    "best_model": "claude3",
+    "models_compared": [
+      "gpt4",
+      "claude3",
+      "mistral7b",
+      "gpt4all"
+    ],
+    "scores": {
+      "gpt4": 0.901,
+      "claude3": 0.9025,
+      "mistral7b": 0.862,
+      "gpt4all": 0.82
+    },
+    "detailed_scores": {
+      "gpt4": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.87,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "claude3": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.875,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "mistral7b": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.74,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "gpt4all": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.6,
+        "completeness": 0.7,
+        "formatting": 0.6
+      }
+    },
+    "quality_score": 0.9025,
+    "query_complexity": 1
+  },
+  "1741055416003": {
+    "timestamp": 1741055416.003905,
+    "query": "I'm feeling sad today. Can you help me feel better?",
+    "query_tags": [],
+    "best_model": "claude3",
+    "models_compared": [
+      "gpt4",
+      "claude3",
+      "mistral7b",
+      "gpt4all"
+    ],
+    "scores": {
+      "gpt4": 0.881,
+      "claude3": 0.8825,
+      "mistral7b": 0.842,
+      "gpt4all": 0.7999999999999999
+    },
+    "detailed_scores": {
+      "gpt4": {
+        "relevance": 0.8,
+        "coherence": 0.6,
+        "accuracy": 0.87,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "claude3": {
+        "relevance": 0.8,
+        "coherence": 0.6,
+        "accuracy": 0.875,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "mistral7b": {
+        "relevance": 0.8,
+        "coherence": 0.6,
+        "accuracy": 0.74,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "gpt4all": {
+        "relevance": 0.8,
+        "coherence": 0.6,
+        "accuracy": 0.6,
+        "completeness": 0.7,
+        "formatting": 0.6
+      }
+    },
+    "quality_score": 0.8825,
+    "query_complexity": 1
+  },
+  "1741055416000": {
+    "timestamp": "2025-03-03T21:30:16.019816",
+    "query": "Can you help me debug this Python code? def fibonacci(n): if n <= 0: return 0 elif n == 1: return 1 else: return fibonacci(n-1) + fibonacci(n-2)",
+    "query_tags": [
+      "code"
+    ],
+    "best_model": "gpt4",
+    "models_compared": [],
+    "scores": {
+      "gpt4": 1.0,
+      "claude3": 1.0,
+      "mistral7b": 1.0,
+      "gpt4all": 0.924
+    },
+    "detailed_scores": {
+      "gpt4": {
+        "relevance": 1.0,
+        "coherence": 0.7,
+        "accuracy": 0.87,
+        "completeness": 0.5,
+        "formatting": 0.6
+      },
+      "claude3": {
+        "relevance": 1.0,
+        "coherence": 0.7,
+        "accuracy": 0.875,
+        "completeness": 0.5,
+        "formatting": 0.6
+      },
+      "mistral7b": {
+        "relevance": 1.0,
+        "coherence": 0.7,
+        "accuracy": 0.74,
+        "completeness": 0.5,
+        "formatting": 0.6
+      },
+      "gpt4all": {
+        "relevance": 1.0,
+        "coherence": 0.7,
+        "accuracy": 0.6,
+        "completeness": 0.5,
+        "formatting": 0.6
+      }
+    },
+    "quality_score": 0.0,
+    "query_complexity": 3.7
+  },
+  "1741055416016": {
+    "timestamp": 1741055416.0163898,
+    "query": "Can you help me debug this Python code? def fibonacci(n): if n <= 0: return 0 elif n == 1: return 1 else: return fibonacci(n-1) + fibonacci(n-2)",
+    "query_tags": [
+      "code"
+    ],
+    "best_model": "gpt4",
+    "models_compared": [
+      "gpt4",
+      "claude3",
+      "mistral7b",
+      "gpt4all"
+    ],
+    "scores": {
+      "gpt4": 1.0,
+      "claude3": 1.0,
+      "mistral7b": 1.0,
+      "gpt4all": 0.924
+    },
+    "detailed_scores": {
+      "gpt4": {
+        "relevance": 1.0,
+        "coherence": 0.7,
+        "accuracy": 0.87,
+        "completeness": 0.5,
+        "formatting": 0.6
+      },
+      "claude3": {
+        "relevance": 1.0,
+        "coherence": 0.7,
+        "accuracy": 0.875,
+        "completeness": 0.5,
+        "formatting": 0.6
+      },
+      "mistral7b": {
+        "relevance": 1.0,
+        "coherence": 0.7,
+        "accuracy": 0.74,
+        "completeness": 0.5,
+        "formatting": 0.6
+      },
+      "gpt4all": {
+        "relevance": 1.0,
+        "coherence": 0.7,
+        "accuracy": 0.6,
+        "completeness": 0.5,
+        "formatting": 0.6
+      }
+    },
+    "quality_score": 1.0,
+    "query_complexity": 3.7
+  },
+  "1741068663394": {
+    "timestamp": 1741068663.394676,
+    "query": "What is the capital of France?",
+    "query_tags": [
+      "explanation",
+      "short_query"
+    ],
+    "best_model": "gpt4",
+    "models_compared": [
+      "gpt4",
+      "claude3",
+      "mistral7b",
+      "gpt4all"
+    ],
+    "scores": {
+      "gpt4": 0.877,
+      "claude3": 0.856,
+      "mistral7b": 0.856,
+      "gpt4all": 0.856
+    },
+    "detailed_scores": {
+      "gpt4": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.79,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "claude3": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.72,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "mistral7b": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.72,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "gpt4all": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.72,
+        "completeness": 0.7,
+        "formatting": 0.6
+      }
+    },
+    "quality_score": 0.877,
+    "query_complexity": 1
+  },
+  "1741068663000": {
+    "timestamp": "2025-03-04T01:11:03.423358",
+    "query": "Write a short poem about technology.",
+    "query_tags": [
+      "short_query"
+    ],
+    "best_model": "gpt4",
+    "models_compared": [],
+    "scores": {
+      "gpt4": 0.877,
+      "claude3": 0.856,
+      "mistral7b": 0.856,
+      "gpt4all": 0.856
+    },
+    "detailed_scores": {
+      "gpt4": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.79,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "claude3": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.72,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "mistral7b": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.72,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "gpt4all": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.72,
+        "completeness": 0.7,
+        "formatting": 0.6
+      }
+    },
+    "quality_score": 0.0,
+    "query_complexity": 1
+  },
+  "1741068663407": {
+    "timestamp": 1741068663.407866,
+    "query": "Explain quantum computing in simple terms.",
+    "query_tags": [
+      "explanation",
+      "short_query"
+    ],
+    "best_model": "gpt4",
+    "models_compared": [
+      "gpt4",
+      "claude3",
+      "mistral7b",
+      "gpt4all"
+    ],
+    "scores": {
+      "gpt4": 0.877,
+      "claude3": 0.856,
+      "mistral7b": 0.856,
+      "gpt4all": 0.856
+    },
+    "detailed_scores": {
+      "gpt4": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.79,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "claude3": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.72,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "mistral7b": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.72,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "gpt4all": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.72,
+        "completeness": 0.7,
+        "formatting": 0.6
+      }
+    },
+    "quality_score": 0.877,
+    "query_complexity": 1.5
+  },
+  "1741068663419": {
+    "timestamp": 1741068663.419519,
+    "query": "Write a short poem about technology.",
+    "query_tags": [
+      "short_query"
+    ],
+    "best_model": "gpt4",
+    "models_compared": [
+      "gpt4",
+      "claude3",
+      "mistral7b",
+      "gpt4all"
+    ],
+    "scores": {
+      "gpt4": 0.877,
+      "claude3": 0.856,
+      "mistral7b": 0.856,
+      "gpt4all": 0.856
+    },
+    "detailed_scores": {
+      "gpt4": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.79,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "claude3": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.72,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "mistral7b": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.72,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "gpt4all": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.72,
+        "completeness": 0.7,
+        "formatting": 0.6
+      }
+    },
+    "quality_score": 0.877,
+    "query_complexity": 1
+  },
+  "1741068739199": {
+    "timestamp": 1741068739.199281,
+    "query": "What is the capital of France?",
+    "query_tags": [
+      "explanation",
+      "short_query"
+    ],
+    "best_model": "gpt4",
+    "models_compared": [
+      "gpt4",
+      "claude3",
+      "mistral7b",
+      "gpt4all"
+    ],
+    "scores": {
+      "gpt4": 0.877,
+      "claude3": 0.856,
+      "mistral7b": 0.856,
+      "gpt4all": 0.856
+    },
+    "detailed_scores": {
+      "gpt4": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.79,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "claude3": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.72,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "mistral7b": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.72,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "gpt4all": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.72,
+        "completeness": 0.7,
+        "formatting": 0.6
+      }
+    },
+    "quality_score": 0.877,
+    "query_complexity": 1
+  },
+  "1741068739000": {
+    "timestamp": "2025-03-04T01:12:19.229489",
+    "query": "Write a short poem about technology.",
+    "query_tags": [
+      "short_query"
+    ],
+    "best_model": "gpt4",
+    "models_compared": [],
+    "scores": {
+      "gpt4": 0.877,
+      "claude3": 0.856,
+      "mistral7b": 0.856,
+      "gpt4all": 0.856
+    },
+    "detailed_scores": {
+      "gpt4": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.79,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "claude3": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.72,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "mistral7b": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.72,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "gpt4all": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.72,
+        "completeness": 0.7,
+        "formatting": 0.6
+      }
+    },
+    "quality_score": 0.0,
+    "query_complexity": 1
+  },
+  "1741068739213": {
+    "timestamp": 1741068739.213278,
+    "query": "Explain quantum computing in simple terms.",
+    "query_tags": [
+      "explanation",
+      "short_query"
+    ],
+    "best_model": "gpt4",
+    "models_compared": [
+      "gpt4",
+      "claude3",
+      "mistral7b",
+      "gpt4all"
+    ],
+    "scores": {
+      "gpt4": 0.877,
+      "claude3": 0.856,
+      "mistral7b": 0.856,
+      "gpt4all": 0.856
+    },
+    "detailed_scores": {
+      "gpt4": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.79,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "claude3": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.72,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "mistral7b": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.72,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "gpt4all": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.72,
+        "completeness": 0.7,
+        "formatting": 0.6
+      }
+    },
+    "quality_score": 0.877,
+    "query_complexity": 1.5
+  },
+  "1741068739225": {
+    "timestamp": 1741068739.2256372,
+    "query": "Write a short poem about technology.",
+    "query_tags": [
+      "short_query"
+    ],
+    "best_model": "gpt4",
+    "models_compared": [
+      "gpt4",
+      "claude3",
+      "mistral7b",
+      "gpt4all"
+    ],
+    "scores": {
+      "gpt4": 0.877,
+      "claude3": 0.856,
+      "mistral7b": 0.856,
+      "gpt4all": 0.856
+    },
+    "detailed_scores": {
+      "gpt4": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.79,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "claude3": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.72,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "mistral7b": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.72,
+        "completeness": 0.7,
+        "formatting": 0.6
+      },
+      "gpt4all": {
+        "relevance": 0.8,
+        "coherence": 0.7,
+        "accuracy": 0.72,
+        "completeness": 0.7,
+        "formatting": 0.6
+      }
+    },
+    "quality_score": 0.877,
+    "query_complexity": 1
+  },
+  "1741072933000": {
+    "timestamp": "2025-03-04T02:22:13.537520",
+    "query": "Can you help me debug this Python code? def fibonacci(n): if n <= 0: return 0 elif n == 1: return 1 else: return fibonacci(n-1) + fibonacci(n-2)",
+    "query_tags": [
+      "code"
+    ],
+    "best_model": "gpt4",
+    "models_compared": [],
+    "scores": {
+      "gpt4": 0.6633435897435898,
+      "claude3": 0.6434132307692308,
+      "mistral7b": 0.5707236923076924,
+      "gpt4all": 0.5093328205128205
+    },
+    "detailed_scores": {
+      "voting_results": {
+        "gpt4": 0.3076923076923077,
+        "claude3": 0.27692307692307694,
+        "mistral7b": 0.23076923076923078,
+        "gpt4all": 0.1846153846153846
+      },
+      "consensus_scores": {
+        "gpt4": 0.8731666666666666,
+        "claude3": 0.8586100000000001,
+        "mistral7b": 0.7230400000000001,
+        "gpt4all": 0.6112166666666666
+      },
+      "confidence_results": {
+        "gpt4": 0.955,
+        "claude3": 0.946,
+        "mistral7b": 0.946,
+        "gpt4all": 0.955
+      },
+      "ranking_results": {
+        "scores": {
+          "gpt4": 0.6633435897435898,
+          "claude3": 0.6434132307692308,
+          "mistral7b": 0.5707236923076924,
+          "gpt4all": 0.5093328205128205
+        },
+        "ranked_models": [
+          [
+            "gpt4",
+            0.6633435897435898
+          ],
+          [
+            "claude3",
+            0.6434132307692308
+          ],
+          [
+            "mistral7b",
+            0.5707236923076924
+          ],
+          [
+            "gpt4all",
+            0.5093328205128205
+          ]
+        ],
+        "best_model": "gpt4",
+        "voting_scores": {
+          "gpt4": 0.3076923076923077,
+          "claude3": 0.27692307692307694,
+          "mistral7b": 0.23076923076923078,
+          "gpt4all": 0.1846153846153846
+        },
+        "consensus_scores": {
+          "gpt4": 0.8731666666666666,
+          "claude3": 0.8586100000000001,
+          "mistral7b": 0.7230400000000001,
+          "gpt4all": 0.6112166666666666
+        },
+        "confidence_scores": {
+          "gpt4": 0.955,
+          "claude3": 0.946,
+          "mistral7b": 0.946,
+          "gpt4all": 0.955
+        }
+      }
+    },
+    "quality_score": 0.0,
+    "query_complexity": 3.7
+  }
+}

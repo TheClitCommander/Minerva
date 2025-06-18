@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minerva Simple Navigation Test</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 220px;
+            background-color: #1e293b;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .nav-button {
+            background-color: #334155;
+            border: none;
+            color: white;
+            padding: 12px 15px;
+            text-align: left;
+            text-decoration: none;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .nav-button:hover {
+            background-color: #475569;
+        }
+        
+        .nav-button.active {
+            background-color: #6366f1;
+            font-weight: bold;
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 30px;
+        }
+        
+        .section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .status-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Minerva</h2>
+        <button id="dashboard-btn" class="nav-button active">Dashboard</button>
+        <button id="chat-btn" class="nav-button">Chat</button>
+        <button id="memory-btn" class="nav-button">Memory</button>
+        <button id="projects-btn" class="nav-button">Projects</button>
+    </div>
+    
+    <div class="main-content">
+        <div id="dashboard-section" class="section active">
+            <h1>Dashboard</h1>
+            <p>Welcome to the Minerva dashboard. This is a simplified test to show working navigation.</p>
+        </div>
+        
+        <div id="chat-section" class="section">
+            <h1>Chat</h1>
+            <p>This is the chat section where you can interact with Minerva.</p>
+            <div>
+                <input type="text" id="chat-input" placeholder="Type your message...">
+                <button id="send-button">Send</button>
+            </div>
+            <div id="chat-messages"></div>
+        </div>
+        
+        <div id="memory-section" class="section">
+            <h1>Memory</h1>
+            <p>View and manage your saved memories here.</p>
+        </div>
+        
+        <div id="projects-section" class="section">
+            <h1>Projects</h1>
+            <p>Manage your projects in this section.</p>
+        </div>
+    </div>
+    
+    <div class="status-indicator">API: Connected</div>
+    
+    <script>
+        $(document).ready(function() {
+            console.log("Simple navigation test initialized");
+            
+            // Handle navigation button clicks
+            $('.nav-button').on('click', function() {
+                // Remove active class from all buttons and add to clicked button
+                $('.nav-button').removeClass('active');
+                $(this).addClass('active');
+                
+                // Hide all sections
+                $('.section').removeClass('active');
+                
+                // Show the selected section
+                const section = $(this).attr('id').replace('-btn', '-section');
+                $('#' + section).addClass('active');
+                
+                console.log("Navigated to:", section);
+            });
+            
+            // Chat functionality
+            $('#send-button').on('click', function() {
+                const message = $('#chat-input').val().trim();
+                if (message) {
+                    $('#chat-messages').append(`<div><strong>You:</strong> ${message}</div>`);
+                    $('#chat-input').val('');
+                    
+                    // Simulate response
+                    setTimeout(function() {
+                        $('#chat-messages').append(`<div><strong>Minerva:</strong> I received your message: "${message}"</div>`);
+                    }, 1000);
+                }
+            });
+            
+            // Allow Enter key to send messages
+            $('#chat-input').on('keypress', function(e) {
+                if (e.which === 13) {
+                    $('#send-button').click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

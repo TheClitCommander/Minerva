@@ -1,0 +1,115 @@
+{
+  "session_id": "test_session_20250303195927",
+  "enhanced": true,
+  "script_name": "general",
+  "exchanges": 5,
+  "conversation": [
+    {
+      "role": "system",
+      "content": "I am Minerva, an AI assistant. I'll help answer your questions and have a conversation with you.",
+      "timestamp": "2025-03-03T19:59:27.318802"
+    },
+    {
+      "role": "user",
+      "content": "Hello, how are you today?",
+      "timestamp": "2025-03-03T19:59:27.318969"
+    },
+    {
+      "role": "system",
+      "content": "Here is a response to your query about Hello, how are you t.",
+      "timestamp": "2025-03-03T19:59:27.319564"
+    },
+    {
+      "role": "user",
+      "content": "What can you tell me about Python programming?",
+      "timestamp": "2025-03-03T19:59:27.319674"
+    },
+    {
+      "role": "system",
+      "content": "```python\ndef sort_list(lst): return sorted(lst)\n```",
+      "timestamp": "2025-03-03T19:59:27.319768"
+    },
+    {
+      "role": "user",
+      "content": "Can you write a simple function to calculate factorial?",
+      "timestamp": "2025-03-03T19:59:27.319940"
+    },
+    {
+      "role": "system",
+      "content": "```python\ndef sort_list(lst): return sorted(lst)\n```",
+      "timestamp": "2025-03-03T19:59:27.320011"
+    },
+    {
+      "role": "user",
+      "content": "How does that code work exactly?",
+      "timestamp": "2025-03-03T19:59:27.320101"
+    },
+    {
+      "role": "system",
+      "content": "Here is a response to your query about How does that code w.",
+      "timestamp": "2025-03-03T19:59:27.320185"
+    },
+    {
+      "role": "user",
+      "content": "Thank you for explaining!",
+      "timestamp": "2025-03-03T19:59:27.320276"
+    },
+    {
+      "role": "system",
+      "content": "Here is a response to your query about Thank you for explai.",
+      "timestamp": "2025-03-03T19:59:27.320369"
+    }
+  ],
+  "evaluations": [
+    {
+      "length_score": 0.6,
+      "contains_query_terms": 0.8,
+      "coherence": 0.9,
+      "self_reference": false,
+      "quality_score": 0.77,
+      "exchange_number": 1,
+      "query": "Hello, how are you today?"
+    },
+    {
+      "length_score": 0.52,
+      "contains_query_terms": 0.0,
+      "coherence": 0.8,
+      "self_reference": false,
+      "quality_score": 0.396,
+      "exchange_number": 2,
+      "query": "What can you tell me about Python programming?"
+    },
+    {
+      "length_score": 0.52,
+      "contains_query_terms": 0.0,
+      "coherence": 0.8,
+      "self_reference": false,
+      "quality_score": 0.396,
+      "exchange_number": 3,
+      "query": "Can you write a simple function to calculate factorial?"
+    },
+    {
+      "length_score": 0.6,
+      "contains_query_terms": 0.6666666666666666,
+      "coherence": 0.9,
+      "self_reference": false,
+      "quality_score": 0.7166666666666667,
+      "exchange_number": 4,
+      "query": "How does that code work exactly?"
+    },
+    {
+      "length_score": 0.6,
+      "contains_query_terms": 0.75,
+      "coherence": 0.9,
+      "self_reference": false,
+      "quality_score": 0.75,
+      "exchange_number": 5,
+      "query": "Thank you for explaining!"
+    }
+  ],
+  "metrics": {
+    "average_quality": 0.6057333333333333,
+    "self_references": 0,
+    "self_reference_rate": 0.0
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "objectives": [
+    "Launch MVP for OptionLingo",
+    "Create daily quiz pipeline",
+    "Handle Stripe subscriptions",
+    "Add user authentication"
+  ],
+  "task_queue": [
+    "Build webhook handler for user signups.",
+    "Integrate with Auth0"
+  ],
+  "logs": [
+    "Booted up Minerva for OptionLingo.",
+    "Linked conversation: Subscription Model Discussion"
+  ],
+  "notes": [
+    "Remember to check Cohere API limits.",
+    "User requested social login options"
+  ],
+  "conversations": [
+    {
+      "id": "conv_12345",
+      "title": "Subscription Model Discussion",
+      "linked_at": "2025-04-05 05:23:31"
+    }
+  ]
+}

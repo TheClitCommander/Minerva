@@ -1,0 +1,46 @@
+[
+  {
+    "message_id": 0,
+    "message": "Hello, how are you today?",
+    "response": "Hi there! What can I assist you with?",
+    "response_type": "direct_response",
+    "models_used": [
+      "greeting_handler"
+    ],
+    "processing_time": 0.0017747879028320312,
+    "status": "success"
+  },
+  {
+    "message_id": 1,
+    "message": "What are the main differences between Python and JavaScript?",
+    "response": "Error processing your request: name 'models_used' is not defined",
+    "response_type": "error",
+    "models_used": [
+      "error_fallback_model"
+    ],
+    "processing_time": 0.32123613357543945,
+    "status": "success"
+  },
+  {
+    "message_id": 2,
+    "message": "Can you explain how photosynthesis works?",
+    "response": "Error processing your request: name 'models_used' is not defined",
+    "response_type": "error",
+    "models_used": [
+      "error_fallback_model"
+    ],
+    "processing_time": 0.3186039924621582,
+    "status": "success"
+  },
+  {
+    "message_id": 3,
+    "message": "Write a short poem about artificial intelligence.",
+    "response": "Error processing your request: name 'models_used' is not defined",
+    "response_type": "error",
+    "models_used": [
+      "error_fallback_model"
+    ],
+    "processing_time": 0.2945401668548584,
+    "status": "success"
+  }
+]

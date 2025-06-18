@@ -13,6 +13,7 @@ import time
 import logging
 import requests
 import uuid
+import random
 from typing import Dict, List, Optional, Any
 from datetime import datetime
 from pathlib import Path
@@ -29,87 +30,66 @@ file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
 
 class ChatHistory:
-    """Manages persistent chat history."""
+    """Class for managing chat history."""
     
-    def __init__(self, storage_dir='data/chat_history'):
-        """Initialize chat history manager.
+    def __init__(self, storage_dir="data/chat_history"):
+        """Initialize the chat history manager."""
+        self.storage_dir = storage_dir
+        os.makedirs(storage_dir, exist_ok=True)
+        logger.info(f"ChatHistory initialized with storage at {storage_dir}")
         
-        Args:
-            storage_dir: Directory to store chat history files
-        """
-        self.storage_dir = Path(storage_dir)
-        self.storage_dir.mkdir(parents=True, exist_ok=True)
-        self.active_sessions = {}
-        self.message_ttl = 30 * 24 * 60 * 60  # 30 days in seconds
-        
-        logger.info(f"ChatHistory initialized with storage at {self.storage_dir}")
-    
-    def get_session_path(self, session_id):
-        """Get the filesystem path for a session."""
-        return self.storage_dir / f"{session_id}.json"
-    
-    def create_session(self, user_id=None, metadata=None):
-        """Create a new chat session.
-        
-        Args:
-            user_id: Optional user identifier
-            metadata: Optional metadata about the session
-            
-        Returns:
-            session_id: Unique identifier for the created session
-        """
+    def create_session(self, user_id="anonymous"):
+        """Create a new chat session."""
         session_id = str(uuid.uuid4())
-        timestamp = datetime.now().isoformat()
+        session_file = os.path.join(self.storage_dir, f"{session_id}.json")
         
         session_data = {
             "session_id": session_id,
-            "user_id": user_id or "anonymous",
-            "created_at": timestamp,
-            "updated_at": timestamp,
-            "metadata": metadata or {},
+            "user_id": user_id,
+            "created_at": time.time(),
             "messages": []
         }
         
-        self.active_sessions[session_id] = session_data
-        self._save_session(session_id)
-        
-        logger.info(f"Created new chat session {session_id} for user {user_id or 'anonymous'}")
-        return session_id
-    
-    def add_message(self, session_id, message, sender_type, metadata=None):
-        """Add a message to a chat session.
-        
-        Args:
-            session_id: Session identifier
-            message: The message text
-            sender_type: 'user' or 'ai'
-            metadata: Optional metadata about the message
+        with open(session_file, 'w') as f:
+            json.dump(session_data, f, indent=2)
             
-        Returns:
-            message_id: Unique identifier for the added message
-        """
-        # Load session if not in active sessions
-        if session_id not in self.active_sessions:
-            self._load_session(session_id)
+        return session_id
         
-        timestamp = datetime.now().isoformat()
-        message_id = str(uuid.uuid4())
+    def session_exists(self, session_id):
+        """Check if a session exists."""
+        session_file = os.path.join(self.storage_dir, f"{session_id}.json")
+        return os.path.exists(session_file)
         
-        message_data = {
-            "id": message_id,
-            "timestamp": timestamp,
-            "sender_type": sender_type,
-            "content": message,
-            "metadata": metadata or {}
-        }
+    def add_message(self, session_id, role, content, metadata=None):
+        """Add a message to a chat session."""
+        session_file = os.path.join(self.storage_dir, f"{session_id}.json")
         
-        # Add message and update session
-        self.active_sessions[session_id]["messages"].append(message_data)
-        self.active_sessions[session_id]["updated_at"] = timestamp
-        self._save_session(session_id)
-        
-        logger.info(f"Added {sender_type} message to session {session_id}")
-        return message_id
+        if not os.path.exists(session_file):
+            logger.warning(f"Session {session_id} does not exist")
+            return None
+            
+        try:
+            with open(session_file, 'r') as f:
+                session_data = json.load(f)
+                
+            message_id = str(uuid.uuid4())
+            message = {
+                "id": message_id,
+                "role": role,
+                "content": content,
+                "timestamp": time.time(),
+                "metadata": metadata or {}
+            }
+            
+            session_data["messages"].append(message)
+            
+            with open(session_file, 'w') as f:
+                json.dump(session_data, f, indent=2)
+                
+            return message_id
+        except Exception as e:
+            logger.error(f"Error adding message to session {session_id}: {str(e)}")
+            return None
     
     def get_session_messages(self, session_id, limit=None, include_metadata=False):
         """Get messages from a chat session.
@@ -122,25 +102,31 @@ class ChatHistory:
         Returns:
             List of message dictionaries or None if session not found
         """
-        # Load session if not in active sessions
-        if session_id not in self.active_sessions:
-            success = self._load_session(session_id)
-            if not success:
-                logger.warning(f"Session {session_id} not found")
-                return None
+        session_file = os.path.join(self.storage_dir, f"{session_id}.json")
         
-        messages = self.active_sessions[session_id]["messages"]
+        if not os.path.exists(session_file):
+            logger.warning(f"Session {session_id} does not exist")
+            return None
         
-        # Apply limit if specified
-        if limit is not None:
-            messages = messages[-limit:]
-        
-        # Remove metadata if not requested
-        if not include_metadata:
-            messages = [{k: v for k, v in msg.items() if k != 'metadata'} 
-                        for msg in messages]
-        
-        return messages
+        try:
+            with open(session_file, 'r') as f:
+                session_data = json.load(f)
+            
+            messages = session_data["messages"]
+            
+            # Apply limit if specified
+            if limit is not None:
+                messages = messages[-limit:]
+            
+            # Remove metadata if not requested
+            if not include_metadata:
+                messages = [{k: v for k, v in msg.items() if k != 'metadata'} 
+                            for msg in messages]
+            
+            return messages
+        except Exception as e:
+            logger.error(f"Error getting messages from session {session_id}: {str(e)}")
+            return None
     
     def get_all_sessions(self, user_id=None):
         """Get summary information about all sessions.
@@ -151,11 +137,12 @@ class ChatHistory:
         Returns:
             List of session summary dictionaries
         """
-        # Load all sessions from disk
-        self._load_all_sessions()
-        
         sessions = []
-        for session_id, session_data in self.active_sessions.items():
+        for session_file in Path(self.storage_dir).glob("*.json"):
+            session_id = session_file.stem
+            with open(session_file, 'r') as f:
+                session_data = json.load(f)
+            
             # Filter by user_id if specified
             if user_id and session_data["user_id"] != user_id:
                 continue
@@ -172,90 +159,98 @@ class ChatHistory:
         return sessions
     
     def delete_session(self, session_id):
-        """Delete a chat session.
-        
-        Args:
-            session_id: Session identifier
-            
-        Returns:
-            bool: True if session was deleted, False otherwise
-        """
-        session_path = self.get_session_path(session_id)
-        
-        # Remove from active sessions
-        if session_id in self.active_sessions:
-            del self.active_sessions[session_id]
-        
-        # Remove file if it exists
-        if session_path.exists():
-            session_path.unlink()
-            logger.info(f"Deleted chat session {session_id}")
-            return True
-        
-        logger.warning(f"Session {session_id} not found for deletion")
-        return False
-    
-    def _save_session(self, session_id):
-        """Save a session to disk."""
-        if session_id not in self.active_sessions:
-            logger.warning(f"Cannot save non-existent session {session_id}")
-            return False
-        
-        session_path = self.get_session_path(session_id)
-        
-        with open(session_path, 'w') as f:
-            json.dump(self.active_sessions[session_id], f)
-        
-        return True
-    
-    def _load_session(self, session_id):
-        """Load a session from disk."""
-        session_path = self.get_session_path(session_id)
-        
-        if not session_path.exists():
-            logger.warning(f"Session file {session_path} does not exist")
-            return False
-        
+        """Delete a chat session by ID"""
         try:
-            with open(session_path, 'r') as f:
-                self.active_sessions[session_id] = json.load(f)
+            if not os.path.exists(os.path.join(self.storage_dir, f"{session_id}.json")):
+                logger.warning(f"Session {session_id} not found for deletion")
+                return False
+            
+            # Delete the session file
+            os.remove(os.path.join(self.storage_dir, f"{session_id}.json"))
+            logger.info(f"Deleted session {session_id}")
             return True
-        except json.JSONDecodeError:
-            logger.error(f"Error decoding session file {session_path}")
+        except Exception as e:
+            logger.error(f"Error deleting session {session_id}: {str(e)}")
             return False
     
-    def _load_all_sessions(self):
-        """Load all sessions from disk."""
-        for session_file in self.storage_dir.glob("*.json"):
-            session_id = session_file.stem
-            self._load_session(session_id)
+    def create_test_session(self):
+        """Create a test session for health checks
+        
+        Returns:
+            str: The session ID if successful, None otherwise
+        """
+        try:
+            # Create a temporary session ID with test prefix
+            session_id = f"test_{int(time.time())}_{random.randint(1000, 9999)}"
+            
+            # Create an empty session with minimal data
+            session_data = {
+                "messages": [],
+                "created_at": time.time(),
+                "updated_at": time.time(),
+                "metadata": {
+                    "type": "test_session",
+                    "purpose": "health_check"
+                }
+            }
+            
+            # Write session to file
+            with open(os.path.join(self.storage_dir, f"{session_id}.json"), 'w') as f:
+                json.dump(session_data, f)
+                
+            logger.debug(f"Created test session {session_id} for health check")
+            return session_id
+            
+        except Exception as e:
+            logger.error(f"Error creating test session: {str(e)}")
+            return None
     
+    def close(self):
+        """Close any open resources"""
+        # Currently we just use file-based storage, but this method
+        # could close database connections or other resources in the future
+        logger.info("Closing ChatHistory resources")
+        return True
+        
     def cleanup_old_sessions(self, ttl=None):
         """Remove sessions older than TTL.
         
         Args:
             ttl: Time-to-live in seconds (default: self.message_ttl)
-            
+        
         Returns:
             int: Number of sessions removed
         """
-        ttl = ttl or self.message_ttl
+        ttl = ttl or 30 * 24 * 60 * 60  # 30 days in seconds
         now = datetime.now()
         removed_count = 0
         
-        # Load all sessions
-        self._load_all_sessions()
-        
-        for session_id, session_data in list(self.active_sessions.items()):
-            updated_at = datetime.fromisoformat(session_data["updated_at"])
-            age_seconds = (now - updated_at).total_seconds()
+        try:
+            for session_file in Path(self.storage_dir).glob("*.json"):
+                try:
+                    session_id = session_file.stem
+                    
+                    # Skip test sessions as they should be removed separately
+                    if session_id.startswith("test_"):
+                        continue
+                        
+                    with open(session_file, 'r') as f:
+                        session_data = json.load(f)
+                    
+                    updated_at = datetime.fromtimestamp(session_data.get("updated_at", 0))
+                    age_seconds = (now - updated_at).total_seconds()
+                    
+                    if age_seconds > ttl:
+                        if self.delete_session(session_id):
+                            removed_count += 1
+                except Exception as e:
+                    logger.error(f"Error processing session file {session_file}: {str(e)}")
             
-            if age_seconds > ttl:
-                self.delete_session(session_id)
-                removed_count += 1
-        
-        logger.info(f"Cleaned up {removed_count} old chat sessions")
-        return removed_count
+            logger.info(f"Cleaned up {removed_count} old chat sessions")
+            return removed_count
+        except Exception as e:
+            logger.error(f"Error in cleanup_old_sessions: {str(e)}")
+            return 0
 
 
 class WebResearcher:
@@ -500,114 +495,242 @@ class WebResearcher:
 class MinervaExtensions:
     """Main class for Minerva extensions."""
     
-    def __init__(self, multi_ai_coordinator=None):
-        """Initialize Minerva extensions.
+    def __init__(self, coordinator=None):
+        """
+        Initialize the MinervaExtensions with optional AI coordinator.
         
         Args:
-            multi_ai_coordinator: Optional MultiAICoordinator instance
+            coordinator: Optional AI coordinator instance
         """
+        # Set up the coordinator
+        self.coordinator = coordinator
+        
+        # If no coordinator provided, try to import it from singleton
+        if self.coordinator is None:
+            print("MinervaExtensions: No coordinator provided, attempting to import")
+            
+            try:
+                # First try to import from the singleton file
+                from ai_coordinator_singleton import coordinator, Coordinator
+                self.coordinator = coordinator
+                print(f"✅ MinervaExtensions: Successfully imported coordinator from singleton: {id(self.coordinator)}")
+            except (ImportError, AttributeError) as e:
+                print(f"MinervaExtensions: Error importing from singleton: {e}")
+                
+                # Fallback to direct import as a last resort
+                try:
+                    from web.multi_ai_coordinator import Coordinator
+                    self.coordinator = Coordinator
+                    print(f"MinervaExtensions: Using Coordinator from direct import: {id(self.coordinator)}")
+                except (ImportError, AttributeError) as e:
+                    print(f"❌ MinervaExtensions: Error importing coordinator: {e}")
+                    self.coordinator = None
+        
+        # Set up the chat history manager
         self.chat_history = ChatHistory()
+        logger.info("ChatHistory initialized with storage at data/chat_history")
+        
+        # Set up the web research client
         self.web_researcher = WebResearcher()
-        self.multi_ai_coordinator = multi_ai_coordinator
+        logger.info("WebResearcher initialized with duckduckgo provider")
+        
         self.active_sessions = {}
         
-        logger.info("MinervaExtensions initialized")
+        # Final check to confirm coordinator status
+        if self.coordinator:
+            try:
+                # Verify the coordinator has the required methods
+                if hasattr(self.coordinator, 'generate_response') and callable(getattr(self.coordinator, 'generate_response')):
+                    print(f"✅ MinervaExtensions: Successfully connected to coordinator")
+                    logger.info(f"MinervaExtensions initialized with coordinator")
+                else:
+                    logger.warning("MinervaExtensions: Coordinator missing required methods")
+                    self.coordinator = None
+            except Exception as e:
+                logger.error(f"Error verifying coordinator: {e}")
+                self.coordinator = None
+        
+        if not self.coordinator:
+            logger.warning("MultiAICoordinator not available, using simulated responses")
+            print("WARNING: MultiAICoordinator not available, using simulated responses")
     
-    def process_message(self, message, session_id=None, model_preference=None, 
-                        enable_web_research=False, research_depth="medium"):
-        """Process a user message with enhanced capabilities.
+    def process_message(self, message, session_id=None, user_id=None, model_preference=None, enable_web_research=False, research_depth="medium"):
+        """
+        Process a message and generate a response.
         
         Args:
-            message: User message
-            session_id: Optional chat session ID
+            message: The user message
+            session_id: Optional session ID
+            user_id: Optional user ID
             model_preference: Optional model preference
-            enable_web_research: Whether to enable web research
-            research_depth: Web research depth (light, medium, deep)
+            enable_web_research: Whether to perform web research
+            research_depth: Web research depth
             
         Returns:
-            Dictionary with response data
+            dict: Response with message content
         """
-        # Create session if none provided
-        if not session_id:
-            session_id = self.chat_history.create_session()
+        print(f"[MinervaExtensions] Processing: {message[:100]} in session {session_id} with model {model_preference}")
         
-        # Save user message to history
-        message_id = self.chat_history.add_message(
-            session_id, 
-            message, 
-            "user", 
-            {"model_preference": model_preference, "enable_web_research": enable_web_research}
-        )
+        # Track timing for performance debugging
+        start_time = time.time()
         
-        # Perform web research if enabled
-        research_data = None
-        if enable_web_research:
-            logger.info(f"Performing web research for message {message_id}")
-            research_data = self.web_researcher.research(message, depth=research_depth)
-        
-        # Process with coordinator based on model preference
-        if self.multi_ai_coordinator:
-            # Prepare additional args for the coordinator
-            additional_args = {"message_id": message_id}
+        try:
+            # Generate message ID
+            message_id = str(uuid.uuid4())
             
-            # Add model override if specified
-            if model_preference and model_preference != "blend":
-                additional_args["model_override"] = model_preference
-                additional_args["use_blending"] = False
-            else:
-                additional_args["use_blending"] = True
+            # Save the message to chat history if session exists
+            if session_id:
+                if not self.chat_history.session_exists(session_id):
+                    logger.info(f"Creating new session {session_id} for user {user_id or 'anonymous'}")
+                    self.chat_history.create_session(user_id or "anonymous")
+                    
+                # Save the user message
+                self.chat_history.add_message(session_id, "user", message)
             
-            # Add research data if available
-            if research_data:
-                additional_args["research_data"] = research_data
+            # Perform web research if enabled
+            research_data = None
+            if enable_web_research and self.web_researcher:
+                try:
+                    logger.info(f"Performing web research for: '{message}' with depth {research_depth}")
+                    research_data = self.web_researcher.research(message, max_sources=3, depth=research_depth)
+                    logger.info(f"Research complete with {len(research_data.get('sources', []))} sources")
+                except Exception as e:
+                    logger.error(f"Error performing web research: {str(e)}")
+                    # Continue without research data
             
-            # Process message with coordinator
-            response = self.multi_ai_coordinator.process(message, **additional_args)
-        else:
-            # Simulate AI response if coordinator not available
-            response = self._simulate_ai_response(message, model_preference, research_data)
-        
-        # Add research sources if available
-        if research_data and "sources" in research_data:
-            if isinstance(response, dict) and "model_info" in response:
-                response["model_info"]["research_sources"] = [
-                    {"title": source["title"], "url": source["url"]} 
-                    for source in research_data["sources"]
-                ]
-            elif isinstance(response, str):
-                # Convert string response to dict format
-                response = {
-                    "message": response,
-                    "model_info": {
-                        "research_sources": [
+            # Augment the message with research data if available
+            augmented_message = message
+            if research_data and research_data.get('sources'):
+                sources_text = "\n\nReference information:\n"
+                for i, source in enumerate(research_data.get('sources', [])[:3], 1):
+                    sources_text += f"{i}. {source.get('title', 'Untitled')}: {source.get('snippet', 'No snippet available')}\n"
+                augmented_message = f"{message}\n\n{sources_text}"
+            
+            # Process with coordinator if available
+            if self.coordinator:
+                try:
+                    logger.info(f"Using coordinator to generate response with model: {model_preference or 'default'}")
+                    print(f"[MinervaExtensions] Using coordinator with model: {model_preference or 'default'}")
+                    
+                    # Generate response using the coordinator with the augmented message
+                    ai_response = self.coordinator.generate_response(
+                        augmented_message, 
+                        session_id=session_id, 
+                        model_preference=model_preference
+                    )
+                    
+                    print(f"[MinervaExtensions] Coordinator returned response: {ai_response[:100]}...")
+                    
+                    # Get info about which model was used
+                    available_models = self.coordinator.get_available_models()
+                    used_model = model_preference if model_preference in available_models['models'] else available_models.get('default')
+                    
+                    # Create response object
+                    response = {
+                        "message": ai_response,
+                        "message_id": message_id,
+                        "session_id": session_id,
+                        "model": used_model,
+                        "model_info": {
+                            "processing_time": f"{time.time() - start_time:.2f}s",
+                            "web_research": bool(research_data)
+                        }
+                    }
+                    
+                    # Include research data if available
+                    if research_data and research_data.get('sources'):
+                        response["model_info"]["research_sources"] = [
                             {"title": source["title"], "url": source["url"]} 
                             for source in research_data["sources"]
                         ]
+                    
+                    # Save the AI response to chat history if session exists
+                    if session_id:
+                        metadata = {
+                            "model": used_model,
+                            "processing_time": f"{time.time() - start_time:.2f}s",
+                            "web_research": bool(research_data)
+                        }
+                        self.chat_history.add_message(session_id, "ai", ai_response, metadata)
+                    
+                    logger.info(f"Generated AI response in {time.time() - start_time:.2f}s using model {used_model}")
+                    print(f"[MinervaExtensions] Completed in {time.time() - start_time:.2f}s. Returning response.")
+                    return response
+                    
+                except Exception as e:
+                    logger.error(f"Error using coordinator: {str(e)}")
+                    # Log stack trace for debugging
+                    import traceback
+                    logger.error(f"Stack trace: {traceback.format_exc()}")
+                    print(f"[MinervaExtensions] ERROR when using coordinator: {str(e)}")
+                    traceback.print_exc()
+                    
+                    # Fall through to error response, not simulation
+                    error_message = f"I apologize, but I encountered an error while processing your message: {str(e)}"
+                    return {
+                        "message": error_message,
+                        "message_id": message_id,
+                        "session_id": session_id,
+                        "model": "error",
+                        "model_info": {
+                            "error": str(e),
+                            "processing_time": f"{time.time() - start_time:.2f}s"
+                        }
+                    }
+            
+            # If no coordinator available, return error message
+            logger.warning("No AI coordinator available - cannot process message")
+            print("[MinervaExtensions] WARNING: No AI coordinator available - using simulated response")
+            
+            # Generate a simulated response as fallback
+            simulated = self.generate_simulated_response(message)
+            print(f"[MinervaExtensions] Generated simulated response: {simulated[:100]}...")
+            
+            return {
+                "message": simulated,
+                "message_id": message_id,
+                "session_id": session_id,
+                "model": "simulated",
+                "model_info": {
+                    "processing_time": f"{time.time() - start_time:.2f}s",
+                    "simulation": True
+                }
+            }
+            
+        except Exception as e:
+            print(f"[MinervaExtensions ERROR] {str(e)}")
+            import traceback
+            traceback.print_exc()
+            # Fall back to simulated response
+            try:
+                fallback_response = self.generate_simulated_response(message)
+                print(f"[MinervaExtensions] Generated fallback response: {fallback_response[:100]}")
+                
+                return {
+                    "message": fallback_response,
+                    "message_id": str(uuid.uuid4()),
+                    "session_id": session_id,
+                    "model": "fallback",
+                    "model_info": {
+                        "error": str(e),
+                        "processing_time": f"{time.time() - start_time:.2f}s",
+                        "simulation": True
                     }
                 }
-        
-        # Ensure we have a consistent response format
-        if isinstance(response, str):
-            response = {"message": response}
-        
-        # Add response time
-        if "model_info" not in response:
-            response["model_info"] = {}
-        response["model_info"]["response_time"] = f"{time.time() - time.time():.2f}s"
-        
-        # Save AI response to history
-        response_content = response.get("message", str(response))
-        self.chat_history.add_message(
-            session_id, 
-            response_content, 
-            "ai", 
-            response.get("model_info", {})
-        )
-        
-        # Add session_id to response
-        response["session_id"] = session_id
-        
-        return response
+                
+            except Exception as inner_e:
+                print(f"[MinervaExtensions CRITICAL ERROR] Even fallback failed: {str(inner_e)}")
+                traceback.print_exc()
+                return {
+                    "message": f"I'm sorry, I couldn't process your message due to an error: {str(e)}",
+                    "message_id": str(uuid.uuid4()),
+                    "session_id": session_id,
+                    "model": "error",
+                    "model_info": {
+                        "critical_error": True,
+                        "processing_time": f"{time.time() - start_time:.2f}s"
+                    }
+                }
     
     def get_chat_history(self, session_id, limit=None):
         """Get chat history for a session.
@@ -682,14 +805,11 @@ class MinervaExtensions:
         
         return response
 
+    def generate_simulated_response(self, message):
+        """Generate a simulated response for testing without real AI"""
+        print(f"[MinervaExtensions] Generating simulated response for: {message[:100]}")
+
 
 # Create singleton instance
 minerva_extensions = MinervaExtensions()
 
-# Try to connect extensions with MultiAICoordinator
-try:
-    from web.multi_ai_coordinator import multi_ai_coordinator
-    minerva_extensions = MinervaExtensions(multi_ai_coordinator)
-    logger.info("Successfully connected MinervaExtensions to MultiAICoordinator")
-except ImportError:
-    logger.warning("MultiAICoordinator not available, using simulated responses")

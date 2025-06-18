@@ -1,0 +1,154 @@
+{
+  "timestamp": 1741048976.930819,
+  "parameter_results": [
+    {
+      "query": "Hello",
+      "expected_complexity": "low",
+      "actual_complexity": "low",
+      "parameters": {
+        "max_new_tokens": 64,
+        "temperature": 0.4,
+        "top_p": 0.9,
+        "repetition_penalty": 1.06,
+        "presence_penalty": 0.0,
+        "frequency_penalty": 0.0,
+        "do_sample": true
+      },
+      "success": true
+    },
+    {
+      "query": "What is Python programming?",
+      "expected_complexity": "medium",
+      "actual_complexity": "medium",
+      "parameters": {
+        "max_new_tokens": 256,
+        "temperature": 0.6,
+        "top_p": 0.9,
+        "repetition_penalty": 1.15,
+        "presence_penalty": 0.0,
+        "frequency_penalty": 0.0,
+        "do_sample": true
+      },
+      "success": true
+    },
+    {
+      "query": "Explain the implications of quantum computing on modern cryptography.",
+      "expected_complexity": "high",
+      "actual_complexity": "high",
+      "parameters": {
+        "max_new_tokens": 512,
+        "temperature": 0.8,
+        "top_p": 0.9,
+        "repetition_penalty": 1.255,
+        "presence_penalty": 0.1,
+        "frequency_penalty": 0.2,
+        "do_sample": true
+      },
+      "success": true
+    },
+    {
+      "query": "Write a complex algorithm for natural language processing.",
+      "expected_complexity": "high",
+      "actual_complexity": "high",
+      "parameters": {
+        "max_new_tokens": 512,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "repetition_penalty": 1.255,
+        "presence_penalty": 0.1,
+        "frequency_penalty": 0.2,
+        "do_sample": true
+      },
+      "success": true
+    }
+  ],
+  "fallback_results": [
+    {
+      "reason": "timeout",
+      "fallback": "I apologize for the delay. Your query is complex and requires more processing time than is currently available.",
+      "contains_expected": true,
+      "success": true
+    },
+    {
+      "reason": "token_limit",
+      "fallback": "Your query exceeds the maximum token limit I can process at once. Please try breaking it into smaller parts.",
+      "contains_expected": true,
+      "success": true
+    },
+    {
+      "reason": "resource_error",
+      "fallback": "I'm currently experiencing high demand and limited resources. Please try again in a moment with a simpler query.",
+      "contains_expected": true,
+      "success": true
+    },
+    {
+      "reason": "model_error",
+      "fallback": "I'm having trouble processing your request due to a technical issue with the underlying model.",
+      "contains_expected": true,
+      "success": true
+    }
+  ],
+  "cleaning_results": [
+    {
+      "input": "As an AI language model, I don't have personal opi...",
+      "cleaned": "The capital of France is Paris....",
+      "contains_expected": true,
+      "contains_unexpected": false,
+      "occurrences_ok": true,
+      "success": true
+    },
+    {
+      "input": "I am an AI assistant. Here is your Python code: ``...",
+      "cleaned": "Here is your Python code: ```python\ndef hello(): p...",
+      "contains_expected": true,
+      "contains_unexpected": false,
+      "occurrences_ok": true,
+      "success": true
+    },
+    {
+      "input": "```\nprint('Start')\nprint('Start')\nprint('Start')\np...",
+      "cleaned": "```\nprint('Start')\n```...",
+      "contains_expected": true,
+      "contains_unexpected": false,
+      "occurrences_ok": true,
+      "success": true
+    }
+  ],
+  "processing_results": [
+    {
+      "query": "What is the capital of France?",
+      "processed_response": "The capital of France is Paris....",
+      "no_disclaimers": true,
+      "appropriate_length": true,
+      "success": true
+    },
+    {
+      "query": "Explain quantum computing in simple terms.",
+      "processed_response": "Quantum computing uses quantum bits (qubits) that ...",
+      "no_disclaimers": true,
+      "appropriate_length": true,
+      "success": true
+    },
+    {
+      "query": "Write a Python function to sort a list.",
+      "processed_response": "```python\ndef sort_list(lst): return sorted(lst)\n`...",
+      "no_disclaimers": true,
+      "appropriate_length": true,
+      "success": true
+    },
+    {
+      "query": "What are the ethical concerns around AI?",
+      "processed_response": "Some ethical concerns around AI include privacy is...",
+      "no_disclaimers": true,
+      "appropriate_length": true,
+      "success": true
+    },
+    {
+      "query": "Tell me about the history of the internet.",
+      "processed_response": "Here is a response to your query about Tell me abo...",
+      "no_disclaimers": true,
+      "appropriate_length": true,
+      "success": true
+    }
+  ]
+}

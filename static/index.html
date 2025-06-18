@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minerva - AI Think Tank</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+        
+        .chat-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .messages {
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .user-message, .ai-message {
+            padding: 10px 15px;
+            border-radius: 18px;
+            margin-bottom: 10px;
+            max-width: 80%;
+        }
+        
+        .user-message {
+            background: #3498db;
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .ai-message {
+            background: #f2f2f2;
+            border-bottom-left-radius: 5px;
+            white-space: pre-wrap;
+        }
+        
+        .ai-message pre {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 10px 0;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .model-info {
+            font-size: 0.8em;
+            color: #95a5a6;
+            margin-top: 5px;
+            font-style: italic;
+        }
+        
+        .input-area {
+            display: flex;
+            gap: 10px;
+        }
+        
+        #message-input {
+            flex-grow: 1;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        
+        button {
+            background: #2980b9;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        button:hover {
+            background: #3498db;
+        }
+        
+        .advanced-options {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .api-info {
+            margin-top: 30px;
+            padding: 20px;
+            background: #ecf0f1;
+            border-radius: 8px;
+        }
+        
+        .api-info pre {
+            background: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        
+        .loading {
+            display: none;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: #3498db;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Minerva Think Tank</h1>
+        <div class="subtitle">Consulting multiple AI models for optimal responses</div>
+    </header>
+    
+    <div class="chat-container">
+        <div class="messages" id="messages"></div>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Consulting multiple AI models...</p>
+        </div>
+        
+        <div class="input-area">
+            <input type="text" id="message-input" placeholder="Ask a question..." />
+            <button id="send-button">Send</button>
+        </div>
+    </div>
+    
+    <div class="api-info">
+        <h2>API Information</h2>
+        <p>You can also interact with Minerva's Think Tank directly via API:</p>
+        <pre>
+curl -X POST http://127.0.0.1:13083/api/v1/advanced-think-tank \
+  -H "Content-Type: application/json" \
+  -d '{"message":"Explain quantum computing in simple terms"}'
+        </pre>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const messagesContainer = document.getElementById('messages');
+            const messageInput = document.getElementById('message-input');
+            const sendButton = document.getElementById('send-button');
+            const loadingIndicator = document.getElementById('loading');
+            
+            // Add a welcome message
+            addMessage('Welcome to Minerva Think Tank! I can consult multiple AI models to find the best answer to your questions. What would you like to know?', 'ai');
+            
+            // Event listeners
+            sendButton.addEventListener('click', sendMessage);
+            messageInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+            
+            function sendMessage() {
+                const message = messageInput.value.trim();
+                if (!message) return;
+                
+                // Add user message to the UI
+                addMessage(message, 'user');
+                messageInput.value = '';
+                
+                // Show loading indicator
+                loadingIndicator.style.display = 'block';
+                
+                // Call the API
+                fetch('/api/v1/advanced-think-tank', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`API request failed with status ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('API response:', data); // Debug log
+                    
+                    // Hide loading indicator
+                    loadingIndicator.style.display = 'none';
+                    
+                    // Add AI response to the UI
+                    if (typeof data === 'object' && data !== null) {
+                        // Check if we have a response or error message
+                        if (data.error) {
+                            // Show error but in a user-friendly way
+                            addMessage(`The system encountered an issue: ${data.error}`, 'ai');
+                        } else if (data.response) {
+                            // Handle nested response format
+                            let responseText;
+                            
+                            // Handle case where response is an object with a response property
+                            if (typeof data.response === 'object' && data.response !== null && data.response.response) {
+                                responseText = data.response.response;
+                                console.log('Extracted text from nested response object');
+                            } else if (typeof data.response === 'string') {
+                                // Direct string response
+                                responseText = data.response;
+                                console.log('Using direct string response');
+                            } else {
+                                // Fallback: stringify the object
+                                responseText = JSON.stringify(data.response, null, 2);
+                                console.log('Using stringified response object');
+                            }
+                            
+                            addMessage(responseText, 'ai', data.model_info);
+                        } else {
+                            // No response or error field
+                            addMessage('The AI models are currently processing your request. Please try again.', 'ai');
+                        }
+                    } else {
+                        // Handle unexpected response format
+                        addMessage('Received unexpected response format', 'ai');
+                        console.error('Unexpected response format:', data);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    loadingIndicator.style.display = 'none';
+                    addMessage('Sorry, there was an error processing your request. Please try again.', 'ai');
+                });
+            }
+            
+            function addMessage(text, sender, modelInfo = null) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add(sender + '-message');
+                
+                // Use innerHTML for AI messages to preserve formatting like line breaks and code blocks
+                if (sender === 'ai') {
+                    // Simple markdown-like formatting for code blocks and line breaks
+                    let formattedText = text
+                        .replace(/\n/g, '<br>')
+                        .replace(/```(.*?)```/gs, '<pre><code>$1</code></pre>');
+                    messageDiv.innerHTML = formattedText;
+                } else {
+                    // For user messages, use textContent for security
+                    messageDiv.textContent = text;
+                }
+                
+                if (sender === 'ai' && modelInfo) {
+                    const infoDiv = document.createElement('div');
+                    infoDiv.classList.add('model-info');
+                    
+                    // Construct model info text
+                    let infoText = '';
+                    if (modelInfo.best_model) {
+                        infoText += `Best model: ${modelInfo.best_model}`;
+                    }
+                    if (modelInfo.models_used && modelInfo.models_used.length) {
+                        infoText += ` | Models consulted: ${modelInfo.models_used.join(', ')}`;
+                    }
+                    if (modelInfo.blended) {
+                        infoText += ` | Blended response`;
+                    }
+                    
+                    infoDiv.textContent = infoText || 'Processed by Minerva Think Tank';
+                    messageDiv.appendChild(infoDiv);
+                }
+                
+                messagesContainer.appendChild(messageDiv);
+                
+                // Scroll to bottom
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+        });
+    </script>
+</body>
+</html>

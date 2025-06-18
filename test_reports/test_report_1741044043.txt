@@ -1,0 +1,2504 @@
+MINERVA HUGGING FACE PROCESSING - TEST SUITE REPORT
+Generated: 2025-03-03 18:20:43
+
+
+
+================================================================================
+TEST SCRIPT: /Users/bendickinson/Desktop/Minerva/huggingface_test_enhanced.py
+================================================================================
+
+
+=== COMPREHENSIVE HUGGING FACE PROCESSING TEST ===
+
+
+Test Case 1: Simple greeting
+Query: Hello, how are you?
+--------------------------------------------------
+Response: User: Hello, how are you?
+
+Assistant: Here is a response to your query about Hello, how are.
+--------------------------------------------------
+
+Test Case 2: Factual query
+Query: What is the capital of France?
+--------------------------------------------------
+Response: I'm currently experiencing high demand and limited resources. Please try again in a moment with a simpler query.
+--------------------------------------------------
+
+Test Case 3: Complex reasoning
+Query: Analyze the impact of climate change on global economics.
+--------------------------------------------------
+Response: User: Analyze the impact of climate change on global economics.
+
+Assistant: Here is a response to your query about Analyze the impact.
+--------------------------------------------------
+
+Test Case 4: Coding query
+Query: How to implement a quicksort algorithm in Python?
+--------------------------------------------------
+Response: I apologize for the delay. Your query is complex and requires more processing time than is currently available.
+--------------------------------------------------
+
+Test Case 5: Long multi-part query
+Query: Explain quantum computing principles and then compare quantum computers with classical computers in terms of computational capabilities.
+--------------------------------------------------
+Response: User: Explain quantum computing principles and then compare quantum computers with classical computers in terms of computational capabilities.
+
+Assistant: Here is a response to your query about Explain quantum computing.
+--------------------------------------------------
+
+Completed all test cases.
+
+STDERR:
+2025-03-03 18:20:43,806 - minerva.test - INFO - Processing message: Hello, how are you?
+2025-03-03 18:20:43,807 - minerva.test - INFO - Optimized parameters for query: Hello, how are you?...
+2025-03-03 18:20:43,807 - minerva.test - INFO - Query complexity: 0.1, Tags: ['greeting']
+2025-03-03 18:20:43,807 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 64,
+  "temperature": 0.5,
+  "top_p": 0.85,
+  "repetition_penalty": 1.05,
+  "do_sample": true
+}
+2025-03-03 18:20:43,807 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,807 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,807 - minerva.test - INFO - Response quality: 0.74
+2025-03-03 18:20:43,807 - minerva.test - INFO - Processing message: What is the capital of France?
+2025-03-03 18:20:43,807 - minerva.test - INFO - Optimized parameters for query: What is the capital of France?...
+2025-03-03 18:20:43,807 - minerva.test - INFO - Query complexity: 0.4, Tags: ['factual']
+2025-03-03 18:20:43,807 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.4,
+  "top_p": 0.9,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,807 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,807 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,807 - minerva.test - ERROR - Error during generation: Simulated resource error
+2025-03-03 18:20:43,807 - minerva.test - INFO - Generated fallback response for query: What is the capital of France?...
+2025-03-03 18:20:43,807 - minerva.test - INFO - Error type: resource
+2025-03-03 18:20:43,807 - minerva.test - INFO - Processing message: Analyze the impact of climate change on global economics.
+2025-03-03 18:20:43,807 - minerva.test - INFO - Optimized parameters for query: Analyze the impact of climate ...
+2025-03-03 18:20:43,807 - minerva.test - INFO - Query complexity: 0.8, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,807 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.8,
+  "top_p": 0.92,
+  "repetition_penalty": 1.2,
+  "do_sample": true
+}
+2025-03-03 18:20:43,807 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,807 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,807 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,807 - minerva.test - INFO - Processing message: How to implement a quicksort algorithm in Python?
+2025-03-03 18:20:43,807 - minerva.test - INFO - Optimized parameters for query: How to implement a quicksort a...
+2025-03-03 18:20:43,807 - minerva.test - INFO - Query complexity: 0.7, Tags: ['coding']
+2025-03-03 18:20:43,807 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.3,
+  "top_p": 0.9,
+  "repetition_penalty": 1.3,
+  "do_sample": true
+}
+2025-03-03 18:20:43,807 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,807 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,807 - minerva.test - ERROR - Error during generation: Simulated timeout error
+2025-03-03 18:20:43,807 - minerva.test - INFO - Generated fallback response for query: How to implement a quicksort a...
+2025-03-03 18:20:43,807 - minerva.test - INFO - Error type: timeout
+2025-03-03 18:20:43,807 - minerva.test - INFO - Processing message: Explain quantum computing principles and then compare quantum computers with classical computers in terms of computational capabilities.
+2025-03-03 18:20:43,807 - minerva.test - INFO - Optimized parameters for query: Explain quantum computing prin...
+2025-03-03 18:20:43,807 - minerva.test - INFO - Query complexity: 0.9, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,807 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.8,
+  "top_p": 0.92,
+  "repetition_penalty": 1.2,
+  "do_sample": true
+}
+2025-03-03 18:20:43,807 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,807 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,807 - minerva.test - INFO - Response quality: 0.78
+
+
+================================================================================
+TEST SCRIPT: /Users/bendickinson/Desktop/Minerva/huggingface_edge_cases_test.py
+================================================================================
+
+============================================================
+MINERVA HUGGING FACE PROCESSING - EDGE CASE & PERFORMANCE TESTS
+============================================================
+
+=== EDGE CASE QUERY TESTING ===
+
+
+Test Case: Single word
+Query: Hello
+--------------------------------------------------
+✅ PASSED - Processing time: 0.0005s
+Response (69 chars): User: Hello
+
+Assistant: Here is a response to your query about Hello.
+
+Test Case: Two words
+Query: Help me
+--------------------------------------------------
+✅ PASSED - Processing time: 0.0001s
+Response (112 chars): I'm currently experiencing high demand and limited resources. Please try again in a moment with a si...
+
+Test Case: Short question
+Query: Why?
+--------------------------------------------------
+✅ PASSED - Processing time: 0.0001s
+Response (67 chars): User: Why?
+
+Assistant: Here is a response to your query about Why?.
+
+Test Case: Long technical query
+Query: Explain in detail how the TCP/IP protocol works including the handshake process, packet structure, e...
+--------------------------------------------------
+❌ FAILED - Processing time: 0.0001s
+Response (111 chars): I apologize for the delay. Your query is complex and requires more processing time than is currently...
+
+Test Case: Multi-part query
+Query: Can you provide a comprehensive analysis of climate change impacts on global agriculture? Include th...
+--------------------------------------------------
+✅ PASSED - Processing time: 0.0001s
+Response (414 chars): User: Can you provide a comprehensive analysis of climate change impacts on global agriculture? Incl...
+
+Test Case: Spanish query
+Query: ¿Cómo funciona la inteligencia artificial?
+--------------------------------------------------
+✅ PASSED - Processing time: 0.0001s
+Response (118 chars): User: ¿Cómo funciona la inteligencia artificial?
+
+Assistant: Here is a response to your query about ...
+
+Test Case: French query
+Query: Expliquez-moi la théorie de la relativité
+--------------------------------------------------
+✅ PASSED - Processing time: 0.0001s
+Response (112 chars): I'm currently experiencing high demand and limited resources. Please try again in a moment with a si...
+
+Test Case: Japanese query
+Query: 人工知能とは何ですか？
+--------------------------------------------------
+❌ FAILED - Processing time: 0.0001s
+Response (111 chars): I apologize for the delay. Your query is complex and requires more processing time than is currently...
+
+Test Case: List format
+Query: Please explain the following topics:
+1. Quantum mechanics
+2. General relativity
+3. String theory
+--------------------------------------------------
+✅ PASSED - Processing time: 0.0001s
+Response (173 chars): User: Please explain the following topics:
+1. Quantum mechanics
+2. General relativity
+3. String theo...
+
+Test Case: JSON-like query
+Query: {
+  "topic": "Machine Learning",
+  "subtopics": ["Neural Networks", "Decision Trees", "Clustering"],...
+--------------------------------------------------
+✅ PASSED - Processing time: 0.0001s
+Response (216 chars): User: {
+  "topic": "Machine Learning",
+  "subtopics": ["Neural Networks", "Decision Trees", "Cluster...
+
+Test Case: Ambiguous query
+Query: Tell me about it
+--------------------------------------------------
+❌ FAILED - Processing time: 0.0001s
+Response (111 chars): I apologize for the delay. Your query is complex and requires more processing time than is currently...
+
+Test Case: Vague instruction
+Query: Make it better
+--------------------------------------------------
+✅ PASSED - Processing time: 0.0001s
+Response (87 chars): User: Make it better
+
+Assistant: Here is a response to your query about Make it better.
+
+Test Case: Long non-English
+Query: Explique en détail les implications philosophiques et éthiques de l'intelligence artificielle dans l...
+--------------------------------------------------
+✅ PASSED - Processing time: 0.0001s
+Response (464 chars): User: Explique en détail les implications philosophiques et éthiques de l'intelligence artificielle ...
+
+=== EDGE CASE TESTING SUMMARY ===
+Total tests: 13
+Passed: 10
+Failed: 3
+Success rate: 76.92%
+
+=== SYNTHETIC FAILURE TESTING ===
+
+
+Test Case: Timeout simulation
+--------------------------------------------------
+✅ PASSED - System handled the failure appropriately
+Response: I apologize for the delay. Your query is complex and requires more processing time than is currently...
+
+Test Case: Resource error
+--------------------------------------------------
+✅ PASSED - System handled the failure appropriately
+Response: I'm currently experiencing high demand and limited resources. Please try again in a moment with a si...
+
+Test Case: Token limit exceeded
+--------------------------------------------------
+✅ PASSED - System handled the failure appropriately
+Response: Your query would result in a response that exceeds my current capacity. Could you break it down into...
+
+Test Case: Self-reference injection
+--------------------------------------------------
+❌ FAILED - System did not handle the failure as expected
+Response: To answer your question directly: Explain how artificial intelligence works.
+
+Test Case: Empty response
+--------------------------------------------------
+❌ FAILED - System did not handle the failure as expected
+Response: I apologize, but I couldn't generate a response to your query. Could you please rephrase your questi...
+
+Test Case: Repetitive content
+--------------------------------------------------
+❌ FAILED - System did not handle the failure as expected
+Response: The model will repeat this phrase. The model will repeat this phrase.
+
+=== SYNTHETIC FAILURE TESTING SUMMARY ===
+Total tests: 6
+Handled appropriately: 3
+Handled poorly: 3
+Success rate: 50.00%
+
+=== PERFORMANCE TESTING ===
+
+
+--- SIMPLE COMPLEXITY QUERIES ---
+
+Query 1: Hello there
+  Run 1: 0.0001s, Response size: 81 chars
+  Run 2: 0.0001s, Response size: 81 chars
+  Run 3: 0.0001s, Response size: 81 chars
+  Average: 0.0001s, Average size: 81.0 chars
+
+Query 2: What time is it?
+  Run 1: 0.0001s, Response size: 87 chars
+  Run 2: 0.0001s, Response size: 87 chars
+  Run 3: 0.0001s, Response size: 112 chars
+  Average: 0.0001s, Average size: 95.3 chars
+
+Query 3: Tell me a joke
+  Run 1: 0.0001s, Response size: 82 chars
+  Run 2: 0.0001s, Response size: 112 chars
+  Run 3: 0.0002s, Response size: 112 chars
+  Average: 0.0001s, Average size: 102.0 chars
+
+--- MEDIUM COMPLEXITY QUERIES ---
+
+Query 1: Explain how photosynthesis works
+  Run 1: 0.0001s, Response size: 112 chars
+  Run 2: 0.0001s, Response size: 117 chars
+  Run 3: 0.0001s, Response size: 117 chars
+  Average: 0.0001s, Average size: 115.3 chars
+
+Query 2: What are the main causes of climate change?
+  Run 1: 0.0001s, Response size: 114 chars
+  Run 2: 0.0001s, Response size: 114 chars
+  Run 3: 0.0001s, Response size: 114 chars
+  Average: 0.0001s, Average size: 114.0 chars
+
+Query 3: How does a combustion engine work?
+  Run 1: 0.0001s, Response size: 103 chars
+  Run 2: 0.0001s, Response size: 103 chars
+  Run 3: 0.0001s, Response size: 103 chars
+  Average: 0.0001s, Average size: 103.0 chars
+
+--- COMPLEX COMPLEXITY QUERIES ---
+
+Query 1: Compare and contrast quantum computing with classi...
+  Run 1: 0.0001s, Response size: 207 chars
+  Run 2: 0.0001s, Response size: 207 chars
+  Run 3: 0.0001s, Response size: 207 chars
+  Average: 0.0001s, Average size: 207.0 chars
+
+Query 2: Analyze the economic impacts of artificial intelli...
+  Run 1: 0.0001s, Response size: 179 chars
+  Run 2: 0.0001s, Response size: 111 chars
+  Run 3: 0.0001s, Response size: 179 chars
+  Average: 0.0001s, Average size: 156.3 chars
+
+Query 3: Explain the mathematical foundations of machine le...
+  Run 1: 0.0001s, Response size: 229 chars
+  Run 2: 0.0001s, Response size: 229 chars
+  Run 3: 0.0001s, Response size: 229 chars
+  Average: 0.0001s, Average size: 229.0 chars
+
+=== PERFORMANCE SUMMARY ===
+Simple queries:
+  Average processing time: 0.0001s
+  Average response size: 92.8 chars
+  Time per character: 0.0010ms
+Medium queries:
+  Average processing time: 0.0001s
+  Average response size: 110.8 chars
+  Time per character: 0.0007ms
+Complex queries:
+  Average processing time: 0.0001s
+  Average response size: 197.4 chars
+  Time per character: 0.0004ms
+
+============================================================
+COMPREHENSIVE TEST RESULTS
+============================================================
+Edge Case Tests: 10/13 passed (76.92%)
+Failure Handling: 3/6 handled correctly (50.00%)
+
+Performance: Complex queries are 0.87x slower than simple queries
+
+Testing complete!
+
+STDERR:
+2025-03-03 18:20:43,837 - minerva.test - INFO - Processing message: Hello
+2025-03-03 18:20:43,837 - minerva.test - INFO - Optimized parameters for query: Hello...
+2025-03-03 18:20:43,837 - minerva.test - INFO - Query complexity: 0.1, Tags: ['greeting']
+2025-03-03 18:20:43,837 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 64,
+  "temperature": 0.5,
+  "top_p": 0.85,
+  "repetition_penalty": 1.05,
+  "do_sample": true
+}
+2025-03-03 18:20:43,837 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,837 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,837 - minerva.test - INFO - Response quality: 0.66
+2025-03-03 18:20:43,837 - minerva.test - INFO - Processing message: Help me
+2025-03-03 18:20:43,837 - minerva.test - INFO - Optimized parameters for query: Help me...
+2025-03-03 18:20:43,837 - minerva.test - INFO - Query complexity: 0.3, Tags: ['general']
+2025-03-03 18:20:43,837 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,837 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,837 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,837 - minerva.test - ERROR - Error during generation: Simulated resource error
+2025-03-03 18:20:43,837 - minerva.test - INFO - Generated fallback response for query: Help me...
+2025-03-03 18:20:43,837 - minerva.test - INFO - Error type: resource
+2025-03-03 18:20:43,837 - minerva.test - INFO - Processing message: Why?
+2025-03-03 18:20:43,838 - minerva.test - INFO - Optimized parameters for query: Why?...
+2025-03-03 18:20:43,838 - minerva.test - INFO - Query complexity: 0.2, Tags: ['factual']
+2025-03-03 18:20:43,838 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 128,
+  "temperature": 0.4,
+  "top_p": 0.85,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,838 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,838 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,838 - minerva.test - INFO - Response quality: 0.74
+2025-03-03 18:20:43,838 - minerva.test - INFO - Processing message: Explain in detail how the TCP/IP protocol works including the handshake process, packet structure, error handling, congestion control mechanisms, and how it interacts with other protocols in the networking stack. Include specific examples of common implementation challenges and how they are typically resolved in production environments.
+2025-03-03 18:20:43,838 - minerva.test - INFO - Optimized parameters for query: Explain in detail how the TCP/...
+2025-03-03 18:20:43,838 - minerva.test - INFO - Query complexity: 1.0, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,838 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.8,
+  "top_p": 0.92,
+  "repetition_penalty": 1.2,
+  "do_sample": true
+}
+2025-03-03 18:20:43,838 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,838 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,838 - minerva.test - ERROR - Error during generation: Simulated timeout error
+2025-03-03 18:20:43,838 - minerva.test - INFO - Generated fallback response for query: Explain in detail how the TCP/...
+2025-03-03 18:20:43,838 - minerva.test - INFO - Error type: timeout
+2025-03-03 18:20:43,838 - minerva.test - INFO - Processing message: Can you provide a comprehensive analysis of climate change impacts on global agriculture? Include the effects on crop yields, livestock production, water resources, and economic implications for both developed and developing countries. Also discuss potential adaptation strategies and policy recommendations for mitigating negative effects.
+2025-03-03 18:20:43,838 - minerva.test - INFO - Optimized parameters for query: Can you provide a comprehensiv...
+2025-03-03 18:20:43,838 - minerva.test - INFO - Query complexity: 1.0, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,838 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.8,
+  "top_p": 0.92,
+  "repetition_penalty": 1.2,
+  "do_sample": true
+}
+2025-03-03 18:20:43,838 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,838 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,838 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,838 - minerva.test - INFO - Processing message: ¿Cómo funciona la inteligencia artificial?
+2025-03-03 18:20:43,838 - minerva.test - INFO - Optimized parameters for query: ¿Cómo funciona la inteligencia...
+2025-03-03 18:20:43,838 - minerva.test - INFO - Query complexity: 0.5, Tags: ['general']
+2025-03-03 18:20:43,838 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,838 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,838 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,838 - minerva.test - INFO - Response quality: 0.74
+2025-03-03 18:20:43,838 - minerva.test - INFO - Processing message: Expliquez-moi la théorie de la relativité
+2025-03-03 18:20:43,838 - minerva.test - INFO - Optimized parameters for query: Expliquez-moi la théorie de la...
+2025-03-03 18:20:43,838 - minerva.test - INFO - Query complexity: 0.5, Tags: ['general']
+2025-03-03 18:20:43,838 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,838 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,838 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,838 - minerva.test - ERROR - Error during generation: Simulated resource error
+2025-03-03 18:20:43,838 - minerva.test - INFO - Generated fallback response for query: Expliquez-moi la théorie de la...
+2025-03-03 18:20:43,838 - minerva.test - INFO - Error type: resource
+2025-03-03 18:20:43,838 - minerva.test - INFO - Processing message: 人工知能とは何ですか？
+2025-03-03 18:20:43,838 - minerva.test - INFO - Optimized parameters for query: 人工知能とは何ですか？...
+2025-03-03 18:20:43,838 - minerva.test - INFO - Query complexity: 0.3, Tags: ['general']
+2025-03-03 18:20:43,838 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,838 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,838 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,838 - minerva.test - ERROR - Error during generation: Simulated timeout error
+2025-03-03 18:20:43,838 - minerva.test - INFO - Generated fallback response for query: 人工知能とは何ですか？...
+2025-03-03 18:20:43,838 - minerva.test - INFO - Error type: timeout
+2025-03-03 18:20:43,838 - minerva.test - INFO - Processing message: Please explain the following topics:
+1. Quantum mechanics
+2. General relativity
+3. String theory
+2025-03-03 18:20:43,838 - minerva.test - INFO - Optimized parameters for query: Please explain the following t...
+2025-03-03 18:20:43,838 - minerva.test - INFO - Query complexity: 0.8, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,838 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.8,
+  "top_p": 0.92,
+  "repetition_penalty": 1.2,
+  "do_sample": true
+}
+2025-03-03 18:20:43,838 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,838 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,838 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,838 - minerva.test - INFO - Processing message: {
+  "topic": "Machine Learning",
+  "subtopics": ["Neural Networks", "Decision Trees", "Clustering"],
+  "focus": "Practical applications"
+}
+2025-03-03 18:20:43,838 - minerva.test - INFO - Optimized parameters for query: {
+  "topic": "Machine Learning...
+2025-03-03 18:20:43,838 - minerva.test - INFO - Query complexity: 0.5, Tags: ['general']
+2025-03-03 18:20:43,838 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,838 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,838 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,838 - minerva.test - INFO - Response quality: 0.70
+2025-03-03 18:20:43,838 - minerva.test - INFO - Processing message: Tell me about it
+2025-03-03 18:20:43,838 - minerva.test - INFO - Optimized parameters for query: Tell me about it...
+2025-03-03 18:20:43,838 - minerva.test - INFO - Query complexity: 0.3, Tags: ['general']
+2025-03-03 18:20:43,838 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,838 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,838 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,838 - minerva.test - ERROR - Error during generation: Simulated timeout error
+2025-03-03 18:20:43,838 - minerva.test - INFO - Generated fallback response for query: Tell me about it...
+2025-03-03 18:20:43,838 - minerva.test - INFO - Error type: timeout
+2025-03-03 18:20:43,838 - minerva.test - INFO - Processing message: Make it better
+2025-03-03 18:20:43,838 - minerva.test - INFO - Optimized parameters for query: Make it better...
+2025-03-03 18:20:43,838 - minerva.test - INFO - Query complexity: 0.3, Tags: ['general']
+2025-03-03 18:20:43,838 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,838 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,838 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,838 - minerva.test - INFO - Response quality: 0.66
+2025-03-03 18:20:43,838 - minerva.test - INFO - Processing message: Explique en détail les implications philosophiques et éthiques de l'intelligence artificielle dans la société moderne, en tenant compte des préoccupations concernant la vie privée, l'autonomie, l'emploi et les biais algorithmiques. Discutez également des approches réglementaires potentielles et des cadres éthiques qui pourraient guider le développement responsable de ces technologies.
+2025-03-03 18:20:43,839 - minerva.test - INFO - Optimized parameters for query: Explique en détail les implica...
+2025-03-03 18:20:43,839 - minerva.test - INFO - Query complexity: 0.7, Tags: ['general']
+2025-03-03 18:20:43,839 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,839 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,839 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,839 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,839 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,839 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,839 - minerva.test - INFO - Optimized parameters for query: Explain how artificial intelli...
+2025-03-03 18:20:43,839 - minerva.test - INFO - Query complexity: 0.8, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,839 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.8,
+  "top_p": 0.92,
+  "repetition_penalty": 1.2,
+  "do_sample": true
+}
+2025-03-03 18:20:43,839 - minerva.test - INFO - Generated fallback response for query: Explain how artificial intelli...
+2025-03-03 18:20:43,839 - minerva.test - INFO - Error type: timeout
+2025-03-03 18:20:43,839 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,839 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,839 - minerva.test - INFO - Optimized parameters for query: Explain how artificial intelli...
+2025-03-03 18:20:43,839 - minerva.test - INFO - Query complexity: 0.8, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,839 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.8,
+  "top_p": 0.92,
+  "repetition_penalty": 1.2,
+  "do_sample": true
+}
+2025-03-03 18:20:43,839 - minerva.test - INFO - Generated fallback response for query: Explain how artificial intelli...
+2025-03-03 18:20:43,839 - minerva.test - INFO - Error type: resource
+2025-03-03 18:20:43,839 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,839 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,839 - minerva.test - INFO - Optimized parameters for query: Explain how artificial intelli...
+2025-03-03 18:20:43,839 - minerva.test - INFO - Query complexity: 0.8, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,839 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.8,
+  "top_p": 0.92,
+  "repetition_penalty": 1.2,
+  "do_sample": true
+}
+2025-03-03 18:20:43,839 - minerva.test - INFO - Generated fallback response for query: Explain how artificial intelli...
+2025-03-03 18:20:43,839 - minerva.test - INFO - Error type: token_limit
+2025-03-03 18:20:43,839 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,839 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,839 - minerva.test - INFO - Optimized parameters for query: Explain how artificial intelli...
+2025-03-03 18:20:43,839 - minerva.test - INFO - Query complexity: 0.8, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,839 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.8,
+  "top_p": 0.92,
+  "repetition_penalty": 1.2,
+  "do_sample": true
+}
+2025-03-03 18:20:43,839 - minerva.test - INFO - Generated fallback response for query: Explain how artificial intelli...
+2025-03-03 18:20:43,839 - minerva.test - INFO - Validation failure: self_reference
+2025-03-03 18:20:43,839 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,839 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,839 - minerva.test - INFO - Optimized parameters for query: Explain how artificial intelli...
+2025-03-03 18:20:43,839 - minerva.test - INFO - Query complexity: 0.8, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,839 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.8,
+  "top_p": 0.92,
+  "repetition_penalty": 1.2,
+  "do_sample": true
+}
+2025-03-03 18:20:43,839 - minerva.test - INFO - Generated fallback response for query: Explain how artificial intelli...
+2025-03-03 18:20:43,839 - minerva.test - INFO - Validation failure: empty
+2025-03-03 18:20:43,839 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,839 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,839 - minerva.test - INFO - Optimized parameters for query: Explain how artificial intelli...
+2025-03-03 18:20:43,839 - minerva.test - INFO - Query complexity: 0.8, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,839 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.8,
+  "top_p": 0.92,
+  "repetition_penalty": 1.2,
+  "do_sample": true
+}
+2025-03-03 18:20:43,839 - minerva.test - INFO - Processing message: Hello there
+2025-03-03 18:20:43,839 - minerva.test - INFO - Optimized parameters for query: Hello there...
+2025-03-03 18:20:43,839 - minerva.test - INFO - Query complexity: 0.1, Tags: ['greeting']
+2025-03-03 18:20:43,839 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 64,
+  "temperature": 0.5,
+  "top_p": 0.85,
+  "repetition_penalty": 1.05,
+  "do_sample": true
+}
+2025-03-03 18:20:43,839 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,839 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,839 - minerva.test - INFO - Response quality: 0.66
+2025-03-03 18:20:43,839 - minerva.test - INFO - Processing message: Hello there
+2025-03-03 18:20:43,839 - minerva.test - INFO - Optimized parameters for query: Hello there...
+2025-03-03 18:20:43,839 - minerva.test - INFO - Query complexity: 0.1, Tags: ['greeting']
+2025-03-03 18:20:43,839 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 64,
+  "temperature": 0.5,
+  "top_p": 0.85,
+  "repetition_penalty": 1.05,
+  "do_sample": true
+}
+2025-03-03 18:20:43,839 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,839 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,839 - minerva.test - INFO - Response quality: 0.66
+2025-03-03 18:20:43,839 - minerva.test - INFO - Processing message: Hello there
+2025-03-03 18:20:43,839 - minerva.test - INFO - Optimized parameters for query: Hello there...
+2025-03-03 18:20:43,839 - minerva.test - INFO - Query complexity: 0.1, Tags: ['greeting']
+2025-03-03 18:20:43,839 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 64,
+  "temperature": 0.5,
+  "top_p": 0.85,
+  "repetition_penalty": 1.05,
+  "do_sample": true
+}
+2025-03-03 18:20:43,839 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,839 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,839 - minerva.test - INFO - Response quality: 0.66
+2025-03-03 18:20:43,839 - minerva.test - INFO - Processing message: What time is it?
+2025-03-03 18:20:43,839 - minerva.test - INFO - Optimized parameters for query: What time is it?...
+2025-03-03 18:20:43,839 - minerva.test - INFO - Query complexity: 0.2, Tags: ['factual']
+2025-03-03 18:20:43,839 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 128,
+  "temperature": 0.4,
+  "top_p": 0.85,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,839 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,839 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,839 - minerva.test - INFO - Response quality: 0.74
+2025-03-03 18:20:43,839 - minerva.test - INFO - Processing message: What time is it?
+2025-03-03 18:20:43,839 - minerva.test - INFO - Optimized parameters for query: What time is it?...
+2025-03-03 18:20:43,839 - minerva.test - INFO - Query complexity: 0.2, Tags: ['factual']
+2025-03-03 18:20:43,839 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 128,
+  "temperature": 0.4,
+  "top_p": 0.85,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,839 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,839 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,839 - minerva.test - INFO - Response quality: 0.74
+2025-03-03 18:20:43,839 - minerva.test - INFO - Processing message: What time is it?
+2025-03-03 18:20:43,839 - minerva.test - INFO - Optimized parameters for query: What time is it?...
+2025-03-03 18:20:43,839 - minerva.test - INFO - Query complexity: 0.2, Tags: ['factual']
+2025-03-03 18:20:43,839 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 128,
+  "temperature": 0.4,
+  "top_p": 0.85,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,839 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,840 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,840 - minerva.test - ERROR - Error during generation: Simulated resource error
+2025-03-03 18:20:43,840 - minerva.test - INFO - Generated fallback response for query: What time is it?...
+2025-03-03 18:20:43,840 - minerva.test - INFO - Error type: resource
+2025-03-03 18:20:43,840 - minerva.test - INFO - Processing message: Tell me a joke
+2025-03-03 18:20:43,840 - minerva.test - INFO - Optimized parameters for query: Tell me a joke...
+2025-03-03 18:20:43,840 - minerva.test - INFO - Query complexity: 0.3, Tags: ['general']
+2025-03-03 18:20:43,840 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,840 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,840 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,840 - minerva.test - INFO - Response quality: 0.66
+2025-03-03 18:20:43,840 - minerva.test - INFO - Processing message: Tell me a joke
+2025-03-03 18:20:43,840 - minerva.test - INFO - Optimized parameters for query: Tell me a joke...
+2025-03-03 18:20:43,840 - minerva.test - INFO - Query complexity: 0.3, Tags: ['general']
+2025-03-03 18:20:43,840 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,840 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,840 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,840 - minerva.test - ERROR - Error during generation: Simulated resource error
+2025-03-03 18:20:43,840 - minerva.test - INFO - Generated fallback response for query: Tell me a joke...
+2025-03-03 18:20:43,840 - minerva.test - INFO - Error type: resource
+2025-03-03 18:20:43,840 - minerva.test - INFO - Processing message: Tell me a joke
+2025-03-03 18:20:43,840 - minerva.test - INFO - Optimized parameters for query: Tell me a joke...
+2025-03-03 18:20:43,840 - minerva.test - INFO - Query complexity: 0.3, Tags: ['general']
+2025-03-03 18:20:43,840 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,840 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,840 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,840 - minerva.test - ERROR - Error during generation: Simulated resource error
+2025-03-03 18:20:43,840 - minerva.test - INFO - Generated fallback response for query: Tell me a joke...
+2025-03-03 18:20:43,840 - minerva.test - INFO - Error type: resource
+2025-03-03 18:20:43,840 - minerva.test - INFO - Processing message: Explain how photosynthesis works
+2025-03-03 18:20:43,840 - minerva.test - INFO - Optimized parameters for query: Explain how photosynthesis wor...
+2025-03-03 18:20:43,840 - minerva.test - INFO - Query complexity: 0.6000000000000001, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,840 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,840 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,840 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,840 - minerva.test - ERROR - Error during generation: Simulated resource error
+2025-03-03 18:20:43,840 - minerva.test - INFO - Generated fallback response for query: Explain how photosynthesis wor...
+2025-03-03 18:20:43,840 - minerva.test - INFO - Error type: resource
+2025-03-03 18:20:43,840 - minerva.test - INFO - Processing message: Explain how photosynthesis works
+2025-03-03 18:20:43,840 - minerva.test - INFO - Optimized parameters for query: Explain how photosynthesis wor...
+2025-03-03 18:20:43,840 - minerva.test - INFO - Query complexity: 0.6000000000000001, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,840 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,840 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,840 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,840 - minerva.test - INFO - Response quality: 0.66
+2025-03-03 18:20:43,840 - minerva.test - INFO - Processing message: Explain how photosynthesis works
+2025-03-03 18:20:43,840 - minerva.test - INFO - Optimized parameters for query: Explain how photosynthesis wor...
+2025-03-03 18:20:43,840 - minerva.test - INFO - Query complexity: 0.6000000000000001, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,840 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,840 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,840 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,840 - minerva.test - INFO - Response quality: 0.66
+2025-03-03 18:20:43,840 - minerva.test - INFO - Processing message: What are the main causes of climate change?
+2025-03-03 18:20:43,840 - minerva.test - INFO - Optimized parameters for query: What are the main causes of cl...
+2025-03-03 18:20:43,840 - minerva.test - INFO - Query complexity: 0.4, Tags: ['factual']
+2025-03-03 18:20:43,840 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.4,
+  "top_p": 0.9,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,840 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,840 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,840 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,840 - minerva.test - INFO - Processing message: What are the main causes of climate change?
+2025-03-03 18:20:43,840 - minerva.test - INFO - Optimized parameters for query: What are the main causes of cl...
+2025-03-03 18:20:43,840 - minerva.test - INFO - Query complexity: 0.4, Tags: ['factual']
+2025-03-03 18:20:43,840 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.4,
+  "top_p": 0.9,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,840 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,840 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,840 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,840 - minerva.test - INFO - Processing message: What are the main causes of climate change?
+2025-03-03 18:20:43,840 - minerva.test - INFO - Optimized parameters for query: What are the main causes of cl...
+2025-03-03 18:20:43,840 - minerva.test - INFO - Query complexity: 0.4, Tags: ['factual']
+2025-03-03 18:20:43,840 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.4,
+  "top_p": 0.9,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,840 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,840 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,840 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,840 - minerva.test - INFO - Processing message: How does a combustion engine work?
+2025-03-03 18:20:43,840 - minerva.test - INFO - Optimized parameters for query: How does a combustion engine w...
+2025-03-03 18:20:43,840 - minerva.test - INFO - Query complexity: 0.5, Tags: ['general']
+2025-03-03 18:20:43,840 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,840 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,840 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,840 - minerva.test - INFO - Response quality: 0.74
+2025-03-03 18:20:43,840 - minerva.test - INFO - Processing message: How does a combustion engine work?
+2025-03-03 18:20:43,840 - minerva.test - INFO - Optimized parameters for query: How does a combustion engine w...
+2025-03-03 18:20:43,840 - minerva.test - INFO - Query complexity: 0.5, Tags: ['general']
+2025-03-03 18:20:43,840 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,840 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,840 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,840 - minerva.test - INFO - Response quality: 0.74
+2025-03-03 18:20:43,840 - minerva.test - INFO - Processing message: How does a combustion engine work?
+2025-03-03 18:20:43,841 - minerva.test - INFO - Optimized parameters for query: How does a combustion engine w...
+2025-03-03 18:20:43,841 - minerva.test - INFO - Query complexity: 0.5, Tags: ['general']
+2025-03-03 18:20:43,841 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,841 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,841 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,841 - minerva.test - INFO - Response quality: 0.74
+2025-03-03 18:20:43,841 - minerva.test - INFO - Processing message: Compare and contrast quantum computing with classical computing, including advantages, disadvantages, and potential applications
+2025-03-03 18:20:43,841 - minerva.test - INFO - Optimized parameters for query: Compare and contrast quantum c...
+2025-03-03 18:20:43,841 - minerva.test - INFO - Query complexity: 0.8, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,841 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.8,
+  "top_p": 0.92,
+  "repetition_penalty": 1.2,
+  "do_sample": true
+}
+2025-03-03 18:20:43,841 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,841 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,841 - minerva.test - INFO - Response quality: 0.70
+2025-03-03 18:20:43,841 - minerva.test - INFO - Processing message: Compare and contrast quantum computing with classical computing, including advantages, disadvantages, and potential applications
+2025-03-03 18:20:43,841 - minerva.test - INFO - Optimized parameters for query: Compare and contrast quantum c...
+2025-03-03 18:20:43,841 - minerva.test - INFO - Query complexity: 0.8, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,841 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.8,
+  "top_p": 0.92,
+  "repetition_penalty": 1.2,
+  "do_sample": true
+}
+2025-03-03 18:20:43,841 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,841 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,841 - minerva.test - INFO - Response quality: 0.70
+2025-03-03 18:20:43,841 - minerva.test - INFO - Processing message: Compare and contrast quantum computing with classical computing, including advantages, disadvantages, and potential applications
+2025-03-03 18:20:43,841 - minerva.test - INFO - Optimized parameters for query: Compare and contrast quantum c...
+2025-03-03 18:20:43,841 - minerva.test - INFO - Query complexity: 0.8, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,841 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.8,
+  "top_p": 0.92,
+  "repetition_penalty": 1.2,
+  "do_sample": true
+}
+2025-03-03 18:20:43,841 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,841 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,841 - minerva.test - INFO - Response quality: 0.70
+2025-03-03 18:20:43,841 - minerva.test - INFO - Processing message: Analyze the economic impacts of artificial intelligence on global labor markets over the next decade
+2025-03-03 18:20:43,841 - minerva.test - INFO - Optimized parameters for query: Analyze the economic impacts o...
+2025-03-03 18:20:43,841 - minerva.test - INFO - Query complexity: 0.8, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,841 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.8,
+  "top_p": 0.92,
+  "repetition_penalty": 1.2,
+  "do_sample": true
+}
+2025-03-03 18:20:43,841 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,841 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,841 - minerva.test - INFO - Response quality: 0.70
+2025-03-03 18:20:43,841 - minerva.test - INFO - Processing message: Analyze the economic impacts of artificial intelligence on global labor markets over the next decade
+2025-03-03 18:20:43,841 - minerva.test - INFO - Optimized parameters for query: Analyze the economic impacts o...
+2025-03-03 18:20:43,841 - minerva.test - INFO - Query complexity: 0.8, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,841 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.8,
+  "top_p": 0.92,
+  "repetition_penalty": 1.2,
+  "do_sample": true
+}
+2025-03-03 18:20:43,841 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,841 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,841 - minerva.test - ERROR - Error during generation: Simulated timeout error
+2025-03-03 18:20:43,841 - minerva.test - INFO - Generated fallback response for query: Analyze the economic impacts o...
+2025-03-03 18:20:43,841 - minerva.test - INFO - Error type: timeout
+2025-03-03 18:20:43,841 - minerva.test - INFO - Processing message: Analyze the economic impacts of artificial intelligence on global labor markets over the next decade
+2025-03-03 18:20:43,841 - minerva.test - INFO - Optimized parameters for query: Analyze the economic impacts o...
+2025-03-03 18:20:43,841 - minerva.test - INFO - Query complexity: 0.8, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,841 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.8,
+  "top_p": 0.92,
+  "repetition_penalty": 1.2,
+  "do_sample": true
+}
+2025-03-03 18:20:43,841 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,841 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,841 - minerva.test - INFO - Response quality: 0.70
+2025-03-03 18:20:43,841 - minerva.test - INFO - Processing message: Explain the mathematical foundations of machine learning algorithms including neural networks, support vector machines, and reinforcement learning
+2025-03-03 18:20:43,841 - minerva.test - INFO - Optimized parameters for query: Explain the mathematical found...
+2025-03-03 18:20:43,841 - minerva.test - INFO - Query complexity: 0.9, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,841 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.8,
+  "top_p": 0.92,
+  "repetition_penalty": 1.2,
+  "do_sample": true
+}
+2025-03-03 18:20:43,841 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,841 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,841 - minerva.test - INFO - Response quality: 0.70
+2025-03-03 18:20:43,841 - minerva.test - INFO - Processing message: Explain the mathematical foundations of machine learning algorithms including neural networks, support vector machines, and reinforcement learning
+2025-03-03 18:20:43,841 - minerva.test - INFO - Optimized parameters for query: Explain the mathematical found...
+2025-03-03 18:20:43,841 - minerva.test - INFO - Query complexity: 0.9, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,841 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.8,
+  "top_p": 0.92,
+  "repetition_penalty": 1.2,
+  "do_sample": true
+}
+2025-03-03 18:20:43,841 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,841 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,841 - minerva.test - INFO - Response quality: 0.70
+2025-03-03 18:20:43,841 - minerva.test - INFO - Processing message: Explain the mathematical foundations of machine learning algorithms including neural networks, support vector machines, and reinforcement learning
+2025-03-03 18:20:43,841 - minerva.test - INFO - Optimized parameters for query: Explain the mathematical found...
+2025-03-03 18:20:43,841 - minerva.test - INFO - Query complexity: 0.9, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,841 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.8,
+  "top_p": 0.92,
+  "repetition_penalty": 1.2,
+  "do_sample": true
+}
+2025-03-03 18:20:43,841 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,841 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,841 - minerva.test - INFO - Response quality: 0.70
+
+
+================================================================================
+TEST SCRIPT: /Users/bendickinson/Desktop/Minerva/huggingface_quality_benchmark.py
+================================================================================
+
+============================================================
+MINERVA HUGGING FACE PROCESSING - QUALITY BENCHMARK
+============================================================
+
+=== RUNNING QUALITY BENCHMARK ON 90 QUERIES ===
+Each query will be tested 1 time(s)
+
+Processing query 1/90: What is the capital of Japan?
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.74 | Time: 0.0006s
+
+Processing query 2/90: Who wrote the book '1984'?
+  Run 1: ✅ PASSED | FALLBACK | Quality: 0.74 | Time: 0.0001s
+
+Processing query 3/90: Explain the theory of relativity.
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.74 | Time: 0.0001s
+
+Processing query 4/90: What are the main causes of climate change?
+  Run 1: ✅ PASSED | FALLBACK | Quality: 0.74 | Time: 0.0001s
+
+Processing query 5/90: How does photosynthesis work?
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.74 | Time: 0.0001s
+
+Processing query 6/90: Explain how a neural network works.
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.74 | Time: 0.0001s
+
+Processing query 7/90: What is the difference between HTTP and HTTPS?
+  Run 1: ✅ PASSED | FALLBACK | Quality: 0.74 | Time: 0.0001s
+
+Processing query 8/90: How does public key cryptography work?
+  Run 1: ✅ PASSED | FALLBACK | Quality: 0.74 | Time: 0.0001s
+
+Processing query 9/90: Explain the concept of object-oriented programming...
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.74 | Time: 0.0001s
+
+Processing query 10/90: What is the time complexity of quicksort?
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 11/90: Write a Python function to find the factorial of a...
+  Run 1: ✅ PASSED | FALLBACK | Quality: 0.74 | Time: 0.0001s
+
+Processing query 12/90: How do I optimize a slow SQL query?
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 13/90: Explain the difference between a list and a tuple ...
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 14/90: What are JavaScript closures?
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.74 | Time: 0.0001s
+
+Processing query 15/90: How to implement binary search in Java?
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 16/90: What is the meaning of life?
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.74 | Time: 0.0001s
+
+Processing query 17/90: Explain the trolley problem in ethics.
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.74 | Time: 0.0001s
+
+Processing query 18/90: What is existentialism?
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.74 | Time: 0.0001s
+
+Processing query 19/90: Compare and contrast determinism and free will.
+  Run 1: ✅ PASSED | FALLBACK | Quality: 0.74 | Time: 0.0001s
+
+Processing query 20/90: What is the nature of consciousness?
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.74 | Time: 0.0001s
+
+Processing query 21/90: Write a short poem about the ocean.
+  Run 1: ✅ PASSED | FALLBACK | Quality: 0.74 | Time: 0.0001s
+
+Processing query 22/90: Create a story about a time traveler.
+  Run 1: ✅ PASSED | FALLBACK | Quality: 0.74 | Time: 0.0001s
+
+Processing query 23/90: Describe an alien world with unique physics.
+  Run 1: ✅ PASSED | FALLBACK | Quality: 0.74 | Time: 0.0001s
+
+Processing query 24/90: Generate ideas for a science fiction novel.
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 25/90: Invent a new sport that combines elements of baske...
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 26/90: How do I change a flat tire?
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 27/90: What's a good recipe for chocolate chip cookies?
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 28/90: How do I remove a coffee stain from a white shirt?
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 29/90: What are some tips for better sleep?
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 30/90: How do I create a budget?
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.74 | Time: 0.0001s
+
+Processing query 31/90: Analyze the economic impacts of automation on the ...
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 32/90: Compare and contrast different political systems a...
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 33/90: Discuss the ethical implications of genetic engine...
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 34/90: Evaluate the strengths and weaknesses of various e...
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0002s
+
+Processing query 35/90: Explore the relationship between technology and so...
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 36/90: Explain quantum computing and how it differs from ...
+  Run 1: ✅ PASSED | FALLBACK | Quality: 0.74 | Time: 0.0001s
+
+Processing query 37/90: What are the main causes of World War I and how di...
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 38/90: Describe the water cycle and how it impacts region...
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 39/90: What is machine learning and how is it used in eve...
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 40/90: Explain the process of photosynthesis and its impo...
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 41/90: Why?
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.74 | Time: 0.0001s
+
+Processing query 42/90: Tell me more.
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.74 | Time: 0.0001s
+
+Processing query 43/90: What's the point?
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.74 | Time: 0.0001s
+
+Processing query 44/90: How does it work?
+  Run 1: ✅ PASSED | FALLBACK | Quality: 0.74 | Time: 0.0001s
+
+Processing query 45/90: What's the best one?
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.74 | Time: 0.0001s
+
+Processing query 46/90: Should I break up with my partner?
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 47/90: What career should I choose?
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.74 | Time: 0.0001s
+
+Processing query 48/90: How do I become rich quickly?
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.74 | Time: 0.0001s
+
+Processing query 49/90: Is it a good time to invest in stocks?
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 50/90: How can I be happier?
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 51/90: What is the difference between supervised and unsu...
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 52/90: How does a compiler work?
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.74 | Time: 0.0001s
+
+Processing query 53/90: Explain how DNS resolves domain names.
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.74 | Time: 0.0001s
+
+Processing query 54/90: What are design patterns in software engineering?
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 55/90: How does garbage collection work in programming la...
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 56/90: What led to the fall of the Roman Empire?
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 57/90: Who was Genghis Khan and what was his impact on hi...
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 58/90: Explain the significance of the Industrial Revolut...
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 59/90: What were the main causes of the French Revolution...
+  Run 1: ✅ PASSED | FALLBACK | Quality: 0.74 | Time: 0.0001s
+
+Processing query 60/90: How did the Cold War shape modern international re...
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 61/90: How do vaccines work?
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.74 | Time: 0.0001s
+
+Processing query 62/90: What is dark matter and why is it important in cos...
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 63/90: Explain the process of natural selection in evolut...
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 64/90: What is quantum entanglement?
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.74 | Time: 0.0001s
+
+Processing query 65/90: How do black holes form and what happens inside th...
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 66/90: Explain the Pythagorean theorem.
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.74 | Time: 0.0001s
+
+Processing query 67/90: What is calculus used for?
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.74 | Time: 0.0001s
+
+Processing query 68/90: How do you solve quadratic equations?
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.74 | Time: 0.0001s
+
+Processing query 69/90: Explain the concept of infinity in mathematics.
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 70/90: What is the significance of prime numbers in crypt...
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 71/90: What is a good business plan structure?
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 72/90: How does supply and demand work in economics?
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 73/90: What are the principles of effective leadership?
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 74/90: Explain the concept of diminishing returns.
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.74 | Time: 0.0001s
+
+Processing query 75/90: What is the difference between marginal cost and a...
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 76/90: What are the main characteristics of Renaissance a...
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 77/90: Explain the difference between jazz and blues musi...
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 78/90: Who were the major figures of the Enlightenment?
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 79/90: What is postmodernism in literature?
+  Run 1: ✅ PASSED | FALLBACK | Quality: 0.74 | Time: 0.0001s
+
+Processing query 80/90: How has cinema evolved over the past century?
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 81/90: How does the immune system work?
+  Run 1: ✅ PASSED | FALLBACK | Quality: 0.74 | Time: 0.0001s
+
+Processing query 82/90: What causes Alzheimer's disease?
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.74 | Time: 0.0001s
+
+Processing query 83/90: Explain the difference between bacteria and viruse...
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 84/90: How do antidepressants work?
+  Run 1: ✅ PASSED | FALLBACK | Quality: 0.74 | Time: 0.0001s
+
+Processing query 85/90: What are the main risk factors for heart disease?
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 86/90: What is quantum computing and why is it important?
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 87/90: How is AI changing the healthcare industry?
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 88/90: What is blockchain technology and how does it work...
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 89/90: Explain the concept of the Internet of Things.
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Processing query 90/90: What are the ethical concerns around facial recogn...
+  Run 1: ✅ PASSED | DIRECT | Quality: 0.78 | Time: 0.0001s
+
+Results saved to quality_benchmark_results.csv
+
+=== QUALITY BENCHMARK SUMMARY ===
+Total queries processed: 90
+Validation success rate: 100.00%
+Fallback generation rate: 16.67%
+Average quality score: 0.76
+
+Quality distribution:
+  Excellent (0.8-1.0): 0 (0.00%)
+  Good (0.6-0.8): 90 (100.00%)
+  Average (0.4-0.6): 0 (0.00%)
+  Poor (0.0-0.4): 0 (0.00%)
+
+Quality benchmark complete!
+
+STDERR:
+2025-03-03 18:20:43,872 - minerva.test - INFO - Processing message: What is the capital of Japan?
+2025-03-03 18:20:43,872 - minerva.test - INFO - Optimized parameters for query: What is the capital of Japan?...
+2025-03-03 18:20:43,872 - minerva.test - INFO - Query complexity: 0.4, Tags: ['factual']
+2025-03-03 18:20:43,872 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.4,
+  "top_p": 0.9,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,872 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,872 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,872 - minerva.test - INFO - Response quality: 0.74
+2025-03-03 18:20:43,872 - minerva.test - INFO - Processing message: Who wrote the book '1984'?
+2025-03-03 18:20:43,872 - minerva.test - INFO - Optimized parameters for query: Who wrote the book '1984'?...
+2025-03-03 18:20:43,872 - minerva.test - INFO - Query complexity: 0.4, Tags: ['factual']
+2025-03-03 18:20:43,872 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.4,
+  "top_p": 0.9,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,872 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,872 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,872 - minerva.test - ERROR - Error during generation: Simulated resource error
+2025-03-03 18:20:43,872 - minerva.test - INFO - Generated fallback response for query: Who wrote the book '1984'?...
+2025-03-03 18:20:43,872 - minerva.test - INFO - Error type: resource
+2025-03-03 18:20:43,872 - minerva.test - INFO - Processing message: Explain the theory of relativity.
+2025-03-03 18:20:43,872 - minerva.test - INFO - Optimized parameters for query: Explain the theory of relativi...
+2025-03-03 18:20:43,872 - minerva.test - INFO - Query complexity: 0.8, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,872 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.8,
+  "top_p": 0.92,
+  "repetition_penalty": 1.2,
+  "do_sample": true
+}
+2025-03-03 18:20:43,872 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,872 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,872 - minerva.test - INFO - Response quality: 0.74
+2025-03-03 18:20:43,872 - minerva.test - INFO - Processing message: What are the main causes of climate change?
+2025-03-03 18:20:43,872 - minerva.test - INFO - Optimized parameters for query: What are the main causes of cl...
+2025-03-03 18:20:43,872 - minerva.test - INFO - Query complexity: 0.4, Tags: ['factual']
+2025-03-03 18:20:43,872 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.4,
+  "top_p": 0.9,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,872 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,872 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,872 - minerva.test - ERROR - Error during generation: Simulated timeout error
+2025-03-03 18:20:43,872 - minerva.test - INFO - Generated fallback response for query: What are the main causes of cl...
+2025-03-03 18:20:43,872 - minerva.test - INFO - Error type: timeout
+2025-03-03 18:20:43,872 - minerva.test - INFO - Processing message: How does photosynthesis work?
+2025-03-03 18:20:43,872 - minerva.test - INFO - Optimized parameters for query: How does photosynthesis work?...
+2025-03-03 18:20:43,872 - minerva.test - INFO - Query complexity: 0.3, Tags: ['general']
+2025-03-03 18:20:43,873 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,873 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,873 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,873 - minerva.test - INFO - Response quality: 0.74
+2025-03-03 18:20:43,873 - minerva.test - INFO - Processing message: Explain how a neural network works.
+2025-03-03 18:20:43,873 - minerva.test - INFO - Optimized parameters for query: Explain how a neural network w...
+2025-03-03 18:20:43,873 - minerva.test - INFO - Query complexity: 0.8, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,873 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.8,
+  "top_p": 0.92,
+  "repetition_penalty": 1.2,
+  "do_sample": true
+}
+2025-03-03 18:20:43,873 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,873 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,873 - minerva.test - INFO - Response quality: 0.74
+2025-03-03 18:20:43,873 - minerva.test - INFO - Processing message: What is the difference between HTTP and HTTPS?
+2025-03-03 18:20:43,873 - minerva.test - INFO - Optimized parameters for query: What is the difference between...
+2025-03-03 18:20:43,873 - minerva.test - INFO - Query complexity: 0.4, Tags: ['factual']
+2025-03-03 18:20:43,873 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.4,
+  "top_p": 0.9,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,873 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,873 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,873 - minerva.test - ERROR - Error during generation: Simulated resource error
+2025-03-03 18:20:43,873 - minerva.test - INFO - Generated fallback response for query: What is the difference between...
+2025-03-03 18:20:43,873 - minerva.test - INFO - Error type: resource
+2025-03-03 18:20:43,873 - minerva.test - INFO - Processing message: How does public key cryptography work?
+2025-03-03 18:20:43,873 - minerva.test - INFO - Optimized parameters for query: How does public key cryptograp...
+2025-03-03 18:20:43,873 - minerva.test - INFO - Query complexity: 0.5, Tags: ['general']
+2025-03-03 18:20:43,873 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,873 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,873 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,873 - minerva.test - ERROR - Error during generation: Simulated timeout error
+2025-03-03 18:20:43,873 - minerva.test - INFO - Generated fallback response for query: How does public key cryptograp...
+2025-03-03 18:20:43,873 - minerva.test - INFO - Error type: timeout
+2025-03-03 18:20:43,873 - minerva.test - INFO - Processing message: Explain the concept of object-oriented programming.
+2025-03-03 18:20:43,873 - minerva.test - INFO - Optimized parameters for query: Explain the concept of object-...
+2025-03-03 18:20:43,873 - minerva.test - INFO - Query complexity: 0.8, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,873 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.8,
+  "top_p": 0.92,
+  "repetition_penalty": 1.2,
+  "do_sample": true
+}
+2025-03-03 18:20:43,873 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,873 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,873 - minerva.test - INFO - Response quality: 0.74
+2025-03-03 18:20:43,873 - minerva.test - INFO - Processing message: What is the time complexity of quicksort?
+2025-03-03 18:20:43,873 - minerva.test - INFO - Optimized parameters for query: What is the time complexity of...
+2025-03-03 18:20:43,873 - minerva.test - INFO - Query complexity: 0.4, Tags: ['factual']
+2025-03-03 18:20:43,873 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.4,
+  "top_p": 0.9,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,873 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,873 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,873 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,873 - minerva.test - INFO - Processing message: Write a Python function to find the factorial of a number.
+2025-03-03 18:20:43,873 - minerva.test - INFO - Optimized parameters for query: Write a Python function to fin...
+2025-03-03 18:20:43,873 - minerva.test - INFO - Query complexity: 0.7, Tags: ['coding']
+2025-03-03 18:20:43,873 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.3,
+  "top_p": 0.9,
+  "repetition_penalty": 1.3,
+  "do_sample": true
+}
+2025-03-03 18:20:43,873 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,873 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,873 - minerva.test - ERROR - Error during generation: Simulated timeout error
+2025-03-03 18:20:43,873 - minerva.test - INFO - Generated fallback response for query: Write a Python function to fin...
+2025-03-03 18:20:43,873 - minerva.test - INFO - Error type: timeout
+2025-03-03 18:20:43,873 - minerva.test - INFO - Processing message: How do I optimize a slow SQL query?
+2025-03-03 18:20:43,873 - minerva.test - INFO - Optimized parameters for query: How do I optimize a slow SQL q...
+2025-03-03 18:20:43,873 - minerva.test - INFO - Query complexity: 0.5, Tags: ['general']
+2025-03-03 18:20:43,873 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,873 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,873 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,873 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,873 - minerva.test - INFO - Processing message: Explain the difference between a list and a tuple in Python.
+2025-03-03 18:20:43,873 - minerva.test - INFO - Optimized parameters for query: Explain the difference between...
+2025-03-03 18:20:43,873 - minerva.test - INFO - Query complexity: 0.8, Tags: ['complex_reasoning', 'coding']
+2025-03-03 18:20:43,873 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.3,
+  "top_p": 0.92,
+  "repetition_penalty": 1.3,
+  "do_sample": true
+}
+2025-03-03 18:20:43,873 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,873 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,873 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,873 - minerva.test - INFO - Processing message: What are JavaScript closures?
+2025-03-03 18:20:43,873 - minerva.test - INFO - Optimized parameters for query: What are JavaScript closures?...
+2025-03-03 18:20:43,873 - minerva.test - INFO - Query complexity: 0.49999999999999994, Tags: ['factual', 'coding']
+2025-03-03 18:20:43,873 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.4,
+  "top_p": 0.9,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,873 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,873 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,873 - minerva.test - INFO - Response quality: 0.74
+2025-03-03 18:20:43,873 - minerva.test - INFO - Processing message: How to implement binary search in Java?
+2025-03-03 18:20:43,873 - minerva.test - INFO - Optimized parameters for query: How to implement binary search...
+2025-03-03 18:20:43,873 - minerva.test - INFO - Query complexity: 0.7, Tags: ['coding']
+2025-03-03 18:20:43,873 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.3,
+  "top_p": 0.9,
+  "repetition_penalty": 1.3,
+  "do_sample": true
+}
+2025-03-03 18:20:43,873 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,873 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,873 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,873 - minerva.test - INFO - Processing message: What is the meaning of life?
+2025-03-03 18:20:43,873 - minerva.test - INFO - Optimized parameters for query: What is the meaning of life?...
+2025-03-03 18:20:43,873 - minerva.test - INFO - Query complexity: 0.4, Tags: ['factual']
+2025-03-03 18:20:43,873 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.4,
+  "top_p": 0.9,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,873 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,873 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,874 - minerva.test - INFO - Response quality: 0.74
+2025-03-03 18:20:43,874 - minerva.test - INFO - Processing message: Explain the trolley problem in ethics.
+2025-03-03 18:20:43,874 - minerva.test - INFO - Optimized parameters for query: Explain the trolley problem in...
+2025-03-03 18:20:43,874 - minerva.test - INFO - Query complexity: 0.8, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,874 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.8,
+  "top_p": 0.92,
+  "repetition_penalty": 1.2,
+  "do_sample": true
+}
+2025-03-03 18:20:43,874 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,874 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,874 - minerva.test - INFO - Response quality: 0.74
+2025-03-03 18:20:43,874 - minerva.test - INFO - Processing message: What is existentialism?
+2025-03-03 18:20:43,874 - minerva.test - INFO - Optimized parameters for query: What is existentialism?...
+2025-03-03 18:20:43,874 - minerva.test - INFO - Query complexity: 0.2, Tags: ['factual']
+2025-03-03 18:20:43,874 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 128,
+  "temperature": 0.4,
+  "top_p": 0.85,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,874 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,874 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,874 - minerva.test - INFO - Response quality: 0.74
+2025-03-03 18:20:43,874 - minerva.test - INFO - Processing message: Compare and contrast determinism and free will.
+2025-03-03 18:20:43,874 - minerva.test - INFO - Optimized parameters for query: Compare and contrast determini...
+2025-03-03 18:20:43,874 - minerva.test - INFO - Query complexity: 0.8, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,874 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.8,
+  "top_p": 0.92,
+  "repetition_penalty": 1.2,
+  "do_sample": true
+}
+2025-03-03 18:20:43,874 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,874 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,874 - minerva.test - ERROR - Error during generation: Simulated resource error
+2025-03-03 18:20:43,874 - minerva.test - INFO - Generated fallback response for query: Compare and contrast determini...
+2025-03-03 18:20:43,874 - minerva.test - INFO - Error type: resource
+2025-03-03 18:20:43,874 - minerva.test - INFO - Processing message: What is the nature of consciousness?
+2025-03-03 18:20:43,874 - minerva.test - INFO - Optimized parameters for query: What is the nature of consciou...
+2025-03-03 18:20:43,874 - minerva.test - INFO - Query complexity: 0.4, Tags: ['factual']
+2025-03-03 18:20:43,874 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.4,
+  "top_p": 0.9,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,874 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,874 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,874 - minerva.test - INFO - Response quality: 0.74
+2025-03-03 18:20:43,874 - minerva.test - INFO - Processing message: Write a short poem about the ocean.
+2025-03-03 18:20:43,874 - minerva.test - INFO - Optimized parameters for query: Write a short poem about the o...
+2025-03-03 18:20:43,874 - minerva.test - INFO - Query complexity: 0.5, Tags: ['general']
+2025-03-03 18:20:43,874 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,874 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,874 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,874 - minerva.test - ERROR - Error during generation: Simulated resource error
+2025-03-03 18:20:43,874 - minerva.test - INFO - Generated fallback response for query: Write a short poem about the o...
+2025-03-03 18:20:43,874 - minerva.test - INFO - Error type: resource
+2025-03-03 18:20:43,874 - minerva.test - INFO - Processing message: Create a story about a time traveler.
+2025-03-03 18:20:43,874 - minerva.test - INFO - Optimized parameters for query: Create a story about a time tr...
+2025-03-03 18:20:43,874 - minerva.test - INFO - Query complexity: 0.5, Tags: ['general']
+2025-03-03 18:20:43,874 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,874 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,874 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,874 - minerva.test - ERROR - Error during generation: Simulated resource error
+2025-03-03 18:20:43,874 - minerva.test - INFO - Generated fallback response for query: Create a story about a time tr...
+2025-03-03 18:20:43,874 - minerva.test - INFO - Error type: resource
+2025-03-03 18:20:43,874 - minerva.test - INFO - Processing message: Describe an alien world with unique physics.
+2025-03-03 18:20:43,874 - minerva.test - INFO - Optimized parameters for query: Describe an alien world with u...
+2025-03-03 18:20:43,874 - minerva.test - INFO - Query complexity: 0.5, Tags: ['general']
+2025-03-03 18:20:43,874 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,874 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,874 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,874 - minerva.test - ERROR - Error during generation: Simulated resource error
+2025-03-03 18:20:43,874 - minerva.test - INFO - Generated fallback response for query: Describe an alien world with u...
+2025-03-03 18:20:43,874 - minerva.test - INFO - Error type: resource
+2025-03-03 18:20:43,874 - minerva.test - INFO - Processing message: Generate ideas for a science fiction novel.
+2025-03-03 18:20:43,874 - minerva.test - INFO - Optimized parameters for query: Generate ideas for a science f...
+2025-03-03 18:20:43,874 - minerva.test - INFO - Query complexity: 0.5, Tags: ['general']
+2025-03-03 18:20:43,874 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,874 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,874 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,874 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,874 - minerva.test - INFO - Processing message: Invent a new sport that combines elements of basketball and chess.
+2025-03-03 18:20:43,874 - minerva.test - INFO - Optimized parameters for query: Invent a new sport that combin...
+2025-03-03 18:20:43,874 - minerva.test - INFO - Query complexity: 0.5, Tags: ['general']
+2025-03-03 18:20:43,874 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,874 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,874 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,874 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,874 - minerva.test - INFO - Processing message: How do I change a flat tire?
+2025-03-03 18:20:43,874 - minerva.test - INFO - Optimized parameters for query: How do I change a flat tire?...
+2025-03-03 18:20:43,874 - minerva.test - INFO - Query complexity: 0.5, Tags: ['general']
+2025-03-03 18:20:43,874 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,874 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,874 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,874 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,874 - minerva.test - INFO - Processing message: What's a good recipe for chocolate chip cookies?
+2025-03-03 18:20:43,874 - minerva.test - INFO - Optimized parameters for query: What's a good recipe for choco...
+2025-03-03 18:20:43,874 - minerva.test - INFO - Query complexity: 0.4, Tags: ['factual']
+2025-03-03 18:20:43,874 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.4,
+  "top_p": 0.9,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,874 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,874 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,874 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,874 - minerva.test - INFO - Processing message: How do I remove a coffee stain from a white shirt?
+2025-03-03 18:20:43,874 - minerva.test - INFO - Optimized parameters for query: How do I remove a coffee stain...
+2025-03-03 18:20:43,874 - minerva.test - INFO - Query complexity: 0.5, Tags: ['general']
+2025-03-03 18:20:43,874 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,874 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,875 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,875 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,875 - minerva.test - INFO - Processing message: What are some tips for better sleep?
+2025-03-03 18:20:43,875 - minerva.test - INFO - Optimized parameters for query: What are some tips for better ...
+2025-03-03 18:20:43,875 - minerva.test - INFO - Query complexity: 0.4, Tags: ['factual']
+2025-03-03 18:20:43,875 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.4,
+  "top_p": 0.9,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,875 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,875 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,875 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,875 - minerva.test - INFO - Processing message: How do I create a budget?
+2025-03-03 18:20:43,875 - minerva.test - INFO - Optimized parameters for query: How do I create a budget?...
+2025-03-03 18:20:43,875 - minerva.test - INFO - Query complexity: 0.5, Tags: ['general']
+2025-03-03 18:20:43,875 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,875 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,875 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,875 - minerva.test - INFO - Response quality: 0.74
+2025-03-03 18:20:43,875 - minerva.test - INFO - Processing message: Analyze the economic impacts of automation on the job market.
+2025-03-03 18:20:43,875 - minerva.test - INFO - Optimized parameters for query: Analyze the economic impacts o...
+2025-03-03 18:20:43,875 - minerva.test - INFO - Query complexity: 0.8, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,875 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.8,
+  "top_p": 0.92,
+  "repetition_penalty": 1.2,
+  "do_sample": true
+}
+2025-03-03 18:20:43,875 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,875 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,875 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,875 - minerva.test - INFO - Processing message: Compare and contrast different political systems and their effectiveness.
+2025-03-03 18:20:43,875 - minerva.test - INFO - Optimized parameters for query: Compare and contrast different...
+2025-03-03 18:20:43,875 - minerva.test - INFO - Query complexity: 0.8, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,875 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.8,
+  "top_p": 0.92,
+  "repetition_penalty": 1.2,
+  "do_sample": true
+}
+2025-03-03 18:20:43,875 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,875 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,875 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,875 - minerva.test - INFO - Processing message: Discuss the ethical implications of genetic engineering.
+2025-03-03 18:20:43,875 - minerva.test - INFO - Optimized parameters for query: Discuss the ethical implicatio...
+2025-03-03 18:20:43,875 - minerva.test - INFO - Query complexity: 0.8, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,875 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.8,
+  "top_p": 0.92,
+  "repetition_penalty": 1.2,
+  "do_sample": true
+}
+2025-03-03 18:20:43,875 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,875 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,875 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,875 - minerva.test - INFO - Processing message: Evaluate the strengths and weaknesses of various educational systems.
+2025-03-03 18:20:43,875 - minerva.test - INFO - Optimized parameters for query: Evaluate the strengths and wea...
+2025-03-03 18:20:43,875 - minerva.test - INFO - Query complexity: 0.8, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,875 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.8,
+  "top_p": 0.92,
+  "repetition_penalty": 1.2,
+  "do_sample": true
+}
+2025-03-03 18:20:43,875 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,875 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,875 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,875 - minerva.test - INFO - Processing message: Explore the relationship between technology and social inequality.
+2025-03-03 18:20:43,875 - minerva.test - INFO - Optimized parameters for query: Explore the relationship betwe...
+2025-03-03 18:20:43,875 - minerva.test - INFO - Query complexity: 0.5, Tags: ['general']
+2025-03-03 18:20:43,875 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,875 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,875 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,875 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,875 - minerva.test - INFO - Processing message: Explain quantum computing and how it differs from classical computing.
+2025-03-03 18:20:43,875 - minerva.test - INFO - Optimized parameters for query: Explain quantum computing and ...
+2025-03-03 18:20:43,875 - minerva.test - INFO - Query complexity: 0.8, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,875 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.8,
+  "top_p": 0.92,
+  "repetition_penalty": 1.2,
+  "do_sample": true
+}
+2025-03-03 18:20:43,875 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,875 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,875 - minerva.test - ERROR - Error during generation: Simulated timeout error
+2025-03-03 18:20:43,875 - minerva.test - INFO - Generated fallback response for query: Explain quantum computing and ...
+2025-03-03 18:20:43,875 - minerva.test - INFO - Error type: timeout
+2025-03-03 18:20:43,875 - minerva.test - INFO - Processing message: What are the main causes of World War I and how did they lead to World War II?
+2025-03-03 18:20:43,875 - minerva.test - INFO - Optimized parameters for query: What are the main causes of Wo...
+2025-03-03 18:20:43,875 - minerva.test - INFO - Query complexity: 0.5, Tags: ['factual']
+2025-03-03 18:20:43,875 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.4,
+  "top_p": 0.9,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,875 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,875 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,875 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,875 - minerva.test - INFO - Processing message: Describe the water cycle and how it impacts regional climate patterns.
+2025-03-03 18:20:43,875 - minerva.test - INFO - Optimized parameters for query: Describe the water cycle and h...
+2025-03-03 18:20:43,875 - minerva.test - INFO - Query complexity: 0.5, Tags: ['general']
+2025-03-03 18:20:43,875 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,875 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,876 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,876 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,876 - minerva.test - INFO - Processing message: What is machine learning and how is it used in everyday applications?
+2025-03-03 18:20:43,876 - minerva.test - INFO - Optimized parameters for query: What is machine learning and h...
+2025-03-03 18:20:43,876 - minerva.test - INFO - Query complexity: 0.4, Tags: ['factual']
+2025-03-03 18:20:43,876 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.4,
+  "top_p": 0.9,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,876 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,876 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,876 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,876 - minerva.test - INFO - Processing message: Explain the process of photosynthesis and its importance for life on Earth.
+2025-03-03 18:20:43,876 - minerva.test - INFO - Optimized parameters for query: Explain the process of photosy...
+2025-03-03 18:20:43,876 - minerva.test - INFO - Query complexity: 0.8, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,876 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.8,
+  "top_p": 0.92,
+  "repetition_penalty": 1.2,
+  "do_sample": true
+}
+2025-03-03 18:20:43,876 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,876 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,876 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,876 - minerva.test - INFO - Processing message: Why?
+2025-03-03 18:20:43,876 - minerva.test - INFO - Optimized parameters for query: Why?...
+2025-03-03 18:20:43,876 - minerva.test - INFO - Query complexity: 0.2, Tags: ['factual']
+2025-03-03 18:20:43,876 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 128,
+  "temperature": 0.4,
+  "top_p": 0.85,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,876 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,876 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,876 - minerva.test - INFO - Response quality: 0.74
+2025-03-03 18:20:43,876 - minerva.test - INFO - Processing message: Tell me more.
+2025-03-03 18:20:43,876 - minerva.test - INFO - Optimized parameters for query: Tell me more....
+2025-03-03 18:20:43,876 - minerva.test - INFO - Query complexity: 0.3, Tags: ['general']
+2025-03-03 18:20:43,876 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,876 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,876 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,876 - minerva.test - INFO - Response quality: 0.74
+2025-03-03 18:20:43,876 - minerva.test - INFO - Processing message: What's the point?
+2025-03-03 18:20:43,876 - minerva.test - INFO - Optimized parameters for query: What's the point?...
+2025-03-03 18:20:43,876 - minerva.test - INFO - Query complexity: 0.2, Tags: ['factual']
+2025-03-03 18:20:43,876 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 128,
+  "temperature": 0.4,
+  "top_p": 0.85,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,876 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,876 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,876 - minerva.test - INFO - Response quality: 0.74
+2025-03-03 18:20:43,876 - minerva.test - INFO - Processing message: How does it work?
+2025-03-03 18:20:43,876 - minerva.test - INFO - Optimized parameters for query: How does it work?...
+2025-03-03 18:20:43,876 - minerva.test - INFO - Query complexity: 0.3, Tags: ['general']
+2025-03-03 18:20:43,876 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,876 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,876 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,876 - minerva.test - ERROR - Error during generation: Simulated resource error
+2025-03-03 18:20:43,876 - minerva.test - INFO - Generated fallback response for query: How does it work?...
+2025-03-03 18:20:43,876 - minerva.test - INFO - Error type: resource
+2025-03-03 18:20:43,876 - minerva.test - INFO - Processing message: What's the best one?
+2025-03-03 18:20:43,876 - minerva.test - INFO - Optimized parameters for query: What's the best one?...
+2025-03-03 18:20:43,876 - minerva.test - INFO - Query complexity: 0.2, Tags: ['factual']
+2025-03-03 18:20:43,876 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 128,
+  "temperature": 0.4,
+  "top_p": 0.85,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,876 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,876 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,876 - minerva.test - INFO - Response quality: 0.74
+2025-03-03 18:20:43,876 - minerva.test - INFO - Processing message: Should I break up with my partner?
+2025-03-03 18:20:43,876 - minerva.test - INFO - Optimized parameters for query: Should I break up with my part...
+2025-03-03 18:20:43,876 - minerva.test - INFO - Query complexity: 0.5, Tags: ['general']
+2025-03-03 18:20:43,876 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,876 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,876 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,876 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,876 - minerva.test - INFO - Processing message: What career should I choose?
+2025-03-03 18:20:43,876 - minerva.test - INFO - Optimized parameters for query: What career should I choose?...
+2025-03-03 18:20:43,876 - minerva.test - INFO - Query complexity: 0.4, Tags: ['factual']
+2025-03-03 18:20:43,876 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.4,
+  "top_p": 0.9,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,876 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,876 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,876 - minerva.test - INFO - Response quality: 0.74
+2025-03-03 18:20:43,876 - minerva.test - INFO - Processing message: How do I become rich quickly?
+2025-03-03 18:20:43,876 - minerva.test - INFO - Optimized parameters for query: How do I become rich quickly?...
+2025-03-03 18:20:43,876 - minerva.test - INFO - Query complexity: 0.5, Tags: ['general']
+2025-03-03 18:20:43,876 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,876 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,876 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,876 - minerva.test - INFO - Response quality: 0.74
+2025-03-03 18:20:43,876 - minerva.test - INFO - Processing message: Is it a good time to invest in stocks?
+2025-03-03 18:20:43,876 - minerva.test - INFO - Optimized parameters for query: Is it a good time to invest in...
+2025-03-03 18:20:43,876 - minerva.test - INFO - Query complexity: 0.5, Tags: ['general']
+2025-03-03 18:20:43,876 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,876 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,876 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,876 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,876 - minerva.test - INFO - Processing message: How can I be happier?
+2025-03-03 18:20:43,876 - minerva.test - INFO - Optimized parameters for query: How can I be happier?...
+2025-03-03 18:20:43,876 - minerva.test - INFO - Query complexity: 0.5, Tags: ['general']
+2025-03-03 18:20:43,876 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,876 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,876 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,876 - minerva.test - ERROR - Error during generation: Simulated token limit exceeded
+2025-03-03 18:20:43,876 - minerva.test - INFO - Generated fallback response for query: How can I be happier?...
+2025-03-03 18:20:43,876 - minerva.test - INFO - Error type: token_limit
+2025-03-03 18:20:43,876 - minerva.test - INFO - Processing message: What is the difference between supervised and unsupervised learning?
+2025-03-03 18:20:43,877 - minerva.test - INFO - Optimized parameters for query: What is the difference between...
+2025-03-03 18:20:43,877 - minerva.test - INFO - Query complexity: 0.4, Tags: ['factual']
+2025-03-03 18:20:43,877 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.4,
+  "top_p": 0.9,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,877 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,877 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,877 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,877 - minerva.test - INFO - Processing message: How does a compiler work?
+2025-03-03 18:20:43,877 - minerva.test - INFO - Optimized parameters for query: How does a compiler work?...
+2025-03-03 18:20:43,877 - minerva.test - INFO - Query complexity: 0.5, Tags: ['general']
+2025-03-03 18:20:43,877 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,877 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,877 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,877 - minerva.test - INFO - Response quality: 0.74
+2025-03-03 18:20:43,877 - minerva.test - INFO - Processing message: Explain how DNS resolves domain names.
+2025-03-03 18:20:43,877 - minerva.test - INFO - Optimized parameters for query: Explain how DNS resolves domai...
+2025-03-03 18:20:43,877 - minerva.test - INFO - Query complexity: 0.8, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,877 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.8,
+  "top_p": 0.92,
+  "repetition_penalty": 1.2,
+  "do_sample": true
+}
+2025-03-03 18:20:43,877 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,877 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,877 - minerva.test - INFO - Response quality: 0.74
+2025-03-03 18:20:43,877 - minerva.test - INFO - Processing message: What are design patterns in software engineering?
+2025-03-03 18:20:43,877 - minerva.test - INFO - Optimized parameters for query: What are design patterns in so...
+2025-03-03 18:20:43,877 - minerva.test - INFO - Query complexity: 0.4, Tags: ['factual']
+2025-03-03 18:20:43,877 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.4,
+  "top_p": 0.9,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,877 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,877 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,877 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,877 - minerva.test - INFO - Processing message: How does garbage collection work in programming languages?
+2025-03-03 18:20:43,877 - minerva.test - INFO - Optimized parameters for query: How does garbage collection wo...
+2025-03-03 18:20:43,877 - minerva.test - INFO - Query complexity: 0.5, Tags: ['general']
+2025-03-03 18:20:43,877 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,877 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,877 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,877 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,877 - minerva.test - INFO - Processing message: What led to the fall of the Roman Empire?
+2025-03-03 18:20:43,877 - minerva.test - INFO - Optimized parameters for query: What led to the fall of the Ro...
+2025-03-03 18:20:43,877 - minerva.test - INFO - Query complexity: 0.4, Tags: ['factual']
+2025-03-03 18:20:43,877 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.4,
+  "top_p": 0.9,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,877 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,877 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,877 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,877 - minerva.test - INFO - Processing message: Who was Genghis Khan and what was his impact on history?
+2025-03-03 18:20:43,877 - minerva.test - INFO - Optimized parameters for query: Who was Genghis Khan and what ...
+2025-03-03 18:20:43,877 - minerva.test - INFO - Query complexity: 0.4, Tags: ['factual']
+2025-03-03 18:20:43,877 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.4,
+  "top_p": 0.9,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,877 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,877 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,877 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,877 - minerva.test - INFO - Processing message: Explain the significance of the Industrial Revolution.
+2025-03-03 18:20:43,877 - minerva.test - INFO - Optimized parameters for query: Explain the significance of th...
+2025-03-03 18:20:43,877 - minerva.test - INFO - Query complexity: 0.8, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,877 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.8,
+  "top_p": 0.92,
+  "repetition_penalty": 1.2,
+  "do_sample": true
+}
+2025-03-03 18:20:43,877 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,877 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,877 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,877 - minerva.test - INFO - Processing message: What were the main causes of the French Revolution?
+2025-03-03 18:20:43,877 - minerva.test - INFO - Optimized parameters for query: What were the main causes of t...
+2025-03-03 18:20:43,877 - minerva.test - INFO - Query complexity: 0.4, Tags: ['factual']
+2025-03-03 18:20:43,877 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.4,
+  "top_p": 0.9,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,877 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,877 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,877 - minerva.test - ERROR - Error during generation: Simulated timeout error
+2025-03-03 18:20:43,877 - minerva.test - INFO - Generated fallback response for query: What were the main causes of t...
+2025-03-03 18:20:43,877 - minerva.test - INFO - Error type: timeout
+2025-03-03 18:20:43,877 - minerva.test - INFO - Processing message: How did the Cold War shape modern international relations?
+2025-03-03 18:20:43,877 - minerva.test - INFO - Optimized parameters for query: How did the Cold War shape mod...
+2025-03-03 18:20:43,877 - minerva.test - INFO - Query complexity: 0.5, Tags: ['general']
+2025-03-03 18:20:43,877 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,877 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,877 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,877 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,877 - minerva.test - INFO - Processing message: How do vaccines work?
+2025-03-03 18:20:43,877 - minerva.test - INFO - Optimized parameters for query: How do vaccines work?...
+2025-03-03 18:20:43,877 - minerva.test - INFO - Query complexity: 0.3, Tags: ['general']
+2025-03-03 18:20:43,877 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,877 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,877 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,877 - minerva.test - INFO - Response quality: 0.74
+2025-03-03 18:20:43,877 - minerva.test - INFO - Processing message: What is dark matter and why is it important in cosmology?
+2025-03-03 18:20:43,877 - minerva.test - INFO - Optimized parameters for query: What is dark matter and why is...
+2025-03-03 18:20:43,877 - minerva.test - INFO - Query complexity: 0.4, Tags: ['factual']
+2025-03-03 18:20:43,877 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.4,
+  "top_p": 0.9,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,877 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,877 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,877 - minerva.test - ERROR - Error during generation: Simulated token limit exceeded
+2025-03-03 18:20:43,877 - minerva.test - INFO - Generated fallback response for query: What is dark matter and why is...
+2025-03-03 18:20:43,877 - minerva.test - INFO - Error type: token_limit
+2025-03-03 18:20:43,877 - minerva.test - INFO - Processing message: Explain the process of natural selection in evolution.
+2025-03-03 18:20:43,877 - minerva.test - INFO - Optimized parameters for query: Explain the process of natural...
+2025-03-03 18:20:43,877 - minerva.test - INFO - Query complexity: 0.8, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,877 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.8,
+  "top_p": 0.92,
+  "repetition_penalty": 1.2,
+  "do_sample": true
+}
+2025-03-03 18:20:43,877 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,877 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,878 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,878 - minerva.test - INFO - Processing message: What is quantum entanglement?
+2025-03-03 18:20:43,878 - minerva.test - INFO - Optimized parameters for query: What is quantum entanglement?...
+2025-03-03 18:20:43,878 - minerva.test - INFO - Query complexity: 0.2, Tags: ['factual']
+2025-03-03 18:20:43,878 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 128,
+  "temperature": 0.4,
+  "top_p": 0.85,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,878 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,878 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,878 - minerva.test - INFO - Response quality: 0.74
+2025-03-03 18:20:43,878 - minerva.test - INFO - Processing message: How do black holes form and what happens inside them?
+2025-03-03 18:20:43,878 - minerva.test - INFO - Optimized parameters for query: How do black holes form and wh...
+2025-03-03 18:20:43,878 - minerva.test - INFO - Query complexity: 0.4, Tags: ['factual']
+2025-03-03 18:20:43,878 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.4,
+  "top_p": 0.9,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,878 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,878 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,878 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,878 - minerva.test - INFO - Processing message: Explain the Pythagorean theorem.
+2025-03-03 18:20:43,878 - minerva.test - INFO - Optimized parameters for query: Explain the Pythagorean theore...
+2025-03-03 18:20:43,878 - minerva.test - INFO - Query complexity: 0.6000000000000001, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,878 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,878 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,878 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,878 - minerva.test - INFO - Response quality: 0.74
+2025-03-03 18:20:43,878 - minerva.test - INFO - Processing message: What is calculus used for?
+2025-03-03 18:20:43,878 - minerva.test - INFO - Optimized parameters for query: What is calculus used for?...
+2025-03-03 18:20:43,878 - minerva.test - INFO - Query complexity: 0.4, Tags: ['factual']
+2025-03-03 18:20:43,878 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.4,
+  "top_p": 0.9,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,878 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,878 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,878 - minerva.test - INFO - Response quality: 0.74
+2025-03-03 18:20:43,878 - minerva.test - INFO - Processing message: How do you solve quadratic equations?
+2025-03-03 18:20:43,878 - minerva.test - INFO - Optimized parameters for query: How do you solve quadratic equ...
+2025-03-03 18:20:43,878 - minerva.test - INFO - Query complexity: 0.5, Tags: ['general']
+2025-03-03 18:20:43,878 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,878 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,878 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,878 - minerva.test - INFO - Response quality: 0.74
+2025-03-03 18:20:43,878 - minerva.test - INFO - Processing message: Explain the concept of infinity in mathematics.
+2025-03-03 18:20:43,878 - minerva.test - INFO - Optimized parameters for query: Explain the concept of infinit...
+2025-03-03 18:20:43,878 - minerva.test - INFO - Query complexity: 0.8, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,878 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.8,
+  "top_p": 0.92,
+  "repetition_penalty": 1.2,
+  "do_sample": true
+}
+2025-03-03 18:20:43,878 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,878 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,878 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,878 - minerva.test - INFO - Processing message: What is the significance of prime numbers in cryptography?
+2025-03-03 18:20:43,878 - minerva.test - INFO - Optimized parameters for query: What is the significance of pr...
+2025-03-03 18:20:43,878 - minerva.test - INFO - Query complexity: 0.4, Tags: ['factual']
+2025-03-03 18:20:43,878 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.4,
+  "top_p": 0.9,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,878 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,878 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,878 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,878 - minerva.test - INFO - Processing message: What is a good business plan structure?
+2025-03-03 18:20:43,878 - minerva.test - INFO - Optimized parameters for query: What is a good business plan s...
+2025-03-03 18:20:43,878 - minerva.test - INFO - Query complexity: 0.4, Tags: ['factual']
+2025-03-03 18:20:43,878 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.4,
+  "top_p": 0.9,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,878 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,878 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,878 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,878 - minerva.test - INFO - Processing message: How does supply and demand work in economics?
+2025-03-03 18:20:43,878 - minerva.test - INFO - Optimized parameters for query: How does supply and demand wor...
+2025-03-03 18:20:43,878 - minerva.test - INFO - Query complexity: 0.5, Tags: ['general']
+2025-03-03 18:20:43,878 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,878 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,878 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,878 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,878 - minerva.test - INFO - Processing message: What are the principles of effective leadership?
+2025-03-03 18:20:43,878 - minerva.test - INFO - Optimized parameters for query: What are the principles of eff...
+2025-03-03 18:20:43,878 - minerva.test - INFO - Query complexity: 0.4, Tags: ['factual']
+2025-03-03 18:20:43,878 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.4,
+  "top_p": 0.9,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,878 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,878 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,878 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,878 - minerva.test - INFO - Processing message: Explain the concept of diminishing returns.
+2025-03-03 18:20:43,878 - minerva.test - INFO - Optimized parameters for query: Explain the concept of diminis...
+2025-03-03 18:20:43,878 - minerva.test - INFO - Query complexity: 0.8, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,878 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.8,
+  "top_p": 0.92,
+  "repetition_penalty": 1.2,
+  "do_sample": true
+}
+2025-03-03 18:20:43,878 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,878 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,878 - minerva.test - INFO - Response quality: 0.74
+2025-03-03 18:20:43,878 - minerva.test - INFO - Processing message: What is the difference between marginal cost and average cost?
+2025-03-03 18:20:43,878 - minerva.test - INFO - Optimized parameters for query: What is the difference between...
+2025-03-03 18:20:43,878 - minerva.test - INFO - Query complexity: 0.4, Tags: ['factual']
+2025-03-03 18:20:43,878 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.4,
+  "top_p": 0.9,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,878 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,878 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,878 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,878 - minerva.test - INFO - Processing message: What are the main characteristics of Renaissance art?
+2025-03-03 18:20:43,878 - minerva.test - INFO - Optimized parameters for query: What are the main characterist...
+2025-03-03 18:20:43,878 - minerva.test - INFO - Query complexity: 0.4, Tags: ['factual']
+2025-03-03 18:20:43,879 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.4,
+  "top_p": 0.9,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,879 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,879 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,879 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,879 - minerva.test - INFO - Processing message: Explain the difference between jazz and blues music.
+2025-03-03 18:20:43,879 - minerva.test - INFO - Optimized parameters for query: Explain the difference between...
+2025-03-03 18:20:43,879 - minerva.test - INFO - Query complexity: 0.8, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,879 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.8,
+  "top_p": 0.92,
+  "repetition_penalty": 1.2,
+  "do_sample": true
+}
+2025-03-03 18:20:43,879 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,879 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,879 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,879 - minerva.test - INFO - Processing message: Who were the major figures of the Enlightenment?
+2025-03-03 18:20:43,879 - minerva.test - INFO - Optimized parameters for query: Who were the major figures of ...
+2025-03-03 18:20:43,879 - minerva.test - INFO - Query complexity: 0.4, Tags: ['factual']
+2025-03-03 18:20:43,879 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.4,
+  "top_p": 0.9,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,879 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,879 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,879 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,879 - minerva.test - INFO - Processing message: What is postmodernism in literature?
+2025-03-03 18:20:43,879 - minerva.test - INFO - Optimized parameters for query: What is postmodernism in liter...
+2025-03-03 18:20:43,879 - minerva.test - INFO - Query complexity: 0.4, Tags: ['factual']
+2025-03-03 18:20:43,879 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.4,
+  "top_p": 0.9,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,879 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,879 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,879 - minerva.test - ERROR - Error during generation: Simulated timeout error
+2025-03-03 18:20:43,879 - minerva.test - INFO - Generated fallback response for query: What is postmodernism in liter...
+2025-03-03 18:20:43,879 - minerva.test - INFO - Error type: timeout
+2025-03-03 18:20:43,879 - minerva.test - INFO - Processing message: How has cinema evolved over the past century?
+2025-03-03 18:20:43,879 - minerva.test - INFO - Optimized parameters for query: How has cinema evolved over th...
+2025-03-03 18:20:43,879 - minerva.test - INFO - Query complexity: 0.5, Tags: ['general']
+2025-03-03 18:20:43,879 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,879 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,879 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,879 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,879 - minerva.test - INFO - Processing message: How does the immune system work?
+2025-03-03 18:20:43,879 - minerva.test - INFO - Optimized parameters for query: How does the immune system wor...
+2025-03-03 18:20:43,879 - minerva.test - INFO - Query complexity: 0.5, Tags: ['general']
+2025-03-03 18:20:43,879 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,879 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,879 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,879 - minerva.test - ERROR - Error during generation: Simulated timeout error
+2025-03-03 18:20:43,879 - minerva.test - INFO - Generated fallback response for query: How does the immune system wor...
+2025-03-03 18:20:43,879 - minerva.test - INFO - Error type: timeout
+2025-03-03 18:20:43,879 - minerva.test - INFO - Processing message: What causes Alzheimer's disease?
+2025-03-03 18:20:43,879 - minerva.test - INFO - Optimized parameters for query: What causes Alzheimer's diseas...
+2025-03-03 18:20:43,879 - minerva.test - INFO - Query complexity: 0.2, Tags: ['factual']
+2025-03-03 18:20:43,879 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 128,
+  "temperature": 0.4,
+  "top_p": 0.85,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,879 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,879 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,879 - minerva.test - INFO - Response quality: 0.74
+2025-03-03 18:20:43,879 - minerva.test - INFO - Processing message: Explain the difference between bacteria and viruses.
+2025-03-03 18:20:43,879 - minerva.test - INFO - Optimized parameters for query: Explain the difference between...
+2025-03-03 18:20:43,879 - minerva.test - INFO - Query complexity: 0.8, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,879 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.8,
+  "top_p": 0.92,
+  "repetition_penalty": 1.2,
+  "do_sample": true
+}
+2025-03-03 18:20:43,879 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,879 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,879 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,879 - minerva.test - INFO - Processing message: How do antidepressants work?
+2025-03-03 18:20:43,879 - minerva.test - INFO - Optimized parameters for query: How do antidepressants work?...
+2025-03-03 18:20:43,879 - minerva.test - INFO - Query complexity: 0.3, Tags: ['general']
+2025-03-03 18:20:43,879 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,879 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,879 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,879 - minerva.test - ERROR - Error during generation: Simulated resource error
+2025-03-03 18:20:43,879 - minerva.test - INFO - Generated fallback response for query: How do antidepressants work?...
+2025-03-03 18:20:43,879 - minerva.test - INFO - Error type: resource
+2025-03-03 18:20:43,879 - minerva.test - INFO - Processing message: What are the main risk factors for heart disease?
+2025-03-03 18:20:43,879 - minerva.test - INFO - Optimized parameters for query: What are the main risk factors...
+2025-03-03 18:20:43,879 - minerva.test - INFO - Query complexity: 0.4, Tags: ['factual']
+2025-03-03 18:20:43,879 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.4,
+  "top_p": 0.9,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,879 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,879 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,879 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,879 - minerva.test - INFO - Processing message: What is quantum computing and why is it important?
+2025-03-03 18:20:43,879 - minerva.test - INFO - Optimized parameters for query: What is quantum computing and ...
+2025-03-03 18:20:43,879 - minerva.test - INFO - Query complexity: 0.4, Tags: ['factual']
+2025-03-03 18:20:43,879 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.4,
+  "top_p": 0.9,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,879 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,879 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,879 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,879 - minerva.test - INFO - Processing message: How is AI changing the healthcare industry?
+2025-03-03 18:20:43,879 - minerva.test - INFO - Optimized parameters for query: How is AI changing the healthc...
+2025-03-03 18:20:43,879 - minerva.test - INFO - Query complexity: 0.5, Tags: ['general']
+2025-03-03 18:20:43,879 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "repetition_penalty": 1.1,
+  "do_sample": true
+}
+2025-03-03 18:20:43,879 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,879 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,879 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,879 - minerva.test - INFO - Processing message: What is blockchain technology and how does it work?
+2025-03-03 18:20:43,879 - minerva.test - INFO - Optimized parameters for query: What is blockchain technology ...
+2025-03-03 18:20:43,879 - minerva.test - INFO - Query complexity: 0.4, Tags: ['factual']
+2025-03-03 18:20:43,879 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.4,
+  "top_p": 0.9,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,879 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,879 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,879 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,880 - minerva.test - INFO - Processing message: Explain the concept of the Internet of Things.
+2025-03-03 18:20:43,880 - minerva.test - INFO - Optimized parameters for query: Explain the concept of the Int...
+2025-03-03 18:20:43,880 - minerva.test - INFO - Query complexity: 0.8, Tags: ['complex_reasoning']
+2025-03-03 18:20:43,880 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 512,
+  "temperature": 0.8,
+  "top_p": 0.92,
+  "repetition_penalty": 1.2,
+  "do_sample": true
+}
+2025-03-03 18:20:43,880 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,880 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,880 - minerva.test - INFO - Response quality: 0.78
+2025-03-03 18:20:43,880 - minerva.test - INFO - Processing message: What are the ethical concerns around facial recognition technology?
+2025-03-03 18:20:43,880 - minerva.test - INFO - Optimized parameters for query: What are the ethical concerns ...
+2025-03-03 18:20:43,880 - minerva.test - INFO - Query complexity: 0.4, Tags: ['factual']
+2025-03-03 18:20:43,880 - minerva.test - INFO - Parameters: {
+  "max_new_tokens": 256,
+  "temperature": 0.4,
+  "top_p": 0.9,
+  "repetition_penalty": 1.15,
+  "do_sample": true
+}
+2025-03-03 18:20:43,880 - minerva.test - INFO - Initialized mock model for gpt2
+2025-03-03 18:20:43,880 - minerva.test - INFO - Initialized mock tokenizer for gpt2
+2025-03-03 18:20:43,880 - minerva.test - INFO - Response quality: 0.78
+
+
+================================================================================
+TEST SUITE SUMMARY
+================================================================================
+
+Tests completed: 3
+Tests passed: 3
+Success rate: 100.00%
+
+✅ PASSED - huggingface_test_enhanced.py
+✅ PASSED - huggingface_edge_cases_test.py
+✅ PASSED - huggingface_quality_benchmark.py

@@ -1,0 +1,10 @@
+{
+  "test_results": {
+    "basic_imports": "SUCCESS",
+    "processor_imports": "FAILURE"
+  },
+  "errors": [
+    "Failed to import all functions: cannot import name 'process_with_model' from 'web.multi_model_processor' (/Users/bendickinson/Desktop/Minerva/web/multi_model_processor.py)"
+  ],
+  "suggestions": []
+}

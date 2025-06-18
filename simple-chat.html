@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Minerva Chat</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #1a1a2e;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+            background: rgba(20, 25, 45, 0.8);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(74, 107, 223, 0.4);
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+        
+        .chat-header {
+            padding: 15px;
+            background: rgba(30, 40, 70, 0.6);
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+            border-bottom: 1px solid rgba(74, 107, 223, 0.4);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            max-height: calc(100vh - 200px);
+        }
+        
+        .message {
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 18px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+        
+        .user-message {
+            background-color: rgba(74, 107, 223, 0.5);
+            align-self: flex-end;
+            margin-left: auto;
+        }
+        
+        .bot-message {
+            background-color: rgba(50, 55, 85, 0.5);
+            align-self: flex-start;
+        }
+        
+        .system-message {
+            background-color: rgba(100, 100, 120, 0.4);
+            text-align: center;
+            margin: 10px auto;
+            font-size: 0.9em;
+            padding: 5px 15px;
+        }
+        
+        .chat-input-container {
+            display: flex;
+            padding: 15px;
+            background: rgba(30, 40, 70, 0.6);
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+            border-top: 1px solid rgba(74, 107, 223, 0.4);
+        }
+        
+        #chat-input {
+            flex: 1;
+            padding: 12px;
+            border-radius: 25px;
+            border: none;
+            background-color: rgba(50, 55, 85, 0.5);
+            color: white;
+            outline: none;
+        }
+        
+        #send-button {
+            margin-left: 10px;
+            padding: 10px 20px;
+            border-radius: 25px;
+            border: none;
+            background: linear-gradient(135deg, rgba(74, 107, 223, 0.8), rgba(143, 148, 251, 0.8));
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        #send-button:hover {
+            background: linear-gradient(135deg, rgba(74, 107, 223, 1), rgba(143, 148, 251, 1));
+        }
+        
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            background-color: rgba(50, 55, 85, 0.5);
+            border-radius: 18px;
+            align-self: flex-start;
+            margin-bottom: 15px;
+            width: fit-content;
+        }
+        
+        .typing-indicator span {
+            height: 8px;
+            width: 8px;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            display: inline-block;
+            margin: 0 2px;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+        
+        .typing-indicator span:nth-child(1) { animation-delay: 0s; }
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes typing {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0); }
+        }
+        
+        .info { color: #66b3ff; }
+        .error { color: #ff6666; }
+        .success { color: #66ffaa; }
+        .warning { color: #ffcc66; }
+        
+        pre {
+            background-color: rgba(30, 30, 50, 0.6);
+            padding: 10px;
+            border-radius: 8px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        
+        code {
+            font-family: Monaco, Consolas, monospace;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <h2>Minerva Think Tank</h2>
+            <div id="connection-status">Connecting...</div>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+            <div class="message system-message">
+                Welcome to Minerva Think Tank. How can I help you today?
+            </div>
+        </div>
+        <div class="chat-input-container">
+            <input type="text" id="chat-input" placeholder="Type your message here...">
+            <button id="send-button">Send</button>
+        </div>
+    </div>
+    
+    <script>
+        // Simple chat that talks to the Think Tank API
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const chatInput = document.getElementById('chat-input');
+            const sendButton = document.getElementById('send-button');
+            const chatMessages = document.getElementById('chat-messages');
+            const connectionStatus = document.getElementById('connection-status');
+            
+            // Get or create conversation ID
+            function generateUUID() {
+                return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                    const r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                    return v.toString(16);
+                });
+            }
+            
+            if (!localStorage.getItem('minerva_conversation_id')) {
+                localStorage.setItem('minerva_conversation_id', generateUUID());
+                console.log('Created new conversation ID:', localStorage.getItem('minerva_conversation_id'));
+            }
+            
+            // Add user message to chat
+            function addUserMessage(message) {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('message', 'user-message');
+                messageElement.textContent = message;
+                chatMessages.appendChild(messageElement);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Add bot message to chat
+            function addBotMessage(message) {
+                // Handle code blocks in markdown format
+                message = message.replace(/```(\w+)?\n([\s\S]*?)```/g, function(match, language, code) {
+                    return `<pre><code>${code}</code></pre>`;
+                });
+                
+                // Handle inline code
+                message = message.replace(/`([^`]+)`/g, '<code>$1</code>');
+                
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('message', 'bot-message');
+                messageElement.innerHTML = message;
+                chatMessages.appendChild(messageElement);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Add system message to chat
+            function addSystemMessage(message, status = 'info') {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('message', 'system-message', status);
+                messageElement.textContent = message;
+                chatMessages.appendChild(messageElement);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Show typing indicator
+            function showTypingIndicator() {
+                const typingIndicator = document.createElement('div');
+                typingIndicator.className = 'typing-indicator';
+                typingIndicator.id = 'typing-indicator';
+                
+                for (let i = 0; i < 3; i++) {
+                    const dot = document.createElement('span');
+                    typingIndicator.appendChild(dot);
+                }
+                
+                chatMessages.appendChild(typingIndicator);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Hide typing indicator
+            function hideTypingIndicator() {
+                const indicator = document.getElementById('typing-indicator');
+                if (indicator) {
+                    indicator.remove();
+                }
+            }
+            
+            // Send message to Think Tank API
+            function sendMessage() {
+                const message = chatInput.value.trim();
+                if (!message) return;
+                
+                // Clear input
+                chatInput.value = '';
+                
+                // Add user message to chat
+                addUserMessage(message);
+                
+                // Show typing indicator
+                showTypingIndicator();
+                
+                // Update connection status
+                connectionStatus.textContent = 'Sending...';
+                connectionStatus.style.color = '#ffcc66';
+                
+                // Prepare payload for API
+                const payload = {
+                    message: message,
+                    conversation_id: localStorage.getItem('minerva_conversation_id'),
+                    store_in_memory: true  // Enable conversation memory
+                };
+                
+                // Send to API
+                fetch('http://localhost:7070/api/think-tank', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    mode: 'cors',
+                    body: JSON.stringify(payload)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Hide typing indicator
+                    hideTypingIndicator();
+                    
+                    // Update connection status
+                    connectionStatus.textContent = 'Connected';
+                    connectionStatus.style.color = '#66ffaa';
+                    
+                    // The API returns response content in data.response
+                    const responseContent = data.response || 'No response from Think Tank';
+                    
+                    // Store/update conversation_id in localStorage if returned
+                    if (data.conversation_id) {
+                        localStorage.setItem('minerva_conversation_id', data.conversation_id);
+                        console.log(`Conversation ID saved: ${data.conversation_id}`);
+                    }
+                    
+                    // Add bot response to chat
+                    addBotMessage(responseContent);
+                    
+                    console.log('Successfully received and processed Think Tank response', data);
+                })
+                .catch(error => {
+                    // Hide typing indicator
+                    hideTypingIndicator();
+                    
+                    // Update connection status
+                    connectionStatus.textContent = 'Connection Error';
+                    connectionStatus.style.color = '#ff6666';
+                    
+                    // Show error message in chat
+                    addSystemMessage(`Error connecting to Think Tank: ${error.message}`, 'error');
+                    
+                    console.error('Error:', error);
+                });
+            }
+            
+            // Event listeners
+            sendButton.addEventListener('click', sendMessage);
+            
+            chatInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+            
+            // Initial API connection test
+            fetch('http://localhost:7070/api/think-tank', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                mode: 'cors',
+                body: JSON.stringify({
+                    message: 'system_check',
+                    conversation_id: localStorage.getItem('minerva_conversation_id')
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    connectionStatus.textContent = 'Connected';
+                    connectionStatus.style.color = '#66ffaa';
+                    addSystemMessage('Successfully connected to the Think Tank', 'success');
+                } else {
+                    connectionStatus.textContent = 'Error';
+                    connectionStatus.style.color = '#ff6666';
+                    addSystemMessage(`Error connecting to Think Tank: ${response.status}`, 'error');
+                }
+            })
+            .catch(error => {
+                connectionStatus.textContent = 'Disconnected';
+                connectionStatus.style.color = '#ff6666';
+                addSystemMessage(`Error connecting to Think Tank: ${error.message}`, 'error');
+                console.error('Connection test failed:', error);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>🧪 Minerva Route Tester</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      padding: 2rem;
+      background: #0b0f15;
+      color: #f1f1f1;
+      line-height: 1.5;
+    }
+    h1 { font-size: 1.75rem; margin-bottom: 1rem; }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 1rem;
+    }
+    th, td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #333;
+      text-align: left;
+    }
+    th {
+      background: #1a202c;
+    }
+    .pass { color: #4ade80; }
+    .fail { color: #f87171; }
+    .loading { color: #facc15; }
+    .test-btn {
+      padding: 0.5rem 1rem;
+      background: #1f2937;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-right: 0.5rem;
+      transition: background 0.2s;
+    }
+    .test-btn:hover {
+      background: #374151;
+    }
+    .export-btn {
+      padding: 0.5rem 1rem;
+      background: #065f46;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .export-btn:hover {
+      background: #047857;
+    }
+    .test-controls {
+      display: flex;
+      margin-bottom: 1rem;
+    }
+    .advanced-controls {
+      margin: 1rem 0;
+      padding: 1rem;
+      background: #1a202c;
+      border-radius: 6px;
+    }
+    .response-data {
+      max-width: 600px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .response-data:hover {
+      white-space: normal;
+      word-break: break-all;
+    }
+    .socket-test {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background: #1a202c;
+      border-radius: 6px;
+    }
+    .status-banner {
+      padding: 0.5rem 1rem;
+      background: #374151;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+    }
+    .memory-test {
+      margin-top: 1.5rem;
+    }
+    input, select {
+      padding: 0.5rem;
+      border-radius: 4px;
+      border: 1px solid #4b5563;
+      background: #1f2937;
+      color: white;
+      margin-right: 0.5rem;
+    }
+    .test-group {
+      margin-bottom: 1rem;
+    }
+    footer {
+      margin-top: 2rem;
+      color: #9ca3af;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧪 Minerva Route & API Tester</h1>
+  
+  <div class="status-banner" id="status-banner">
+    Checking Minerva system status...
+  </div>
+  
+  <div class="test-controls">
+    <button class="test-btn" onclick="runTests()">Run All Tests</button>
+    <button class="test-btn" onclick="runUIRouteTests()">Test UI Routes</button>
+    <button class="test-btn" onclick="runAPIRouteTests()">Test API Routes</button>
+    <button class="export-btn" onclick="exportResults()">Export Results</button>
+  </div>
+
+  <h2>Route Tests</h2>
+  <table id="route-table">
+    <thead>
+      <tr>
+        <th>Route</th>
+        <th>Status</th>
+        <th>Time (ms)</th>
+        <th>Response</th>
+      </tr>
+    </thead>
+    <tbody id="results-body">
+      <!-- results appear here -->
+    </tbody>
+  </table>
+
+  <div class="advanced-controls">
+    <h3>Advanced API Testing</h3>
+    <div class="test-group">
+      <input type="text" id="custom-path" placeholder="/api/custom/path" />
+      <select id="request-method">
+        <option value="GET">GET</option>
+        <option value="POST">POST</option>
+        <option value="PUT">PUT</option>
+        <option value="DELETE">DELETE</option>
+        <option value="OPTIONS">OPTIONS</option>
+      </select>
+      <button class="test-btn" onclick="testCustomRoute()">Test Custom Route</button>
+    </div>
+    
+    <div class="test-group">
+      <h4>Payload (for POST/PUT)</h4>
+      <textarea id="request-payload" rows="4" cols="50" placeholder='{"key": "value"}'></textarea>
+    </div>
+  </div>
+
+  <div class="socket-test">
+    <h3>WebSocket Connection Test</h3>
+    <div id="ws-status">Not connected</div>
+    <button class="test-btn" onclick="testWebSocket()">Test WebSocket</button>
+    <div id="ws-log"></div>
+  </div>
+
+  <div class="memory-test">
+    <h3>Memory System Test</h3>
+    <button class="test-btn" onclick="testMemorySystem()">Test Memory System</button>
+    <div id="memory-status"></div>
+  </div>
+
+  <footer>
+    <p>Minerva Route Tester v1.0 | Following Minerva Master Ruleset</p>
+  </footer>
+
+  <script>
+    // Define routes to test
+    const uiRoutes = [
+      { method: 'GET', path: '/', name: 'Home (Orb UI)' },
+      { method: 'GET', path: '/chat', name: 'Chat Interface' },
+      { method: 'GET', path: '/dashboard', name: 'Dashboard' },
+      { method: 'GET', path: '/project/Test', name: 'Project View' }
+    ];
+    
+    const apiRoutes = [
+      { method: 'GET', path: '/api/think-tank', name: 'Think Tank API' },
+      { method: 'POST', path: '/api/think-tank', name: 'Think Tank Submit', payload: { message: "Test message" } },
+      { method: 'GET', path: '/api/project', name: 'Projects List' },
+      { method: 'OPTIONS', path: '/api/think-tank', name: 'CORS Options' },
+      { method: 'GET', path: '/static/js/orb/orb-ui.js', name: 'Orb UI Script' }
+    ];
+
+    // Combined routes
+    const allRoutes = [...uiRoutes, ...apiRoutes];
+    
+    // Check system status on load
+    window.addEventListener('DOMContentLoaded', checkSystemStatus);
+    
+    // System status check
+    async function checkSystemStatus() {
+      const banner = document.getElementById('status-banner');
+      try {
+        const response = await fetch('/api/think-tank');
+        const data = await response.json();
+        
+        if (response.ok) {
+          banner.innerHTML = `✅ Minerva system is online | Mode: <strong>${data.mode || 'unknown'}</strong>`;
+          banner.style.background = '#065f46';
+        } else {
+          banner.innerHTML = `⚠️ Minerva API returned an error: ${data.message || 'Unknown error'}`;
+          banner.style.background = '#991b1b';
+        }
+      } catch (err) {
+        banner.innerHTML = `❌ Cannot connect to Minerva API: ${err.message}`;
+        banner.style.background = '#7f1d1d';
+      }
+    }
+
+    // Run all tests
+    async function runTests() {
+      await runTestsForRoutes(allRoutes);
+    }
+    
+    // Run UI route tests
+    async function runUIRouteTests() {
+      await runTestsForRoutes(uiRoutes);
+    }
+    
+    // Run API route tests
+    async function runAPIRouteTests() {
+      await runTestsForRoutes(apiRoutes);
+    }
+    
+    // Test a custom route specified by the user
+    async function testCustomRoute() {
+      const path = document.getElementById('custom-path').value;
+      const method = document.getElementById('request-method').value;
+      const payloadStr = document.getElementById('request-payload').value;
+      
+      let payload = null;
+      if (payloadStr && (method === 'POST' || method === 'PUT')) {
+        try {
+          payload = JSON.parse(payloadStr);
+        } catch (e) {
+          alert('Invalid JSON payload');
+          return;
+        }
+      }
+      
+      const customRoute = { 
+        method, 
+        path, 
+        name: `Custom: ${method} ${path}`,
+        payload
+      };
+      
+      await runTestsForRoutes([customRoute]);
+    }
+
+    // Core function to run tests for a set of routes
+    async function runTestsForRoutes(routes) {
+      const table = document.getElementById('results-body');
+      table.innerHTML = '';
+
+      for (let route of routes) {
+        const row = document.createElement('tr');
+        const statusCell = document.createElement('td');
+        const timeCell = document.createElement('td');
+        const responseCell = document.createElement('td');
+        const pathCell = document.createElement('td');
+
+        pathCell.textContent = route.name || `${route.method} ${route.path}`;
+        statusCell.textContent = '⏳';
+        statusCell.className = 'loading';
+        timeCell.textContent = '...';
+        responseCell.textContent = '';
+        responseCell.className = 'response-data';
+
+        row.appendChild(pathCell);
+        row.appendChild(statusCell);
+        row.appendChild(timeCell);
+        row.appendChild(responseCell);
+        table.appendChild(row);
+
+        const start = performance.now();
+        try {
+          const response = await fetch(route.path, {
+            method: route.method,
+            headers: route.method === 'POST' || route.method === 'PUT' 
+              ? { 'Content-Type': 'application/json' } 
+              : {},
+            body: (route.method === 'POST' || route.method === 'PUT') && route.payload
+              ? JSON.stringify(route.payload) 
+              : null,
+          });
+          const end = performance.now();
+
+          statusCell.textContent = response.ok ? '✅' : '❌';
+          statusCell.className = response.ok ? 'pass' : 'fail';
+          timeCell.textContent = (end - start).toFixed(1);
+
+          // Process response data
+          const contentType = response.headers.get('content-type');
+          if (contentType && contentType.includes('application/json')) {
+            const data = await response.json();
+            responseCell.textContent = JSON.stringify(data, null, 2).slice(0, 200) + (JSON.stringify(data).length > 200 ? '...' : '');
+          } else {
+            const text = await response.text();
+            responseCell.textContent = text.slice(0, 150) + (text.length > 150 ? '...' : '');
+          }
+
+        } catch (err) {
+          const end = performance.now();
+          statusCell.textContent = '❌';
+          statusCell.className = 'fail';
+          timeCell.textContent = (end - start).toFixed(1);
+          responseCell.textContent = err.message || 'No response';
+        }
+      }
+    }
+    
+    // Test WebSocket connectivity
+    function testWebSocket() {
+      const wsStatus = document.getElementById('ws-status');
+      const wsLog = document.getElementById('ws-log');
+      
+      wsStatus.textContent = 'Connecting...';
+      wsStatus.className = 'loading';
+      
+      try {
+        // Check if socket.io is available
+        if (typeof io === 'undefined') {
+          wsStatus.textContent = '❌ Socket.IO library not loaded';
+          wsStatus.className = 'fail';
+          wsLog.innerHTML += '<div class="fail">Socket.IO not available. Include the socket.io client library.</div>';
+          return;
+        }
+        
+        // Connect to WebSocket
+        const socket = io('http://localhost:5505', {
+          transports: ['websocket'],
+          reconnection: false, // Don't auto-reconnect for this test
+          timeout: 5000 // Timeout after 5 seconds
+        });
+        
+        // Connection events
+        socket.on('connect', () => {
+          wsStatus.textContent = '✅ Connected successfully';
+          wsStatus.className = 'pass';
+          wsLog.innerHTML += `<div class="pass">Connected to ${socket.io.uri}</div>`;
+          
+          // Send a test ping
+          socket.emit('ping', { test: true });
+        });
+        
+        socket.on('connect_error', (error) => {
+          wsStatus.textContent = '❌ Connection error';
+          wsStatus.className = 'fail';
+          wsLog.innerHTML += `<div class="fail">Connection error: ${error.message}</div>`;
+        });
+        
+        socket.on('connect_timeout', () => {
+          wsStatus.textContent = '❌ Connection timeout';
+          wsStatus.className = 'fail';
+          wsLog.innerHTML += `<div class="fail">Connection timed out</div>`;
+        });
+        
+        socket.on('disconnect', (reason) => {
+          wsLog.innerHTML += `<div>Disconnected: ${reason}</div>`;
+        });
+        
+        // Handle any message
+        socket.on('pong', (data) => {
+          wsLog.innerHTML += `<div class="pass">Received pong: ${JSON.stringify(data)}</div>`;
+        });
+        
+        socket.onAny((event, ...args) => {
+          wsLog.innerHTML += `<div>Received ${event}: ${JSON.stringify(args)}</div>`;
+        });
+        
+        // Close after a while
+        setTimeout(() => {
+          if (socket.connected) {
+            wsLog.innerHTML += `<div>Closing test connection after 3 seconds</div>`;
+            socket.close();
+          }
+        }, 3000);
+      } catch (error) {
+        wsStatus.textContent = `❌ Error: ${error.message}`;
+        wsStatus.className = 'fail';
+        wsLog.innerHTML += `<div class="fail">Error: ${error.message}</div>`;
+      }
+    }
+    
+    // Test memory system
+    function testMemorySystem() {
+      const memoryStatus = document.getElementById('memory-status');
+      memoryStatus.innerHTML = '';
+      
+      // Check if enhancedConversationStorage exists
+      if (typeof window.enhancedConversationStorage === 'undefined') {
+        appendMemoryStatus('❌ enhancedConversationStorage not found in window object', 'fail');
+        appendMemoryStatus('This could be because the Orb UI has not been initialized on this page', 'fail');
+        return;
+      }
+      
+      // Basic structure check
+      appendMemoryStatus('✅ enhancedConversationStorage found', 'pass');
+      
+      // Check for conversations object
+      if (window.enhancedConversationStorage.conversations) {
+        const conversationCount = Object.keys(window.enhancedConversationStorage.conversations).length;
+        appendMemoryStatus(`✅ Found ${conversationCount} conversations in memory`, 'pass');
+        
+        // Show some stats
+        if (conversationCount > 0) {
+          const firstConvId = Object.keys(window.enhancedConversationStorage.conversations)[0];
+          const firstConv = window.enhancedConversationStorage.conversations[firstConvId];
+          
+          // Message count if available
+          if (firstConv.messages && Array.isArray(firstConv.messages)) {
+            appendMemoryStatus(`✅ Sample conversation has ${firstConv.messages.length} messages`, 'pass');
+          }
+          
+          // Created timestamp if available
+          if (firstConv.created) {
+            const date = new Date(firstConv.created);
+            appendMemoryStatus(`✅ Sample conversation created: ${date.toLocaleString()}`, 'pass');
+          }
+        }
+      } else {
+        appendMemoryStatus('⚠️ No conversations object found in memory', 'loading');
+        appendMemoryStatus('This may be normal if no conversations have been started', 'loading');
+      }
+      
+      // Check localStorage backup
+      try {
+        const savedStorage = localStorage.getItem('minerva_enhanced_conversations');
+        if (savedStorage) {
+          appendMemoryStatus('✅ Found conversation backup in localStorage', 'pass');
+          
+          // Try to parse it
+          try {
+            const parsed = JSON.parse(savedStorage);
+            appendMemoryStatus('✅ localStorage backup is valid JSON', 'pass');
+          } catch (e) {
+            appendMemoryStatus('❌ localStorage backup is not valid JSON', 'fail');
+          }
+        } else {
+          appendMemoryStatus('⚠️ No conversation backup found in localStorage', 'loading');
+        }
+      } catch (error) {
+        appendMemoryStatus(`❌ Error accessing localStorage: ${error.message}`, 'fail');
+      }
+      
+      // Add test conversation to memory
+      const testConvId = 'test-' + Date.now();
+      try {
+        window.enhancedConversationStorage.conversations = window.enhancedConversationStorage.conversations || {};
+        window.enhancedConversationStorage.conversations[testConvId] = {
+          id: testConvId,
+          title: 'Route Tester Test Conversation',
+          created: new Date().toISOString(),
+          messages: [
+            {
+              role: 'user',
+              content: 'Test message from Route Tester',
+              timestamp: new Date().toISOString()
+            }
+          ]
+        };
+        
+        appendMemoryStatus('✅ Successfully added test conversation to memory', 'pass');
+        
+        // Try saving to localStorage
+        try {
+          localStorage.setItem(
+            'minerva_enhanced_conversations',
+            JSON.stringify(window.enhancedConversationStorage)
+          );
+          appendMemoryStatus('✅ Successfully saved to localStorage', 'pass');
+        } catch (e) {
+          appendMemoryStatus(`❌ Failed to save to localStorage: ${e.message}`, 'fail');
+        }
+      } catch (error) {
+        appendMemoryStatus(`❌ Error adding test conversation: ${error.message}`, 'fail');
+      }
+    }
+    
+    // Helper for memory status updates
+    function appendMemoryStatus(message, className) {
+      const memoryStatus = document.getElementById('memory-status');
+      const div = document.createElement('div');
+      div.className = className || '';
+      div.textContent = message;
+      memoryStatus.appendChild(div);
+    }
+    
+    // Export test results to JSON file
+    function exportResults() {
+      const table = document.getElementById('route-table');
+      const rows = table.querySelectorAll('tbody tr');
+      
+      const results = [];
+      rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        if (cells.length >= 4) {
+          results.push({
+            route: cells[0].textContent,
+            status: cells[1].textContent,
+            time_ms: cells[2].textContent,
+            response: cells[3].textContent
+          });
+        }
+      });
+      
+      // Create test report
+      const report = {
+        timestamp: new Date().toISOString(),
+        test_run: 'Minerva Route Test',
+        system_status: document.getElementById('status-banner').textContent,
+        results: results,
+        memory_status: document.getElementById('memory-status').textContent
+      };
+      
+      // Create and download file
+      const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `minerva-route-test-${new Date().toISOString().slice(0,10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+  </script>
+</body>
+</html>

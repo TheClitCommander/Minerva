@@ -1,0 +1,179 @@
+{
+  "model_analysis": {
+    "total_models": 3,
+    "categories": {
+      "commercial": [],
+      "open_source": [],
+      "local": [],
+      "unknown": [
+        "test_model_1",
+        "test_model_2",
+        "test_model_3"
+      ]
+    },
+    "all_models": {
+      "test_model_1": {
+        "capabilities": {
+          "technical_expertise": 0.8,
+          "creativity": 0.7,
+          "reasoning": 0.9
+        },
+        "api_config": {
+          "provider": "test",
+          "model_identifier": "test_model_1"
+        },
+        "weight": 0.7,
+        "priority": 5,
+        "tags": [
+          "test"
+        ],
+        "registered_at": "2025-03-04T03:25:37.657952"
+      },
+      "test_model_2": {
+        "capabilities": {
+          "technical_expertise": 0.7,
+          "creativity": 0.9,
+          "reasoning": 0.8
+        },
+        "api_config": {
+          "provider": "test",
+          "model_identifier": "test_model_2"
+        },
+        "weight": 0.7,
+        "priority": 5,
+        "tags": [
+          "test"
+        ],
+        "registered_at": "2025-03-04T03:25:37.658166"
+      },
+      "test_model_3": {
+        "capabilities": {
+          "technical_expertise": 0.6,
+          "creativity": 0.8,
+          "reasoning": 0.7
+        },
+        "api_config": {
+          "provider": "test",
+          "model_identifier": "test_model_3"
+        },
+        "weight": 0.7,
+        "priority": 5,
+        "tags": [
+          "test"
+        ],
+        "registered_at": "2025-03-04T03:25:37.658362"
+      }
+    }
+  },
+  "routing_analysis": {
+    "What's the weather like today?": {
+      "recommended_models": [],
+      "query_type": "unknown",
+      "complexity": 0,
+      "is_technical": false,
+      "is_creative": false
+    },
+    "Explain quantum computing to me": {
+      "recommended_models": [],
+      "query_type": "unknown",
+      "complexity": 0,
+      "is_technical": false,
+      "is_creative": false
+    },
+    "Write a short poem about artificial intelligence": {
+      "recommended_models": [],
+      "query_type": "unknown",
+      "complexity": 0,
+      "is_technical": false,
+      "is_creative": false
+    },
+    "What is the capital of France?": {
+      "recommended_models": [],
+      "query_type": "unknown",
+      "complexity": 0,
+      "is_technical": false,
+      "is_creative": false
+    },
+    "Analyze the pros and cons of solar energy": {
+      "recommended_models": [],
+      "query_type": "unknown",
+      "complexity": 0,
+      "is_technical": false,
+      "is_creative": false
+    },
+    "Can you help debug this Python code: for i in range(10): print(i]": {
+      "recommended_models": [],
+      "query_type": "unknown",
+      "complexity": 0,
+      "is_technical": false,
+      "is_creative": false
+    },
+    "How does a neural network work?": {
+      "recommended_models": [],
+      "query_type": "unknown",
+      "complexity": 0,
+      "is_technical": false,
+      "is_creative": false
+    },
+    "Suggest a recipe for chocolate chip cookies": {
+      "recommended_models": [],
+      "query_type": "unknown",
+      "complexity": 0,
+      "is_technical": false,
+      "is_creative": false
+    },
+    "What are the key differences between Python and JavaScript?": {
+      "recommended_models": [],
+      "query_type": "unknown",
+      "complexity": 0,
+      "is_technical": false,
+      "is_creative": false
+    },
+    "Tell me a joke about programming": {
+      "recommended_models": [],
+      "query_type": "unknown",
+      "complexity": 0,
+      "is_technical": false,
+      "is_creative": false
+    }
+  },
+  "usage_analysis": {
+    "query_results": {
+      "What's the weather like today?": {
+        "model_used": "none",
+        "quality_score": 0.0,
+        "processing_time": 0.01672673225402832,
+        "models_attempted": [],
+        "response_length": 104,
+        "models_responded": []
+      },
+      "Explain quantum computing to me": {
+        "model_used": "none",
+        "quality_score": 0.0,
+        "processing_time": 0.011906147003173828,
+        "models_attempted": [],
+        "response_length": 104,
+        "models_responded": []
+      },
+      "Write a short poem about artificial intelligence": {
+        "model_used": "none",
+        "quality_score": 0.0,
+        "processing_time": 0.01819610595703125,
+        "models_attempted": [],
+        "response_length": 104,
+        "models_responded": []
+      }
+    },
+    "model_usage_summary": {},
+    "missing_models": [
+      "test_model_1",
+      "test_model_2",
+      "test_model_3",
+      "gpt4",
+      "claude3",
+      "mistral7b",
+      "gpt4all"
+    ],
+    "errors": []
+  }
+}

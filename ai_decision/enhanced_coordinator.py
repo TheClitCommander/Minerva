@@ -131,7 +131,9 @@ class EnhancedCoordinator:
         
         return context_analysis
     
-    async def process_message(self, user_id: str, message: str, message_id: Optional[str] = None) -> Dict[str, Any]:
+    async def process_message(self, user_id: str, message: str, message_id: Optional[str] = None, 
+                         override_response: Optional[str] = None, override_model: Optional[str] = None,
+                         context_hints: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """
         Process a user message with enhanced decision-making.
         
@@ -139,6 +141,9 @@ class EnhancedCoordinator:
             user_id: The ID of the user
             message: The user's message
             message_id: Optional message ID
+            override_response: Optional pre-generated response (from enhanced AI features)
+            override_model: Optional model name to use (from enhanced AI features)
+            context_hints: Optional additional context hints to guide processing
             
         Returns:
             The processing result
@@ -150,27 +155,32 @@ class EnhancedCoordinator:
         enhanced_params = self.enhance_decision_parameters(user_id, message)
         logger.info(f"Enhanced parameters: {enhanced_params}")
         
-        # Step 2: Determine the optimal model based on context
-        selected_model = self.model_switcher.select_model(enhanced_params)
-        logger.info(f"Selected model based on context: {selected_model}")
+        # If we have context hints from enhanced AI features, merge them
+        if context_hints:
+            enhanced_params.update(context_hints)
+            logger.info(f"Enhanced with additional context hints: {context_hints.keys()}")
         
-        # Step 3: Process with the base coordinator, but with our enhanced model selection
-        # Create a modified decision that specifies our selected model
+        # Step 2: Determine the optimal model based on context (unless overridden)
+        selected_model = override_model or self.model_switcher.select_model(enhanced_params)
+        logger.info(f"Selected model: {selected_model}{' (overridden)' if override_model else ''}")
+        
+        # Step 3: Process with the base coordinator, with our enhanced model selection
         models_to_use = [selected_model]
         
         # Map our context analysis to formatting parameters
         formatting_params = {
             "tone": enhanced_params.get("tone", "neutral"),
-            "structure": "paragraph",  # Default to paragraph, could be enhanced further
-            "length": "short" if enhanced_params.get("length") == "short" else 
-                      "long" if enhanced_params.get("length") == "long" else "medium"
+            "structure": enhanced_params.get("structure", "paragraph"),
+            "length": enhanced_params.get("length", "medium")
         }
         
-        # Override the model selection decision with our enhanced decision
+        # Create a comprehensive override for the base coordinator
         self.base_coordinator._override_model_selection = {
             "models_to_use": models_to_use,
             "timeout": 30.0 if enhanced_params.get("detail_level") == "technical" else 15.0,
-            "formatting_params": formatting_params
+            "formatting_params": formatting_params,
+            "override_response": override_response,  # Pass through any pre-generated response
+            "enhanced_processing": True  # Flag that this is processed by enhanced features
         }
         
         # Process with the base coordinator using our enhanced decision
@@ -179,12 +189,12 @@ class EnhancedCoordinator:
         # Clear the override after use
         self.base_coordinator._override_model_selection = None
         
-        # Record this interaction
+        # Record this interaction, using the actual response and model used
         self.record_interaction(
             user_id=user_id,
             message=message,
             response=result.get("response", ""),
-            model_used=result.get("model_used", "unknown"),
+            model_used=result.get("model_used", override_model or "unknown"),
             quality_score=result.get("quality_score", 0.0)
         )
         
@@ -192,7 +202,9 @@ class EnhancedCoordinator:
         result["enhanced_processing"] = {
             "context_analysis": enhanced_params,
             "suggested_model": selected_model,
-            "processing_time": time.time() - start_time
+            "override_applied": override_response is not None,
+            "processing_time": time.time() - start_time,
+            "context_hints_applied": bool(context_hints)
         }
         
         return result

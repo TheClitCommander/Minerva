@@ -13,11 +13,23 @@ import logging
 from datetime import datetime
 from typing import Dict, List, Any, Optional, Tuple
 
+# Configure logging
+logger = logging.getLogger(__name__)
+
+# Safe import of dependencies with fallbacks
 import chromadb
 from chromadb.utils import embedding_functions
 
-# Configure logging
-logger = logging.getLogger(__name__)
+# Safe import of sentence_transformers
+try:
+    from sentence_transformers import SentenceTransformer
+    SENTENCE_TRANSFORMERS_AVAILABLE = True
+    logger.info("[Memory] sentence_transformers package available.")
+except ImportError:
+    logger.warning("[Memory] sentence_transformers not available. Falling back to limited memory mode.")
+    SENTENCE_TRANSFORMERS_AVAILABLE = False
+
+# Logger already configured above
 
 class MinervaMemory:
     """
@@ -61,21 +73,54 @@ class MinervaMemory:
                 except ImportError:
                     logger.warning("OpenAI package not available, but existing collection may use 1536 dimensions")
                     # We'll need to recreate the collection if this fails
-                    self.embedding_function = embedding_functions.SentenceTransformerEmbeddingFunction(
-                        model_name="all-mpnet-base-v2"  # 768 dimensions
-                    )
+                    if SENTENCE_TRANSFORMERS_AVAILABLE:
+                        try:
+                            # Default to sentence-transformers embedding function
+                            self.embedding_function = embedding_functions.SentenceTransformerEmbeddingFunction(
+                                model_name="all-mpnet-base-v2"  # 768 dimensions
+                            )
+                            logger.info("Using sentence-transformer embeddings (768 dimensions)")
+                        except Exception as e:
+                            logger.warning(f"Failed to load sentence-transformers: {e}")
+                            logger.warning("Falling back to default embedding function")
+                            self.embedding_function = embedding_functions.DefaultEmbeddingFunction()
+                    else:
+                        # If sentence_transformers isn't available at all, use DefaultEmbeddingFunction
+                        logger.warning("Vector embeddings limited: sentence_transformers not available.")
+                        self.embedding_function = embedding_functions.DefaultEmbeddingFunction()
             else:
-                # Default to sentence-transformers embedding function
-                self.embedding_function = embedding_functions.SentenceTransformerEmbeddingFunction(
-                    model_name="all-mpnet-base-v2"  # 768 dimensions
-                )
-                logger.info("Using sentence-transformer embeddings (768 dimensions)")
+                if SENTENCE_TRANSFORMERS_AVAILABLE:
+                    try:
+                        # Default to sentence-transformers embedding function
+                        self.embedding_function = embedding_functions.SentenceTransformerEmbeddingFunction(
+                            model_name="all-mpnet-base-v2"  # 768 dimensions
+                        )
+                        logger.info("Using sentence-transformer embeddings (768 dimensions)")
+                    except Exception as e:
+                        logger.warning(f"Failed to load sentence-transformers: {e}")
+                        logger.warning("Falling back to default embedding function")
+                        self.embedding_function = embedding_functions.DefaultEmbeddingFunction()
+                else:
+                    # If sentence_transformers isn't available at all, use DefaultEmbeddingFunction
+                    logger.warning("Vector embeddings limited: sentence_transformers not available.")
+                    self.embedding_function = embedding_functions.DefaultEmbeddingFunction()
         except ImportError as e:
             logger.warning(f"Error initializing embeddings: {str(e)}")
             logger.info("Defaulting to sentence-transformers embeddings")
-            self.embedding_function = embedding_functions.SentenceTransformerEmbeddingFunction(
-                model_name="all-mpnet-base-v2"
-            )
+            if SENTENCE_TRANSFORMERS_AVAILABLE:
+                try:
+                    self.embedding_function = embedding_functions.SentenceTransformerEmbeddingFunction(
+                        model_name="all-mpnet-base-v2"
+                    )
+                except Exception as e:
+                    logger.warning(f"Failed to load sentence-transformers: {e}")
+                    # Fall back to the default function if sentence-transformers fails
+                    logger.warning("Falling back to default embedding function")
+                    self.embedding_function = embedding_functions.DefaultEmbeddingFunction()
+            else:
+                # If sentence_transformers isn't available at all, use DefaultEmbeddingFunction
+                logger.warning("Vector embeddings limited: sentence_transformers not available.")
+                self.embedding_function = embedding_functions.DefaultEmbeddingFunction()
         
         # Create collections for different memory types
         self.conversation_store = self.chroma_client.get_or_create_collection(

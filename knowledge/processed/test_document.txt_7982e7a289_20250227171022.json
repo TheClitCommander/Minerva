@@ -1,0 +1,27 @@
+{
+  "document_id": "test_document.txt_7982e7a289_20250227171022",
+  "metadata": {
+    "filename": "test_document.txt",
+    "file_type": ".txt",
+    "file_size": 228,
+    "created_at": "2025-02-27T17:10:22.095200",
+    "modified_at": "2025-02-27T17:10:22.094292",
+    "processed_at": "2025-02-27T17:10:22.095279",
+    "title": "Test Document",
+    "author": "Integration Test",
+    "category": "Testing",
+    "tags": [
+      "knowledge",
+      "test"
+    ],
+    "added_at": "2025-02-27T17:10:22.094627"
+  },
+  "content": "This is a test document for integration testing the knowledge workflow.\nIt contains information about machine learning and artificial intelligence.\nKnowledge management systems help organize and retrieve information efficiently.",
+  "content_length": 228,
+  "chunks": [
+    "This is a test document for integration testing the knowledge workflow.\nIt contains information about machine lear",
+    "ning and artificial intelligence.\nKnowledge management systems help organize and retrieve information efficiently."
+  ],
+  "chunk_count": 2,
+  "processed_at": "2025-02-27T17:10:22.095305"
+}

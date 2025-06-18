@@ -1,0 +1,18 @@
+{
+  "document_id": "test_document.txt_948f4e1eca_20250227162041",
+  "metadata": {
+    "filename": "test_document.txt",
+    "file_type": ".txt",
+    "file_size": 63,
+    "created_at": "2025-02-27T16:20:41.239884",
+    "modified_at": "2025-02-27T16:20:41.239884",
+    "processed_at": "2025-02-27T16:20:41.240091",
+    "category": "original"
+  },
+  "content_length": 63,
+  "chunks": [
+    "This is a test document for unit testing the knowledge manager."
+  ],
+  "chunk_count": 1,
+  "processed_at": "2025-02-27T16:20:41.240114"
+}

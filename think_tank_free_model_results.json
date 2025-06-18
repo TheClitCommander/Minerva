@@ -1,0 +1,111 @@
+{
+  "timestamp": "2025-03-04 18:04:43",
+  "mode": "Free models only",
+  "available_models": [
+    "mistral7b",
+    "gpt4all",
+    "llama2",
+    "distilgpt",
+    "falcon",
+    "bloom"
+  ],
+  "queries": [
+    {
+      "query": "What is the capital of France?",
+      "type": "factual",
+      "complexity": "low",
+      "response": "LLaMA 2 by Meta AI response to: What is the capital of France?",
+      "processing_time": 0.0008459091186523438,
+      "models_used": [
+        "mistral7b",
+        "gpt4all",
+        "llama2",
+        "mistral7b",
+        "gpt4all",
+        "llama2"
+      ],
+      "winner_model": "llama2",
+      "api_models_used": 0,
+      "free_models_used": 6
+    },
+    {
+      "query": "Explain how quantum computing works in simple terms",
+      "type": "explanatory",
+      "complexity": "medium",
+      "response": "LLaMA 2 by Meta AI response to: Explain how quantum computing works in simple terms",
+      "processing_time": 0.0005240440368652344,
+      "models_used": [
+        "mistral7b",
+        "gpt4all",
+        "llama2",
+        "mistral7b",
+        "gpt4all",
+        "llama2"
+      ],
+      "winner_model": "llama2",
+      "api_models_used": 0,
+      "free_models_used": 6
+    },
+    {
+      "query": "Write a short poem about artificial intelligence",
+      "type": "creative",
+      "complexity": "medium",
+      "response": "LLaMA 2 by Meta AI response to: Write a short poem about artificial intelligence",
+      "processing_time": 0.00048613548278808594,
+      "models_used": [
+        "mistral7b",
+        "gpt4all",
+        "llama2",
+        "mistral7b",
+        "gpt4all",
+        "llama2"
+      ],
+      "winner_model": "llama2",
+      "api_models_used": 0,
+      "free_models_used": 6
+    },
+    {
+      "query": "Compare and contrast Python and JavaScript programming languages",
+      "type": "analytical",
+      "complexity": "medium",
+      "response": "Mistral 7B open-source model response to: Compare and contrast Python and JavaScript programming languages",
+      "processing_time": 0.0005357265472412109,
+      "models_used": [
+        "mistral7b",
+        "gpt4all",
+        "llama2",
+        "mistral7b",
+        "gpt4all",
+        "llama2"
+      ],
+      "winner_model": "mistral7b",
+      "api_models_used": 0,
+      "free_models_used": 6
+    },
+    {
+      "query": "Describe the implementation of a binary search algorithm",
+      "type": "technical",
+      "complexity": "high",
+      "response": "LLaMA 2 by Meta AI response to: Describe the implementation of a binary search algorithm",
+      "processing_time": 0.0005049705505371094,
+      "models_used": [
+        "mistral7b",
+        "gpt4all",
+        "llama2",
+        "mistral7b",
+        "gpt4all",
+        "llama2"
+      ],
+      "winner_model": "llama2",
+      "api_models_used": 0,
+      "free_models_used": 6
+    }
+  ],
+  "summary": {
+    "total_queries": 5,
+    "total_processing_time": 0.0028967857360839844,
+    "average_processing_time": 0.0005793571472167969,
+    "api_model_wins": 0,
+    "free_model_wins": 5
+  }
+}

@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 
 """
-Enhanced fallback processor for Minerva Think Tank.
-This module provides simulated responses when the full AI integration is unavailable.
+Enhanced fallback module for Minerva
+
+This module provides enhanced fallback responses when real AI models are unavailable.
 """
 
 import logging
@@ -15,51 +16,63 @@ import random
 import datetime
 
 # Configure logging
-logger = logging.getLogger("enhanced_fallback")
+logger = logging.getLogger(__name__)
 
-# Sample responses for different query types
+# Define response types
+RESPONSE_TYPES = {
+    "greeting": ["hello", "hi", "hey", "greetings", "howdy", "morning", "afternoon", "evening"],
+    "inquiry": ["what", "how", "why", "when", "where", "who", "tell me about", "explain", "describe"],
+    "farewell": ["bye", "goodbye", "see you", "later", "farewell"],
+    "gratitude": ["thanks", "thank you", "appreciate", "grateful"],
+    "general": []
+}
+
+# Define fallback responses for each type
 FALLBACK_RESPONSES = {
     "greeting": [
-        "Hello! I'm Minerva Assistant. How can I help you today?",
-        "Hi there! I'm here to assist with your projects. What would you like to discuss?",
-        "Welcome to Minerva. I'm here to help organize your thoughts and projects."
+        "Hello! I'm Minerva, your AI assistant. How can I help you today?",
+        "Hi there! I'm Minerva. What can I assist you with?",
+        "Greetings! I'm Minerva, ready to help with your questions."
     ],
-    "help": [
-        "I can help you organize ideas, create projects, and answer questions. What would you like assistance with?",
-        "Minerva offers several features including conversation memory, project organization, and idea development. How can I assist you today?",
-        "I'm designed to help with project organization, brainstorming, and information retrieval. What do you need help with?"
+    "inquiry": [
+        "That's an interesting question. In enhanced simulation mode, I can provide general information, but I may not have the most current or detailed data on specific topics.",
+        "I'd be happy to help with that question. In simulation mode, I can offer general guidance on this topic.",
+        "I understand you're asking about this topic. While operating in simulation mode, I can provide a general perspective."
     ],
-    "project": [
-        "Would you like to create a new project based on our conversation? I can help organize your ideas into a structured format.",
-        "Projects in Minerva help organize related conversations and ideas. Would you like to create one now?",
-        "I can convert this conversation into a project to keep track of the ideas we've discussed. Would that be helpful?"
+    "farewell": [
+        "Goodbye! Feel free to return if you have more questions.",
+        "See you later! I'll be here when you need assistance again.",
+        "Until next time! Have a great day."
     ],
-    "error": [
-        "I notice there's an issue with my connection to external AI services. I'm operating in local mode right now.",
-        "I'm currently running in fallback mode without external AI connections. I can still help with basic tasks.",
-        "My external AI connections aren't available right now, but I'm still here to help with what I can."
+    "gratitude": [
+        "You're welcome! I'm glad I could help.",
+        "Happy to assist! Is there anything else you'd like to know?",
+        "My pleasure! Feel free to ask if you need anything else."
     ],
     "general": [
-        "I understand your request. In full operation mode, I would connect to multiple AI models for a comprehensive response.",
-        "I've processed your request. With external AI services, I could provide more specialized assistance for this topic.",
-        "Thank you for your message. When fully configured with API keys, I'll provide enhanced responses through multiple AI models."
+        "I understand you're interested in this topic. In simulation mode, I can provide general information but may not have all the specific details.",
+        "That's something I'd like to help with. While I'm running in simulation mode without connection to external AI services, I can offer some general thoughts.",
+        "I appreciate your question. I'm currently operating in simulation mode, but I'll do my best to provide a helpful response."
     ]
 }
 
 def get_response_type(message):
-    """Determine the type of response based on the message content."""
+    """
+    Determine the type of response needed based on the message content.
+    
+    Args:
+        message: The user's message
+        
+    Returns:
+        str: The response type
+    """
     message_lower = message.lower()
     
-    if any(word in message_lower for word in ["hello", "hi", "hey", "greetings"]):
-        return "greeting"
-    elif any(word in message_lower for word in ["help", "assist", "support", "?"]):
-        return "help"
-    elif any(word in message_lower for word in ["project", "organize", "structure"]):
-        return "project"
-    elif any(word in message_lower for word in ["error", "issue", "problem", "not working"]):
-        return "error"
-    else:
-        return "general"
+    for response_type, keywords in RESPONSE_TYPES.items():
+        if any(keyword in message_lower for keyword in keywords):
+            return response_type
+    
+    return "general"
 
 def generate_fallback_response(message, conversation_id=None):
     """
@@ -70,7 +83,7 @@ def generate_fallback_response(message, conversation_id=None):
         conversation_id: Optional conversation ID
         
     Returns:
-        dict: A response object mimicking the format of the full ThinkTank response
+        dict: A response object mimicking the format of the full AI response
     """
     start_time = time.time()
     

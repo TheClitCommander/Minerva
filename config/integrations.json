@@ -1,0 +1,50 @@
+{
+  "integrations": {
+    "autogpt_integration": {
+      "enabled": true,
+      "paths": [
+        "/Users/bendickinson/Desktop/Gpt ai codes/SuperAGI",
+        "/Users/bendickinson/Desktop/Gpt ai codes/mini-agi",
+        "/Users/bendickinson/Desktop/Gpt ai codes/Auto-GPT-Turbo",
+        "/Users/bendickinson/Desktop/Gpt ai codes/Auto-GPT",
+        "/Users/bendickinson/Desktop/Gpt ai codes/autogpt",
+        "/Users/bendickinson/Desktop/Gpt ai codes/babyagi",
+        "/Users/bendickinson/Desktop/Gpt ai codes/autogpt-server-api",
+        "/Users/bendickinson/Desktop/Gpt ai codes/AgentGPT"
+      ]
+    },
+    "huggingface_integration": {
+      "enabled": true,
+      "paths": [
+        "/Users/bendickinson/Desktop/Gpt ai codes/starcoder2",
+        "/Users/bendickinson/Desktop/Gpt ai codes/mlc-llm",
+        "/Users/bendickinson/Desktop/Gpt ai codes/starcoder"
+      ]
+    },
+    "langchain_integration": {
+      "enabled": true,
+      "paths": [
+        "/Users/bendickinson/Desktop/Gpt ai codes/localGPT",
+        "/Users/bendickinson/Desktop/Gpt ai codes/chroma",
+        "/Users/bendickinson/Desktop/Gpt ai codes/run-chroma",
+        "/Users/bendickinson/Desktop/Gpt ai codes/chroma-server",
+        "/Users/bendickinson/Desktop/Gpt ai codes/pdfGPT",
+        "/Users/bendickinson/Desktop/Gpt ai codes/chromadb",
+        "/Users/bendickinson/Desktop/Gpt ai codes/localGPTUI",
+        "/Users/bendickinson/Desktop/Gpt ai codes/distributed-chroma"
+      ]
+    },
+    "gpt4all_integration": {
+      "enabled": true,
+      "paths": [
+        "/Users/bendickinson/Desktop/Gpt ai codes/gpt4all-chat",
+        "/Users/bendickinson/Desktop/Gpt ai codes/gpt4all-bindings",
+        "/Users/bendickinson/Desktop/Gpt ai codes/gpt4all_python",
+        "/Users/bendickinson/Desktop/Gpt ai codes/gpt4all-backend",
+        "/Users/bendickinson/Desktop/Gpt ai codes/gpt4all-training",
+        "/Users/bendickinson/Desktop/Gpt ai codes/gpt4all_api_server",
+        "/Users/bendickinson/Desktop/Gpt ai codes/gpt4all"
+      ]
+    }
+  }
+}

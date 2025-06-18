@@ -1,0 +1,237 @@
+coherence_score,is_fallback,length_score,processing_time,quality_score,query,relevance_score,response,run,validation_failure_reason,validation_passed
+0.8,False,0.5,0.00047898292541503906,0.7400000000000001,What is the capital of Japan?,0.8,"User: What is the capital of Japan?
+
+Assistant: Here is a response to your query about What is the.",1,,True
+0.8,True,0.5,0.000102996826171875,0.7400000000000001,Who wrote the book '1984'?,0.8,I'm currently experiencing high demand and limited resources. Please try again in a moment with a simpler query.,1,,True
+0.8,False,0.5,8.225440979003906e-05,0.7400000000000001,Explain the theory of relativity.,0.8,"User: Explain the theory of relativity.
+
+Assistant: Here is a response to your query about Explain the theory.",1,,True
+0.8,True,0.5,8.392333984375e-05,0.7400000000000001,What are the main causes of climate change?,0.8,I apologize for the delay. Your query is complex and requires more processing time than is currently available.,1,,True
+0.8,False,0.5,7.081031799316406e-05,0.7400000000000001,How does photosynthesis work?,0.8,"User: How does photosynthesis work?
+
+Assistant: Here is a response to your query about How does photosynthesis.",1,,True
+0.8,False,0.5,8.296966552734375e-05,0.7400000000000001,Explain how a neural network works.,0.8,"User: Explain how a neural network works.
+
+Assistant: Here is a response to your query about Explain how a.",1,,True
+0.8,True,0.5,0.0001480579376220703,0.7400000000000001,What is the difference between HTTP and HTTPS?,0.8,I'm currently experiencing high demand and limited resources. Please try again in a moment with a simpler query.,1,,True
+0.8,True,0.5,0.00010991096496582031,0.7400000000000001,How does public key cryptography work?,0.8,I apologize for the delay. Your query is complex and requires more processing time than is currently available.,1,,True
+0.8,False,0.5,9.083747863769531e-05,0.7400000000000001,Explain the concept of object-oriented programming.,0.8,"User: Explain the concept of object-oriented programming.
+
+Assistant: Here is a response to your query about Explain the concept.",1,,True
+0.8,False,0.7,7.915496826171875e-05,0.7800000000000001,What is the time complexity of quicksort?,0.8,"User: What is the time complexity of quicksort?
+
+Assistant: Here is a response to your query about What is the.",1,,True
+0.8,True,0.5,8.511543273925781e-05,0.7400000000000001,Write a Python function to find the factorial of a number.,0.8,I apologize for the delay. Your query is complex and requires more processing time than is currently available.,1,,True
+0.8,False,0.7,7.486343383789062e-05,0.7800000000000001,How do I optimize a slow SQL query?,0.8,"User: How do I optimize a slow SQL query?
+
+Assistant: Here is a response to your query about How do I.",1,,True
+0.8,False,0.7,7.796287536621094e-05,0.7800000000000001,Explain the difference between a list and a tuple in Python.,0.8,"User: Explain the difference between a list and a tuple in Python.
+
+Assistant: Here is a response to your query about Explain the difference.",1,,True
+0.8,False,0.5,7.414817810058594e-05,0.7400000000000001,What are JavaScript closures?,0.8,"User: What are JavaScript closures?
+
+Assistant: Here is a response to your query about What are JavaScript.",1,,True
+0.8,False,0.7,7.200241088867188e-05,0.7800000000000001,How to implement binary search in Java?,0.8,"User: How to implement binary search in Java?
+
+Assistant: Here is a response to your query about How to implement.",1,,True
+0.8,False,0.5,7.176399230957031e-05,0.7400000000000001,What is the meaning of life?,0.8,"User: What is the meaning of life?
+
+Assistant: Here is a response to your query about What is the.",1,,True
+0.8,False,0.5,7.605552673339844e-05,0.7400000000000001,Explain the trolley problem in ethics.,0.8,"User: Explain the trolley problem in ethics.
+
+Assistant: Here is a response to your query about Explain the trolley.",1,,True
+0.8,False,0.5,7.200241088867188e-05,0.7400000000000001,What is existentialism?,0.8,"User: What is existentialism?
+
+Assistant: Here is a response to your query about What is existentialism?.",1,,True
+0.8,True,0.5,0.0003151893615722656,0.7400000000000001,Compare and contrast determinism and free will.,0.8,I'm currently experiencing high demand and limited resources. Please try again in a moment with a simpler query.,1,,True
+0.8,False,0.5,0.00015115737915039062,0.7400000000000001,What is the nature of consciousness?,0.8,"User: What is the nature of consciousness?
+
+Assistant: Here is a response to your query about What is the.",1,,True
+0.8,True,0.5,8.20159912109375e-05,0.7400000000000001,Write a short poem about the ocean.,0.8,I'm currently experiencing high demand and limited resources. Please try again in a moment with a simpler query.,1,,True
+0.8,True,0.5,7.414817810058594e-05,0.7400000000000001,Create a story about a time traveler.,0.8,I'm currently experiencing high demand and limited resources. Please try again in a moment with a simpler query.,1,,True
+0.8,True,0.5,7.295608520507812e-05,0.7400000000000001,Describe an alien world with unique physics.,0.8,I'm currently experiencing high demand and limited resources. Please try again in a moment with a simpler query.,1,,True
+0.8,False,0.7,6.67572021484375e-05,0.7800000000000001,Generate ideas for a science fiction novel.,0.8,"User: Generate ideas for a science fiction novel.
+
+Assistant: Here is a response to your query about Generate ideas for.",1,,True
+0.8,False,0.7,6.508827209472656e-05,0.7800000000000001,Invent a new sport that combines elements of basketball and chess.,0.8,"User: Invent a new sport that combines elements of basketball and chess.
+
+Assistant: Here is a response to your query about Invent a new.",1,,True
+0.8,False,0.7,6.198883056640625e-05,0.7800000000000001,How do I change a flat tire?,0.8,"User: How do I change a flat tire?
+
+Assistant: Here is a response to your query about How do I.",1,,True
+0.8,False,0.7,6.389617919921875e-05,0.7800000000000001,What's a good recipe for chocolate chip cookies?,0.8,"User: What's a good recipe for chocolate chip cookies?
+
+Assistant: Here is a response to your query about What's a good.",1,,True
+0.8,False,0.7,6.389617919921875e-05,0.7800000000000001,How do I remove a coffee stain from a white shirt?,0.8,"User: How do I remove a coffee stain from a white shirt?
+
+Assistant: Here is a response to your query about How do I.",1,,True
+0.8,False,0.7,6.127357482910156e-05,0.7800000000000001,What are some tips for better sleep?,0.8,"User: What are some tips for better sleep?
+
+Assistant: Here is a response to your query about What are some.",1,,True
+0.8,False,0.5,6.318092346191406e-05,0.7400000000000001,How do I create a budget?,0.8,"User: How do I create a budget?
+
+Assistant: Here is a response to your query about How do I.",1,,True
+0.8,False,0.7,6.914138793945312e-05,0.7800000000000001,Analyze the economic impacts of automation on the job market.,0.8,"User: Analyze the economic impacts of automation on the job market.
+
+Assistant: Here is a response to your query about Analyze the economic.",1,,True
+0.8,False,0.7,6.604194641113281e-05,0.7800000000000001,Compare and contrast different political systems and their effectiveness.,0.8,"User: Compare and contrast different political systems and their effectiveness.
+
+Assistant: Here is a response to your query about Compare and contrast.",1,,True
+0.8,False,0.7,6.723403930664062e-05,0.7800000000000001,Discuss the ethical implications of genetic engineering.,0.8,"User: Discuss the ethical implications of genetic engineering.
+
+Assistant: Here is a response to your query about Discuss the ethical.",1,,True
+0.8,False,0.7,6.604194641113281e-05,0.7800000000000001,Evaluate the strengths and weaknesses of various educational systems.,0.8,"User: Evaluate the strengths and weaknesses of various educational systems.
+
+Assistant: Here is a response to your query about Evaluate the strengths.",1,,True
+0.8,False,0.7,6.389617919921875e-05,0.7800000000000001,Explore the relationship between technology and social inequality.,0.8,"User: Explore the relationship between technology and social inequality.
+
+Assistant: Here is a response to your query about Explore the relationship.",1,,True
+0.8,True,0.5,7.009506225585938e-05,0.7400000000000001,Explain quantum computing and how it differs from classical computing.,0.8,I apologize for the delay. Your query is complex and requires more processing time than is currently available.,1,,True
+0.8,False,0.7,6.67572021484375e-05,0.7800000000000001,What are the main causes of World War I and how did they lead to World War II?,0.8,"User: What are the main causes of World War I and how did they lead to World War II?
+
+Assistant: Here is a response to your query about What are the.",1,,True
+0.8,False,0.7,6.389617919921875e-05,0.7800000000000001,Describe the water cycle and how it impacts regional climate patterns.,0.8,"User: Describe the water cycle and how it impacts regional climate patterns.
+
+Assistant: Here is a response to your query about Describe the water.",1,,True
+0.8,False,0.7,6.389617919921875e-05,0.7800000000000001,What is machine learning and how is it used in everyday applications?,0.8,"User: What is machine learning and how is it used in everyday applications?
+
+Assistant: Here is a response to your query about What is machine.",1,,True
+0.8,False,0.7,0.00010895729064941406,0.7800000000000001,Explain the process of photosynthesis and its importance for life on Earth.,0.8,"User: Explain the process of photosynthesis and its importance for life on Earth.
+
+Assistant: Here is a response to your query about Explain the process.",1,,True
+0.8,False,0.5,5.984306335449219e-05,0.7400000000000001,Why?,0.8,"User: Why?
+
+Assistant: Here is a response to your query about Why?.",1,,True
+0.8,False,0.5,0.002257108688354492,0.7400000000000001,Tell me more.,0.8,"User: Tell me more.
+
+Assistant: Here is a response to your query about Tell me more..",1,,True
+0.8,False,0.5,0.00021028518676757812,0.7400000000000001,What's the point?,0.8,"User: What's the point?
+
+Assistant: Here is a response to your query about What's the point?.",1,,True
+0.8,True,0.5,0.0051441192626953125,0.7400000000000001,How does it work?,0.8,I'm currently experiencing high demand and limited resources. Please try again in a moment with a simpler query.,1,,True
+0.8,False,0.5,0.003966093063354492,0.7400000000000001,What's the best one?,0.8,"User: What's the best one?
+
+Assistant: Here is a response to your query about What's the best.",1,,True
+0.8,False,0.7,0.0010213851928710938,0.7800000000000001,Should I break up with my partner?,0.8,"User: Should I break up with my partner?
+
+Assistant: Here is a response to your query about Should I break.",1,,True
+0.8,False,0.5,0.00023984909057617188,0.7400000000000001,What career should I choose?,0.8,"User: What career should I choose?
+
+Assistant: Here is a response to your query about What career should.",1,,True
+0.8,False,0.5,0.0006859302520751953,0.7400000000000001,How do I become rich quickly?,0.8,"User: How do I become rich quickly?
+
+Assistant: Here is a response to your query about How do I.",1,,True
+0.8,False,0.7,0.0002200603485107422,0.7800000000000001,Is it a good time to invest in stocks?,0.8,"User: Is it a good time to invest in stocks?
+
+Assistant: Here is a response to your query about Is it a.",1,,True
+0.8,False,0.7,0.0011899471282958984,0.7800000000000001,How can I be happier?,0.8,Your query would result in a response that exceeds my current capacity. Could you break it down into smaller parts?,1,,True
+0.8,False,0.7,0.00022101402282714844,0.7800000000000001,What is the difference between supervised and unsupervised learning?,0.8,"User: What is the difference between supervised and unsupervised learning?
+
+Assistant: Here is a response to your query about What is the.",1,,True
+0.8,False,0.5,0.0002949237823486328,0.7400000000000001,How does a compiler work?,0.8,"User: How does a compiler work?
+
+Assistant: Here is a response to your query about How does a.",1,,True
+0.8,False,0.5,0.0003180503845214844,0.7400000000000001,Explain how DNS resolves domain names.,0.8,"User: Explain how DNS resolves domain names.
+
+Assistant: Here is a response to your query about Explain how DNS.",1,,True
+0.8,False,0.7,0.00020599365234375,0.7800000000000001,What are design patterns in software engineering?,0.8,"User: What are design patterns in software engineering?
+
+Assistant: Here is a response to your query about What are design.",1,,True
+0.8,False,0.7,0.00019502639770507812,0.7800000000000001,How does garbage collection work in programming languages?,0.8,"User: How does garbage collection work in programming languages?
+
+Assistant: Here is a response to your query about How does garbage.",1,,True
+0.8,False,0.7,0.0001850128173828125,0.7800000000000001,What led to the fall of the Roman Empire?,0.8,"User: What led to the fall of the Roman Empire?
+
+Assistant: Here is a response to your query about What led to.",1,,True
+0.8,False,0.7,0.001894235610961914,0.7800000000000001,Who was Genghis Khan and what was his impact on history?,0.8,"User: Who was Genghis Khan and what was his impact on history?
+
+Assistant: Here is a response to your query about Who was Genghis.",1,,True
+0.8,False,0.7,0.00021600723266601562,0.7800000000000001,Explain the significance of the Industrial Revolution.,0.8,"User: Explain the significance of the Industrial Revolution.
+
+Assistant: Here is a response to your query about Explain the significance.",1,,True
+0.8,True,0.5,0.0002181529998779297,0.7400000000000001,What were the main causes of the French Revolution?,0.8,I apologize for the delay. Your query is complex and requires more processing time than is currently available.,1,,True
+0.8,False,0.7,0.0001938343048095703,0.7800000000000001,How did the Cold War shape modern international relations?,0.8,"User: How did the Cold War shape modern international relations?
+
+Assistant: Here is a response to your query about How did the.",1,,True
+0.8,False,0.5,0.00018477439880371094,0.7400000000000001,How do vaccines work?,0.8,"User: How do vaccines work?
+
+Assistant: Here is a response to your query about How do vaccines.",1,,True
+0.8,False,0.7,0.00021505355834960938,0.7800000000000001,What is dark matter and why is it important in cosmology?,0.8,Your query would result in a response that exceeds my current capacity. Could you break it down into smaller parts?,1,,True
+0.8,False,0.7,0.00021028518676757812,0.7800000000000001,Explain the process of natural selection in evolution.,0.8,"User: Explain the process of natural selection in evolution.
+
+Assistant: Here is a response to your query about Explain the process.",1,,True
+0.8,False,0.5,0.0001850128173828125,0.7400000000000001,What is quantum entanglement?,0.8,"User: What is quantum entanglement?
+
+Assistant: Here is a response to your query about What is quantum.",1,,True
+0.8,False,0.7,0.0002422332763671875,0.7800000000000001,How do black holes form and what happens inside them?,0.8,"User: How do black holes form and what happens inside them?
+
+Assistant: Here is a response to your query about How do black.",1,,True
+0.8,False,0.5,0.00019693374633789062,0.7400000000000001,Explain the Pythagorean theorem.,0.8,"User: Explain the Pythagorean theorem.
+
+Assistant: Here is a response to your query about Explain the Pythagorean.",1,,True
+0.8,False,0.5,0.00019598007202148438,0.7400000000000001,What is calculus used for?,0.8,"User: What is calculus used for?
+
+Assistant: Here is a response to your query about What is calculus.",1,,True
+0.8,False,0.5,0.00021195411682128906,0.7400000000000001,How do you solve quadratic equations?,0.8,"User: How do you solve quadratic equations?
+
+Assistant: Here is a response to your query about How do you.",1,,True
+0.8,False,0.7,0.0021953582763671875,0.7800000000000001,Explain the concept of infinity in mathematics.,0.8,"User: Explain the concept of infinity in mathematics.
+
+Assistant: Here is a response to your query about Explain the concept.",1,,True
+0.8,False,0.7,0.00020623207092285156,0.7800000000000001,What is the significance of prime numbers in cryptography?,0.8,"User: What is the significance of prime numbers in cryptography?
+
+Assistant: Here is a response to your query about What is the.",1,,True
+0.8,False,0.7,0.0001881122589111328,0.7800000000000001,What is a good business plan structure?,0.8,"User: What is a good business plan structure?
+
+Assistant: Here is a response to your query about What is a.",1,,True
+0.8,False,0.7,0.00018405914306640625,0.7800000000000001,How does supply and demand work in economics?,0.8,"User: How does supply and demand work in economics?
+
+Assistant: Here is a response to your query about How does supply.",1,,True
+0.8,False,0.7,0.00017905235290527344,0.7800000000000001,What are the principles of effective leadership?,0.8,"User: What are the principles of effective leadership?
+
+Assistant: Here is a response to your query about What are the.",1,,True
+0.8,False,0.5,0.00018477439880371094,0.7400000000000001,Explain the concept of diminishing returns.,0.8,"User: Explain the concept of diminishing returns.
+
+Assistant: Here is a response to your query about Explain the concept.",1,,True
+0.8,False,0.7,0.00018095970153808594,0.7800000000000001,What is the difference between marginal cost and average cost?,0.8,"User: What is the difference between marginal cost and average cost?
+
+Assistant: Here is a response to your query about What is the.",1,,True
+0.8,False,0.7,0.00017714500427246094,0.7800000000000001,What are the main characteristics of Renaissance art?,0.8,"User: What are the main characteristics of Renaissance art?
+
+Assistant: Here is a response to your query about What are the.",1,,True
+0.8,False,0.7,0.00019288063049316406,0.7800000000000001,Explain the difference between jazz and blues music.,0.8,"User: Explain the difference between jazz and blues music.
+
+Assistant: Here is a response to your query about Explain the difference.",1,,True
+0.8,False,0.7,7.390975952148438e-05,0.7800000000000001,Who were the major figures of the Enlightenment?,0.8,"User: Who were the major figures of the Enlightenment?
+
+Assistant: Here is a response to your query about Who were the.",1,,True
+0.8,True,0.5,7.677078247070312e-05,0.7400000000000001,What is postmodernism in literature?,0.8,I apologize for the delay. Your query is complex and requires more processing time than is currently available.,1,,True
+0.8,False,0.7,6.818771362304688e-05,0.7800000000000001,How has cinema evolved over the past century?,0.8,"User: How has cinema evolved over the past century?
+
+Assistant: Here is a response to your query about How has cinema.",1,,True
+0.8,True,0.5,0.00043892860412597656,0.7400000000000001,How does the immune system work?,0.8,I apologize for the delay. Your query is complex and requires more processing time than is currently available.,1,,True
+0.8,False,0.5,8.797645568847656e-05,0.7400000000000001,What causes Alzheimer's disease?,0.8,"User: What causes Alzheimer's disease?
+
+Assistant: Here is a response to your query about What causes Alzheimer's.",1,,True
+0.8,False,0.7,7.891654968261719e-05,0.7800000000000001,Explain the difference between bacteria and viruses.,0.8,"User: Explain the difference between bacteria and viruses.
+
+Assistant: Here is a response to your query about Explain the difference.",1,,True
+0.8,True,0.5,8.273124694824219e-05,0.7400000000000001,How do antidepressants work?,0.8,I'm currently experiencing high demand and limited resources. Please try again in a moment with a simpler query.,1,,True
+0.8,False,0.7,8.20159912109375e-05,0.7800000000000001,What are the main risk factors for heart disease?,0.8,"User: What are the main risk factors for heart disease?
+
+Assistant: Here is a response to your query about What are the.",1,,True
+0.8,False,0.7,7.43865966796875e-05,0.7800000000000001,What is quantum computing and why is it important?,0.8,"User: What is quantum computing and why is it important?
+
+Assistant: Here is a response to your query about What is quantum.",1,,True
+0.8,False,0.7,6.580352783203125e-05,0.7800000000000001,How is AI changing the healthcare industry?,0.8,"User: How is AI changing the healthcare industry?
+
+Assistant: Here is a response to your query about How is AI.",1,,True
+0.8,False,0.7,6.866455078125e-05,0.7800000000000001,What is blockchain technology and how does it work?,0.8,"User: What is blockchain technology and how does it work?
+
+Assistant: Here is a response to your query about What is blockchain.",1,,True
+0.8,False,0.7,7.104873657226562e-05,0.7800000000000001,Explain the concept of the Internet of Things.,0.8,"User: Explain the concept of the Internet of Things.
+
+Assistant: Here is a response to your query about Explain the concept.",1,,True
+0.8,False,0.7,6.890296936035156e-05,0.7800000000000001,What are the ethical concerns around facial recognition technology?,0.8,"User: What are the ethical concerns around facial recognition technology?
+
+Assistant: Here is a response to your query about What are the.",1,,True

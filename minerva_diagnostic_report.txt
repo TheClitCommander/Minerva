@@ -1,0 +1,46 @@
+========================================================
+               MINERVA AI DIAGNOSTIC REPORT              
+========================================================
+
+Date: 2025-02-28 01:49:08
+Python: 3.13.2
+OS: darwin
+
+1. ENVIRONMENT CHECK
+--------------------
+❌ flask: Not installed
+❌ flask_socketio: Not installed
+❌ torch: Not installed
+❌ transformers: Not installed
+
+2. HUGGINGFACE CHECK
+--------------------
+❌ HuggingFace Transformers: Not installed
+
+3. GPT4ALL CHECK
+----------------
+❌ GPT4All: Not installed
+
+4. AUTOGPT CHECK
+----------------
+⚠️ AutoGPT: Not installed as package, but 1 repositories found
+  - autogpt
+
+5. FRAMEWORKS CHECK
+-------------------
+❌ Framework Manager error: No module named 'loguru'
+
+6. INTEGRATIONS CONFIG CHECK
+----------------------------
+✅ Enabled integrations: 4
+  - autogpt_integration: 8/8 paths exist
+  - huggingface_integration: 3/3 paths exist
+  - langchain_integration: 8/8 paths exist
+  - gpt4all_integration: 7/7 paths exist
+
+7. SUMMARY
+---------
+⚠️ LIMITED: Only one AI model available, limited multi-model capabilities
+❌ Minerva core functionality compromised (HuggingFace not available)
+
+========================================================

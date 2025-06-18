@@ -1,0 +1,18 @@
+{
+  "document_id": "test_document2.txt_086d221590_20250227162041",
+  "metadata": {
+    "filename": "test_document2.txt",
+    "file_type": ".txt",
+    "file_size": 30,
+    "created_at": "2025-02-27T16:20:41.236164",
+    "modified_at": "2025-02-27T16:20:41.236164",
+    "processed_at": "2025-02-27T16:20:41.236236",
+    "category": "other"
+  },
+  "content_length": 30,
+  "chunks": [
+    "This is another test document."
+  ],
+  "chunk_count": 1,
+  "processed_at": "2025-02-27T16:20:41.236258"
+}

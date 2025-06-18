@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minerva AI Portal</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            width: 90%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #7f5af0;
+            text-align: center;
+        }
+        h2 {
+            font-size: 1.5rem;
+            margin-top: 30px;
+            color: #2cb67d;
+        }
+        p {
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .interface-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .interface-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        .interface-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .interface-card h3 {
+            color: #ff8906;
+            margin-top: 0;
+        }
+        .interface-card p {
+            font-size: 0.9rem;
+            color: #94a1b2;
+        }
+        .btn {
+            display: inline-block;
+            background: #7f5af0;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            transition: background 0.3s;
+            margin-top: 15px;
+            border: none;
+            font-weight: bold;
+        }
+        .btn:hover {
+            background: #6246ea;
+        }
+        .status {
+            display: flex;
+            align-items: center;
+            margin-top: 40px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+        .status-indicator {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #2cb67d;
+            margin-right: 10px;
+        }
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            color: #94a1b2;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Minerva AI</h1>
+        <p>Welcome to the Minerva AI Portal. Select an interface to begin interacting with Minerva's enhanced AI capabilities.</p>
+        
+        <h2>Available Interfaces</h2>
+        <div class="interface-grid">
+            <div class="interface-card" onclick="window.location.href='/minerva_orbital_fixed.html'">
+                <h3>Orb Interface</h3>
+                <p>Modern floating orbital interface with advanced features</p>
+                <a href="/minerva_orbital_fixed.html" class="btn">Launch</a>
+            </div>
+            <div class="interface-card" onclick="window.location.href='/minerva_floating_chat.html'">
+                <h3>Floating Chat</h3>
+                <p>Sleek floating chat window that stays out of your way</p>
+                <a href="/minerva_floating_chat.html" class="btn">Launch</a>
+            </div>
+            <div class="interface-card" onclick="window.location.href='/chat-diagnostic.html'">
+                <h3>Diagnostic UI</h3>
+                <p>Technical interface with debug information</p>
+                <a href="/chat-diagnostic.html" class="btn">Launch</a>
+            </div>
+        </div>
+        
+        <div class="status">
+            <div class="status-indicator"></div>
+            <span>Minerva AI Backend: Running</span>
+        </div>
+        
+        <h2>Active Features</h2>
+        <ul>
+            <li>Role-based AI Switching</li>
+            <li>Workflow Automation</li>
+            <li>Knowledge Management (RAG)</li>
+            <li>Enhanced Model Selection</li>
+            <li>Response Quality Validation</li>
+        </ul>
+        
+        <footer>
+            Minerva AI - Running in Simulation Mode
+        </footer>
+    </div>
+
+    <script>
+        // Check WebSocket connection
+        document.addEventListener('DOMContentLoaded', function() {
+            const socket = io.connect(window.location.origin);
+            
+            socket.on('connect', function() {
+                document.querySelector('.status-indicator').style.background = '#2cb67d';
+                document.querySelector('.status span').textContent = 'Minerva AI Backend: Connected';
+            });
+            
+            socket.on('disconnect', function() {
+                document.querySelector('.status-indicator').style.background = '#e45858';
+                document.querySelector('.status span').textContent = 'Minerva AI Backend: Disconnected';
+            });
+            
+            // Check WebSocket connection status after 5 seconds
+            setTimeout(function() {
+                if (!socket.connected) {
+                    document.querySelector('.status-indicator').style.background = '#e45858';
+                    document.querySelector('.status span').textContent = 'Minerva AI Backend: Connection Failed';
+                }
+            }, 5000);
+        });
+    </script>
+    <script src="/socket.io/socket.io.js"></script>
+</body>
+</html>

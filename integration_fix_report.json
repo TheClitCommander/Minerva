@@ -1,0 +1,17 @@
+{
+  "timestamp": "2025-03-07 04:12:40",
+  "fixed_issues": [
+    "Installed flask==2.2.5",
+    "Installed werkzeug==2.2.3",
+    "Installed python-socketio",
+    "Installed flask-socketio",
+    "Installed openai==1.12.0",
+    "Installed anthropic",
+    "Set OpenAI API key in environment",
+    "Created run script for starting Minerva"
+  ],
+  "remaining_issues": [
+    "AI integration test failed: name 'models_used' is not defined"
+  ],
+  "status": "partial_success"
+}

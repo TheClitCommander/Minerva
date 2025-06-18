@@ -1,0 +1,7 @@
+{
+  "url": "http://localhost:5000",
+  "websocket_url": "ws://localhost:5000/socket.io/?EIO=3&transport=websocket",
+  "auth_method": "auto",
+  "credentials": {},
+  "csrf_protection": false
+}

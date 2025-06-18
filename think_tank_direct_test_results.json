@@ -1,0 +1,112 @@
+{
+  "timestamp": "2025-03-09 00:48:28",
+  "overall": {
+    "total_tests": 4,
+    "successful_tests": 4,
+    "success_rate": 100.0,
+    "avg_response_time": 0.00047475099563598633,
+    "avg_structure_score": 5.25,
+    "model_selection_accuracy": 25.0,
+    "blending_rate": 0.0
+  },
+  "categories": {
+    "factual": [
+      {
+        "category": "factual",
+        "query": "What is artificial intelligence?",
+        "response_time": 0.0005130767822265625,
+        "structure_score": 6,
+        "best_model": "gpt-3.5-turbo",
+        "expected_model": "gpt-3.5-turbo",
+        "model_match": true,
+        "is_blended": false,
+        "detected_task_type": "explanation"
+      }
+    ],
+    "technical": [
+      {
+        "category": "technical",
+        "query": "Compare Python and JavaScript for web development.",
+        "response_time": 0.0003218650817871094,
+        "structure_score": 3,
+        "best_model": "gpt4",
+        "expected_model": "gpt-4",
+        "model_match": false,
+        "is_blended": false,
+        "detected_task_type": "code"
+      }
+    ],
+    "reasoning": [
+      {
+        "category": "reasoning",
+        "query": "What are the key differences between classical physics and quantum physics?",
+        "response_time": 0.00048089027404785156,
+        "structure_score": 6,
+        "best_model": "gpt-3.5-turbo",
+        "expected_model": "gpt-4",
+        "model_match": false,
+        "is_blended": false,
+        "detected_task_type": "science"
+      }
+    ],
+    "multi-perspective": [
+      {
+        "category": "multi-perspective",
+        "query": "What are arguments for and against Universal Basic Income?",
+        "response_time": 0.0005831718444824219,
+        "structure_score": 6,
+        "best_model": "gpt-3.5-turbo",
+        "expected_model": "claude-3",
+        "model_match": false,
+        "is_blended": false,
+        "detected_task_type": "general"
+      }
+    ]
+  },
+  "individual_results": [
+    {
+      "category": "factual",
+      "query": "What is artificial intelligence?",
+      "response_time": 0.0005130767822265625,
+      "structure_score": 6,
+      "best_model": "gpt-3.5-turbo",
+      "expected_model": "gpt-3.5-turbo",
+      "model_match": true,
+      "is_blended": false,
+      "detected_task_type": "explanation"
+    },
+    {
+      "category": "technical",
+      "query": "Compare Python and JavaScript for web development.",
+      "response_time": 0.0003218650817871094,
+      "structure_score": 3,
+      "best_model": "gpt4",
+      "expected_model": "gpt-4",
+      "model_match": false,
+      "is_blended": false,
+      "detected_task_type": "code"
+    },
+    {
+      "category": "reasoning",
+      "query": "What are the key differences between classical physics and quantum physics?",
+      "response_time": 0.00048089027404785156,
+      "structure_score": 6,
+      "best_model": "gpt-3.5-turbo",
+      "expected_model": "gpt-4",
+      "model_match": false,
+      "is_blended": false,
+      "detected_task_type": "science"
+    },
+    {
+      "category": "multi-perspective",
+      "query": "What are arguments for and against Universal Basic Income?",
+      "response_time": 0.0005831718444824219,
+      "structure_score": 6,
+      "best_model": "gpt-3.5-turbo",
+      "expected_model": "claude-3",
+      "model_match": false,
+      "is_blended": false,
+      "detected_task_type": "general"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "timestamp": "2025-03-03T19:49:16.454714",
+  "simulation_duration": 20.139265,
+  "final_traffic_percentage": 100.0,
+  "total_requests": 65,
+  "standard_requests": 31,
+  "enhanced_requests": 34,
+  "standard_success_rate": 0.9354838709677419,
+  "enhanced_success_rate": 1.0,
+  "standard_avg_metrics": {
+    "processing_time": 0.9644052748328991,
+    "quality_score": 0.7492139090873133,
+    "relevance_score": 0.7872933821448763,
+    "repetition_score": 0.21894571623522022
+  },
+  "enhanced_avg_metrics": {
+    "processing_time": 1.0052415572868663,
+    "quality_score": 0.8752428293319775,
+    "relevance_score": 0.9104088344054102,
+    "repetition_score": 0.09629138751196759
+  }
+}

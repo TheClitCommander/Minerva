@@ -1,0 +1,4019 @@
+{
+  "insights": {
+    "1a4168fd-0601-4e50-a689-8de019b444fd": {
+      "id": "1a4168fd-0601-4e50-a689-8de019b444fd",
+      "model": "openai",
+      "query": "What is the capital of France?",
+      "response": "OpenAI mock response to: You are Minerva, a highly intelligent AI assistant designed to provide helpful, accurate, and thoughtful responses.\nFollow these guidelines:\n1. Provide clear, concise, and accurate information\n2. When explaining complex topics, break them down into understandable parts\n3. If you're unsure about something, acknowledge the uncertainty\n4. Be respectful and considerate in your responses\n5. Provide reasoning and examples when appropriate\n\n\nWhat is the capital of France?",
+      "feedback": {
+        "rating": 50.0
+      },
+      "context": {
+        "user_id": "test_coordinator_user",
+        "timestamp": "2025-03-01T00:40:31.575596",
+        "processing_time": 0.0005528926849365234,
+        "query_complexity": 5,
+        "priority": "balanced"
+      },
+      "created_at": "2025-03-01T00:40:31.575922",
+      "usage_count": 14,
+      "effectiveness_score": 50.0,
+      "relevance": 1.0
+    },
+    "7364cb38-cf3a-45de-af0f-14f7884b6321": {
+      "id": "7364cb38-cf3a-45de-af0f-14f7884b6321",
+      "model": "openai",
+      "query": "Can you explain the relationship between quantum entanglement and information theory, and how it affects quantum computing?",
+      "response": "OpenAI mock response to: You are Minerva, a highly intelligent AI assistant designed to provide helpful, accurate, and thoughtful responses.\nFollow these guidelines:\n1. Provide clear, concise, and accurate information\n2. When explaining complex topics, break them down into understandable parts\n3. If you're unsure about something, acknowledge the uncertainty\n4. Be respectful and considerate in your responses\n5. Provide reasoning and examples when appropriate\n\n\nCan you explain the relationship between quantum entanglement and information theory, and how it affects quantum computing?",
+      "feedback": {
+        "rating": 50.0
+      },
+      "context": {
+        "user_id": "test_coordinator_user",
+        "timestamp": "2025-03-01T00:40:31.576398",
+        "processing_time": 0.0002307891845703125,
+        "query_complexity": 5,
+        "priority": "balanced"
+      },
+      "created_at": "2025-03-01T00:40:31.576410",
+      "usage_count": 9,
+      "effectiveness_score": 50.0,
+      "relevance": 0.6666666666666666
+    },
+    "8f131442-166f-4512-a5c0-698eda3a6fb3": {
+      "id": "8f131442-166f-4512-a5c0-698eda3a6fb3",
+      "model": "openai",
+      "query": "What is the capital of France?",
+      "response": "OpenAI mock response to: You are Minerva, a highly intelligent AI assistant designed to provide helpful, accurate, and thoughtful responses.\nFollow these guidelines:\n1. Provide clear, concise, and accurate information\n2. When explaining complex topics, break them down into understandable parts\n3. If you're unsure about something, acknowledge the uncertainty\n4. Be respectful and considerate in your responses\n5. Provide reasoning and examples when appropriate\n\n\nWhat is the capital of France?",
+      "feedback": {
+        "rating": 4.5,
+        "feedback_type": "general"
+      },
+      "context": {
+        "user_id": "test_coordinator_user",
+        "message_id": "msg_739bd562",
+        "timestamp": "2025-03-01T00:40:31.576631"
+      },
+      "created_at": "2025-03-01T00:40:31.576668",
+      "usage_count": 13,
+      "effectiveness_score": 4.5,
+      "relevance": 1.0
+    },
+    "847cfa13-d4c0-467b-856f-b1e47c416860": {
+      "id": "847cfa13-d4c0-467b-856f-b1e47c416860",
+      "model": "openai",
+      "query": "Can you explain the relationship between quantum entanglement and information theory, and how it affects quantum computing?",
+      "response": "OpenAI mock response to: You are Minerva, a highly intelligent AI assistant designed to provide helpful, accurate, and thoughtful responses.\nFollow these guidelines:\n1. Provide clear, concise, and accurate information\n2. When explaining complex topics, break them down into understandable parts\n3. If you're unsure about something, acknowledge the uncertainty\n4. Be respectful and considerate in your responses\n5. Provide reasoning and examples when appropriate\n\n\nCan you explain the relationship between quantum entanglement and information theory, and how it affects quantum computing?",
+      "feedback": {
+        "rating": 1.5,
+        "feedback_type": "tone"
+      },
+      "context": {
+        "user_id": "test_coordinator_user",
+        "message_id": "msg_9ce5d2df",
+        "timestamp": "2025-03-01T00:40:31.576883"
+      },
+      "created_at": "2025-03-01T00:40:31.576905",
+      "usage_count": 12,
+      "effectiveness_score": 1.5,
+      "relevance": 0.6666666666666666
+    },
+    "8f938c57-780c-4231-a4b1-d015e38a6a39": {
+      "id": "8f938c57-780c-4231-a4b1-d015e38a6a39",
+      "model": "openai",
+      "query": "Summarize what you know about neural networks.",
+      "response": "OpenAI mock response to: You are Minerva, a highly intelligent AI assistant designed to provide helpful, accurate, and thoughtful responses.\nFollow these guidelines:\n1. Provide clear, concise, and accurate information\n2. When explaining complex topics, break them down into understandable parts\n3. If you're unsure about something, acknowledge the uncertainty\n4. Be respectful and considerate in your responses\n5. Provide reasoning and examples when appropriate\n\n\nSummarize what you know about neural networks.",
+      "feedback": {
+        "rating": 50.0
+      },
+      "context": {
+        "user_id": "test_coordinator_user",
+        "timestamp": "2025-03-01T00:40:31.577671",
+        "processing_time": 0.0003628730773925781,
+        "query_complexity": 5,
+        "priority": "balanced"
+      },
+      "created_at": "2025-03-01T00:40:31.577679",
+      "usage_count": 19,
+      "effectiveness_score": 50.0,
+      "relevance": 0.3333333333333333
+    },
+    "de461169-4c61-4745-96a9-36a7d05ee0c6": {
+      "id": "de461169-4c61-4745-96a9-36a7d05ee0c6",
+      "model": "openai",
+      "query": "What is artificial intelligence?",
+      "response": "OpenAI mock response to: You are Minerva, a highly intelligent AI assistant designed to provide helpful, accurate, and thoughtful responses.\nFollow these guidelines:\n1. Provide clear, concise, and accurate information\n2. When explaining complex topics, break them down into understandable parts\n3. If you're unsure about something, acknowledge the uncertainty\n4. Be respectful and considerate in your responses\n5. Provide reasoning and examples when appropriate\n\n\nWhat is artificial intelligence?",
+      "feedback": {
+        "rating": 50.0
+      },
+      "context": {
+        "user_id": "test_repository_integration_user",
+        "timestamp": "2025-03-01T00:44:24.320317",
+        "processing_time": 0.0004839897155761719,
+        "query_complexity": 5,
+        "priority": "balanced"
+      },
+      "created_at": "2025-03-01T00:44:24.320342",
+      "usage_count": 5,
+      "effectiveness_score": 50.0,
+      "relevance": 0.3333333333333333
+    },
+    "820fcd77-d3bd-448f-bcf5-8ff2dd695edb": {
+      "id": "820fcd77-d3bd-448f-bcf5-8ff2dd695edb",
+      "model": "openai",
+      "query": "What is artificial intelligence?",
+      "response": "OpenAI mock response to: You are Minerva, a highly intelligent AI assistant designed to provide helpful, accurate, and thoughtful responses.\nFollow these guidelines:\n1. Provide clear, concise, and accurate information\n2. When explaining complex topics, break them down into understandable parts\n3. If you're unsure about something, acknowledge the uncertainty\n4. Be respectful and considerate in your responses\n5. Provide reasoning and examples when appropriate\n\n\nWhat is artificial intelligence?",
+      "feedback": {
+        "rating": 4.5,
+        "feedback_type": "general"
+      },
+      "context": {
+        "user_id": "test_repository_integration_user",
+        "message_id": "msg_e889a88c",
+        "timestamp": "2025-03-01T00:44:24.320953"
+      },
+      "created_at": "2025-03-01T00:44:24.320962",
+      "usage_count": 5,
+      "effectiveness_score": 4.5,
+      "relevance": 0.3333333333333333
+    },
+    "004d2503-64da-4f6b-9cc6-254581b7a58d": {
+      "id": "004d2503-64da-4f6b-9cc6-254581b7a58d",
+      "model": "openai",
+      "query": "How does machine learning work?",
+      "response": "OpenAI mock response to: You are Minerva, a highly intelligent AI assistant designed to provide helpful, accurate, and thoughtful responses.\nFollow these guidelines:\n1. Provide clear, concise, and accurate information\n2. When explaining complex topics, break them down into understandable parts\n3. If you're unsure about something, acknowledge the uncertainty\n4. Be respectful and considerate in your responses\n5. Provide reasoning and examples when appropriate\n\n\nHow does machine learning work?",
+      "feedback": {
+        "rating": 50.0
+      },
+      "context": {
+        "user_id": "test_repository_integration_user",
+        "timestamp": "2025-03-01T00:44:24.321591",
+        "processing_time": 0.0002689361572265625,
+        "query_complexity": 5,
+        "priority": "balanced"
+      },
+      "created_at": "2025-03-01T00:44:24.321604",
+      "usage_count": 4,
+      "effectiveness_score": 50.0,
+      "relevance": 0.25
+    },
+    "6cd8f50f-3855-4052-ac6e-e5776f18396d": {
+      "id": "6cd8f50f-3855-4052-ac6e-e5776f18396d",
+      "model": "openai",
+      "query": "How does machine learning work?",
+      "response": "OpenAI mock response to: You are Minerva, a highly intelligent AI assistant designed to provide helpful, accurate, and thoughtful responses.\nFollow these guidelines:\n1. Provide clear, concise, and accurate information\n2. When explaining complex topics, break them down into understandable parts\n3. If you're unsure about something, acknowledge the uncertainty\n4. Be respectful and considerate in your responses\n5. Provide reasoning and examples when appropriate\n\n\nHow does machine learning work?",
+      "feedback": {
+        "rating": 1.5,
+        "feedback_type": "general"
+      },
+      "context": {
+        "user_id": "test_repository_integration_user",
+        "message_id": "msg_74582345",
+        "timestamp": "2025-03-01T00:44:24.321991"
+      },
+      "created_at": "2025-03-01T00:44:24.322024",
+      "usage_count": 4,
+      "effectiveness_score": 1.5,
+      "relevance": 0.25
+    },
+    "95a68782-8313-4b7a-a891-6f06b4a4ba33": {
+      "id": "95a68782-8313-4b7a-a891-6f06b4a4ba33",
+      "model": "openai",
+      "query": "Explain neural networks",
+      "response": "OpenAI mock response to: You are Minerva, a highly intelligent AI assistant designed to provide helpful, accurate, and thoughtful responses.\nFollow these guidelines:\n1. Provide clear, concise, and accurate information\n2. When explaining complex topics, break them down into understandable parts\n3. If you're unsure about something, acknowledge the uncertainty\n4. Be respectful and considerate in your responses\n5. Provide reasoning and examples when appropriate\n\n\nExplain neural networks",
+      "feedback": {
+        "rating": 50.0
+      },
+      "context": {
+        "user_id": "test_repository_integration_user",
+        "timestamp": "2025-03-01T00:44:24.323052",
+        "processing_time": 0.0007021427154541016,
+        "query_complexity": 5,
+        "priority": "balanced"
+      },
+      "created_at": "2025-03-01T00:44:24.323062",
+      "usage_count": 7,
+      "effectiveness_score": 50.0,
+      "relevance": 0.3333333333333333
+    },
+    "4ca66fa1-5993-4799-8b3b-58c5c5f96260": {
+      "id": "4ca66fa1-5993-4799-8b3b-58c5c5f96260",
+      "model": "openai",
+      "query": "Explain neural networks",
+      "response": "OpenAI mock response to: You are Minerva, a highly intelligent AI assistant designed to provide helpful, accurate, and thoughtful responses.\nFollow these guidelines:\n1. Provide clear, concise, and accurate information\n2. When explaining complex topics, break them down into understandable parts\n3. If you're unsure about something, acknowledge the uncertainty\n4. Be respectful and considerate in your responses\n5. Provide reasoning and examples when appropriate\n\n\nExplain neural networks",
+      "feedback": {
+        "rating": 4.5,
+        "feedback_type": "general"
+      },
+      "context": {
+        "user_id": "test_repository_integration_user",
+        "message_id": "msg_71928b47",
+        "timestamp": "2025-03-01T00:44:24.323458"
+      },
+      "created_at": "2025-03-01T00:44:24.323494",
+      "usage_count": 7,
+      "effectiveness_score": 4.5,
+      "relevance": 0.3333333333333333
+    },
+    "462088ed-ccbe-4af1-bbe3-3852aa8879a6": {
+      "id": "462088ed-ccbe-4af1-bbe3-3852aa8879a6",
+      "model": "openai",
+      "query": "What is deep learning?",
+      "response": "OpenAI mock response to: You are Minerva, a highly intelligent AI assistant designed to provide helpful, accurate, and thoughtful responses.\nFollow these guidelines:\n1. Provide clear, concise, and accurate information\n2. When explaining complex topics, break them down into understandable parts\n3. If you're unsure about something, acknowledge the uncertainty\n4. Be respectful and considerate in your responses\n5. Provide reasoning and examples when appropriate\n\n\nWhat is deep learning?",
+      "feedback": {
+        "rating": 50.0
+      },
+      "context": {
+        "user_id": "test_repository_integration_user",
+        "timestamp": "2025-03-01T00:44:24.324364",
+        "processing_time": 0.0005180835723876953,
+        "query_complexity": 5,
+        "priority": "balanced"
+      },
+      "created_at": "2025-03-01T00:44:24.324372",
+      "usage_count": 5,
+      "effectiveness_score": 50.0,
+      "relevance": 0.3333333333333333
+    },
+    "8e248d7d-8357-4760-b2f1-d8de64d71823": {
+      "id": "8e248d7d-8357-4760-b2f1-d8de64d71823",
+      "model": "openai",
+      "query": "What is deep learning?",
+      "response": "OpenAI mock response to: You are Minerva, a highly intelligent AI assistant designed to provide helpful, accurate, and thoughtful responses.\nFollow these guidelines:\n1. Provide clear, concise, and accurate information\n2. When explaining complex topics, break them down into understandable parts\n3. If you're unsure about something, acknowledge the uncertainty\n4. Be respectful and considerate in your responses\n5. Provide reasoning and examples when appropriate\n\n\nWhat is deep learning?",
+      "feedback": {
+        "rating": 1.5,
+        "feedback_type": "general"
+      },
+      "context": {
+        "user_id": "test_repository_integration_user",
+        "message_id": "msg_2159dc60",
+        "timestamp": "2025-03-01T00:44:24.324720"
+      },
+      "created_at": "2025-03-01T00:44:24.324764",
+      "usage_count": 5,
+      "effectiveness_score": 1.5,
+      "relevance": 0.3333333333333333
+    },
+    "7b6972b2-28cf-434e-a6f1-b90a1a6bc822": {
+      "id": "7b6972b2-28cf-434e-a6f1-b90a1a6bc822",
+      "model": "openai",
+      "query": "Compare supervised and unsupervised learning",
+      "response": "OpenAI mock response to: You are Minerva, a highly intelligent AI assistant designed to provide helpful, accurate, and thoughtful responses.\nFollow these guidelines:\n1. Provide clear, concise, and accurate information\n2. When explaining complex topics, break them down into understandable parts\n3. If you're unsure about something, acknowledge the uncertainty\n4. Be respectful and considerate in your responses\n5. Provide reasoning and examples when appropriate\n\n\nCompare supervised and unsupervised learning",
+      "feedback": {
+        "rating": 50.0
+      },
+      "context": {
+        "user_id": "test_repository_integration_user",
+        "timestamp": "2025-03-01T00:44:24.325635",
+        "processing_time": 0.0005178451538085938,
+        "query_complexity": 5,
+        "priority": "balanced"
+      },
+      "created_at": "2025-03-01T00:44:24.325645",
+      "usage_count": 3,
+      "effectiveness_score": 50.0,
+      "relevance": 0.125
+    },
+    "65388e3f-f865-4a4d-8953-663769f49f6a": {
+      "id": "65388e3f-f865-4a4d-8953-663769f49f6a",
+      "model": "openai",
+      "query": "Compare supervised and unsupervised learning",
+      "response": "OpenAI mock response to: You are Minerva, a highly intelligent AI assistant designed to provide helpful, accurate, and thoughtful responses.\nFollow these guidelines:\n1. Provide clear, concise, and accurate information\n2. When explaining complex topics, break them down into understandable parts\n3. If you're unsure about something, acknowledge the uncertainty\n4. Be respectful and considerate in your responses\n5. Provide reasoning and examples when appropriate\n\n\nCompare supervised and unsupervised learning",
+      "feedback": {
+        "rating": 4.5,
+        "feedback_type": "general"
+      },
+      "context": {
+        "user_id": "test_repository_integration_user",
+        "message_id": "msg_f772cc0f",
+        "timestamp": "2025-03-01T00:44:24.326307"
+      },
+      "created_at": "2025-03-01T00:44:24.326344",
+      "usage_count": 3,
+      "effectiveness_score": 4.5,
+      "relevance": 0.125
+    },
+    "d6c632a8-74d9-4aa1-9ccb-4ef40468070a": {
+      "id": "d6c632a8-74d9-4aa1-9ccb-4ef40468070a",
+      "model": "openai",
+      "query": "What's AI?",
+      "response": "OpenAI mock response to: You are Minerva, a highly intelligent AI assistant designed to provide helpful, accurate, and thoughtful responses.\nFollow these guidelines:\n1. Provide clear, concise, and accurate information\n2. When explaining complex topics, break them down into understandable parts\n3. If you're unsure about something, acknowledge the uncertainty\n4. Be respectful and considerate in your responses\n5. Provide reasoning and examples when appropriate\n\n\nWhat's AI?",
+      "feedback": {
+        "rating": 50.0
+      },
+      "context": {
+        "user_id": "test_repository_integration_user",
+        "timestamp": "2025-03-01T00:44:24.327008",
+        "processing_time": 0.0001709461212158203,
+        "query_complexity": 5,
+        "priority": "balanced"
+      },
+      "created_at": "2025-03-01T00:44:24.327016",
+      "usage_count": 0,
+      "effectiveness_score": 50.0
+    },
+    "71872595-c628-4ce4-b158-4ac90f2c0181": {
+      "id": "71872595-c628-4ce4-b158-4ac90f2c0181",
+      "model": "openai",
+      "query": "How does ML work?",
+      "response": "OpenAI mock response to: You are Minerva, a highly intelligent AI assistant designed to provide helpful, accurate, and thoughtful responses.\nFollow these guidelines:\n1. Provide clear, concise, and accurate information\n2. When explaining complex topics, break them down into understandable parts\n3. If you're unsure about something, acknowledge the uncertainty\n4. Be respectful and considerate in your responses\n5. Provide reasoning and examples when appropriate\n\n\nHow does ML work?",
+      "feedback": {
+        "rating": 50.0
+      },
+      "context": {
+        "user_id": "test_repository_integration_user",
+        "timestamp": "2025-03-01T00:44:24.328258",
+        "processing_time": 0.00022411346435546875,
+        "query_complexity": 5,
+        "priority": "balanced"
+      },
+      "created_at": "2025-03-01T00:44:24.328269",
+      "usage_count": 0,
+      "effectiveness_score": 50.0
+    },
+    "17037afa-b5fe-4ac9-9830-e9279bbcc6d8": {
+      "id": "17037afa-b5fe-4ac9-9830-e9279bbcc6d8",
+      "model": "openai",
+      "query": "Tell me about neural networks",
+      "response": "OpenAI mock response to: You are Minerva, a highly intelligent AI assistant designed to provide helpful, accurate, and thoughtful responses.\nFollow these guidelines:\n1. Provide clear, concise, and accurate information\n2. When explaining complex topics, break them down into understandable parts\n3. If you're unsure about something, acknowledge the uncertainty\n4. Be respectful and considerate in your responses\n5. Provide reasoning and examples when appropriate\n\n\nTell me about neural networks",
+      "feedback": {
+        "rating": 50.0
+      },
+      "context": {
+        "user_id": "test_repository_integration_user",
+        "timestamp": "2025-03-01T00:44:24.329508",
+        "processing_time": 0.00018405914306640625,
+        "query_complexity": 5,
+        "priority": "balanced"
+      },
+      "created_at": "2025-03-01T00:44:24.329520",
+      "usage_count": 11,
+      "effectiveness_score": 50.0,
+      "relevance": 0.3333333333333333
+    },
+    "23efffdd-5cbf-4e8e-a95b-144a0846b536": {
+      "id": "23efffdd-5cbf-4e8e-a95b-144a0846b536",
+      "model": "openai",
+      "query": "What are the differences between supervised and unsupervised learning?",
+      "response": "OpenAI mock response to: You are Minerva, a highly intelligent AI assistant designed to provide helpful, accurate, and thoughtful responses.\nFollow these guidelines:\n1. Provide clear, concise, and accurate information\n2. When explaining complex topics, break them down into understandable parts\n3. If you're unsure about something, acknowledge the uncertainty\n4. Be respectful and considerate in your responses\n5. Provide reasoning and examples when appropriate\n\n\nWhat are the differences between supervised and unsupervised learning?",
+      "feedback": {
+        "rating": 50.0
+      },
+      "context": {
+        "user_id": "test_repository_integration_user",
+        "timestamp": "2025-03-01T00:44:24.331598",
+        "processing_time": 0.0001888275146484375,
+        "query_complexity": 5,
+        "priority": "balanced"
+      },
+      "created_at": "2025-03-01T00:44:24.331606",
+      "usage_count": 7,
+      "effectiveness_score": 50.0,
+      "relevance": 0.5
+    },
+    "1aabc5fe-8a3c-4518-87fd-43eb3dcfa269": {
+      "id": "1aabc5fe-8a3c-4518-87fd-43eb3dcfa269",
+      "model": "openai",
+      "query": "What is the capital of France?",
+      "response": "OpenAI mock response to: You are Minerva, a highly intelligent AI assistant designed to provide helpful, accurate, and thoughtful responses.\nFollow these guidelines:\n1. Provide clear, concise, and accurate information\n2. When explaining complex topics, break them down into understandable parts\n3. If you're unsure about something, acknowledge the uncertainty\n4. Be respectful and considerate in your responses\n5. Provide reasoning and examples when appropriate\n\n\nWhat is the capital of France?",
+      "feedback": {
+        "rating": 50.0
+      },
+      "context": {
+        "user_id": "test_coordinator_user",
+        "timestamp": "2025-03-01T00:47:05.601998",
+        "processing_time": 0.00047087669372558594,
+        "query_complexity": 5,
+        "priority": "balanced"
+      },
+      "created_at": "2025-03-01T00:47:05.602021",
+      "usage_count": 8,
+      "effectiveness_score": 50.0,
+      "relevance": 1.0
+    },
+    "cb8bb429-f8f8-4b0d-a179-067e80db01c7": {
+      "id": "cb8bb429-f8f8-4b0d-a179-067e80db01c7",
+      "model": "openai",
+      "query": "Can you explain the relationship between quantum entanglement and information theory, and how it affects quantum computing?",
+      "response": "OpenAI mock response to: You are Minerva, a highly intelligent AI assistant designed to provide helpful, accurate, and thoughtful responses.\nFollow these guidelines:\n1. Provide clear, concise, and accurate information\n2. When explaining complex topics, break them down into understandable parts\n3. If you're unsure about something, acknowledge the uncertainty\n4. Be respectful and considerate in your responses\n5. Provide reasoning and examples when appropriate\n\n\nCan you explain the relationship between quantum entanglement and information theory, and how it affects quantum computing?",
+      "feedback": {
+        "rating": 50.0
+      },
+      "context": {
+        "user_id": "test_coordinator_user",
+        "timestamp": "2025-03-01T00:47:05.603743",
+        "processing_time": 0.0007622241973876953,
+        "query_complexity": 5,
+        "priority": "balanced"
+      },
+      "created_at": "2025-03-01T00:47:05.603754",
+      "usage_count": 6,
+      "effectiveness_score": 50.0,
+      "relevance": 0.6666666666666666
+    },
+    "d8707058-d811-4464-9378-d528e769029f": {
+      "id": "d8707058-d811-4464-9378-d528e769029f",
+      "model": "openai",
+      "query": "What is the capital of France?",
+      "response": "OpenAI mock response to: You are Minerva, a highly intelligent AI assistant designed to provide helpful, accurate, and thoughtful responses.\nFollow these guidelines:\n1. Provide clear, concise, and accurate information\n2. When explaining complex topics, break them down into understandable parts\n3. If you're unsure about something, acknowledge the uncertainty\n4. Be respectful and considerate in your responses\n5. Provide reasoning and examples when appropriate\n\n\nWhat is the capital of France?",
+      "feedback": {
+        "rating": 4.5,
+        "feedback_type": "general"
+      },
+      "context": {
+        "user_id": "test_coordinator_user",
+        "message_id": "msg_0f089694",
+        "timestamp": "2025-03-01T00:47:05.604282"
+      },
+      "created_at": "2025-03-01T00:47:05.604314",
+      "usage_count": 9,
+      "effectiveness_score": 4.5,
+      "relevance": 1.0
+    },
+    "67b1e952-27e9-43dd-9ee6-54343a200a31": {
+      "id": "67b1e952-27e9-43dd-9ee6-54343a200a31",
+      "model": "openai",
+      "query": "Can you explain the relationship between quantum entanglement and information theory, and how it affects quantum computing?",
+      "response": "OpenAI mock response to: You are Minerva, a highly intelligent AI assistant designed to provide helpful, accurate, and thoughtful responses.\nFollow these guidelines:\n1. Provide clear, concise, and accurate information\n2. When explaining complex topics, break them down into understandable parts\n3. If you're unsure about something, acknowledge the uncertainty\n4. Be respectful and considerate in your responses\n5. Provide reasoning and examples when appropriate\n\n\nCan you explain the relationship between quantum entanglement and information theory, and how it affects quantum computing?",
+      "feedback": {
+        "rating": 1.5,
+        "feedback_type": "tone"
+      },
+      "context": {
+        "user_id": "test_coordinator_user",
+        "message_id": "msg_c7a0679d",
+        "timestamp": "2025-03-01T00:47:05.604823"
+      },
+      "created_at": "2025-03-01T00:47:05.604849",
+      "usage_count": 6,
+      "effectiveness_score": 1.5,
+      "relevance": 0.6666666666666666
+    },
+    "f51adf14-2f78-449b-8777-3a625ca5bb48": {
+      "id": "f51adf14-2f78-449b-8777-3a625ca5bb48",
+      "model": "openai",
+      "query": "Summarize what you know about neural networks.",
+      "response": "OpenAI mock response to: You are Minerva, a highly intelligent AI assistant designed to provide helpful, accurate, and thoughtful responses.\nFollow these guidelines:\n1. Provide clear, concise, and accurate information\n2. When explaining complex topics, break them down into understandable parts\n3. If you're unsure about something, acknowledge the uncertainty\n4. Be respectful and considerate in your responses\n5. Provide reasoning and examples when appropriate\n\n\nSummarize what you know about neural networks.",
+      "feedback": {
+        "rating": 50.0
+      },
+      "context": {
+        "user_id": "test_coordinator_user",
+        "timestamp": "2025-03-01T00:47:05.607049",
+        "processing_time": 0.0009839534759521484,
+        "query_complexity": 5,
+        "priority": "balanced"
+      },
+      "created_at": "2025-03-01T00:47:05.607063",
+      "usage_count": 12,
+      "effectiveness_score": 50.0,
+      "relevance": 0.3333333333333333
+    },
+    "2e1ffd0d-4114-4228-9a8c-1dc12e3dacb6": {
+      "id": "2e1ffd0d-4114-4228-9a8c-1dc12e3dacb6",
+      "model": "openai",
+      "query": "What is the capital of France?",
+      "response": "OpenAI mock response to: You are Minerva, a highly intelligent AI assistant designed to provide helpful, accurate, and thoughtful responses.\nFollow these guidelines:\n1. Provide clear, concise, and accurate information\n2. When explaining complex topics, break them down into understandable parts\n3. If you're unsure about something, acknowledge the uncertainty\n4. Be respectful and considerate in your responses\n5. Provide reasoning and examples when appropriate\n\n\nWhat is the capital of France?",
+      "feedback": {
+        "rating": 50.0
+      },
+      "context": {
+        "user_id": "test_coordinator_user",
+        "timestamp": "2025-03-01T00:53:47.637163",
+        "processing_time": 0.0005409717559814453,
+        "query_complexity": 1,
+        "adjusted_complexity": 1,
+        "confidence_threshold": 0.7666666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        }
+      },
+      "created_at": "2025-03-01T00:53:47.637187",
+      "usage_count": 8,
+      "effectiveness_score": 50.0,
+      "relevance": 1.0
+    },
+    "0def8283-43f5-4d42-9abb-48b6ab71ba5d": {
+      "id": "0def8283-43f5-4d42-9abb-48b6ab71ba5d",
+      "model": "openai",
+      "query": "Can you explain the relationship between quantum entanglement and information theory, and how it affects quantum computing?",
+      "response": "OpenAI mock response to: You are Minerva, a highly intelligent AI assistant designed to provide helpful, accurate, and thoughtful responses.\nFollow these guidelines:\n1. Provide clear, concise, and accurate information\n2. When explaining complex topics, break them down into understandable parts\n3. If you're unsure about something, acknowledge the uncertainty\n4. Be respectful and considerate in your responses\n5. Provide reasoning and examples when appropriate\n\n\nCan you explain the relationship between quantum entanglement and information theory, and how it affects quantum computing?",
+      "feedback": {
+        "rating": 50.0
+      },
+      "context": {
+        "user_id": "test_coordinator_user",
+        "timestamp": "2025-03-01T00:53:47.638911",
+        "processing_time": 0.0008831024169921875,
+        "query_complexity": 3.2,
+        "adjusted_complexity": 3.2,
+        "confidence_threshold": 0.6933333333333334,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        }
+      },
+      "created_at": "2025-03-01T00:53:47.638920",
+      "usage_count": 7,
+      "effectiveness_score": 50.0,
+      "relevance": 0.6666666666666666
+    },
+    "fc0cf1df-1635-4df9-a215-90f619205558": {
+      "id": "fc0cf1df-1635-4df9-a215-90f619205558",
+      "model": "openai",
+      "query": "What is the capital of France?",
+      "response": "OpenAI mock response to: You are Minerva, a highly intelligent AI assistant designed to provide helpful, accurate, and thoughtful responses.\nFollow these guidelines:\n1. Provide clear, concise, and accurate information\n2. When explaining complex topics, break them down into understandable parts\n3. If you're unsure about something, acknowledge the uncertainty\n4. Be respectful and considerate in your responses\n5. Provide reasoning and examples when appropriate\n\n\nWhat is the capital of France?",
+      "feedback": {
+        "rating": 4.5,
+        "feedback_type": "general"
+      },
+      "context": {
+        "user_id": "test_coordinator_user",
+        "message_id": "msg_932c1b80",
+        "timestamp": "2025-03-01T00:53:47.639556"
+      },
+      "created_at": "2025-03-01T00:53:47.639577",
+      "usage_count": 7,
+      "effectiveness_score": 4.5,
+      "relevance": 1.0
+    },
+    "1d3bc622-d86e-454c-bab0-c3f049c53da9": {
+      "id": "1d3bc622-d86e-454c-bab0-c3f049c53da9",
+      "model": "openai",
+      "query": "Can you explain the relationship between quantum entanglement and information theory, and how it affects quantum computing?",
+      "response": "OpenAI mock response to: You are Minerva, a highly intelligent AI assistant designed to provide helpful, accurate, and thoughtful responses.\nFollow these guidelines:\n1. Provide clear, concise, and accurate information\n2. When explaining complex topics, break them down into understandable parts\n3. If you're unsure about something, acknowledge the uncertainty\n4. Be respectful and considerate in your responses\n5. Provide reasoning and examples when appropriate\n\n\nCan you explain the relationship between quantum entanglement and information theory, and how it affects quantum computing?",
+      "feedback": {
+        "rating": 1.5,
+        "feedback_type": "tone"
+      },
+      "context": {
+        "user_id": "test_coordinator_user",
+        "message_id": "msg_af600320",
+        "timestamp": "2025-03-01T00:53:47.640285"
+      },
+      "created_at": "2025-03-01T00:53:47.640319",
+      "usage_count": 5,
+      "effectiveness_score": 1.5,
+      "relevance": 0.6666666666666666
+    },
+    "d76a1ceb-31d9-44d1-90da-b62409d31546": {
+      "id": "d76a1ceb-31d9-44d1-90da-b62409d31546",
+      "model": "openai",
+      "query": "Summarize what you know about neural networks.",
+      "response": "OpenAI mock response to: You are Minerva, a highly intelligent AI assistant designed to provide helpful, accurate, and thoughtful responses.\nFollow these guidelines:\n1. Provide clear, concise, and accurate information\n2. When explaining complex topics, break them down into understandable parts\n3. If you're unsure about something, acknowledge the uncertainty\n4. Be respectful and considerate in your responses\n5. Provide reasoning and examples when appropriate\n\n\nSummarize what you know about neural networks.",
+      "feedback": {
+        "rating": 50.0
+      },
+      "context": {
+        "user_id": "test_coordinator_user",
+        "timestamp": "2025-03-01T00:53:47.642852",
+        "processing_time": 0.0012028217315673828,
+        "query_complexity": 2.0,
+        "adjusted_complexity": 2.0,
+        "confidence_threshold": 0.7333333333333334,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        }
+      },
+      "created_at": "2025-03-01T00:53:47.642871",
+      "usage_count": 10,
+      "effectiveness_score": 50.0,
+      "relevance": 0.3333333333333333
+    },
+    "b53b3d33-814c-4f6f-9315-adb66100166f": {
+      "id": "b53b3d33-814c-4f6f-9315-adb66100166f",
+      "model": "openai",
+      "query": "What's the capital of Italy?",
+      "response": "Rome is the capital of Italy.",
+      "feedback": {
+        "rating": 4.5,
+        "feedback_type": "general",
+        "relevance_tags": [
+          "general_quality"
+        ]
+      },
+      "context": {
+        "user_id": "test_feedback_user",
+        "message_id": "msg_1740808690",
+        "timestamp": "2025-03-01T00:58:10.091246",
+        "query_complexity": 4.28
+      },
+      "created_at": "2025-03-01T00:58:10.091295",
+      "usage_count": 1,
+      "effectiveness_score": 4.5,
+      "relevance": 0.6666666666666666
+    },
+    "ef755d3e-59e2-4a23-a34c-296a2304ed99": {
+      "id": "ef755d3e-59e2-4a23-a34c-296a2304ed99",
+      "model": "openai",
+      "query": "Explain natural language processing techniques.",
+      "response": "Natural language processing (NLP) is a field of AI focused on the interaction between computers and human language...",
+      "feedback": {
+        "rating": 4.5,
+        "feedback_type": "general",
+        "relevance_tags": [
+          "general_quality",
+          "simple_query"
+        ]
+      },
+      "context": {
+        "user_id": "test_feedback_user",
+        "message_id": "msg_1740808690",
+        "timestamp": "2025-03-01T00:58:10.092237",
+        "query_complexity": 0.47
+      },
+      "created_at": "2025-03-01T00:58:10.092261",
+      "usage_count": 2,
+      "effectiveness_score": 4.5,
+      "relevance": 0.3333333333333333
+    },
+    "ddf4df10-26cb-4ccd-9fbb-4825c3211202": {
+      "id": "ddf4df10-26cb-4ccd-9fbb-4825c3211202",
+      "model": "openai",
+      "query": "Describe the implementation of attention mechanisms in transformer neural networks and how to optimize them for large language models.",
+      "response": "Attention mechanisms in transformer neural networks are a key innovation that enables these models to process sequence data efficiently...",
+      "feedback": {
+        "rating": 4.5,
+        "feedback_type": "general",
+        "relevance_tags": [
+          "general_quality"
+        ]
+      },
+      "context": {
+        "user_id": "test_feedback_user",
+        "message_id": "msg_1740808690",
+        "timestamp": "2025-03-01T00:58:10.093253",
+        "query_complexity": 5.34
+      },
+      "created_at": "2025-03-01T00:58:10.093282",
+      "usage_count": 1,
+      "effectiveness_score": 4.5,
+      "relevance": 0.75
+    },
+    "cdd3ddb3-1018-45a6-9808-20f9d42678e2": {
+      "id": "cdd3ddb3-1018-45a6-9808-20f9d42678e2",
+      "model": "openai",
+      "query": "What is the capital of France?",
+      "response": "openai response to: What is the capital of France?...\n\nThis is a brief, direct answer to your question.",
+      "feedback": {
+        "rating": 4.5,
+        "feedback_type": "general",
+        "relevance_tags": [
+          "general_quality"
+        ]
+      },
+      "context": {
+        "user_id": "test_model_selection_user",
+        "message_id": "msg_1740808857",
+        "timestamp": "2025-03-01T01:00:57.445574",
+        "query_complexity": 4.3
+      },
+      "created_at": "2025-03-01T01:00:57.445632",
+      "usage_count": 6,
+      "effectiveness_score": 4.5,
+      "relevance": 1.0
+    },
+    "ee3fa167-96a5-40be-b313-f0c6b8ea27db": {
+      "id": "ee3fa167-96a5-40be-b313-f0c6b8ea27db",
+      "model": "openai",
+      "query": "Explain how photosynthesis works in plants",
+      "response": "openai response to: Explain how photosynthesis wor...\n\nThis is a brief, direct answer to your question.",
+      "feedback": {
+        "rating": 4.5,
+        "feedback_type": "general",
+        "relevance_tags": [
+          "general_quality",
+          "simple_query"
+        ]
+      },
+      "context": {
+        "user_id": "test_model_selection_user",
+        "message_id": "msg_1740808857",
+        "timestamp": "2025-03-01T01:00:57.449024",
+        "query_complexity": 0.42
+      },
+      "created_at": "2025-03-01T01:00:57.449091",
+      "usage_count": 1,
+      "effectiveness_score": 4.5,
+      "relevance": 0.3333333333333333
+    },
+    "88e40ff2-0c7c-4c5f-88a4-1d2cb46f1fa4": {
+      "id": "88e40ff2-0c7c-4c5f-88a4-1d2cb46f1fa4",
+      "model": "openai",
+      "query": "Describe the implementation of a transformer neural network architecture with self-attention mechanisms",
+      "response": "openai response to: Describe the implementation of...\n\nThis is a moderately detailed explanation.\n\nIt covers the main points without excessive detail.",
+      "feedback": {
+        "rating": 4.5,
+        "feedback_type": "general",
+        "relevance_tags": [
+          "general_quality"
+        ]
+      },
+      "context": {
+        "user_id": "test_model_selection_user",
+        "message_id": "msg_1740808857",
+        "timestamp": "2025-03-01T01:00:57.450961",
+        "query_complexity": 5.03
+      },
+      "created_at": "2025-03-01T01:00:57.450986",
+      "usage_count": 0,
+      "effectiveness_score": 4.5
+    },
+    "cadc94bd-4e96-47ec-87fb-ee81a2a45875": {
+      "id": "cadc94bd-4e96-47ec-87fb-ee81a2a45875",
+      "model": "claude3",
+      "query": "Explain quantum computing and its implications for AI.",
+      "response": "Error processing with claude3: name '_simulated_claude3_processor' is not defined",
+      "feedback": {
+        "rating": 3.6125000000000003
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-02T18:06:53.087782",
+        "processing_time": 0.3509969711303711,
+        "query_complexity": 1.5,
+        "adjusted_complexity": 1.5,
+        "confidence_threshold": 0.75,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "explanation",
+          "short_query"
+        ],
+        "repository_guided": false,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-02T18:06:53.092784",
+      "usage_count": 2,
+      "effectiveness_score": 3.6125000000000003,
+      "relevance": 0.6666666666666666
+    },
+    "d6639801-e61d-4ed7-acbc-19256cf54c98": {
+      "id": "d6639801-e61d-4ed7-acbc-19256cf54c98",
+      "model": "claude3",
+      "query": "Explain quantum computing and its implications for AI.",
+      "response": "Error processing with claude3: name '_simulated_claude3_processor' is not defined",
+      "feedback": {
+        "rating": 3.6125000000000003
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-02T18:08:20.528629",
+        "processing_time": 0.010233163833618164,
+        "query_complexity": 1.5,
+        "adjusted_complexity": 1.5,
+        "confidence_threshold": 0.75,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "explanation",
+          "short_query"
+        ],
+        "repository_guided": false,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-02T18:08:20.528692",
+      "usage_count": 2,
+      "effectiveness_score": 3.6125000000000003,
+      "relevance": 0.6666666666666666
+    },
+    "1be88e96-39fb-45cb-a4cf-0aaf9f2736b2": {
+      "id": "1be88e96-39fb-45cb-a4cf-0aaf9f2736b2",
+      "model": "claude3",
+      "query": "Explain quantum computing and its implications for AI.",
+      "response": "Error processing with claude3: name '_simulated_claude3_processor' is not defined",
+      "feedback": {
+        "rating": 3.6125000000000003
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-02T18:11:39.279640",
+        "processing_time": 0.011018991470336914,
+        "query_complexity": 1.5,
+        "adjusted_complexity": 1.5,
+        "confidence_threshold": 0.75,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "explanation",
+          "short_query"
+        ],
+        "repository_guided": false,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-02T18:11:39.279702",
+      "usage_count": 7,
+      "effectiveness_score": 3.6125000000000003,
+      "relevance": 0.6666666666666666
+    },
+    "844409ad-fead-4385-8d44-330d15d32a9b": {
+      "id": "844409ad-fead-4385-8d44-330d15d32a9b",
+      "model": "claude3",
+      "query": "Explain quantum computing and its implications for AI.",
+      "response": "Error processing with claude3: name '_simulated_claude3_processor' is not defined",
+      "feedback": {
+        "rating": 3.6125000000000003
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-02T18:13:59.992824",
+        "processing_time": 0.010105133056640625,
+        "query_complexity": 1.5,
+        "adjusted_complexity": 1.5,
+        "confidence_threshold": 0.75,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "explanation",
+          "short_query"
+        ],
+        "repository_guided": false,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-02T18:13:59.992897",
+      "usage_count": 6,
+      "effectiveness_score": 3.6125000000000003,
+      "relevance": 0.6666666666666666
+    },
+    "e86ac4a1-49e8-46d3-97da-307a51217e3a": {
+      "id": "e86ac4a1-49e8-46d3-97da-307a51217e3a",
+      "model": "gpt4",
+      "query": "Explain quantum computing and its implications for AI.",
+      "response": "Simulated GPT-4 response to your question about ['Explain', 'quantum', 'computing']. This model would provide a detailed, nuanced explanation with clear examples and thorough analysis.",
+      "feedback": {
+        "rating": 4.2925
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-02T19:52:48.854953",
+        "processing_time": 0.011467695236206055,
+        "query_complexity": 1.5,
+        "adjusted_complexity": 1.5,
+        "confidence_threshold": 0.75,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "explanation",
+          "short_query"
+        ],
+        "repository_guided": false,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-02T19:52:48.856186",
+      "usage_count": 4,
+      "effectiveness_score": 4.2925,
+      "relevance": 0.6666666666666666
+    },
+    "966fb9aa-6f35-4a60-8877-b7b21e40b390": {
+      "id": "966fb9aa-6f35-4a60-8877-b7b21e40b390",
+      "model": "gpt4",
+      "query": "Compare the economic theories of Keynes and Friedman",
+      "response": "Simulated GPT-4 response to your question about ['Compare', 'the', 'economic']. This model would provide a detailed, nuanced explanation with clear examples and thorough analysis.",
+      "feedback": {
+        "rating": 3.9850000000000003
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-02T19:53:03.812028",
+        "processing_time": 0.00992584228515625,
+        "query_complexity": 1,
+        "adjusted_complexity": 1,
+        "confidence_threshold": 0.7666666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "comparison",
+          "short_query"
+        ],
+        "repository_guided": true,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-02T19:53:03.812048",
+      "usage_count": 0,
+      "effectiveness_score": 3.9850000000000003
+    },
+    "4840c171-62bb-44ab-b253-372b23ca2b75": {
+      "id": "4840c171-62bb-44ab-b253-372b23ca2b75",
+      "model": "gpt4",
+      "query": "What is the capital of France?",
+      "response": "Simulated GPT-4 response to your question about ['What', 'is', 'the']. This model would provide a detailed, nuanced explanation with clear examples and thorough analysis.",
+      "feedback": {
+        "rating": 4.1049999999999995
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-02T20:08:35.351050",
+        "processing_time": 0.011051177978515625,
+        "query_complexity": 1,
+        "adjusted_complexity": 1,
+        "confidence_threshold": 0.7666666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "explanation",
+          "short_query"
+        ],
+        "repository_guided": false,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-02T20:08:35.351112",
+      "usage_count": 6,
+      "effectiveness_score": 4.1049999999999995,
+      "relevance": 1.0
+    },
+    "56bc53cd-00c5-4808-8c60-334cc11d8917": {
+      "id": "56bc53cd-00c5-4808-8c60-334cc11d8917",
+      "model": "gpt4",
+      "query": "What is the capital of France?",
+      "response": "Simulated GPT-4 response to your question about ['What', 'is', 'the']. This model would provide a detailed, nuanced explanation with clear examples and thorough analysis.",
+      "feedback": {
+        "rating": 4.1049999999999995
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-02T20:12:08.978761",
+        "processing_time": 0.029207944869995117,
+        "query_complexity": 1,
+        "adjusted_complexity": 1,
+        "confidence_threshold": 0.7666666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "explanation",
+          "short_query"
+        ],
+        "repository_guided": false,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-02T20:12:08.978836",
+      "usage_count": 6,
+      "effectiveness_score": 4.1049999999999995,
+      "relevance": 1.0
+    },
+    "89313006-5ccb-460e-bd8f-764556c83b62": {
+      "id": "89313006-5ccb-460e-bd8f-764556c83b62",
+      "model": "gpt4",
+      "query": "Explain quantum computing in simple terms",
+      "response": "Simulated GPT-4 response to your question about ['Explain', 'quantum', 'computing']. This model would provide a detailed, nuanced explanation with clear examples and thorough analysis.",
+      "feedback": {
+        "rating": 4.074999999999999
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-02T20:12:21.291828",
+        "processing_time": 0.008985280990600586,
+        "query_complexity": 5.0,
+        "adjusted_complexity": 5.0,
+        "confidence_threshold": 0.7,
+        "priority": "balanced",
+        "response_formatting": {},
+        "query_tags": [],
+        "repository_guided": false,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-02T20:12:21.291849",
+      "usage_count": 8,
+      "effectiveness_score": 4.074999999999999,
+      "relevance": 0.8333333333333334
+    },
+    "21aba12e-e314-497a-843d-9bf0807f66be": {
+      "id": "21aba12e-e314-497a-843d-9bf0807f66be",
+      "model": "claude3",
+      "query": "Tell me a nonsense story that repeats itself over and over",
+      "response": "Thank you for asking about Tell me a nonsense story. I'd be happy to help with this.\n\n## Overview\n\nWhen discussing Tell me a nonsense story, it's important to consider multiple perspectives and ensure we have accurate information. Let me break this down:\n\n## Key Points\n\n1. **Fundamental Concepts**: The basic principles that apply to this topic include several important frameworks that experts have developed over time.\n\n2. **Common Approaches**: There are several methodologies that people use when addressing this, each with its own strengths.\n\n3. **Ethical Considerations**: It's worth noting the ethical dimensions of this topic, as they inform how we should approach it.\n\n## Practical Applications\n\nIn practical terms, you might apply this knowledge by identifying the specific context of your situation and adapting the general principles accordingly.\n\n## Conclusion\n\nI hope this explanation of Tell me a nonsense story has been helpful. If you have any follow-up questions or need clarification on any point, please don't hesitate to ask.",
+      "feedback": {
+        "rating": 4.733928571428572
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-02T20:53:55.073521",
+        "processing_time": 0.01456904411315918,
+        "query_complexity": 1.1,
+        "adjusted_complexity": 1.1,
+        "confidence_threshold": 0.7633333333333334,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [],
+        "repository_guided": false,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-02T20:53:55.073583",
+      "usage_count": 1,
+      "effectiveness_score": 4.733928571428572,
+      "relevance": 0.25
+    },
+    "cfa3a47d-037d-4af5-bbb6-c386a5425931": {
+      "id": "cfa3a47d-037d-4af5-bbb6-c386a5425931",
+      "model": "mistral7b",
+      "query": "Tell me a nonsense story that repeats itself over and over",
+      "response": "Regarding your question about Tell nonsense story:\n\nThis topic can be understood through three main lenses:\n\n1) Technical foundation: The underlying mechanisms follow established patterns that can be observed across similar systems.\n\n2) Practical implementation: Most successful approaches involve iterative testing and refinement based on observed outcomes.\n\n3) Contextual factors: Results may vary depending on specific environmental conditions and constraints.\n\nThe most important thing to remember about Tell nonsense story is that fundamentals matter more than edge cases. Focus on getting the core concepts right first.",
+      "feedback": {
+        "rating": 3.5
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-02T21:13:51.138537",
+        "processing_time": 0.1607499122619629,
+        "query_complexity": 1.1,
+        "adjusted_complexity": 1.1,
+        "confidence_threshold": 0.7633333333333334,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [],
+        "repository_guided": false,
+        "dashboard_guided": false,
+        "considered_models": [
+          "mistral7b"
+        ]
+      },
+      "created_at": "2025-03-02T21:13:51.140163",
+      "usage_count": 1,
+      "effectiveness_score": 3.5,
+      "relevance": 0.25
+    },
+    "d407e04b-55ea-4922-806c-b748b2de6513": {
+      "id": "d407e04b-55ea-4922-806c-b748b2de6513",
+      "model": "gpt4",
+      "query": "What are the main factors that influence climate change?",
+      "response": "I understand you're asking about What are the. Let me provide a comprehensive answer.\n\nThis is a complex topic with several important aspects to consider:\n\n1. The primary factors involved include historical context, current applications, and future implications.\n\n2. From a technical perspective, there are multiple approaches that experts recommend, each with different trade-offs.\n\n3. Recent research suggests several new developments that might reshape our understanding of this area.\n\nIn conclusion, when thinking about {topic}, remember that context matters significantly, and what works in one situation might not be appropriate in another. I hope this provides the insight you were looking for.",
+      "feedback": {
+        "rating": 4.71452380952381
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-02T21:18:37.796323",
+        "processing_time": 0.014326095581054688,
+        "query_complexity": 1,
+        "adjusted_complexity": 1,
+        "confidence_threshold": 0.7666666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "short_query"
+        ],
+        "repository_guided": true,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-02T21:18:37.796382",
+      "usage_count": 0,
+      "effectiveness_score": 4.71452380952381,
+      "relevance": 0.3333333333333333
+    },
+    "9ea2263c-1e23-4f74-84e7-e72e0c12c389": {
+      "id": "9ea2263c-1e23-4f74-84e7-e72e0c12c389",
+      "model": "gpt4",
+      "query": "hey",
+      "response": "I understand you're asking about hey. Let me provide a comprehensive answer.\n\nHere's what you need to know about this topic:\n\nThe key point to understand is that this involves several interconnected concepts that work together to produce the results you're seeing.\n\nIn conclusion, when thinking about {topic}, remember that context matters significantly, and what works in one situation might not be appropriate in another. I hope this provides the insight you were looking for.",
+      "feedback": {
+        "rating": 4.421666666666667
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-02T21:38:23.018014",
+        "processing_time": 0.01888298988342285,
+        "query_complexity": 1,
+        "adjusted_complexity": 1,
+        "confidence_threshold": 0.7666666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "short_query"
+        ],
+        "repository_guided": false,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-02T21:38:23.018103",
+      "usage_count": 0,
+      "effectiveness_score": 4.421666666666667
+    },
+    "aae345d5-83fc-4bef-b1bb-aa9765e0d179": {
+      "id": "aae345d5-83fc-4bef-b1bb-aa9765e0d179",
+      "model": "claude3",
+      "query": "hey",
+      "response": "Hello there! I'm Claude. How can I help you today?",
+      "feedback": {
+        "rating": 3.7625
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-02T21:41:13.285859",
+        "processing_time": 0.016546010971069336,
+        "query_complexity": 1,
+        "adjusted_complexity": 1,
+        "confidence_threshold": 0.7666666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "short_query"
+        ],
+        "repository_guided": false,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-02T21:41:13.285933",
+      "usage_count": 0,
+      "effectiveness_score": 3.7625
+    },
+    "5b3246f2-5f76-41e4-ab42-61bdc5709baa": {
+      "id": "5b3246f2-5f76-41e4-ab42-61bdc5709baa",
+      "model": "gpt4all",
+      "query": "What is the meaning of life?",
+      "response": "About USER: What is the - here's a simple explanation:\n\n- Main idea: This concept involves specific elements working together in a structured way.\n\n- Practical side: You can apply this in everyday situations by following certain principles.\n\n- Important to remember: Context matters, and what works in one situation might need adjustment in another.\n\n- Practical tip: When you're dealing with this in everyday situations, focus on the main components and don't get distracted by minor details.",
+      "feedback": {
+        "rating": 4.35
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-02T21:44:57.242506",
+        "processing_time": 0.015569925308227539,
+        "query_complexity": 1,
+        "adjusted_complexity": 1,
+        "confidence_threshold": 0.7666666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "explanation",
+          "short_query"
+        ],
+        "repository_guided": false,
+        "dashboard_guided": false,
+        "considered_models": [
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-02T21:44:57.244039",
+      "usage_count": 0,
+      "effectiveness_score": 4.35,
+      "relevance": 0.6666666666666666
+    },
+    "e8175752-3846-49b0-b9b8-2e7c40608241": {
+      "id": "e8175752-3846-49b0-b9b8-2e7c40608241",
+      "model": "mistral7b",
+      "query": "What is the meaning of life?",
+      "response": "About What meaning life?:\n\nThere are three key aspects to understand:\n\n1) Core concepts: The fundamental principles involve specific patterns and relationships.\n\n2) Practical applications: These concepts can be applied in various contexts with different outcomes.\n\n3) Recent developments: The field continues to evolve with new insights and approaches.\n\n",
+      "feedback": {
+        "rating": 2.4779999999999998
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-02T21:49:33.978269",
+        "processing_time": 0.008831262588500977,
+        "query_complexity": 1,
+        "adjusted_complexity": 1,
+        "confidence_threshold": 0.7666666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "explanation",
+          "short_query"
+        ],
+        "repository_guided": false,
+        "dashboard_guided": false,
+        "considered_models": [
+          "mistral7b"
+        ]
+      },
+      "created_at": "2025-03-02T21:49:33.978348",
+      "usage_count": 0,
+      "effectiveness_score": 2.4779999999999998,
+      "relevance": 0.6666666666666666
+    },
+    "5e1202f1-3e20-4974-8b49-c56fe3ab4a8e": {
+      "id": "5e1202f1-3e20-4974-8b49-c56fe3ab4a8e",
+      "model": "claude3",
+      "query": "hey",
+      "response": "Hello there! I'm Claude. How can I help you today?",
+      "feedback": {
+        "rating": 3.7625
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-02T21:49:42.831301",
+        "processing_time": 0.012627124786376953,
+        "query_complexity": 1,
+        "adjusted_complexity": 1,
+        "confidence_threshold": 0.7666666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "short_query"
+        ],
+        "repository_guided": false,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-02T21:49:42.831371",
+      "usage_count": 0,
+      "effectiveness_score": 3.7625
+    },
+    "75631211-df94-42e9-9f02-e48090746cc9": {
+      "id": "75631211-df94-42e9-9f02-e48090746cc9",
+      "model": "claude3",
+      "query": "Tell me about the history of machine learning",
+      "response": "Regarding Tell me about the history, here's what I can share:\n\nThe context and specific details matter greatly when discussing this subject. Different circumstances might call for different approaches.\n\nIf you have a specific scenario or context related to Tell me about the history that you'd like me to address, I'd be happy to provide more targeted guidance.",
+      "feedback": {
+        "rating": 4.3325
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-02T21:54:01.593049",
+        "processing_time": 0.015765905380249023,
+        "query_complexity": 1,
+        "adjusted_complexity": 1,
+        "confidence_threshold": 0.7666666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "short_query"
+        ],
+        "repository_guided": true,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-02T21:54:01.593069",
+      "usage_count": 7,
+      "effectiveness_score": 4.3325,
+      "relevance": 0.3333333333333333
+    },
+    "b09d242b-ea2f-490f-9397-f06595ed7db7": {
+      "id": "b09d242b-ea2f-490f-9397-f06595ed7db7",
+      "model": "claude3",
+      "query": "What is the capital of France?",
+      "response": "Claude 3 response to: System: You are Minerva, a helpful AI assistant. Answer directly and clearly. DO NOT begin with 'I'll help you with that' or 'I'll answer this question' or reference being an AI.\n\nSystem: Provide a clear, relevant response that directly answers the query.\n\nUser: What is the capital of France?\n\nAssistant: I'll answer this question directly and clearly.",
+      "feedback": {
+        "rating": 4.5125
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-03T21:23:12.971867",
+        "processing_time": 0.015681028366088867,
+        "query_complexity": 1,
+        "adjusted_complexity": 1,
+        "confidence_threshold": 0.7666666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "explanation",
+          "short_query"
+        ],
+        "repository_guided": false,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-03T21:23:12.971909",
+      "usage_count": 3,
+      "effectiveness_score": 4.5125,
+      "relevance": 1.0
+    },
+    "5f261280-ae76-4b67-bc65-bbb15b747217": {
+      "id": "5f261280-ae76-4b67-bc65-bbb15b747217",
+      "model": "claude3",
+      "query": "Explain quantum computing in simple terms.",
+      "response": "Claude 3 response to: System: You are Minerva, a helpful AI assistant. Answer directly and clearly. DO NOT begin with 'I'll help you with that' or 'I'll answer this question' or reference being an AI.\n\nSystem: Provide a clear, relevant response that directly answers the query.\n\nUser: Explain quantum computing in simple terms.\n\nAssistant: I'll answer this question directly and clearly.",
+      "feedback": {
+        "rating": 4.5125
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-03T21:23:12.980835",
+        "processing_time": 0.007207155227661133,
+        "query_complexity": 1.5,
+        "adjusted_complexity": 1.5,
+        "confidence_threshold": 0.75,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "explanation",
+          "short_query"
+        ],
+        "repository_guided": true,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-03T21:23:12.980853",
+      "usage_count": 7,
+      "effectiveness_score": 4.5125,
+      "relevance": 1.0
+    },
+    "739704fd-12c2-42b6-8ed6-8f0616cebce4": {
+      "id": "739704fd-12c2-42b6-8ed6-8f0616cebce4",
+      "model": "claude3",
+      "query": "Write a short poem about technology.",
+      "response": "Claude 3 response to: System: You are Minerva, a helpful AI assistant. Answer directly and clearly. DO NOT begin with 'I'll help you with that' or 'I'll answer this question' or reference being an AI.\n\nSystem: Provide a clear, relevant response that directly answers the query.\n\nUser: Write a short poem about technology.\n\nAssistant: I'll answer this question directly and clearly.",
+      "feedback": {
+        "rating": 4.5125
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-03T21:23:12.991121",
+        "processing_time": 0.008121013641357422,
+        "query_complexity": 1,
+        "adjusted_complexity": 1,
+        "confidence_threshold": 0.7666666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "short_query"
+        ],
+        "repository_guided": true,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-03T21:23:12.991145",
+      "usage_count": 7,
+      "effectiveness_score": 4.5125,
+      "relevance": 1.0
+    },
+    "da30b42b-20d2-4219-96d0-1eaecf51ea9d": {
+      "id": "da30b42b-20d2-4219-96d0-1eaecf51ea9d",
+      "model": "claude3",
+      "query": "Hello there!",
+      "response": "Claude 3 response to: System: You are Minerva, a helpful AI assistant designed to be brief and friendly.\n\nUser: Hello there!\n\nAssistant: I'll respond briefly and naturally to your greeting.",
+      "feedback": {
+        "rating": 4.3125
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-03T21:30:15.964595",
+        "processing_time": 0.03511500358581543,
+        "query_complexity": 1,
+        "adjusted_complexity": 1,
+        "confidence_threshold": 0.7666666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "short_query"
+        ],
+        "repository_guided": false,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-03T21:30:15.964637",
+      "usage_count": 0,
+      "effectiveness_score": 4.3125
+    },
+    "d7e2dcb3-d277-49a0-beab-e6f8ce6fb061": {
+      "id": "d7e2dcb3-d277-49a0-beab-e6f8ce6fb061",
+      "model": "claude3",
+      "query": "What is the capital of France?",
+      "response": "Claude 3 response to: System: You are Minerva, a helpful AI assistant. Answer directly and clearly. DO NOT begin with 'I'll help you with that' or 'I'll answer this question' or reference being an AI.\n\nSystem: Provide a clear, relevant response that directly answers the query.\n\nUser: What is the capital of France?\n\nAssistant: I'll answer this question directly and clearly.",
+      "feedback": {
+        "rating": 4.5125
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-03T21:30:15.976148",
+        "processing_time": 0.009641408920288086,
+        "query_complexity": 1,
+        "adjusted_complexity": 1,
+        "confidence_threshold": 0.7666666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "explanation",
+          "short_query"
+        ],
+        "repository_guided": true,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-03T21:30:15.976167",
+      "usage_count": 1,
+      "effectiveness_score": 4.5125,
+      "relevance": 1.0
+    },
+    "43868db3-e1c9-4b8d-8023-0c138c375ff0": {
+      "id": "43868db3-e1c9-4b8d-8023-0c138c375ff0",
+      "model": "claude3",
+      "query": "Explain quantum computing in simple terms.",
+      "response": "Claude 3 response to: System: You are Minerva, a helpful AI assistant. Answer directly and clearly. DO NOT begin with 'I'll help you with that' or 'I'll answer this question' or reference being an AI.\n\nSystem: Provide a clear, relevant response that directly answers the query.\n\nUser: Explain quantum computing in simple terms.\n\nAssistant: I'll answer this question directly and clearly.",
+      "feedback": {
+        "rating": 4.5125
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-03T21:30:15.987702",
+        "processing_time": 0.00989389419555664,
+        "query_complexity": 1.5,
+        "adjusted_complexity": 1.5,
+        "confidence_threshold": 0.75,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "explanation",
+          "short_query"
+        ],
+        "repository_guided": true,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-03T21:30:15.987721",
+      "usage_count": 6,
+      "effectiveness_score": 4.5125,
+      "relevance": 1.0
+    },
+    "70c09886-821c-415a-87c2-670f906b0934": {
+      "id": "70c09886-821c-415a-87c2-670f906b0934",
+      "model": "claude3",
+      "query": "Write a short poem about technology.",
+      "response": "Claude 3 response to: System: You are Minerva, a helpful AI assistant. Answer directly and clearly. DO NOT begin with 'I'll help you with that' or 'I'll answer this question' or reference being an AI.\n\nSystem: Provide a clear, relevant response that directly answers the query.\n\nUser: Write a short poem about technology.\n\nAssistant: I'll answer this question directly and clearly.",
+      "feedback": {
+        "rating": 4.5125
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-03T21:30:15.999260",
+        "processing_time": 0.009898185729980469,
+        "query_complexity": 1,
+        "adjusted_complexity": 1,
+        "confidence_threshold": 0.7666666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "short_query"
+        ],
+        "repository_guided": true,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-03T21:30:15.999289",
+      "usage_count": 6,
+      "effectiveness_score": 4.5125,
+      "relevance": 1.0
+    },
+    "962b81a4-14b4-48f2-9b57-7a738457c470": {
+      "id": "962b81a4-14b4-48f2-9b57-7a738457c470",
+      "model": "claude3",
+      "query": "I'm feeling sad today. Can you help me feel better?",
+      "response": "Claude 3 response to: System: You are Minerva, a helpful AI assistant. Answer directly and clearly. DO NOT begin with 'I'll help you with that' or 'I'll answer this question' or reference being an AI.\n\nSystem: Provide a clear, relevant response that directly answers the query.\n\nUser: I'm feeling sad today. Can you help me feel better?\n\nAssistant: I'll answer this question directly and clearly.",
+      "feedback": {
+        "rating": 4.4125
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-03T21:30:16.009805",
+        "processing_time": 0.008572101593017578,
+        "query_complexity": 1,
+        "adjusted_complexity": 1,
+        "confidence_threshold": 0.7666666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [],
+        "repository_guided": false,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-03T21:30:16.009818",
+      "usage_count": 9,
+      "effectiveness_score": 4.4125,
+      "relevance": 0.2222222222222222
+    },
+    "799162ae-75be-4568-84a1-b3b73cab1cca": {
+      "id": "799162ae-75be-4568-84a1-b3b73cab1cca",
+      "model": "gpt4",
+      "query": "Can you help me debug this Python code? def fibonacci(n): if n <= 0: return 0 elif n == 1: return 1 else: return fibonacci(n-1) + fibonacci(n-2)",
+      "response": "This is a simulated GPT-4 response for: System: You are Minerva, a helpful AI assistant. Answer directly and clearly. DO NOT begin with 'I'll help you with that' or 'I'll answer this question' or reference being an AI.\n\nSystem: Provide a clear, relevant response that directly answers the query.\n\nUser: Can you help me debug this Python code? def fibonacci(n): if n <= 0: return 0 elif n == 1: return 1 else: return fibonacci(n-1) + fibonacci(n-2)\n\nAssistant: I'll answer this question directly and clearly.",
+      "feedback": {
+        "rating": 5.0
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-03T21:30:16.022100",
+        "processing_time": 0.010571002960205078,
+        "query_complexity": 3.7,
+        "adjusted_complexity": 3.7,
+        "confidence_threshold": 0.6766666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "code"
+        ],
+        "repository_guided": false,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-03T21:30:16.022150",
+      "usage_count": 8,
+      "effectiveness_score": 5.0,
+      "relevance": 1.0
+    },
+    "05921fa0-dd0e-41d9-9331-4d4a15a8a91d": {
+      "id": "05921fa0-dd0e-41d9-9331-4d4a15a8a91d",
+      "model": "gpt4",
+      "query": "What is the capital of France?",
+      "response": "This is a simulated GPT-4 response for: System: You are Minerva, a helpful AI assistant. Answer directly and clearly. DO NOT begin with 'I'll help you with that' or 'I'll answer this question' or reference being an AI.\n\nSystem: Provide a clear, relevant response that directly answers the query.\n\nUser: What is the capital of France?\n\nAssistant: I'll answer this question directly and clearly.",
+      "feedback": {
+        "rating": 4.385
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-04T01:11:03.401763",
+        "processing_time": 0.04253387451171875,
+        "query_complexity": 1,
+        "adjusted_complexity": 1,
+        "confidence_threshold": 0.7666666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "explanation",
+          "short_query"
+        ],
+        "repository_guided": false,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-04T01:11:03.401799",
+      "usage_count": 3,
+      "effectiveness_score": 4.385,
+      "relevance": 1.0
+    },
+    "373437bc-010a-4396-ad5d-e37bcf3f7ba8": {
+      "id": "373437bc-010a-4396-ad5d-e37bcf3f7ba8",
+      "model": "gpt4",
+      "query": "Explain quantum computing in simple terms.",
+      "response": "This is a simulated GPT-4 response for: System: You are Minerva, a helpful AI assistant. Answer directly and clearly. DO NOT begin with 'I'll help you with that' or 'I'll answer this question' or reference being an AI.\n\nSystem: Provide a clear, relevant response that directly answers the query.\n\nUser: Explain quantum computing in simple terms.\n\nAssistant: I'll answer this question directly and clearly.",
+      "feedback": {
+        "rating": 4.385
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-04T01:11:03.413725",
+        "processing_time": 0.00991201400756836,
+        "query_complexity": 1.5,
+        "adjusted_complexity": 1.5,
+        "confidence_threshold": 0.75,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "explanation",
+          "short_query"
+        ],
+        "repository_guided": true,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-04T01:11:03.413742",
+      "usage_count": 5,
+      "effectiveness_score": 4.385,
+      "relevance": 1.0
+    },
+    "f11a46b8-f71d-47e1-b0e4-e538c322f9a9": {
+      "id": "f11a46b8-f71d-47e1-b0e4-e538c322f9a9",
+      "model": "gpt4",
+      "query": "Write a short poem about technology.",
+      "response": "This is a simulated GPT-4 response for: System: You are Minerva, a helpful AI assistant. Answer directly and clearly. DO NOT begin with 'I'll help you with that' or 'I'll answer this question' or reference being an AI.\n\nSystem: Provide a clear, relevant response that directly answers the query.\n\nUser: Write a short poem about technology.\n\nAssistant: I'll answer this question directly and clearly.",
+      "feedback": {
+        "rating": 4.385
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-04T01:11:03.425790",
+        "processing_time": 0.0101318359375,
+        "query_complexity": 1,
+        "adjusted_complexity": 1,
+        "confidence_threshold": 0.7666666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "short_query"
+        ],
+        "repository_guided": true,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-04T01:11:03.425806",
+      "usage_count": 5,
+      "effectiveness_score": 4.385,
+      "relevance": 1.0
+    },
+    "a51bc234-bb53-4c6a-aafd-fd74010bc421": {
+      "id": "a51bc234-bb53-4c6a-aafd-fd74010bc421",
+      "model": "gpt4",
+      "query": "What is the capital of France?",
+      "response": "This is a simulated GPT-4 response for: System: You are Minerva, a helpful AI assistant. Answer directly and clearly. DO NOT begin with 'I'll help you with that' or 'I'll answer this question' or reference being an AI.\n\nSystem: Provide a clear, relevant response that directly answers the query.\n\nUser: What is the capital of France?\n\nAssistant: I'll answer this question directly and clearly.",
+      "feedback": {
+        "rating": 4.385
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-04T01:12:19.206605",
+        "processing_time": 0.015316009521484375,
+        "query_complexity": 1,
+        "adjusted_complexity": 1,
+        "confidence_threshold": 0.7666666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "explanation",
+          "short_query"
+        ],
+        "repository_guided": false,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-04T01:12:19.206644",
+      "usage_count": 3,
+      "effectiveness_score": 4.385,
+      "relevance": 1.0
+    },
+    "4c8cfac2-c99e-44cc-9ae7-9858a82bea3e": {
+      "id": "4c8cfac2-c99e-44cc-9ae7-9858a82bea3e",
+      "model": "gpt4",
+      "query": "Explain quantum computing in simple terms.",
+      "response": "This is a simulated GPT-4 response for: System: You are Minerva, a helpful AI assistant. Answer directly and clearly. DO NOT begin with 'I'll help you with that' or 'I'll answer this question' or reference being an AI.\n\nSystem: Provide a clear, relevant response that directly answers the query.\n\nUser: Explain quantum computing in simple terms.\n\nAssistant: I'll answer this question directly and clearly.",
+      "feedback": {
+        "rating": 4.385
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-04T01:12:19.219606",
+        "processing_time": 0.010933160781860352,
+        "query_complexity": 1.5,
+        "adjusted_complexity": 1.5,
+        "confidence_threshold": 0.75,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "explanation",
+          "short_query"
+        ],
+        "repository_guided": true,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-04T01:12:19.219623",
+      "usage_count": 4,
+      "effectiveness_score": 4.385,
+      "relevance": 1.0
+    },
+    "92db77ae-baa4-45e0-8d59-2caef03c23b3": {
+      "id": "92db77ae-baa4-45e0-8d59-2caef03c23b3",
+      "model": "gpt4",
+      "query": "Write a short poem about technology.",
+      "response": "This is a simulated GPT-4 response for: System: You are Minerva, a helpful AI assistant. Answer directly and clearly. DO NOT begin with 'I'll help you with that' or 'I'll answer this question' or reference being an AI.\n\nSystem: Provide a clear, relevant response that directly answers the query.\n\nUser: Write a short poem about technology.\n\nAssistant: I'll answer this question directly and clearly.",
+      "feedback": {
+        "rating": 4.385
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-04T01:12:19.231956",
+        "processing_time": 0.010439872741699219,
+        "query_complexity": 1,
+        "adjusted_complexity": 1,
+        "confidence_threshold": 0.7666666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "short_query"
+        ],
+        "repository_guided": true,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-04T01:12:19.231970",
+      "usage_count": 4,
+      "effectiveness_score": 4.385,
+      "relevance": 1.0
+    },
+    "08611f26-deeb-4f3e-b9ed-48dce68f5a0a": {
+      "id": "08611f26-deeb-4f3e-b9ed-48dce68f5a0a",
+      "model": "gpt4all",
+      "query": "Hello there!",
+      "response": "This is a simulated GPT4All response for: System: You are Minerva, a helpful AI assistant designed to be brief and friendly.\n\nUser: Hello there!\n\nAssistant: I'll respond briefly and naturally to your greeting.",
+      "feedback": {
+        "rating": 1.4629999999999999
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-04T02:14:59.799266",
+        "processing_time": 0.0064182281494140625,
+        "query_complexity": 1,
+        "adjusted_complexity": 1,
+        "confidence_threshold": 0.7666666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "short_query"
+        ],
+        "repository_guided": false,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-04T02:14:59.799308",
+      "usage_count": 0,
+      "effectiveness_score": 1.4629999999999999
+    },
+    "01a5e0d8-8064-4658-b823-83126c7d4b47": {
+      "id": "01a5e0d8-8064-4658-b823-83126c7d4b47",
+      "model": "gpt4all",
+      "query": "What is the capital of France?",
+      "response": "This is a simulated GPT4All response for: System: You are Minerva, a helpful AI assistant. Answer directly and clearly. DO NOT begin with 'I'll help you with that' or 'I'll answer this question' or reference being an AI.\n\nSystem: Provide a clear, relevant response that directly answers the query.\n\nUser: What is the capital of France?\n\nAssistant: I'll answer this question directly and clearly.",
+      "feedback": {
+        "rating": 2.7649999999999997
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-04T02:14:59.805553",
+        "processing_time": 0.0041730403900146484,
+        "query_complexity": 1,
+        "adjusted_complexity": 1,
+        "confidence_threshold": 0.7666666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "explanation",
+          "short_query"
+        ],
+        "repository_guided": true,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-04T02:14:59.805569",
+      "usage_count": 0,
+      "effectiveness_score": 2.7649999999999997,
+      "relevance": 1.0
+    },
+    "a550a96e-b183-4959-954c-0bf1ca028f5a": {
+      "id": "a550a96e-b183-4959-954c-0bf1ca028f5a",
+      "model": "gpt4all",
+      "query": "Explain quantum computing in simple terms.",
+      "response": "This is a simulated GPT4All response for: System: You are Minerva, a helpful AI assistant. Answer directly and clearly. DO NOT begin with 'I'll help you with that' or 'I'll answer this question' or reference being an AI.\n\nSystem: Provide a clear, relevant response that directly answers the query.\n\nUser: Explain quantum computing in simple terms.\n\nAssistant: I'll answer this question directly and clearly.",
+      "feedback": {
+        "rating": 2.8489999999999998
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-04T02:14:59.811951",
+        "processing_time": 0.004171848297119141,
+        "query_complexity": 1.5,
+        "adjusted_complexity": 1.5,
+        "confidence_threshold": 0.75,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "explanation",
+          "short_query"
+        ],
+        "repository_guided": true,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-04T02:14:59.811965",
+      "usage_count": 3,
+      "effectiveness_score": 2.8489999999999998,
+      "relevance": 1.0
+    },
+    "490508cc-1d51-4d24-98d4-9fbeb6b29fbf": {
+      "id": "490508cc-1d51-4d24-98d4-9fbeb6b29fbf",
+      "model": "gpt4all",
+      "query": "Write a short poem about technology.",
+      "response": "This is a simulated GPT4All response for: System: You are Minerva, a helpful AI assistant. Answer directly and clearly. DO NOT begin with 'I'll help you with that' or 'I'll answer this question' or reference being an AI.\n\nSystem: Provide a clear, relevant response that directly answers the query.\n\nUser: Write a short poem about technology.\n\nAssistant: I'll answer this question directly and clearly.",
+      "feedback": {
+        "rating": 2.807
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-04T02:14:59.818011",
+        "processing_time": 0.003968954086303711,
+        "query_complexity": 1,
+        "adjusted_complexity": 1,
+        "confidence_threshold": 0.7666666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "short_query"
+        ],
+        "repository_guided": true,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-04T02:14:59.818027",
+      "usage_count": 3,
+      "effectiveness_score": 2.807,
+      "relevance": 1.0
+    },
+    "38dffe7c-5ca6-42d9-8f52-3142dd9e7e40": {
+      "id": "38dffe7c-5ca6-42d9-8f52-3142dd9e7e40",
+      "model": "gpt4all",
+      "query": "I'm feeling sad today. Can you help me feel better?",
+      "response": "This is a simulated GPT4All response for: System: You are Minerva, a helpful AI assistant. Answer directly and clearly. DO NOT begin with 'I'll help you with that' or 'I'll answer this question' or reference being an AI.\n\nSystem: Provide a clear, relevant response that directly answers the query.\n\nUser: I'm feeling sad today. Can you help me feel better?\n\nAssistant: I'll answer this question directly and clearly.",
+      "feedback": {
+        "rating": 2.9119999999999995
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-04T02:14:59.824121",
+        "processing_time": 0.003648042678833008,
+        "query_complexity": 1,
+        "adjusted_complexity": 1,
+        "confidence_threshold": 0.7666666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [],
+        "repository_guided": true,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-04T02:14:59.824139",
+      "usage_count": 7,
+      "effectiveness_score": 2.9119999999999995,
+      "relevance": 0.2222222222222222
+    },
+    "ea2c8a12-b063-4c70-8495-b30cf5a13e39": {
+      "id": "ea2c8a12-b063-4c70-8495-b30cf5a13e39",
+      "model": "gpt4",
+      "query": "Can you help me debug this Python code? def fibonacci(n): if n <= 0: return 0 elif n == 1: return 1 else: return fibonacci(n-1) + fibonacci(n-2)",
+      "response": "This is a simulated GPT-4 response for: System: You are Minerva, a helpful AI assistant. Answer directly and clearly. DO NOT begin with 'I'll help you with that' or 'I'll answer this question' or reference being an AI.\n\nSystem: Provide a clear, relevant response that directly answers the query.\n\nUser: Can you help me debug this Python code? def fibonacci(n): if n <= 0: return 0 elif n == 1: return 1 else: return fibonacci(n-1) + fibonacci(n-2)\n\nAssistant: I'll answer this question directly and clearly.",
+      "feedback": {
+        "rating": 3.5
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-04T02:14:59.830569",
+        "processing_time": 0.0041351318359375,
+        "query_complexity": 3.7,
+        "adjusted_complexity": 3.7,
+        "confidence_threshold": 0.6766666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "code"
+        ],
+        "repository_guided": true,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-04T02:14:59.830609",
+      "usage_count": 6,
+      "effectiveness_score": 3.5,
+      "relevance": 1.0
+    },
+    "5dfcdf4a-7170-49c2-a6c3-121e3be31e63": {
+      "id": "5dfcdf4a-7170-49c2-a6c3-121e3be31e63",
+      "model": "gpt4all",
+      "query": "Hello there!",
+      "response": "This is a simulated GPT4All response for: System: You are Minerva, a helpful AI assistant designed to be brief and friendly.\n\nUser: Hello there!\n\nAssistant: I'll respond briefly and naturally to your greeting.",
+      "feedback": {
+        "rating": 1.4629999999999999
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-04T02:18:01.903104",
+        "processing_time": 0.0068531036376953125,
+        "query_complexity": 1,
+        "adjusted_complexity": 1,
+        "confidence_threshold": 0.7666666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "short_query"
+        ],
+        "repository_guided": false,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-04T02:18:01.903143",
+      "usage_count": 0,
+      "effectiveness_score": 1.4629999999999999
+    },
+    "66f6c227-ab52-43b9-a4e8-af1b7e47dbca": {
+      "id": "66f6c227-ab52-43b9-a4e8-af1b7e47dbca",
+      "model": "gpt4all",
+      "query": "What is the capital of France?",
+      "response": "This is a simulated GPT4All response for: System: You are Minerva, a helpful AI assistant. Answer directly and clearly. DO NOT begin with 'I'll help you with that' or 'I'll answer this question' or reference being an AI.\n\nSystem: Provide a clear, relevant response that directly answers the query.\n\nUser: What is the capital of France?\n\nAssistant: I'll answer this question directly and clearly.",
+      "feedback": {
+        "rating": 2.7649999999999997
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-04T02:18:01.922953",
+        "processing_time": 0.017412185668945312,
+        "query_complexity": 1,
+        "adjusted_complexity": 1,
+        "confidence_threshold": 0.7666666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "explanation",
+          "short_query"
+        ],
+        "repository_guided": true,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-04T02:18:01.922982",
+      "usage_count": 1,
+      "effectiveness_score": 2.7649999999999997,
+      "relevance": 1.0
+    },
+    "f95e5968-0492-45b2-9f0c-ed7702cc02ab": {
+      "id": "f95e5968-0492-45b2-9f0c-ed7702cc02ab",
+      "model": "gpt4all",
+      "query": "Explain quantum computing in simple terms.",
+      "response": "This is a simulated GPT4All response for: System: You are Minerva, a helpful AI assistant. Answer directly and clearly. DO NOT begin with 'I'll help you with that' or 'I'll answer this question' or reference being an AI.\n\nSystem: Provide a clear, relevant response that directly answers the query.\n\nUser: Explain quantum computing in simple terms.\n\nAssistant: I'll answer this question directly and clearly.",
+      "feedback": {
+        "rating": 2.8489999999999998
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-04T02:18:01.929660",
+        "processing_time": 0.00430607795715332,
+        "query_complexity": 1.5,
+        "adjusted_complexity": 1.5,
+        "confidence_threshold": 0.75,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "explanation",
+          "short_query"
+        ],
+        "repository_guided": true,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-04T02:18:01.929679",
+      "usage_count": 2,
+      "effectiveness_score": 2.8489999999999998,
+      "relevance": 1.0
+    },
+    "47d238d7-47b9-4e32-addc-d46000ea7efb": {
+      "id": "47d238d7-47b9-4e32-addc-d46000ea7efb",
+      "model": "gpt4all",
+      "query": "Write a short poem about technology.",
+      "response": "This is a simulated GPT4All response for: System: You are Minerva, a helpful AI assistant. Answer directly and clearly. DO NOT begin with 'I'll help you with that' or 'I'll answer this question' or reference being an AI.\n\nSystem: Provide a clear, relevant response that directly answers the query.\n\nUser: Write a short poem about technology.\n\nAssistant: I'll answer this question directly and clearly.",
+      "feedback": {
+        "rating": 2.807
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-04T02:18:01.936423",
+        "processing_time": 0.004422903060913086,
+        "query_complexity": 1,
+        "adjusted_complexity": 1,
+        "confidence_threshold": 0.7666666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "short_query"
+        ],
+        "repository_guided": true,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-04T02:18:01.936441",
+      "usage_count": 2,
+      "effectiveness_score": 2.807,
+      "relevance": 1.0
+    },
+    "bbeccf28-79c6-48cd-a7c3-ce1ec4023663": {
+      "id": "bbeccf28-79c6-48cd-a7c3-ce1ec4023663",
+      "model": "gpt4all",
+      "query": "I'm feeling sad today. Can you help me feel better?",
+      "response": "This is a simulated GPT4All response for: System: You are Minerva, a helpful AI assistant. Answer directly and clearly. DO NOT begin with 'I'll help you with that' or 'I'll answer this question' or reference being an AI.\n\nSystem: Provide a clear, relevant response that directly answers the query.\n\nUser: I'm feeling sad today. Can you help me feel better?\n\nAssistant: I'll answer this question directly and clearly.",
+      "feedback": {
+        "rating": 2.9119999999999995
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-04T02:18:01.943313",
+        "processing_time": 0.004103899002075195,
+        "query_complexity": 1,
+        "adjusted_complexity": 1,
+        "confidence_threshold": 0.7666666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [],
+        "repository_guided": true,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-04T02:18:01.943330",
+      "usage_count": 5,
+      "effectiveness_score": 2.9119999999999995,
+      "relevance": 0.2222222222222222
+    },
+    "b8290469-6f7b-4d84-936c-47c467dcc221": {
+      "id": "b8290469-6f7b-4d84-936c-47c467dcc221",
+      "model": "gpt4",
+      "query": "Can you help me debug this Python code? def fibonacci(n): if n <= 0: return 0 elif n == 1: return 1 else: return fibonacci(n-1) + fibonacci(n-2)",
+      "response": "This is a simulated GPT-4 response for: System: You are Minerva, a helpful AI assistant. Answer directly and clearly. DO NOT begin with 'I'll help you with that' or 'I'll answer this question' or reference being an AI.\n\nSystem: Provide a clear, relevant response that directly answers the query.\n\nUser: Can you help me debug this Python code? def fibonacci(n): if n <= 0: return 0 elif n == 1: return 1 else: return fibonacci(n-1) + fibonacci(n-2)\n\nAssistant: I'll answer this question directly and clearly.",
+      "feedback": {
+        "rating": 3.5
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-04T02:18:01.950154",
+        "processing_time": 0.004563093185424805,
+        "query_complexity": 3.7,
+        "adjusted_complexity": 3.7,
+        "confidence_threshold": 0.6766666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "code"
+        ],
+        "repository_guided": true,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-04T02:18:01.950187",
+      "usage_count": 4,
+      "effectiveness_score": 3.5,
+      "relevance": 1.0
+    },
+    "a3834ee2-625b-47c4-8d90-560b3a93d7e5": {
+      "id": "a3834ee2-625b-47c4-8d90-560b3a93d7e5",
+      "model": "gpt4all",
+      "query": "Hello there!",
+      "response": "This is a simulated GPT4All response for: System: You are Minerva, a helpful AI assistant designed to be brief and friendly.\n\nUser: Hello there!\n\nAssistant: I'll respond briefly and naturally to your greeting.",
+      "feedback": {
+        "rating": 1.4629999999999999
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-04T02:21:34.720446",
+        "processing_time": 0.00835108757019043,
+        "query_complexity": 1,
+        "adjusted_complexity": 1,
+        "confidence_threshold": 0.7666666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "short_query"
+        ],
+        "repository_guided": false,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-04T02:21:34.720481",
+      "usage_count": 0,
+      "effectiveness_score": 1.4629999999999999
+    },
+    "e0a57b7c-0250-4cdd-a35b-6f7b4b7d5360": {
+      "id": "e0a57b7c-0250-4cdd-a35b-6f7b4b7d5360",
+      "model": "gpt4all",
+      "query": "What is the capital of France?",
+      "response": "This is a simulated GPT4All response for: System: You are Minerva, a helpful AI assistant. Answer directly and clearly. DO NOT begin with 'I'll help you with that' or 'I'll answer this question' or reference being an AI.\n\nSystem: Provide a clear, relevant response that directly answers the query.\n\nUser: What is the capital of France?\n\nAssistant: I'll answer this question directly and clearly.",
+      "feedback": {
+        "rating": 2.7649999999999997
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-04T02:21:34.727626",
+        "processing_time": 0.004452705383300781,
+        "query_complexity": 1,
+        "adjusted_complexity": 1,
+        "confidence_threshold": 0.7666666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "explanation",
+          "short_query"
+        ],
+        "repository_guided": true,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-04T02:21:34.727647",
+      "usage_count": 1,
+      "effectiveness_score": 2.7649999999999997,
+      "relevance": 1.0
+    },
+    "dabe5c58-41ce-40fb-868e-36b1a825ed2a": {
+      "id": "dabe5c58-41ce-40fb-868e-36b1a825ed2a",
+      "model": "gpt4all",
+      "query": "Explain quantum computing in simple terms.",
+      "response": "This is a simulated GPT4All response for: System: You are Minerva, a helpful AI assistant. Answer directly and clearly. DO NOT begin with 'I'll help you with that' or 'I'll answer this question' or reference being an AI.\n\nSystem: Provide a clear, relevant response that directly answers the query.\n\nUser: Explain quantum computing in simple terms.\n\nAssistant: I'll answer this question directly and clearly.",
+      "feedback": {
+        "rating": 2.8489999999999998
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-04T02:21:34.734475",
+        "processing_time": 0.004453182220458984,
+        "query_complexity": 1.5,
+        "adjusted_complexity": 1.5,
+        "confidence_threshold": 0.75,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "explanation",
+          "short_query"
+        ],
+        "repository_guided": true,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-04T02:21:34.734488",
+      "usage_count": 1,
+      "effectiveness_score": 2.8489999999999998,
+      "relevance": 1.0
+    },
+    "36e9de73-d3fc-4874-bf81-262cc6b22b7a": {
+      "id": "36e9de73-d3fc-4874-bf81-262cc6b22b7a",
+      "model": "gpt4all",
+      "query": "Write a short poem about technology.",
+      "response": "This is a simulated GPT4All response for: System: You are Minerva, a helpful AI assistant. Answer directly and clearly. DO NOT begin with 'I'll help you with that' or 'I'll answer this question' or reference being an AI.\n\nSystem: Provide a clear, relevant response that directly answers the query.\n\nUser: Write a short poem about technology.\n\nAssistant: I'll answer this question directly and clearly.",
+      "feedback": {
+        "rating": 2.807
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-04T02:21:34.740871",
+        "processing_time": 0.004179954528808594,
+        "query_complexity": 1,
+        "adjusted_complexity": 1,
+        "confidence_threshold": 0.7666666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "short_query"
+        ],
+        "repository_guided": true,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-04T02:21:34.740893",
+      "usage_count": 1,
+      "effectiveness_score": 2.807,
+      "relevance": 1.0
+    },
+    "8d207bce-ec75-4f9f-8298-575e32d77944": {
+      "id": "8d207bce-ec75-4f9f-8298-575e32d77944",
+      "model": "gpt4all",
+      "query": "I'm feeling sad today. Can you help me feel better?",
+      "response": "This is a simulated GPT4All response for: System: You are Minerva, a helpful AI assistant. Answer directly and clearly. DO NOT begin with 'I'll help you with that' or 'I'll answer this question' or reference being an AI.\n\nSystem: Provide a clear, relevant response that directly answers the query.\n\nUser: I'm feeling sad today. Can you help me feel better?\n\nAssistant: I'll answer this question directly and clearly.",
+      "feedback": {
+        "rating": 2.9119999999999995
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-04T02:21:34.748267",
+        "processing_time": 0.00462794303894043,
+        "query_complexity": 1,
+        "adjusted_complexity": 1,
+        "confidence_threshold": 0.7666666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [],
+        "repository_guided": true,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-04T02:21:34.748293",
+      "usage_count": 3,
+      "effectiveness_score": 2.9119999999999995,
+      "relevance": 0.2222222222222222
+    },
+    "8ef105d6-3d3d-44eb-9be8-a02922daa4cf": {
+      "id": "8ef105d6-3d3d-44eb-9be8-a02922daa4cf",
+      "model": "gpt4",
+      "query": "Can you help me debug this Python code? def fibonacci(n): if n <= 0: return 0 elif n == 1: return 1 else: return fibonacci(n-1) + fibonacci(n-2)",
+      "response": "This is a simulated GPT-4 response for: System: You are Minerva, a helpful AI assistant. Answer directly and clearly. DO NOT begin with 'I'll help you with that' or 'I'll answer this question' or reference being an AI.\n\nSystem: Provide a clear, relevant response that directly answers the query.\n\nUser: Can you help me debug this Python code? def fibonacci(n): if n <= 0: return 0 elif n == 1: return 1 else: return fibonacci(n-1) + fibonacci(n-2)\n\nAssistant: I'll answer this question directly and clearly.",
+      "feedback": {
+        "rating": 3.5
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-04T02:21:34.755318",
+        "processing_time": 0.004657745361328125,
+        "query_complexity": 3.7,
+        "adjusted_complexity": 3.7,
+        "confidence_threshold": 0.6766666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "code"
+        ],
+        "repository_guided": true,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-04T02:21:34.755349",
+      "usage_count": 2,
+      "effectiveness_score": 3.5,
+      "relevance": 1.0
+    },
+    "70757782-ea1d-4d3a-8e09-32af7c3e0d7d": {
+      "id": "70757782-ea1d-4d3a-8e09-32af7c3e0d7d",
+      "model": "claude3",
+      "query": "Hello there!",
+      "response": "Claude 3 response to: System: You are Minerva, a helpful AI assistant designed to be brief and friendly.\n\nUser: Hello there!\n\nAssistant: I'll respond briefly and naturally to your greeting.",
+      "feedback": {
+        "rating": 2.9690246376811595
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-04T02:22:13.478504",
+        "processing_time": 0.012240886688232422,
+        "query_complexity": 1,
+        "adjusted_complexity": 1,
+        "confidence_threshold": 0.7666666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "short_query"
+        ],
+        "repository_guided": false,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-04T02:22:13.478546",
+      "usage_count": 0,
+      "effectiveness_score": 2.9690246376811595
+    },
+    "6c39a041-b51c-4f45-b4c2-c567c761a640": {
+      "id": "6c39a041-b51c-4f45-b4c2-c567c761a640",
+      "model": "gpt4",
+      "query": "What is the capital of France?",
+      "response": "This is a simulated GPT-4 response for: System: You are Minerva, a helpful AI assistant. Answer directly and clearly. DO NOT begin with 'I'll help you with that' or 'I'll answer this question' or reference being an AI.\n\nSystem: Provide a clear, relevant response that directly answers the query.\n\nUser: What is the capital of France?\n\nAssistant: I'll answer this question directly and clearly.",
+      "feedback": {
+        "rating": 3.215917948717949
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-04T02:22:13.491883",
+        "processing_time": 0.009988069534301758,
+        "query_complexity": 1,
+        "adjusted_complexity": 1,
+        "confidence_threshold": 0.7666666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "explanation",
+          "short_query"
+        ],
+        "repository_guided": true,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-04T02:22:13.491918",
+      "usage_count": 0,
+      "effectiveness_score": 3.215917948717949
+    },
+    "b3d236ca-6c93-45fa-b099-0c04bdb14c62": {
+      "id": "b3d236ca-6c93-45fa-b099-0c04bdb14c62",
+      "model": "gpt4",
+      "query": "Explain quantum computing in simple terms.",
+      "response": "This is a simulated GPT-4 response for: System: You are Minerva, a helpful AI assistant. Answer directly and clearly. DO NOT begin with 'I'll help you with that' or 'I'll answer this question' or reference being an AI.\n\nSystem: Provide a clear, relevant response that directly answers the query.\n\nUser: Explain quantum computing in simple terms.\n\nAssistant: I'll answer this question directly and clearly.",
+      "feedback": {
+        "rating": 3.2065939393939398
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-04T02:22:13.504512",
+        "processing_time": 0.009881258010864258,
+        "query_complexity": 1.5,
+        "adjusted_complexity": 1.5,
+        "confidence_threshold": 0.75,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "explanation",
+          "short_query"
+        ],
+        "repository_guided": true,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-04T02:22:13.504539",
+      "usage_count": 0,
+      "effectiveness_score": 3.2065939393939398
+    },
+    "11ec3bd7-2453-49cb-a87a-ad4bd356ee25": {
+      "id": "11ec3bd7-2453-49cb-a87a-ad4bd356ee25",
+      "model": "gpt4",
+      "query": "Write a short poem about technology.",
+      "response": "This is a simulated GPT-4 response for: System: You are Minerva, a helpful AI assistant. Answer directly and clearly. DO NOT begin with 'I'll help you with that' or 'I'll answer this question' or reference being an AI.\n\nSystem: Provide a clear, relevant response that directly answers the query.\n\nUser: Write a short poem about technology.\n\nAssistant: I'll answer this question directly and clearly.",
+      "feedback": {
+        "rating": 3.151257971014493
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-04T02:22:13.517765",
+        "processing_time": 0.01026296615600586,
+        "query_complexity": 1,
+        "adjusted_complexity": 1,
+        "confidence_threshold": 0.7666666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "short_query"
+        ],
+        "repository_guided": true,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-04T02:22:13.517786",
+      "usage_count": 0,
+      "effectiveness_score": 3.151257971014493
+    },
+    "9bf13cb2-1309-4d22-994b-001a00b29bd1": {
+      "id": "9bf13cb2-1309-4d22-994b-001a00b29bd1",
+      "model": "gpt4",
+      "query": "I'm feeling sad today. Can you help me feel better?",
+      "response": "This is a simulated GPT-4 response for: System: You are Minerva, a helpful AI assistant. Answer directly and clearly. DO NOT begin with 'I'll help you with that' or 'I'll answer this question' or reference being an AI.\n\nSystem: Provide a clear, relevant response that directly answers the query.\n\nUser: I'm feeling sad today. Can you help me feel better?\n\nAssistant: I'll answer this question directly and clearly.",
+      "feedback": {
+        "rating": 3.208967287784679
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-04T02:22:13.528735",
+        "processing_time": 0.008331060409545898,
+        "query_complexity": 1,
+        "adjusted_complexity": 1,
+        "confidence_threshold": 0.7666666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [],
+        "repository_guided": true,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-04T02:22:13.528749",
+      "usage_count": 1,
+      "effectiveness_score": 3.208967287784679,
+      "relevance": 0.2222222222222222
+    },
+    "73b3e43e-465d-41f9-883e-5d6573151193": {
+      "id": "73b3e43e-465d-41f9-883e-5d6573151193",
+      "model": "gpt4",
+      "query": "Can you help me debug this Python code? def fibonacci(n): if n <= 0: return 0 elif n == 1: return 1 else: return fibonacci(n-1) + fibonacci(n-2)",
+      "response": "This is a simulated GPT-4 response for: System: You are Minerva, a helpful AI assistant. Answer directly and clearly. DO NOT begin with 'I'll help you with that' or 'I'll answer this question' or reference being an AI.\n\nSystem: Provide a clear, relevant response that directly answers the query.\n\nUser: Can you help me debug this Python code? def fibonacci(n): if n <= 0: return 0 elif n == 1: return 1 else: return fibonacci(n-1) + fibonacci(n-2)\n\nAssistant: I'll answer this question directly and clearly.",
+      "feedback": {
+        "rating": 3.316717948717949
+      },
+      "context": {
+        "user_id": "test_user",
+        "timestamp": "2025-03-04T02:22:13.540409",
+        "processing_time": 0.009079694747924805,
+        "query_complexity": 3.7,
+        "adjusted_complexity": 3.7,
+        "confidence_threshold": 0.6766666666666667,
+        "priority": "balanced",
+        "response_formatting": {
+          "tone": "neutral",
+          "structure": "paragraph",
+          "length": "medium"
+        },
+        "query_tags": [
+          "code"
+        ],
+        "repository_guided": true,
+        "dashboard_guided": false,
+        "considered_models": [
+          "gpt4",
+          "claude3",
+          "mistral7b",
+          "gpt4all"
+        ]
+      },
+      "created_at": "2025-03-04T02:22:13.540422",
+      "usage_count": 0,
+      "effectiveness_score": 3.316717948717949
+    }
+  },
+  "model_performance": {
+    "openai": {
+      "response_quality": [
+        {
+          "value": 50.0,
+          "timestamp": "2025-03-01T00:40:31.575928",
+          "insight_id": "1a4168fd-0601-4e50-a689-8de019b444fd"
+        },
+        {
+          "value": 50.0,
+          "timestamp": "2025-03-01T00:40:31.576416",
+          "insight_id": "7364cb38-cf3a-45de-af0f-14f7884b6321"
+        },
+        {
+          "value": 4.5,
+          "timestamp": "2025-03-01T00:40:31.576672",
+          "insight_id": "8f131442-166f-4512-a5c0-698eda3a6fb3"
+        },
+        {
+          "value": 1.5,
+          "timestamp": "2025-03-01T00:40:31.576910",
+          "insight_id": "847cfa13-d4c0-467b-856f-b1e47c416860"
+        },
+        {
+          "value": 50.0,
+          "timestamp": "2025-03-01T00:40:31.577683",
+          "insight_id": "8f938c57-780c-4231-a4b1-d015e38a6a39"
+        },
+        {
+          "value": 50.0,
+          "timestamp": "2025-03-01T00:44:24.320347",
+          "insight_id": "de461169-4c61-4745-96a9-36a7d05ee0c6"
+        },
+        {
+          "value": 4.5,
+          "timestamp": "2025-03-01T00:44:24.320966",
+          "insight_id": "820fcd77-d3bd-448f-bcf5-8ff2dd695edb"
+        },
+        {
+          "value": 50.0,
+          "timestamp": "2025-03-01T00:44:24.321609",
+          "insight_id": "004d2503-64da-4f6b-9cc6-254581b7a58d"
+        },
+        {
+          "value": 1.5,
+          "timestamp": "2025-03-01T00:44:24.322029",
+          "insight_id": "6cd8f50f-3855-4052-ac6e-e5776f18396d"
+        },
+        {
+          "value": 50.0,
+          "timestamp": "2025-03-01T00:44:24.323066",
+          "insight_id": "95a68782-8313-4b7a-a891-6f06b4a4ba33"
+        },
+        {
+          "value": 4.5,
+          "timestamp": "2025-03-01T00:44:24.323498",
+          "insight_id": "4ca66fa1-5993-4799-8b3b-58c5c5f96260"
+        },
+        {
+          "value": 50.0,
+          "timestamp": "2025-03-01T00:44:24.324375",
+          "insight_id": "462088ed-ccbe-4af1-bbe3-3852aa8879a6"
+        },
+        {
+          "value": 1.5,
+          "timestamp": "2025-03-01T00:44:24.324767",
+          "insight_id": "8e248d7d-8357-4760-b2f1-d8de64d71823"
+        },
+        {
+          "value": 50.0,
+          "timestamp": "2025-03-01T00:44:24.325650",
+          "insight_id": "7b6972b2-28cf-434e-a6f1-b90a1a6bc822"
+        },
+        {
+          "value": 4.5,
+          "timestamp": "2025-03-01T00:44:24.326349",
+          "insight_id": "65388e3f-f865-4a4d-8953-663769f49f6a"
+        },
+        {
+          "value": 50.0,
+          "timestamp": "2025-03-01T00:44:24.327018",
+          "insight_id": "d6c632a8-74d9-4aa1-9ccb-4ef40468070a"
+        },
+        {
+          "value": 50.0,
+          "timestamp": "2025-03-01T00:44:24.328273",
+          "insight_id": "71872595-c628-4ce4-b158-4ac90f2c0181"
+        },
+        {
+          "value": 50.0,
+          "timestamp": "2025-03-01T00:44:24.329524",
+          "insight_id": "17037afa-b5fe-4ac9-9830-e9279bbcc6d8"
+        },
+        {
+          "value": 50.0,
+          "timestamp": "2025-03-01T00:44:24.331610",
+          "insight_id": "23efffdd-5cbf-4e8e-a95b-144a0846b536"
+        },
+        {
+          "value": 50.0,
+          "timestamp": "2025-03-01T00:47:05.602027",
+          "insight_id": "1aabc5fe-8a3c-4518-87fd-43eb3dcfa269"
+        },
+        {
+          "value": 50.0,
+          "timestamp": "2025-03-01T00:47:05.603760",
+          "insight_id": "cb8bb429-f8f8-4b0d-a179-067e80db01c7"
+        },
+        {
+          "value": 4.5,
+          "timestamp": "2025-03-01T00:47:05.604318",
+          "insight_id": "d8707058-d811-4464-9378-d528e769029f"
+        },
+        {
+          "value": 1.5,
+          "timestamp": "2025-03-01T00:47:05.604858",
+          "insight_id": "67b1e952-27e9-43dd-9ee6-54343a200a31"
+        },
+        {
+          "value": 50.0,
+          "timestamp": "2025-03-01T00:47:05.607068",
+          "insight_id": "f51adf14-2f78-449b-8777-3a625ca5bb48"
+        },
+        {
+          "value": 50.0,
+          "timestamp": "2025-03-01T00:53:47.637193",
+          "insight_id": "2e1ffd0d-4114-4228-9a8c-1dc12e3dacb6"
+        },
+        {
+          "value": 50.0,
+          "timestamp": "2025-03-01T00:53:47.638926",
+          "insight_id": "0def8283-43f5-4d42-9abb-48b6ab71ba5d"
+        },
+        {
+          "value": 4.5,
+          "timestamp": "2025-03-01T00:53:47.639584",
+          "insight_id": "fc0cf1df-1635-4df9-a215-90f619205558"
+        },
+        {
+          "value": 1.5,
+          "timestamp": "2025-03-01T00:53:47.640325",
+          "insight_id": "1d3bc622-d86e-454c-bab0-c3f049c53da9"
+        },
+        {
+          "value": 50.0,
+          "timestamp": "2025-03-01T00:53:47.642876",
+          "insight_id": "d76a1ceb-31d9-44d1-90da-b62409d31546"
+        },
+        {
+          "value": 4.5,
+          "timestamp": "2025-03-01T00:58:10.091302",
+          "insight_id": "b53b3d33-814c-4f6f-9315-adb66100166f"
+        },
+        {
+          "value": 4.5,
+          "timestamp": "2025-03-01T00:58:10.092266",
+          "insight_id": "ef755d3e-59e2-4a23-a34c-296a2304ed99"
+        },
+        {
+          "value": 4.5,
+          "timestamp": "2025-03-01T00:58:10.093291",
+          "insight_id": "ddf4df10-26cb-4ccd-9fbb-4825c3211202"
+        },
+        {
+          "value": 4.5,
+          "timestamp": "2025-03-01T01:00:57.445638",
+          "insight_id": "cdd3ddb3-1018-45a6-9808-20f9d42678e2"
+        },
+        {
+          "value": 4.5,
+          "timestamp": "2025-03-01T01:00:57.449098",
+          "insight_id": "ee3fa167-96a5-40be-b313-f0c6b8ea27db"
+        },
+        {
+          "value": 4.5,
+          "timestamp": "2025-03-01T01:00:57.450994",
+          "insight_id": "88e40ff2-0c7c-4c5f-88a4-1d2cb46f1fa4"
+        }
+      ],
+      "user_satisfaction": [],
+      "response_time": [],
+      "effectiveness_by_topic": {},
+      "last_updated": "2025-03-01T00:40:31.575609"
+    },
+    "claude3": {
+      "response_quality": [
+        {
+          "value": 3.6125000000000003,
+          "timestamp": "2025-03-02T18:06:53.092826",
+          "insight_id": "cadc94bd-4e96-47ec-87fb-ee81a2a45875"
+        },
+        {
+          "value": 3.6125000000000003,
+          "timestamp": "2025-03-02T18:08:20.528700",
+          "insight_id": "d6639801-e61d-4ed7-acbc-19256cf54c98"
+        },
+        {
+          "value": 3.6125000000000003,
+          "timestamp": "2025-03-02T18:11:39.279711",
+          "insight_id": "1be88e96-39fb-45cb-a4cf-0aaf9f2736b2"
+        },
+        {
+          "value": 3.6125000000000003,
+          "timestamp": "2025-03-02T18:13:59.992905",
+          "insight_id": "844409ad-fead-4385-8d44-330d15d32a9b"
+        },
+        {
+          "value": 4.733928571428572,
+          "timestamp": "2025-03-02T20:53:55.073593",
+          "insight_id": "21aba12e-e314-497a-843d-9bf0807f66be"
+        },
+        {
+          "value": 3.7625,
+          "timestamp": "2025-03-02T21:41:13.285937",
+          "insight_id": "aae345d5-83fc-4bef-b1bb-aa9765e0d179"
+        },
+        {
+          "value": 3.7625,
+          "timestamp": "2025-03-02T21:49:42.831383",
+          "insight_id": "5e1202f1-3e20-4974-8b49-c56fe3ab4a8e"
+        },
+        {
+          "value": 4.3325,
+          "timestamp": "2025-03-02T21:54:01.593075",
+          "insight_id": "75631211-df94-42e9-9f02-e48090746cc9"
+        },
+        {
+          "value": 4.5125,
+          "timestamp": "2025-03-03T21:23:12.971915",
+          "insight_id": "b09d242b-ea2f-490f-9397-f06595ed7db7"
+        },
+        {
+          "value": 4.5125,
+          "timestamp": "2025-03-03T21:23:12.980858",
+          "insight_id": "5f261280-ae76-4b67-bc65-bbb15b747217"
+        },
+        {
+          "value": 4.5125,
+          "timestamp": "2025-03-03T21:23:12.991152",
+          "insight_id": "739704fd-12c2-42b6-8ed6-8f0616cebce4"
+        },
+        {
+          "value": 4.3125,
+          "timestamp": "2025-03-03T21:30:15.964645",
+          "insight_id": "da30b42b-20d2-4219-96d0-1eaecf51ea9d"
+        },
+        {
+          "value": 4.5125,
+          "timestamp": "2025-03-03T21:30:15.976173",
+          "insight_id": "d7e2dcb3-d277-49a0-beab-e6f8ce6fb061"
+        },
+        {
+          "value": 4.5125,
+          "timestamp": "2025-03-03T21:30:15.987726",
+          "insight_id": "43868db3-e1c9-4b8d-8023-0c138c375ff0"
+        },
+        {
+          "value": 4.5125,
+          "timestamp": "2025-03-03T21:30:15.999295",
+          "insight_id": "70c09886-821c-415a-87c2-670f906b0934"
+        },
+        {
+          "value": 4.4125,
+          "timestamp": "2025-03-03T21:30:16.009824",
+          "insight_id": "962b81a4-14b4-48f2-9b57-7a738457c470"
+        },
+        {
+          "value": 2.9690246376811595,
+          "timestamp": "2025-03-04T02:22:13.478554",
+          "insight_id": "70757782-ea1d-4d3a-8e09-32af7c3e0d7d"
+        }
+      ],
+      "user_satisfaction": [],
+      "response_time": [],
+      "effectiveness_by_topic": {},
+      "last_updated": "2025-03-02T18:06:53.087824"
+    },
+    "gpt4": {
+      "response_quality": [
+        {
+          "value": 4.2925,
+          "timestamp": "2025-03-02T19:52:48.856195",
+          "insight_id": "e86ac4a1-49e8-46d3-97da-307a51217e3a"
+        },
+        {
+          "value": 3.9850000000000003,
+          "timestamp": "2025-03-02T19:53:03.812055",
+          "insight_id": "966fb9aa-6f35-4a60-8877-b7b21e40b390"
+        },
+        {
+          "value": 4.1049999999999995,
+          "timestamp": "2025-03-02T20:08:35.351119",
+          "insight_id": "4840c171-62bb-44ab-b253-372b23ca2b75"
+        },
+        {
+          "value": 4.1049999999999995,
+          "timestamp": "2025-03-02T20:12:08.978844",
+          "insight_id": "56bc53cd-00c5-4808-8c60-334cc11d8917"
+        },
+        {
+          "value": 4.074999999999999,
+          "timestamp": "2025-03-02T20:12:21.291856",
+          "insight_id": "89313006-5ccb-460e-bd8f-764556c83b62"
+        },
+        {
+          "value": 4.71452380952381,
+          "timestamp": "2025-03-02T21:18:37.796392",
+          "insight_id": "d407e04b-55ea-4922-806c-b748b2de6513"
+        },
+        {
+          "value": 4.421666666666667,
+          "timestamp": "2025-03-02T21:38:23.018108",
+          "insight_id": "9ea2263c-1e23-4f74-84e7-e72e0c12c389"
+        },
+        {
+          "value": 5.0,
+          "timestamp": "2025-03-03T21:30:16.022157",
+          "insight_id": "799162ae-75be-4568-84a1-b3b73cab1cca"
+        },
+        {
+          "value": 4.385,
+          "timestamp": "2025-03-04T01:11:03.401807",
+          "insight_id": "05921fa0-dd0e-41d9-9331-4d4a15a8a91d"
+        },
+        {
+          "value": 4.385,
+          "timestamp": "2025-03-04T01:11:03.413748",
+          "insight_id": "373437bc-010a-4396-ad5d-e37bcf3f7ba8"
+        },
+        {
+          "value": 4.385,
+          "timestamp": "2025-03-04T01:11:03.425811",
+          "insight_id": "f11a46b8-f71d-47e1-b0e4-e538c322f9a9"
+        },
+        {
+          "value": 4.385,
+          "timestamp": "2025-03-04T01:12:19.206651",
+          "insight_id": "a51bc234-bb53-4c6a-aafd-fd74010bc421"
+        },
+        {
+          "value": 4.385,
+          "timestamp": "2025-03-04T01:12:19.219629",
+          "insight_id": "4c8cfac2-c99e-44cc-9ae7-9858a82bea3e"
+        },
+        {
+          "value": 4.385,
+          "timestamp": "2025-03-04T01:12:19.231975",
+          "insight_id": "92db77ae-baa4-45e0-8d59-2caef03c23b3"
+        },
+        {
+          "value": 3.5,
+          "timestamp": "2025-03-04T02:14:59.830617",
+          "insight_id": "ea2c8a12-b063-4c70-8495-b30cf5a13e39"
+        },
+        {
+          "value": 3.5,
+          "timestamp": "2025-03-04T02:18:01.950198",
+          "insight_id": "b8290469-6f7b-4d84-936c-47c467dcc221"
+        },
+        {
+          "value": 3.5,
+          "timestamp": "2025-03-04T02:21:34.755358",
+          "insight_id": "8ef105d6-3d3d-44eb-9be8-a02922daa4cf"
+        },
+        {
+          "value": 3.215917948717949,
+          "timestamp": "2025-03-04T02:22:13.491923",
+          "insight_id": "6c39a041-b51c-4f45-b4c2-c567c761a640"
+        },
+        {
+          "value": 3.2065939393939398,
+          "timestamp": "2025-03-04T02:22:13.504546",
+          "insight_id": "b3d236ca-6c93-45fa-b099-0c04bdb14c62"
+        },
+        {
+          "value": 3.151257971014493,
+          "timestamp": "2025-03-04T02:22:13.517793",
+          "insight_id": "11ec3bd7-2453-49cb-a87a-ad4bd356ee25"
+        },
+        {
+          "value": 3.208967287784679,
+          "timestamp": "2025-03-04T02:22:13.528754",
+          "insight_id": "9bf13cb2-1309-4d22-994b-001a00b29bd1"
+        },
+        {
+          "value": 3.316717948717949,
+          "timestamp": "2025-03-04T02:22:13.540429",
+          "insight_id": "73b3e43e-465d-41f9-883e-5d6573151193"
+        }
+      ],
+      "user_satisfaction": [],
+      "response_time": [],
+      "effectiveness_by_topic": {},
+      "last_updated": "2025-03-02T19:52:48.854982"
+    },
+    "mistral7b": {
+      "response_quality": [
+        {
+          "value": 3.5,
+          "timestamp": "2025-03-02T21:13:51.140172",
+          "insight_id": "cfa3a47d-037d-4af5-bbb6-c386a5425931"
+        },
+        {
+          "value": 2.4779999999999998,
+          "timestamp": "2025-03-02T21:49:33.978366",
+          "insight_id": "e8175752-3846-49b0-b9b8-2e7c40608241"
+        }
+      ],
+      "user_satisfaction": [],
+      "response_time": [],
+      "effectiveness_by_topic": {},
+      "last_updated": "2025-03-02T21:13:51.138566"
+    },
+    "gpt4all": {
+      "response_quality": [
+        {
+          "value": 4.35,
+          "timestamp": "2025-03-02T21:44:57.244049",
+          "insight_id": "5b3246f2-5f76-41e4-ab42-61bdc5709baa"
+        },
+        {
+          "value": 1.4629999999999999,
+          "timestamp": "2025-03-04T02:14:59.799313",
+          "insight_id": "08611f26-deeb-4f3e-b9ed-48dce68f5a0a"
+        },
+        {
+          "value": 2.7649999999999997,
+          "timestamp": "2025-03-04T02:14:59.805578",
+          "insight_id": "01a5e0d8-8064-4658-b823-83126c7d4b47"
+        },
+        {
+          "value": 2.8489999999999998,
+          "timestamp": "2025-03-04T02:14:59.811970",
+          "insight_id": "a550a96e-b183-4959-954c-0bf1ca028f5a"
+        },
+        {
+          "value": 2.807,
+          "timestamp": "2025-03-04T02:14:59.818032",
+          "insight_id": "490508cc-1d51-4d24-98d4-9fbeb6b29fbf"
+        },
+        {
+          "value": 2.9119999999999995,
+          "timestamp": "2025-03-04T02:14:59.824149",
+          "insight_id": "38dffe7c-5ca6-42d9-8f52-3142dd9e7e40"
+        },
+        {
+          "value": 1.4629999999999999,
+          "timestamp": "2025-03-04T02:18:01.903148",
+          "insight_id": "5dfcdf4a-7170-49c2-a6c3-121e3be31e63"
+        },
+        {
+          "value": 2.7649999999999997,
+          "timestamp": "2025-03-04T02:18:01.922989",
+          "insight_id": "66f6c227-ab52-43b9-a4e8-af1b7e47dbca"
+        },
+        {
+          "value": 2.8489999999999998,
+          "timestamp": "2025-03-04T02:18:01.929685",
+          "insight_id": "f95e5968-0492-45b2-9f0c-ed7702cc02ab"
+        },
+        {
+          "value": 2.807,
+          "timestamp": "2025-03-04T02:18:01.936447",
+          "insight_id": "47d238d7-47b9-4e32-addc-d46000ea7efb"
+        },
+        {
+          "value": 2.9119999999999995,
+          "timestamp": "2025-03-04T02:18:01.943337",
+          "insight_id": "bbeccf28-79c6-48cd-a7c3-ce1ec4023663"
+        },
+        {
+          "value": 1.4629999999999999,
+          "timestamp": "2025-03-04T02:21:34.720486",
+          "insight_id": "a3834ee2-625b-47c4-8d90-560b3a93d7e5"
+        },
+        {
+          "value": 2.7649999999999997,
+          "timestamp": "2025-03-04T02:21:34.727652",
+          "insight_id": "e0a57b7c-0250-4cdd-a35b-6f7b4b7d5360"
+        },
+        {
+          "value": 2.8489999999999998,
+          "timestamp": "2025-03-04T02:21:34.734492",
+          "insight_id": "dabe5c58-41ce-40fb-868e-36b1a825ed2a"
+        },
+        {
+          "value": 2.807,
+          "timestamp": "2025-03-04T02:21:34.740899",
+          "insight_id": "36e9de73-d3fc-4874-bf81-262cc6b22b7a"
+        },
+        {
+          "value": 2.9119999999999995,
+          "timestamp": "2025-03-04T02:21:34.748300",
+          "insight_id": "8d207bce-ec75-4f9f-8298-575e32d77944"
+        }
+      ],
+      "user_satisfaction": [],
+      "response_time": [],
+      "effectiveness_by_topic": {},
+      "last_updated": "2025-03-02T21:44:57.242535"
+    }
+  },
+  "query_patterns": {
+    "what": [
+      "1a4168fd-0601-4e50-a689-8de019b444fd",
+      "8f131442-166f-4512-a5c0-698eda3a6fb3",
+      "8f938c57-780c-4231-a4b1-d015e38a6a39",
+      "de461169-4c61-4745-96a9-36a7d05ee0c6",
+      "820fcd77-d3bd-448f-bcf5-8ff2dd695edb",
+      "462088ed-ccbe-4af1-bbe3-3852aa8879a6",
+      "8e248d7d-8357-4760-b2f1-d8de64d71823",
+      "23efffdd-5cbf-4e8e-a95b-144a0846b536",
+      "1aabc5fe-8a3c-4518-87fd-43eb3dcfa269",
+      "d8707058-d811-4464-9378-d528e769029f",
+      "f51adf14-2f78-449b-8777-3a625ca5bb48",
+      "2e1ffd0d-4114-4228-9a8c-1dc12e3dacb6",
+      "fc0cf1df-1635-4df9-a215-90f619205558",
+      "d76a1ceb-31d9-44d1-90da-b62409d31546",
+      "cdd3ddb3-1018-45a6-9808-20f9d42678e2",
+      "4840c171-62bb-44ab-b253-372b23ca2b75",
+      "56bc53cd-00c5-4808-8c60-334cc11d8917",
+      "d407e04b-55ea-4922-806c-b748b2de6513",
+      "5b3246f2-5f76-41e4-ab42-61bdc5709baa",
+      "e8175752-3846-49b0-b9b8-2e7c40608241",
+      "b09d242b-ea2f-490f-9397-f06595ed7db7",
+      "d7e2dcb3-d277-49a0-beab-e6f8ce6fb061",
+      "05921fa0-dd0e-41d9-9331-4d4a15a8a91d",
+      "a51bc234-bb53-4c6a-aafd-fd74010bc421",
+      "01a5e0d8-8064-4658-b823-83126c7d4b47",
+      "66f6c227-ab52-43b9-a4e8-af1b7e47dbca",
+      "e0a57b7c-0250-4cdd-a35b-6f7b4b7d5360",
+      "6c39a041-b51c-4f45-b4c2-c567c761a640"
+    ],
+    "capital": [
+      "1a4168fd-0601-4e50-a689-8de019b444fd",
+      "8f131442-166f-4512-a5c0-698eda3a6fb3",
+      "1aabc5fe-8a3c-4518-87fd-43eb3dcfa269",
+      "d8707058-d811-4464-9378-d528e769029f",
+      "2e1ffd0d-4114-4228-9a8c-1dc12e3dacb6",
+      "fc0cf1df-1635-4df9-a215-90f619205558",
+      "b53b3d33-814c-4f6f-9315-adb66100166f",
+      "cdd3ddb3-1018-45a6-9808-20f9d42678e2",
+      "4840c171-62bb-44ab-b253-372b23ca2b75",
+      "56bc53cd-00c5-4808-8c60-334cc11d8917",
+      "b09d242b-ea2f-490f-9397-f06595ed7db7",
+      "d7e2dcb3-d277-49a0-beab-e6f8ce6fb061",
+      "05921fa0-dd0e-41d9-9331-4d4a15a8a91d",
+      "a51bc234-bb53-4c6a-aafd-fd74010bc421",
+      "01a5e0d8-8064-4658-b823-83126c7d4b47",
+      "66f6c227-ab52-43b9-a4e8-af1b7e47dbca",
+      "e0a57b7c-0250-4cdd-a35b-6f7b4b7d5360",
+      "6c39a041-b51c-4f45-b4c2-c567c761a640"
+    ],
+    "france?": [
+      "1a4168fd-0601-4e50-a689-8de019b444fd",
+      "8f131442-166f-4512-a5c0-698eda3a6fb3",
+      "1aabc5fe-8a3c-4518-87fd-43eb3dcfa269",
+      "d8707058-d811-4464-9378-d528e769029f",
+      "2e1ffd0d-4114-4228-9a8c-1dc12e3dacb6",
+      "fc0cf1df-1635-4df9-a215-90f619205558",
+      "cdd3ddb3-1018-45a6-9808-20f9d42678e2",
+      "4840c171-62bb-44ab-b253-372b23ca2b75",
+      "56bc53cd-00c5-4808-8c60-334cc11d8917",
+      "b09d242b-ea2f-490f-9397-f06595ed7db7",
+      "d7e2dcb3-d277-49a0-beab-e6f8ce6fb061",
+      "05921fa0-dd0e-41d9-9331-4d4a15a8a91d",
+      "a51bc234-bb53-4c6a-aafd-fd74010bc421",
+      "01a5e0d8-8064-4658-b823-83126c7d4b47",
+      "66f6c227-ab52-43b9-a4e8-af1b7e47dbca",
+      "e0a57b7c-0250-4cdd-a35b-6f7b4b7d5360",
+      "6c39a041-b51c-4f45-b4c2-c567c761a640"
+    ],
+    "explain": [
+      "7364cb38-cf3a-45de-af0f-14f7884b6321",
+      "847cfa13-d4c0-467b-856f-b1e47c416860",
+      "95a68782-8313-4b7a-a891-6f06b4a4ba33",
+      "4ca66fa1-5993-4799-8b3b-58c5c5f96260",
+      "cb8bb429-f8f8-4b0d-a179-067e80db01c7",
+      "67b1e952-27e9-43dd-9ee6-54343a200a31",
+      "0def8283-43f5-4d42-9abb-48b6ab71ba5d",
+      "1d3bc622-d86e-454c-bab0-c3f049c53da9",
+      "ef755d3e-59e2-4a23-a34c-296a2304ed99",
+      "ee3fa167-96a5-40be-b313-f0c6b8ea27db",
+      "cadc94bd-4e96-47ec-87fb-ee81a2a45875",
+      "d6639801-e61d-4ed7-acbc-19256cf54c98",
+      "1be88e96-39fb-45cb-a4cf-0aaf9f2736b2",
+      "844409ad-fead-4385-8d44-330d15d32a9b",
+      "e86ac4a1-49e8-46d3-97da-307a51217e3a",
+      "89313006-5ccb-460e-bd8f-764556c83b62",
+      "5f261280-ae76-4b67-bc65-bbb15b747217",
+      "43868db3-e1c9-4b8d-8023-0c138c375ff0",
+      "373437bc-010a-4396-ad5d-e37bcf3f7ba8",
+      "4c8cfac2-c99e-44cc-9ae7-9858a82bea3e",
+      "a550a96e-b183-4959-954c-0bf1ca028f5a",
+      "f95e5968-0492-45b2-9f0c-ed7702cc02ab",
+      "dabe5c58-41ce-40fb-868e-36b1a825ed2a",
+      "b3d236ca-6c93-45fa-b099-0c04bdb14c62"
+    ],
+    "relationship": [
+      "7364cb38-cf3a-45de-af0f-14f7884b6321",
+      "847cfa13-d4c0-467b-856f-b1e47c416860",
+      "cb8bb429-f8f8-4b0d-a179-067e80db01c7",
+      "67b1e952-27e9-43dd-9ee6-54343a200a31",
+      "0def8283-43f5-4d42-9abb-48b6ab71ba5d",
+      "1d3bc622-d86e-454c-bab0-c3f049c53da9"
+    ],
+    "between": [
+      "7364cb38-cf3a-45de-af0f-14f7884b6321",
+      "847cfa13-d4c0-467b-856f-b1e47c416860",
+      "23efffdd-5cbf-4e8e-a95b-144a0846b536",
+      "cb8bb429-f8f8-4b0d-a179-067e80db01c7",
+      "67b1e952-27e9-43dd-9ee6-54343a200a31",
+      "0def8283-43f5-4d42-9abb-48b6ab71ba5d",
+      "1d3bc622-d86e-454c-bab0-c3f049c53da9"
+    ],
+    "quantum": [
+      "7364cb38-cf3a-45de-af0f-14f7884b6321",
+      "847cfa13-d4c0-467b-856f-b1e47c416860",
+      "cb8bb429-f8f8-4b0d-a179-067e80db01c7",
+      "67b1e952-27e9-43dd-9ee6-54343a200a31",
+      "0def8283-43f5-4d42-9abb-48b6ab71ba5d",
+      "1d3bc622-d86e-454c-bab0-c3f049c53da9",
+      "cadc94bd-4e96-47ec-87fb-ee81a2a45875",
+      "d6639801-e61d-4ed7-acbc-19256cf54c98",
+      "1be88e96-39fb-45cb-a4cf-0aaf9f2736b2",
+      "844409ad-fead-4385-8d44-330d15d32a9b",
+      "e86ac4a1-49e8-46d3-97da-307a51217e3a",
+      "89313006-5ccb-460e-bd8f-764556c83b62",
+      "5f261280-ae76-4b67-bc65-bbb15b747217",
+      "43868db3-e1c9-4b8d-8023-0c138c375ff0",
+      "373437bc-010a-4396-ad5d-e37bcf3f7ba8",
+      "4c8cfac2-c99e-44cc-9ae7-9858a82bea3e",
+      "a550a96e-b183-4959-954c-0bf1ca028f5a",
+      "f95e5968-0492-45b2-9f0c-ed7702cc02ab",
+      "dabe5c58-41ce-40fb-868e-36b1a825ed2a",
+      "b3d236ca-6c93-45fa-b099-0c04bdb14c62"
+    ],
+    "entanglement": [
+      "7364cb38-cf3a-45de-af0f-14f7884b6321",
+      "847cfa13-d4c0-467b-856f-b1e47c416860",
+      "cb8bb429-f8f8-4b0d-a179-067e80db01c7",
+      "67b1e952-27e9-43dd-9ee6-54343a200a31",
+      "0def8283-43f5-4d42-9abb-48b6ab71ba5d",
+      "1d3bc622-d86e-454c-bab0-c3f049c53da9"
+    ],
+    "information": [
+      "7364cb38-cf3a-45de-af0f-14f7884b6321",
+      "847cfa13-d4c0-467b-856f-b1e47c416860",
+      "cb8bb429-f8f8-4b0d-a179-067e80db01c7",
+      "67b1e952-27e9-43dd-9ee6-54343a200a31",
+      "0def8283-43f5-4d42-9abb-48b6ab71ba5d",
+      "1d3bc622-d86e-454c-bab0-c3f049c53da9"
+    ],
+    "theory,": [
+      "7364cb38-cf3a-45de-af0f-14f7884b6321",
+      "847cfa13-d4c0-467b-856f-b1e47c416860",
+      "cb8bb429-f8f8-4b0d-a179-067e80db01c7",
+      "67b1e952-27e9-43dd-9ee6-54343a200a31",
+      "0def8283-43f5-4d42-9abb-48b6ab71ba5d",
+      "1d3bc622-d86e-454c-bab0-c3f049c53da9"
+    ],
+    "affects": [
+      "7364cb38-cf3a-45de-af0f-14f7884b6321",
+      "847cfa13-d4c0-467b-856f-b1e47c416860",
+      "cb8bb429-f8f8-4b0d-a179-067e80db01c7",
+      "67b1e952-27e9-43dd-9ee6-54343a200a31",
+      "0def8283-43f5-4d42-9abb-48b6ab71ba5d",
+      "1d3bc622-d86e-454c-bab0-c3f049c53da9"
+    ],
+    "computing?": [
+      "7364cb38-cf3a-45de-af0f-14f7884b6321",
+      "847cfa13-d4c0-467b-856f-b1e47c416860",
+      "cb8bb429-f8f8-4b0d-a179-067e80db01c7",
+      "67b1e952-27e9-43dd-9ee6-54343a200a31",
+      "0def8283-43f5-4d42-9abb-48b6ab71ba5d",
+      "1d3bc622-d86e-454c-bab0-c3f049c53da9"
+    ],
+    "summarize": [
+      "8f938c57-780c-4231-a4b1-d015e38a6a39",
+      "f51adf14-2f78-449b-8777-3a625ca5bb48",
+      "d76a1ceb-31d9-44d1-90da-b62409d31546"
+    ],
+    "know": [
+      "8f938c57-780c-4231-a4b1-d015e38a6a39",
+      "f51adf14-2f78-449b-8777-3a625ca5bb48",
+      "d76a1ceb-31d9-44d1-90da-b62409d31546"
+    ],
+    "about": [
+      "8f938c57-780c-4231-a4b1-d015e38a6a39",
+      "17037afa-b5fe-4ac9-9830-e9279bbcc6d8",
+      "f51adf14-2f78-449b-8777-3a625ca5bb48",
+      "d76a1ceb-31d9-44d1-90da-b62409d31546",
+      "75631211-df94-42e9-9f02-e48090746cc9",
+      "739704fd-12c2-42b6-8ed6-8f0616cebce4",
+      "70c09886-821c-415a-87c2-670f906b0934",
+      "f11a46b8-f71d-47e1-b0e4-e538c322f9a9",
+      "92db77ae-baa4-45e0-8d59-2caef03c23b3",
+      "490508cc-1d51-4d24-98d4-9fbeb6b29fbf",
+      "47d238d7-47b9-4e32-addc-d46000ea7efb",
+      "36e9de73-d3fc-4874-bf81-262cc6b22b7a",
+      "11ec3bd7-2453-49cb-a87a-ad4bd356ee25"
+    ],
+    "neural": [
+      "8f938c57-780c-4231-a4b1-d015e38a6a39",
+      "95a68782-8313-4b7a-a891-6f06b4a4ba33",
+      "4ca66fa1-5993-4799-8b3b-58c5c5f96260",
+      "17037afa-b5fe-4ac9-9830-e9279bbcc6d8",
+      "f51adf14-2f78-449b-8777-3a625ca5bb48",
+      "d76a1ceb-31d9-44d1-90da-b62409d31546",
+      "ddf4df10-26cb-4ccd-9fbb-4825c3211202",
+      "88e40ff2-0c7c-4c5f-88a4-1d2cb46f1fa4"
+    ],
+    "networks.": [
+      "8f938c57-780c-4231-a4b1-d015e38a6a39",
+      "f51adf14-2f78-449b-8777-3a625ca5bb48",
+      "d76a1ceb-31d9-44d1-90da-b62409d31546"
+    ],
+    "artificial": [
+      "de461169-4c61-4745-96a9-36a7d05ee0c6",
+      "820fcd77-d3bd-448f-bcf5-8ff2dd695edb"
+    ],
+    "intelligence?": [
+      "de461169-4c61-4745-96a9-36a7d05ee0c6",
+      "820fcd77-d3bd-448f-bcf5-8ff2dd695edb"
+    ],
+    "does": [
+      "004d2503-64da-4f6b-9cc6-254581b7a58d",
+      "6cd8f50f-3855-4052-ac6e-e5776f18396d",
+      "71872595-c628-4ce4-b158-4ac90f2c0181"
+    ],
+    "machine": [
+      "004d2503-64da-4f6b-9cc6-254581b7a58d",
+      "6cd8f50f-3855-4052-ac6e-e5776f18396d",
+      "75631211-df94-42e9-9f02-e48090746cc9"
+    ],
+    "learning": [
+      "004d2503-64da-4f6b-9cc6-254581b7a58d",
+      "6cd8f50f-3855-4052-ac6e-e5776f18396d",
+      "7b6972b2-28cf-434e-a6f1-b90a1a6bc822",
+      "65388e3f-f865-4a4d-8953-663769f49f6a",
+      "75631211-df94-42e9-9f02-e48090746cc9"
+    ],
+    "work?": [
+      "004d2503-64da-4f6b-9cc6-254581b7a58d",
+      "6cd8f50f-3855-4052-ac6e-e5776f18396d",
+      "71872595-c628-4ce4-b158-4ac90f2c0181"
+    ],
+    "networks": [
+      "95a68782-8313-4b7a-a891-6f06b4a4ba33",
+      "4ca66fa1-5993-4799-8b3b-58c5c5f96260",
+      "17037afa-b5fe-4ac9-9830-e9279bbcc6d8",
+      "ddf4df10-26cb-4ccd-9fbb-4825c3211202"
+    ],
+    "deep": [
+      "462088ed-ccbe-4af1-bbe3-3852aa8879a6",
+      "8e248d7d-8357-4760-b2f1-d8de64d71823"
+    ],
+    "learning?": [
+      "462088ed-ccbe-4af1-bbe3-3852aa8879a6",
+      "8e248d7d-8357-4760-b2f1-d8de64d71823",
+      "23efffdd-5cbf-4e8e-a95b-144a0846b536"
+    ],
+    "compare": [
+      "7b6972b2-28cf-434e-a6f1-b90a1a6bc822",
+      "65388e3f-f865-4a4d-8953-663769f49f6a",
+      "966fb9aa-6f35-4a60-8877-b7b21e40b390"
+    ],
+    "supervised": [
+      "7b6972b2-28cf-434e-a6f1-b90a1a6bc822",
+      "65388e3f-f865-4a4d-8953-663769f49f6a",
+      "23efffdd-5cbf-4e8e-a95b-144a0846b536"
+    ],
+    "unsupervised": [
+      "7b6972b2-28cf-434e-a6f1-b90a1a6bc822",
+      "65388e3f-f865-4a4d-8953-663769f49f6a",
+      "23efffdd-5cbf-4e8e-a95b-144a0846b536"
+    ],
+    "what's": [
+      "d6c632a8-74d9-4aa1-9ccb-4ef40468070a",
+      "b53b3d33-814c-4f6f-9315-adb66100166f"
+    ],
+    "tell": [
+      "17037afa-b5fe-4ac9-9830-e9279bbcc6d8",
+      "21aba12e-e314-497a-843d-9bf0807f66be",
+      "cfa3a47d-037d-4af5-bbb6-c386a5425931",
+      "75631211-df94-42e9-9f02-e48090746cc9"
+    ],
+    "differences": [
+      "23efffdd-5cbf-4e8e-a95b-144a0846b536"
+    ],
+    "italy?": [
+      "b53b3d33-814c-4f6f-9315-adb66100166f"
+    ],
+    "natural": [
+      "ef755d3e-59e2-4a23-a34c-296a2304ed99"
+    ],
+    "language": [
+      "ef755d3e-59e2-4a23-a34c-296a2304ed99",
+      "ddf4df10-26cb-4ccd-9fbb-4825c3211202"
+    ],
+    "processing": [
+      "ef755d3e-59e2-4a23-a34c-296a2304ed99"
+    ],
+    "techniques.": [
+      "ef755d3e-59e2-4a23-a34c-296a2304ed99"
+    ],
+    "describe": [
+      "ddf4df10-26cb-4ccd-9fbb-4825c3211202",
+      "88e40ff2-0c7c-4c5f-88a4-1d2cb46f1fa4"
+    ],
+    "implementation": [
+      "ddf4df10-26cb-4ccd-9fbb-4825c3211202",
+      "88e40ff2-0c7c-4c5f-88a4-1d2cb46f1fa4"
+    ],
+    "attention": [
+      "ddf4df10-26cb-4ccd-9fbb-4825c3211202"
+    ],
+    "mechanisms": [
+      "ddf4df10-26cb-4ccd-9fbb-4825c3211202",
+      "88e40ff2-0c7c-4c5f-88a4-1d2cb46f1fa4"
+    ],
+    "transformer": [
+      "ddf4df10-26cb-4ccd-9fbb-4825c3211202",
+      "88e40ff2-0c7c-4c5f-88a4-1d2cb46f1fa4"
+    ],
+    "optimize": [
+      "ddf4df10-26cb-4ccd-9fbb-4825c3211202"
+    ],
+    "them": [
+      "ddf4df10-26cb-4ccd-9fbb-4825c3211202"
+    ],
+    "large": [
+      "ddf4df10-26cb-4ccd-9fbb-4825c3211202"
+    ],
+    "models.": [
+      "ddf4df10-26cb-4ccd-9fbb-4825c3211202"
+    ],
+    "photosynthesis": [
+      "ee3fa167-96a5-40be-b313-f0c6b8ea27db"
+    ],
+    "works": [
+      "ee3fa167-96a5-40be-b313-f0c6b8ea27db"
+    ],
+    "plants": [
+      "ee3fa167-96a5-40be-b313-f0c6b8ea27db"
+    ],
+    "network": [
+      "88e40ff2-0c7c-4c5f-88a4-1d2cb46f1fa4"
+    ],
+    "architecture": [
+      "88e40ff2-0c7c-4c5f-88a4-1d2cb46f1fa4"
+    ],
+    "with": [
+      "88e40ff2-0c7c-4c5f-88a4-1d2cb46f1fa4"
+    ],
+    "self-attention": [
+      "88e40ff2-0c7c-4c5f-88a4-1d2cb46f1fa4"
+    ],
+    "computing": [
+      "cadc94bd-4e96-47ec-87fb-ee81a2a45875",
+      "d6639801-e61d-4ed7-acbc-19256cf54c98",
+      "1be88e96-39fb-45cb-a4cf-0aaf9f2736b2",
+      "844409ad-fead-4385-8d44-330d15d32a9b",
+      "e86ac4a1-49e8-46d3-97da-307a51217e3a",
+      "89313006-5ccb-460e-bd8f-764556c83b62",
+      "5f261280-ae76-4b67-bc65-bbb15b747217",
+      "43868db3-e1c9-4b8d-8023-0c138c375ff0",
+      "373437bc-010a-4396-ad5d-e37bcf3f7ba8",
+      "4c8cfac2-c99e-44cc-9ae7-9858a82bea3e",
+      "a550a96e-b183-4959-954c-0bf1ca028f5a",
+      "f95e5968-0492-45b2-9f0c-ed7702cc02ab",
+      "dabe5c58-41ce-40fb-868e-36b1a825ed2a",
+      "b3d236ca-6c93-45fa-b099-0c04bdb14c62"
+    ],
+    "implications": [
+      "cadc94bd-4e96-47ec-87fb-ee81a2a45875",
+      "d6639801-e61d-4ed7-acbc-19256cf54c98",
+      "1be88e96-39fb-45cb-a4cf-0aaf9f2736b2",
+      "844409ad-fead-4385-8d44-330d15d32a9b",
+      "e86ac4a1-49e8-46d3-97da-307a51217e3a"
+    ],
+    "economic": [
+      "966fb9aa-6f35-4a60-8877-b7b21e40b390"
+    ],
+    "theories": [
+      "966fb9aa-6f35-4a60-8877-b7b21e40b390"
+    ],
+    "keynes": [
+      "966fb9aa-6f35-4a60-8877-b7b21e40b390"
+    ],
+    "friedman": [
+      "966fb9aa-6f35-4a60-8877-b7b21e40b390"
+    ],
+    "simple": [
+      "89313006-5ccb-460e-bd8f-764556c83b62",
+      "5f261280-ae76-4b67-bc65-bbb15b747217",
+      "43868db3-e1c9-4b8d-8023-0c138c375ff0",
+      "373437bc-010a-4396-ad5d-e37bcf3f7ba8",
+      "4c8cfac2-c99e-44cc-9ae7-9858a82bea3e",
+      "a550a96e-b183-4959-954c-0bf1ca028f5a",
+      "f95e5968-0492-45b2-9f0c-ed7702cc02ab",
+      "dabe5c58-41ce-40fb-868e-36b1a825ed2a",
+      "b3d236ca-6c93-45fa-b099-0c04bdb14c62"
+    ],
+    "terms": [
+      "89313006-5ccb-460e-bd8f-764556c83b62"
+    ],
+    "nonsense": [
+      "21aba12e-e314-497a-843d-9bf0807f66be",
+      "cfa3a47d-037d-4af5-bbb6-c386a5425931"
+    ],
+    "story": [
+      "21aba12e-e314-497a-843d-9bf0807f66be",
+      "cfa3a47d-037d-4af5-bbb6-c386a5425931"
+    ],
+    "that": [
+      "21aba12e-e314-497a-843d-9bf0807f66be",
+      "cfa3a47d-037d-4af5-bbb6-c386a5425931",
+      "d407e04b-55ea-4922-806c-b748b2de6513"
+    ],
+    "repeats": [
+      "21aba12e-e314-497a-843d-9bf0807f66be",
+      "cfa3a47d-037d-4af5-bbb6-c386a5425931"
+    ],
+    "itself": [
+      "21aba12e-e314-497a-843d-9bf0807f66be",
+      "cfa3a47d-037d-4af5-bbb6-c386a5425931"
+    ],
+    "over": [
+      "21aba12e-e314-497a-843d-9bf0807f66be",
+      "cfa3a47d-037d-4af5-bbb6-c386a5425931"
+    ],
+    "main": [
+      "d407e04b-55ea-4922-806c-b748b2de6513"
+    ],
+    "factors": [
+      "d407e04b-55ea-4922-806c-b748b2de6513"
+    ],
+    "influence": [
+      "d407e04b-55ea-4922-806c-b748b2de6513"
+    ],
+    "climate": [
+      "d407e04b-55ea-4922-806c-b748b2de6513"
+    ],
+    "change?": [
+      "d407e04b-55ea-4922-806c-b748b2de6513"
+    ],
+    "meaning": [
+      "5b3246f2-5f76-41e4-ab42-61bdc5709baa",
+      "e8175752-3846-49b0-b9b8-2e7c40608241"
+    ],
+    "life?": [
+      "5b3246f2-5f76-41e4-ab42-61bdc5709baa",
+      "e8175752-3846-49b0-b9b8-2e7c40608241"
+    ],
+    "history": [
+      "75631211-df94-42e9-9f02-e48090746cc9"
+    ],
+    "terms.": [
+      "5f261280-ae76-4b67-bc65-bbb15b747217",
+      "43868db3-e1c9-4b8d-8023-0c138c375ff0",
+      "373437bc-010a-4396-ad5d-e37bcf3f7ba8",
+      "4c8cfac2-c99e-44cc-9ae7-9858a82bea3e",
+      "a550a96e-b183-4959-954c-0bf1ca028f5a",
+      "f95e5968-0492-45b2-9f0c-ed7702cc02ab",
+      "dabe5c58-41ce-40fb-868e-36b1a825ed2a",
+      "b3d236ca-6c93-45fa-b099-0c04bdb14c62"
+    ],
+    "write": [
+      "739704fd-12c2-42b6-8ed6-8f0616cebce4",
+      "70c09886-821c-415a-87c2-670f906b0934",
+      "f11a46b8-f71d-47e1-b0e4-e538c322f9a9",
+      "92db77ae-baa4-45e0-8d59-2caef03c23b3",
+      "490508cc-1d51-4d24-98d4-9fbeb6b29fbf",
+      "47d238d7-47b9-4e32-addc-d46000ea7efb",
+      "36e9de73-d3fc-4874-bf81-262cc6b22b7a",
+      "11ec3bd7-2453-49cb-a87a-ad4bd356ee25"
+    ],
+    "short": [
+      "739704fd-12c2-42b6-8ed6-8f0616cebce4",
+      "70c09886-821c-415a-87c2-670f906b0934",
+      "f11a46b8-f71d-47e1-b0e4-e538c322f9a9",
+      "92db77ae-baa4-45e0-8d59-2caef03c23b3",
+      "490508cc-1d51-4d24-98d4-9fbeb6b29fbf",
+      "47d238d7-47b9-4e32-addc-d46000ea7efb",
+      "36e9de73-d3fc-4874-bf81-262cc6b22b7a",
+      "11ec3bd7-2453-49cb-a87a-ad4bd356ee25"
+    ],
+    "poem": [
+      "739704fd-12c2-42b6-8ed6-8f0616cebce4",
+      "70c09886-821c-415a-87c2-670f906b0934",
+      "f11a46b8-f71d-47e1-b0e4-e538c322f9a9",
+      "92db77ae-baa4-45e0-8d59-2caef03c23b3",
+      "490508cc-1d51-4d24-98d4-9fbeb6b29fbf",
+      "47d238d7-47b9-4e32-addc-d46000ea7efb",
+      "36e9de73-d3fc-4874-bf81-262cc6b22b7a",
+      "11ec3bd7-2453-49cb-a87a-ad4bd356ee25"
+    ],
+    "technology.": [
+      "739704fd-12c2-42b6-8ed6-8f0616cebce4",
+      "70c09886-821c-415a-87c2-670f906b0934",
+      "f11a46b8-f71d-47e1-b0e4-e538c322f9a9",
+      "92db77ae-baa4-45e0-8d59-2caef03c23b3",
+      "490508cc-1d51-4d24-98d4-9fbeb6b29fbf",
+      "47d238d7-47b9-4e32-addc-d46000ea7efb",
+      "36e9de73-d3fc-4874-bf81-262cc6b22b7a",
+      "11ec3bd7-2453-49cb-a87a-ad4bd356ee25"
+    ],
+    "hello": [
+      "da30b42b-20d2-4219-96d0-1eaecf51ea9d",
+      "08611f26-deeb-4f3e-b9ed-48dce68f5a0a",
+      "5dfcdf4a-7170-49c2-a6c3-121e3be31e63",
+      "a3834ee2-625b-47c4-8d90-560b3a93d7e5",
+      "70757782-ea1d-4d3a-8e09-32af7c3e0d7d"
+    ],
+    "there!": [
+      "da30b42b-20d2-4219-96d0-1eaecf51ea9d",
+      "08611f26-deeb-4f3e-b9ed-48dce68f5a0a",
+      "5dfcdf4a-7170-49c2-a6c3-121e3be31e63",
+      "a3834ee2-625b-47c4-8d90-560b3a93d7e5",
+      "70757782-ea1d-4d3a-8e09-32af7c3e0d7d"
+    ],
+    "feeling": [
+      "962b81a4-14b4-48f2-9b57-7a738457c470",
+      "38dffe7c-5ca6-42d9-8f52-3142dd9e7e40",
+      "bbeccf28-79c6-48cd-a7c3-ce1ec4023663",
+      "8d207bce-ec75-4f9f-8298-575e32d77944",
+      "9bf13cb2-1309-4d22-994b-001a00b29bd1"
+    ],
+    "today.": [
+      "962b81a4-14b4-48f2-9b57-7a738457c470",
+      "38dffe7c-5ca6-42d9-8f52-3142dd9e7e40",
+      "bbeccf28-79c6-48cd-a7c3-ce1ec4023663",
+      "8d207bce-ec75-4f9f-8298-575e32d77944",
+      "9bf13cb2-1309-4d22-994b-001a00b29bd1"
+    ],
+    "help": [
+      "962b81a4-14b4-48f2-9b57-7a738457c470",
+      "799162ae-75be-4568-84a1-b3b73cab1cca",
+      "38dffe7c-5ca6-42d9-8f52-3142dd9e7e40",
+      "ea2c8a12-b063-4c70-8495-b30cf5a13e39",
+      "bbeccf28-79c6-48cd-a7c3-ce1ec4023663",
+      "b8290469-6f7b-4d84-936c-47c467dcc221",
+      "8d207bce-ec75-4f9f-8298-575e32d77944",
+      "8ef105d6-3d3d-44eb-9be8-a02922daa4cf",
+      "9bf13cb2-1309-4d22-994b-001a00b29bd1",
+      "73b3e43e-465d-41f9-883e-5d6573151193"
+    ],
+    "feel": [
+      "962b81a4-14b4-48f2-9b57-7a738457c470",
+      "38dffe7c-5ca6-42d9-8f52-3142dd9e7e40",
+      "bbeccf28-79c6-48cd-a7c3-ce1ec4023663",
+      "8d207bce-ec75-4f9f-8298-575e32d77944",
+      "9bf13cb2-1309-4d22-994b-001a00b29bd1"
+    ],
+    "better?": [
+      "962b81a4-14b4-48f2-9b57-7a738457c470",
+      "38dffe7c-5ca6-42d9-8f52-3142dd9e7e40",
+      "bbeccf28-79c6-48cd-a7c3-ce1ec4023663",
+      "8d207bce-ec75-4f9f-8298-575e32d77944",
+      "9bf13cb2-1309-4d22-994b-001a00b29bd1"
+    ],
+    "debug": [
+      "799162ae-75be-4568-84a1-b3b73cab1cca",
+      "ea2c8a12-b063-4c70-8495-b30cf5a13e39",
+      "b8290469-6f7b-4d84-936c-47c467dcc221",
+      "8ef105d6-3d3d-44eb-9be8-a02922daa4cf",
+      "73b3e43e-465d-41f9-883e-5d6573151193"
+    ],
+    "this": [
+      "799162ae-75be-4568-84a1-b3b73cab1cca",
+      "ea2c8a12-b063-4c70-8495-b30cf5a13e39",
+      "b8290469-6f7b-4d84-936c-47c467dcc221",
+      "8ef105d6-3d3d-44eb-9be8-a02922daa4cf",
+      "73b3e43e-465d-41f9-883e-5d6573151193"
+    ],
+    "python": [
+      "799162ae-75be-4568-84a1-b3b73cab1cca",
+      "ea2c8a12-b063-4c70-8495-b30cf5a13e39",
+      "b8290469-6f7b-4d84-936c-47c467dcc221",
+      "8ef105d6-3d3d-44eb-9be8-a02922daa4cf",
+      "73b3e43e-465d-41f9-883e-5d6573151193"
+    ],
+    "code?": [
+      "799162ae-75be-4568-84a1-b3b73cab1cca",
+      "ea2c8a12-b063-4c70-8495-b30cf5a13e39",
+      "b8290469-6f7b-4d84-936c-47c467dcc221",
+      "8ef105d6-3d3d-44eb-9be8-a02922daa4cf",
+      "73b3e43e-465d-41f9-883e-5d6573151193"
+    ],
+    "fibonacci(n):": [
+      "799162ae-75be-4568-84a1-b3b73cab1cca",
+      "ea2c8a12-b063-4c70-8495-b30cf5a13e39",
+      "b8290469-6f7b-4d84-936c-47c467dcc221",
+      "8ef105d6-3d3d-44eb-9be8-a02922daa4cf",
+      "73b3e43e-465d-41f9-883e-5d6573151193"
+    ],
+    "return": [
+      "799162ae-75be-4568-84a1-b3b73cab1cca",
+      "ea2c8a12-b063-4c70-8495-b30cf5a13e39",
+      "b8290469-6f7b-4d84-936c-47c467dcc221",
+      "8ef105d6-3d3d-44eb-9be8-a02922daa4cf",
+      "73b3e43e-465d-41f9-883e-5d6573151193"
+    ],
+    "elif": [
+      "799162ae-75be-4568-84a1-b3b73cab1cca",
+      "ea2c8a12-b063-4c70-8495-b30cf5a13e39",
+      "b8290469-6f7b-4d84-936c-47c467dcc221",
+      "8ef105d6-3d3d-44eb-9be8-a02922daa4cf",
+      "73b3e43e-465d-41f9-883e-5d6573151193"
+    ],
+    "else:": [
+      "799162ae-75be-4568-84a1-b3b73cab1cca",
+      "ea2c8a12-b063-4c70-8495-b30cf5a13e39",
+      "b8290469-6f7b-4d84-936c-47c467dcc221",
+      "8ef105d6-3d3d-44eb-9be8-a02922daa4cf",
+      "73b3e43e-465d-41f9-883e-5d6573151193"
+    ],
+    "fibonacci(n-1)": [
+      "799162ae-75be-4568-84a1-b3b73cab1cca",
+      "ea2c8a12-b063-4c70-8495-b30cf5a13e39",
+      "b8290469-6f7b-4d84-936c-47c467dcc221",
+      "8ef105d6-3d3d-44eb-9be8-a02922daa4cf",
+      "73b3e43e-465d-41f9-883e-5d6573151193"
+    ],
+    "fibonacci(n-2)": [
+      "799162ae-75be-4568-84a1-b3b73cab1cca",
+      "ea2c8a12-b063-4c70-8495-b30cf5a13e39",
+      "b8290469-6f7b-4d84-936c-47c467dcc221",
+      "8ef105d6-3d3d-44eb-9be8-a02922daa4cf",
+      "73b3e43e-465d-41f9-883e-5d6573151193"
+    ]
+  },
+  "response_effectiveness": {},
+  "metadata": {
+    "created_at": "2025-03-01T00:40:31.574617",
+    "last_updated": "2025-03-04T02:22:13.540431",
+    "version": "1.0"
+  }
+}

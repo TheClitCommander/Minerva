@@ -54,8 +54,14 @@ import logging
 import threading
 
 # Import memory management utilities
-from integrations.memory import memory_system as enhanced_memory_manager
-from integrations.memory import (
+# Fix import path to use web.integrations instead of root integrations
+from web.integrations.memory import MinervaMemory
+# Create memory system instance
+memory_system = MinervaMemory()
+enhanced_memory_manager = memory_system
+
+# Import memory utility functions
+from web.integrations.memory import (
     format_memory_for_response, 
     integrate_memories_into_response, 
     process_memory_command,
@@ -176,6 +182,14 @@ try:
     print("[STARTUP] Registered Chat API routes for Think Tank interface")
 except ImportError as e:
     print(f"[STARTUP] Could not register Chat API: {e}")
+
+# Register project API blueprint for Project Context integration
+try:
+    from project_api import project_api
+    app.register_blueprint(project_api)
+    print("[STARTUP] Registered Project API routes for Project Context integration")
+except ImportError as e:
+    print(f"[STARTUP] Could not register Project API: {e}")
 
 def register_real_api_processors(coordinator):
     """
@@ -1013,14 +1027,23 @@ def init_app(flask_app=None, socketio_instance=None):
 
 @app.route('/')
 def index():
-    """Render the main dashboard page or serve the static index.html."""
-    # Serve enhanced UI with floating chat component for homepage
-    # But still make other pages accessible
-    custom_ui_path = os.path.join(os.path.dirname(app.static_folder), 'minerva_central.html')
-    if os.path.exists(custom_ui_path) and request.path == '/':
-        return send_file(custom_ui_path)
+    """Render the main dashboard page or serve a static HTML file."""
+    app.logger.info("Root route accessed - attempting to serve UI")
     
-    # If no static index.html exists, try the template approach
+    # Try to serve the Minerva Orb UI if it exists
+    ui_path = os.path.join(os.path.dirname(__file__), 'minerva_central.html')
+    if os.path.exists(ui_path):
+        app.logger.info(f"Serving Minerva Orb UI from: {ui_path}")
+        try:
+            return send_file(ui_path)
+        except Exception as e:
+            app.logger.error(f"Failed to serve minerva_central.html: {e}")
+            # Fall through to the standard index template rendering
+    else:
+        app.logger.warning(f"minerva_central.html not found at {ui_path}, falling back to index.html")
+    
+    # If we reach here, minerva_central.html wasn't found or couldn't be served
+    # Fall back to the template renderer for index.html
     try:
         # Check if user is in session, if not create a user ID
         if 'user_id' not in session:
@@ -1029,19 +1052,30 @@ def index():
         # Get or create a conversation for this user
         user_id = session['user_id']
         if user_id not in active_conversations:
-            result = minerva.start_conversation(user_id=user_id)
-            active_conversations[user_id] = result['conversation_id']
+            try:
+                result = minerva.start_conversation(user_id=user_id)
+                active_conversations[user_id] = result['conversation_id']
+            except Exception as e:
+                app.logger.error(f"Failed to start conversation: {e}")
+                active_conversations[user_id] = str(uuid.uuid4())
         
         # Get frameworks for display
-        frameworks = minerva.framework_manager.get_all_frameworks()
-        framework_names = list(frameworks.keys()) if frameworks else []
+        framework_names = []
+        try:
+            frameworks = minerva.framework_manager.get_all_frameworks()
+            framework_names = list(frameworks.keys()) if frameworks else []
+        except Exception as e:
+            app.logger.warning(f"Couldn't load frameworks: {e}")
         
+        app.logger.info("Rendering index.html template")
         return render_template('index.html', 
-                               user_id=user_id,
-                               conversation_id=active_conversations[user_id],
-                               frameworks=framework_names)
+                              user_id=user_id,
+                              conversation_id=active_conversations[user_id],
+                              frameworks=framework_names)
+                              
     except Exception as e:
         # If template rendering fails, show a basic HTML page with API information
+        app.logger.error(f"Failed to render index template: {e}")
         html_content = f'''
         <!DOCTYPE html>
         <html>
@@ -6263,7 +6297,8 @@ ALWAYS prioritize user safety and privacy. NEVER share or request personal infor
     # Format based on model architecture with debugging
     if model_type in ["zephyr", "mistral-7b"]:
         # Zephyr/Mistral specific format
-        formatted_prompt = f"<|system|>\n{enhanced_system}</s>\n<|assistant|>\nUser: {message}\nAssistant:"
+        formatted_prompt = f"<|system|>\n{enhanced_system}
+ \n<|assistant|>\nUser: {message}\nAssistant:"
         if debug:
             print(f"[FORMAT DEBUG] Using Zephyr/Mistral format")
     elif model_type in ["gpt-4", "claude"]:
@@ -6273,7 +6308,9 @@ ALWAYS prioritize user safety and privacy. NEVER share or request personal infor
             print(f"[FORMAT DEBUG] Using GPT-4/Claude format")
     elif model_type == "code-llama":
         # Code Llama specific format
-        formatted_prompt = f"<s>[INST] {enhanced_system}\n\n{message} [/INST]\n"
+        formatted_prompt = f"
+  {enhanced_system}\n\n{message} 
+ \n"
         if debug:
             print(f"[FORMAT DEBUG] Using Code Llama format")
     elif model_type == "basic":
@@ -6487,8 +6524,10 @@ def process_gpt_response(message, user_id=None):
                         if is_advanced_model:
                             if "<|assistant|>" in generated_text:
                                 assistant_text = generated_text.split("<|assistant|>")[1]
-                                if "</s>" in assistant_text:
-                                    assistant_text = assistant_text.split("</s>")[0]
+                                if "
+ " in assistant_text:
+                                    assistant_text = assistant_text.split("
+ ")[0]
                                 response = assistant_text.strip()
                             elif "User:" in generated_text and "Assistant:" in generated_text:
                                 response = generated_text.split("Assistant:")[1].strip()
@@ -7364,8 +7403,10 @@ def process_huggingface_only(message, message_history=None, bypass_validation=Fa
                     # Extract everything after the assistant tag and before any closing tag
                     assistant_text = generated_text.split("<|assistant|>")[1]
                     # Remove any trailing tags if present
-                    if "</s>" in assistant_text:
-                        assistant_text = assistant_text.split("</s>")[0]
+                    if "
+ " in assistant_text:
+                        assistant_text = assistant_text.split("
+ ")[0]
                     response = assistant_text.strip()
                 elif "<assistant>" in generated_text:
                     # Alternative format for some models
@@ -7906,6 +7947,154 @@ def submit_feedback_api():
             "code": "feedback_error"
         }), 500
 
+# Route tester endpoint for debugging and route checking
+@app.route('/route_tester')
+def route_tester():
+    """Serves the route testing tool for checking API connections and endpoints.
+    
+    This follows Rule #4 from the Minerva Master Ruleset:
+    - API Connectivity Rules with graceful fallbacks
+    - Debuggable endpoints
+    """
+    logger.info("[ROUTE TESTER] Route tester accessed")
+    return render_template('route_tester.html')
+
+# General Think Tank API endpoint to handle requests that don't match specific routes
+# Ensure we have all required imports
+import uuid
+import datetime
+
+@app.route('/api/think-tank', methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"])
+def think_tank_api():
+    """General Think Tank API endpoint to handle all requests to the Think Tank API.
+    
+    This endpoint serves as a central handler for all Think Tank interface requests.
+    It implements Rule #4 from the Minerva Master Ruleset:
+    - API Connectivity Rules:
+      - Default port for API connections: 8080
+      - If a bridge server is used (e.g., 8090), declare it in a config
+      - No usage of window.location.origin unless explicitly allowed
+      - Graceful fallback if API fails
+    """
+    try:
+        # Get the request information
+        method = request.method
+        data = request.json if request.is_json else {}
+        headers = dict(request.headers)
+        
+        # Log the request for debugging
+        app.logger.info(f"[THINK TANK API] Received {method} request")
+        
+        # Special handling for OPTIONS requests (CORS)
+        if method == "OPTIONS":
+            response = jsonify({'status': 'success', 'cors': 'enabled'})
+            response.headers.add('Access-Control-Allow-Origin', '*')
+            response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+            response.headers.add('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,PATCH,OPTIONS')
+            return response
+            
+        # Regular API response handling
+        # Handle different request methods
+        if method == "GET":
+            # Provide API status and capabilities
+            return jsonify({
+                'status': 'success',
+                'message': 'Think Tank API is available',
+                'mode': 'template-only',
+                'capabilities': {
+                    'chat': True,
+                    'memory': True,
+                    'projects': True,
+                    'ai_models': False  # AI models are disabled as noted in logs
+                },
+                'timestamp': datetime.datetime.now().isoformat()
+            })
+        elif method == "POST":
+            # Process the user message
+            user_id = data.get('user_id', str(uuid.uuid4()))
+            user_message = data.get('message', 'Empty message')
+            conversation_id = data.get('conversation_id', str(uuid.uuid4()))
+            project_id = data.get('project_id', None)
+            
+            # Log conversation data
+            app.logger.info(f"[THINK TANK] Processing message for user {user_id} in conversation {conversation_id}")
+            
+            # Return template response
+            return jsonify({
+                'status': 'success', 
+                'message': 'Message processed',
+                'response': {
+                    'content': f"I've received your message and am processing it. (Running in template-only mode)",
+                    'timestamp': datetime.datetime.now().isoformat(),
+                    'conversation_id': conversation_id,
+                    'user_id': user_id,
+                    'message_id': str(uuid.uuid4()),
+                    'project_context': project_id
+                }
+            })
+        elif method in ["PUT", "PATCH"]:
+            # Handle update requests
+            return jsonify({
+                'status': 'success',
+                'message': 'Update processed',
+                'timestamp': datetime.datetime.now().isoformat()
+            })
+        elif method == "DELETE":
+            # Handle delete requests
+            return jsonify({
+                'status': 'success',
+                'message': 'Delete request processed',
+                'timestamp': datetime.datetime.now().isoformat()
+            })
+        else:
+            return jsonify({
+                'status': 'error',
+                'message': f'Unsupported method: {method}'
+            }), 400
+    except Exception as e:
+        # Implement graceful fallback (Rule #4)
+        app.logger.error(f"[THINK TANK API] Error processing request: {str(e)}")
+        return jsonify({
+            'status': 'error',
+            'message': 'An error occurred processing your request', 
+            'error': str(e),
+            'fallback': 'Activated according to Minerva Master Ruleset #4'
+        }), 500
+
+
+# Simple API endpoints for chat UI connectivity
+@app.route("/api/status", methods=["GET"])
+def api_status():
+    """Status endpoint to check if API is available"""
+    return jsonify({
+        "status": "success",
+        "message": "Minerva API is online",
+        "timestamp": datetime.now().isoformat()
+    })
+
+@app.route("/api/chat", methods=["POST"])
+def api_chat():
+    """Chat endpoint to handle user messages"""
+    try:
+        data = request.json
+        user_message = data.get("message", "")
+        
+        # Log the incoming message
+        app.logger.info(f"Received chat message: {user_message[:50]}{'...' if len(user_message) > 50 else ''}")
+        
+        # In a real implementation, this would process the message through an AI model
+        # For now, we'll return a simple response to confirm connectivity
+        return jsonify({
+            "status": "success",
+            "response": f"Hello from the Minerva API! I received your message: '{user_message[:30]}...'" if len(user_message) > 30 else f"Hello from the Minerva API! I received your message: '{user_message}'",
+            "timestamp": datetime.now().isoformat()
+        })
+    except Exception as e:
+        app.logger.error(f"Error processing chat request: {str(e)}")
+        return jsonify({
+            "status": "error",
+            "message": f"Error processing your request: {str(e)}"
+        }), 500
 
 if __name__ == '__main__':
     run()

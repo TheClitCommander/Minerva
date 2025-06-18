@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Socket.IO Chat Debugging</title>
+    
+    <!-- Load Socket.IO library from server -->
+    <script src="/socket.io/socket.io.js"></script>
+    
+    <!-- Fallback to CDN if server version not available -->
+    <script>
+        if (typeof io === 'undefined') {
+            console.log('Socket.IO not found from server, loading from CDN');
+            const cdnScript = document.createElement('script');
+            cdnScript.src = 'https://cdn.socket.io/4.4.1/socket.io.min.js';
+            document.head.appendChild(cdnScript);
+        }
+    </script>
+    
+    <!-- Load our debug script -->
+    <script src="/static/js/debug-chat.js"></script>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        
+        h1 {
+            color: #333;
+        }
+        
+        .info-panel {
+            background-color: #fff;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .debug-info {
+            font-family: monospace;
+            background-color: #222;
+            color: #0f0;
+            padding: 10px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            margin-top: 10px;
+            max-height: 200px;
+            overflow: auto;
+        }
+        
+        .network-info {
+            margin-top: 10px;
+        }
+        
+        .network-log {
+            margin-top: 5px;
+            font-family: monospace;
+            padding: 5px;
+            background-color: #f5f5f5;
+            border-radius: 3px;
+            border-left: 3px solid #6e4cf8;
+        }
+    </style>
+</head>
+<body>
+    <h1>Socket.IO Chat Debugging</h1>
+    
+    <div class="info-panel">
+        <h2>Connection Status</h2>
+        <div id="connection-info">Checking connection...</div>
+        
+        <h2>Browser Info</h2>
+        <div id="browser-info"></div>
+        
+        <h2>Network Info</h2>
+        <div class="network-info">
+            <div id="network-log" class="network-log">Waiting for network activity...</div>
+        </div>
+    </div>
+    
+    <script>
+        // Display browser info
+        document.getElementById('browser-info').innerHTML = `
+            <div>User Agent: ${navigator.userAgent}</div>
+            <div>Platform: ${navigator.platform}</div>
+            <div>Online: ${navigator.onLine ? 'Yes' : 'No'}</div>
+        `;
+        
+        // Check Socket.IO availability
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                const connectionInfo = document.getElementById('connection-info');
+                if (typeof io === 'undefined') {
+                    connectionInfo.innerHTML = '<span style="color:red">Socket.IO library not loaded!</span>';
+                } else {
+                    connectionInfo.innerHTML = '<span style="color:green">Socket.IO library loaded successfully</span>';
+                }
+                
+                // Override console.log for network logging
+                const originalLog = console.log;
+                console.log = function() {
+                    const networkLog = document.getElementById('network-log');
+                    const args = Array.from(arguments);
+                    const message = args.map(arg => 
+                        typeof arg === 'object' ? JSON.stringify(arg) : arg
+                    ).join(' ');
+                    
+                    networkLog.innerHTML = `<div>${new Date().toISOString().substr(11, 8)} - ${message}</div>` 
+                        + networkLog.innerHTML;
+                    
+                    // Call original console.log
+                    originalLog.apply(console, arguments);
+                };
+            }, 2000);
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Socket.IO Debug Interface</title>
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+            line-height: 1.4;
+        }
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+        }
+        .box {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 10px 15px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .disconnected {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #ef9a9a;
+        }
+        .connected {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #a5d6a7;
+        }
+        .connecting {
+            background: #fff8e1;
+            color: #f57f17;
+            border: 1px solid #ffe082;
+        }
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        button {
+            background: #4a6da7;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #3a5a8c;
+        }
+        input {
+            flex-grow: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            min-width: 200px;
+        }
+        .log-container {
+            height: 300px;
+            overflow-y: auto;
+            background: #1e1e1e;
+            color: #ddd;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        .log-entry {
+            margin-bottom: 5px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 5px;
+        }
+        .timestamp {
+            color: #888;
+            font-size: 12px;
+        }
+        .incoming {
+            color: #8bc34a;
+        }
+        .outgoing {
+            color: #64b5f6;
+        }
+        .error {
+            color: #ef5350;
+        }
+        .info {
+            color: #e0e0e0;
+        }
+        .event-test {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 4px;
+        }
+        .event-row {
+            display: flex;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+        .event-name {
+            flex: 0 0 150px;
+            font-weight: bold;
+        }
+        .event-data {
+            flex: 1;
+        }
+        .panel-heading {
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .badge {
+            font-size: 12px;
+            padding: 3px 8px;
+            border-radius: 10px;
+            background: #333;
+            color: white;
+        }
+        .badge-success {
+            background: #388e3c;
+        }
+        .badge-error {
+            background: #d32f2f;
+        }
+        .badge-warn {
+            background: #f57c00;
+        }
+        .clear-btn {
+            background: #666;
+            padding: 4px 8px;
+            font-size: 12px;
+        }
+        .clear-btn:hover {
+            background: #555;
+        }
+        .tab-container {
+            margin-bottom: 15px;
+        }
+        .tab-buttons {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+        .tab-button {
+            padding: 8px 16px;
+            background: #ddd;
+            border: none;
+            border-radius: 4px 4px 0 0;
+            cursor: pointer;
+        }
+        .tab-button.active {
+            background: #4a6da7;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Socket.IO Debug Interface</h1>
+    
+    <div class="box">
+        <div id="connection-status" class="status disconnected">
+            <span>Status: Disconnected</span>
+            <div>
+                <span id="sid-display"></span>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button id="connect-btn">Connect</button>
+            <button id="disconnect-btn" disabled>Disconnect</button>
+            <button id="reconnect-btn" disabled>Reconnect</button>
+        </div>
+    </div>
+    
+    <div class="tab-container">
+        <div class="tab-buttons">
+            <button class="tab-button active" data-tab="logs">Debug Logs</button>
+            <button class="tab-button" data-tab="test">Test Messages</button>
+            <button class="tab-button" data-tab="events">Listen For Events</button>
+        </div>
+        
+        <div class="tab-content active" id="logs-tab">
+            <div class="box">
+                <div class="panel-heading">
+                    <span>Socket.IO Debug Log</span>
+                    <button class="clear-btn" id="clear-log">Clear</button>
+                </div>
+                <div class="log-container" id="log-display"></div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="test-tab">
+            <div class="box">
+                <div class="panel-heading">
+                    <span>Test Message Sending</span>
+                </div>
+                
+                <div class="event-test">
+                    <div class="event-row">
+                        <div class="event-name">Event:</div>
+                        <div class="event-data">
+                            <select id="event-select">
+                                <option value="message">message</option>
+                                <option value="chat_message" selected>chat_message</option>
+                                <option value="chat">chat</option>
+                                <option value="chat_request">chat_request</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="event-row">
+                        <div class="event-name">Format:</div>
+                        <div class="event-data">
+                            <select id="format-select">
+                                <option value="string">String</option>
+                                <option value="object" selected>Object</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="event-row">
+                        <div class="event-name">Message:</div>
+                        <div class="event-data">
+                            <input type="text" id="message-input" placeholder="Enter message..." value="Hello from debug">
+                        </div>
+                    </div>
+                    
+                    <div class="event-row">
+                        <div class="event-name">Object Key:</div>
+                        <div class="event-data">
+                            <input type="text" id="key-input" placeholder="message" value="message">
+                            <small>(Only for object format)</small>
+                        </div>
+                    </div>
+                    
+                    <div class="event-row">
+                        <button id="send-btn">Send Message</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="events-tab">
+            <div class="box">
+                <div class="panel-heading">
+                    <span>Event Listeners</span>
+                </div>
+                
+                <div class="event-test">
+                    <div class="event-row">
+                        <div class="event-name">Listen for:</div>
+                        <div class="event-data">
+                            <input type="text" id="listen-event" placeholder="Event name" value="chat_reply">
+                            <button id="listen-btn">Add Listener</button>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="panel-heading">
+                            <span>Active Listeners</span>
+                            <button class="clear-btn" id="clear-listeners">Clear All</button>
+                        </div>
+                        <div id="listeners-display"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Socket.IO Client -->
+    <script src="/socket.io/socket.io.js"></script>
+    
+    <!-- Fallback to CDN if needed -->
+    <script>
+        if (typeof io === 'undefined') {
+            console.warn('Socket.IO client not found locally, loading from CDN');
+            document.write('<script src="https://cdn.socket.io/4.4.1/socket.io.min.js"><\/script>');
+        }
+    </script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elements
+            const connectBtn = document.getElementById('connect-btn');
+            const disconnectBtn = document.getElementById('disconnect-btn');
+            const reconnectBtn = document.getElementById('reconnect-btn');
+            const connectionStatus = document.getElementById('connection-status');
+            const sidDisplay = document.getElementById('sid-display');
+            const logDisplay = document.getElementById('log-display');
+            const clearLogBtn = document.getElementById('clear-log');
+            const eventSelect = document.getElementById('event-select');
+            const formatSelect = document.getElementById('format-select');
+            const messageInput = document.getElementById('message-input');
+            const keyInput = document.getElementById('key-input');
+            const sendBtn = document.getElementById('send-btn');
+            const listenEvent = document.getElementById('listen-event');
+            const listenBtn = document.getElementById('listen-btn');
+            const listenersDisplay = document.getElementById('listeners-display');
+            const clearListenersBtn = document.getElementById('clear-listeners');
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            // Tabs functionality
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabId = button.getAttribute('data-tab');
+                    
+                    // Remove active class from all buttons and tabs
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(tab => tab.classList.remove('active'));
+                    
+                    // Add active class to clicked button and corresponding tab
+                    button.classList.add('active');
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                });
+            });
+            
+            // Variables
+            let socket = null;
+            const listeners = new Set(['connect', 'disconnect', 'connect_error']);
+            let connectOptions = {
+                reconnection: true,
+                reconnectionAttempts: 5,
+                reconnectionDelay: 1000,
+                timeout: 20000,
+                transports: ['websocket', 'polling']
+            };
+            
+            // Helper function to log messages
+            function log(message, type = 'info') {
+                const entry = document.createElement('div');
+                entry.classList.add('log-entry');
+                entry.classList.add(type);
+                
+                const time = new Date().toLocaleTimeString();
+                entry.innerHTML = `<span class="timestamp">[${time}]</span> ${message}`;
+                
+                logDisplay.appendChild(entry);
+                logDisplay.scrollTop = logDisplay.scrollHeight;
+            }
+            
+            // Update connection status UI
+            function updateStatus(status) {
+                connectionStatus.className = `status ${status}`;
+                
+                switch (status) {
+                    case 'connected':
+                        connectionStatus.innerHTML = `<span>Status: Connected</span><div><span id="sid-display">${socket?.id || ''}</span></div>`;
+                        connectBtn.disabled = true;
+                        disconnectBtn.disabled = false;
+                        reconnectBtn.disabled = true;
+                        break;
+                    case 'connecting':
+                        connectionStatus.innerHTML = '<span>Status: Connecting...</span><div></div>';
+                        connectBtn.disabled = true;
+                        disconnectBtn.disabled = true;
+                        reconnectBtn.disabled = true;
+                        break;
+                    case 'disconnected':
+                        connectionStatus.innerHTML = '<span>Status: Disconnected</span><div></div>';
+                        connectBtn.disabled = false;
+                        disconnectBtn.disabled = true;
+                        reconnectBtn.disabled = false;
+                        break;
+                }
+            }
+            
+            // Socket initialization
+            function initSocket() {
+                log('Initializing Socket.IO connection...', 'info');
+                
+                try {
+                    updateStatus('connecting');
+                    
+                    socket = io(connectOptions);
+                    
+                    // Basic event handlers
+                    socket.on('connect', () => {
+                        log(`Connected to server. Socket ID: ${socket.id}`, 'incoming');
+                        updateStatus('connected');
+                    });
+                    
+                    socket.on('disconnect', (reason) => {
+                        log(`Disconnected from server. Reason: ${reason}`, 'error');
+                        updateStatus('disconnected');
+                    });
+                    
+                    socket.on('connect_error', (error) => {
+                        log(`Connection error: ${error.message}`, 'error');
+                        updateStatus('disconnected');
+                    });
+                    
+                    // Add default listeners
+                    addListener('message');
+                    addListener('chat_reply');
+                    addListener('chat_response');
+                    
+                } catch (error) {
+                    log(`Error initializing socket: ${error.message}`, 'error');
+                    updateStatus('disconnected');
+                }
+            }
+            
+            // Add event listener
+            function addListener(event) {
+                if (listeners.has(event)) {
+                    log(`Already listening for event: ${event}`, 'info');
+                    return;
+                }
+                
+                if (!socket) {
+                    log('Socket not connected, cannot add listener', 'error');
+                    return;
+                }
+                
+                listeners.add(event);
+                
+                socket.on(event, (data) => {
+                    const dataStr = typeof data === 'object' 
+                        ? JSON.stringify(data, null, 2)
+                        : data;
+                    
+                    log(`<b>[${event}]</b> Received: ${dataStr}`, 'incoming');
+                });
+                
+                log(`Now listening for event: ${event}`, 'info');
+                updateListenersDisplay();
+            }
+            
+            // Update listeners display
+            function updateListenersDisplay() {
+                listenersDisplay.innerHTML = '';
+                
+                if (listeners.size === 0) {
+                    listenersDisplay.innerHTML = '<p>No active listeners</p>';
+                    return;
+                }
+                
+                const list = document.createElement('ul');
+                listeners.forEach(event => {
+                    const item = document.createElement('li');
+                    item.textContent = event;
+                    list.appendChild(item);
+                });
+                
+                listenersDisplay.appendChild(list);
+            }
+            
+            // Clear all event listeners
+            function clearListeners() {
+                if (!socket) return;
+                
+                // Keep basic listeners
+                const basicListeners = ['connect', 'disconnect', 'connect_error'];
+                
+                // Remove all custom listeners
+                listeners.forEach(event => {
+                    if (!basicListeners.includes(event)) {
+                        socket.off(event);
+                    }
+                });
+                
+                // Reset listeners set to only include basic listeners
+                listeners.clear();
+                basicListeners.forEach(event => listeners.add(event));
+                
+                log('Cleared all custom event listeners', 'info');
+                updateListenersDisplay();
+            }
+            
+            // Send message
+            function sendMessage() {
+                if (!socket || !socket.connected) {
+                    log('Socket not connected, cannot send message', 'error');
+                    return;
+                }
+                
+                const event = eventSelect.value;
+                const format = formatSelect.value;
+                const message = messageInput.value;
+                const key = keyInput.value || 'message';
+                
+                let data;
+                let logData;
+                
+                if (format === 'string') {
+                    data = message;
+                    logData = message;
+                } else {
+                    data = { [key]: message };
+                    logData = JSON.stringify(data);
+                }
+                
+                try {
+                    socket.emit(event, data);
+                    log(`<b>[${event}]</b> Sent: ${logData}`, 'outgoing');
+                } catch (error) {
+                    log(`Error sending message: ${error.message}`, 'error');
+                }
+            }
+            
+            // Button event listeners
+            connectBtn.addEventListener('click', () => {
+                if (!socket || !socket.connected) {
+                    initSocket();
+                }
+            });
+            
+            disconnectBtn.addEventListener('click', () => {
+                if (socket && socket.connected) {
+                    socket.disconnect();
+                }
+            });
+            
+            reconnectBtn.addEventListener('click', () => {
+                if (socket) {
+                    socket.disconnect();
+                }
+                
+                setTimeout(() => {
+                    initSocket();
+                }, 1000);
+            });
+            
+            clearLogBtn.addEventListener('click', () => {
+                logDisplay.innerHTML = '';
+                log('Log cleared', 'info');
+            });
+            
+            sendBtn.addEventListener('click', sendMessage);
+            
+            messageInput.addEventListener('keypress', (event) => {
+                if (event.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+            
+            listenBtn.addEventListener('click', () => {
+                const event = listenEvent.value.trim();
+                if (event) {
+                    addListener(event);
+                    listenEvent.value = '';
+                }
+            });
+            
+            listenEvent.addEventListener('keypress', (event) => {
+                if (event.key === 'Enter') {
+                    const eventName = listenEvent.value.trim();
+                    if (eventName) {
+                        addListener(eventName);
+                        listenEvent.value = '';
+                    }
+                }
+            });
+            
+            clearListenersBtn.addEventListener('click', clearListeners);
+            
+            // Format select change handler
+            formatSelect.addEventListener('change', () => {
+                const format = formatSelect.value;
+                keyInput.disabled = format === 'string';
+            });
+            
+            // Initialize connection
+            initSocket();
+            
+            // Set initial state for format select
+            keyInput.disabled = formatSelect.value === 'string';
+            
+            // Initialize listeners display
+            updateListenersDisplay();
+        });
+    </script>
+</body>
+</html> 

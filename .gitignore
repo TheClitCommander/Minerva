@@ -25,6 +25,11 @@ var/
 .env.*
 .venv
 venv/
+*/venv/
+*_venv/
+minerva_env/
+fresh_venv/
+websocket_venv/
 ENV/
 .coverage
 flask_session/
@@ -55,6 +60,19 @@ hf_token.txt
 *.backup
 *_backup*
 *.save
+*.fixed
+*.orig
+*.patch
+*.fix
+*-fixed.*
+*.original
+
+# Test files (should be moved to test directory)
+test_*.py
+*_test.py
+*_test.js
+*_test.html
+test_*.html
 
 # Embedded git repositories
 Gpt ai codes/
@@ -65,11 +83,24 @@ gpt4all-installer-*
 
 # Large directories to exclude
 archive/
+archive/test_files/
+archive/backup_files/
+archive/demo_files/
+archive/old_scripts/
 backups/
 MinervaClean/
+evaluation_storage/
+delete_me_later/
 
 # Cache and temp files
 __pycache__/
 .cache/
 tmp/
 temp/
+.pytest_cache/
+
+# Legacy chat files (to be archived per Minerva ruleset)
+direct-chat.js
+floating-chat.js
+chat.js
+chat-core.js

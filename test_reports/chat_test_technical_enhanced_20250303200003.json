@@ -1,0 +1,115 @@
+{
+  "session_id": "test_session_20250303200003",
+  "enhanced": true,
+  "script_name": "technical",
+  "exchanges": 5,
+  "conversation": [
+    {
+      "role": "system",
+      "content": "I am Minerva, an AI assistant. I'll help answer your questions and have a conversation with you.",
+      "timestamp": "2025-03-03T20:00:03.763597"
+    },
+    {
+      "role": "user",
+      "content": "What is the difference between REST and GraphQL?",
+      "timestamp": "2025-03-03T20:00:03.763784"
+    },
+    {
+      "role": "system",
+      "content": "Here is a response to your query about What is the differen.",
+      "timestamp": "2025-03-03T20:00:03.764374"
+    },
+    {
+      "role": "user",
+      "content": "Can you give me an example of a GraphQL query?",
+      "timestamp": "2025-03-03T20:00:03.764488"
+    },
+    {
+      "role": "system",
+      "content": "Here is a response to your query about Can you give me an e.",
+      "timestamp": "2025-03-03T20:00:03.764578"
+    },
+    {
+      "role": "user",
+      "content": "How would I implement authentication with GraphQL?",
+      "timestamp": "2025-03-03T20:00:03.764664"
+    },
+    {
+      "role": "system",
+      "content": "Here is a response to your query about How would I implemen.",
+      "timestamp": "2025-03-03T20:00:03.764750"
+    },
+    {
+      "role": "user",
+      "content": "What are some best practices for GraphQL error handling?",
+      "timestamp": "2025-03-03T20:00:03.764832"
+    },
+    {
+      "role": "system",
+      "content": "Here is a response to your query about What are some best p.",
+      "timestamp": "2025-03-03T20:00:03.764914"
+    },
+    {
+      "role": "user",
+      "content": "Can you summarize the key points we discussed?",
+      "timestamp": "2025-03-03T20:00:03.764998"
+    },
+    {
+      "role": "system",
+      "content": "Here is a response to your query about Can you summarize th.",
+      "timestamp": "2025-03-03T20:00:03.765087"
+    }
+  ],
+  "evaluations": [
+    {
+      "length_score": 0.6,
+      "contains_query_terms": 0.375,
+      "coherence": 0.9,
+      "self_reference": false,
+      "quality_score": 0.6000000000000001,
+      "exchange_number": 1,
+      "query": "What is the difference between REST and GraphQL?"
+    },
+    {
+      "length_score": 0.6,
+      "contains_query_terms": 0.6,
+      "coherence": 0.9,
+      "self_reference": false,
+      "quality_score": 0.69,
+      "exchange_number": 2,
+      "query": "Can you give me an example of a GraphQL query?"
+    },
+    {
+      "length_score": 0.6,
+      "contains_query_terms": 0.42857142857142855,
+      "coherence": 0.9,
+      "self_reference": false,
+      "quality_score": 0.6214285714285714,
+      "exchange_number": 3,
+      "query": "How would I implement authentication with GraphQL?"
+    },
+    {
+      "length_score": 0.6,
+      "contains_query_terms": 0.4444444444444444,
+      "coherence": 0.9,
+      "self_reference": false,
+      "quality_score": 0.6277777777777778,
+      "exchange_number": 4,
+      "query": "What are some best practices for GraphQL error handling?"
+    },
+    {
+      "length_score": 0.6,
+      "contains_query_terms": 0.375,
+      "coherence": 0.9,
+      "self_reference": false,
+      "quality_score": 0.6000000000000001,
+      "exchange_number": 5,
+      "query": "Can you summarize the key points we discussed?"
+    }
+  ],
+  "metrics": {
+    "average_quality": 0.6278412698412699,
+    "self_references": 0,
+    "self_reference_rate": 0.0
+  }
+}

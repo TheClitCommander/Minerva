@@ -1,10 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- Load enhanced immediate fixes first, before ANY other scripts -->
-<script src="/static/js/immediate-fixes.js"></script>
-<!-- Immediate Fix Script - Implements Rules #5, #10 & #17 -->
-<script>
-    // Run immediately to fix UI issues before anything else loads
+<!-- Real Minerva Implementation - No Fallbacks -->
     (function() {
         console.log('🚀 Minerva Immediate Fix Script - Implementing Master Ruleset');
         
@@ -54,19 +50,12 @@
                         error.minervaContext = {
                             url: args[0],
                             timestamp: new Date().toISOString(),
-                            fallbackAvailable: true
-                        };
-                    }
-                    throw error;
-                });
-        };
-    })();
-</script>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minerva Central Interface</title>
-    
+    <!-- Real API Connection to Backend (127.0.0.1:5505) -->
+    <script src="/static/js/minerva-api-connector.js"></script>
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     
@@ -830,10 +819,102 @@
     
     <!-- Minerva Orbital UI with integrated structure for 3D navigation -->
     <div id="minerva-orbital-ui">
-        <!-- Enhanced Orb UI -->
-    <div id="orb-container" class="orb-container">
-        <div id="orb-interface">
-            <!-- Navigation with icons -->
+        <!-- Main container for all Minerva components -->
+        <div id="minerva-container" class="minerva-container">
+            
+            <!-- GUARANTEED ORB CONTAINER - Directly in HTML -->
+            <div id="orb-container" class="orb-container">
+                <!-- Main content container for the orb interface -->
+                <div id="orb-interface" class="orb-interface">
+                    <!-- Dashboard section -->
+                    <div id="dashboard-section" class="dashboard-section orb-section">
+                        <h2>Dashboard</h2>
+                        <div class="dashboard-content">
+                            <p>Welcome to the Minerva Dashboard</p>
+                            <div class="status-display">
+                                <div class="status-item">
+                                    <span class="status-label">API Status:</span>
+                                    <span class="status-value" id="api-status">Checking...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Chat section -->
+                    <div id="chat-section" class="chat-section orb-section">
+                        <h2>Chat</h2>
+                        <div class="chat-content">
+                            <div id="chat-messages" class="chat-messages">
+                                <!-- Messages will appear here -->
+                                <div class="message system">
+                                    <div class="message-text">Welcome to Minerva Chat. How can I assist you today?</div>
+                                </div>
+                            </div>
+                            <div class="chat-input-container">
+                                <textarea id="chat-input" placeholder="Type your message here..."></textarea>
+                                <button id="send-button"><i class="fas fa-paper-plane"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Memory section -->
+                    <div id="memory-section" class="memory-section orb-section">
+                        <h2>Memory</h2>
+                        <div class="memory-content">
+                            <div id="memory-list" class="memory-list">
+                                <!-- Memory items will be displayed here -->
+                                <p>Loading memories...</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Projects section -->
+                    <div id="projects-section" class="projects-section orb-section">
+                        <h2>Projects</h2>
+                        <div class="projects-content">
+                            <div id="projects-list" class="projects-list">
+                                <!-- Projects will be displayed here -->
+                                <p>Loading projects...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Orb visualization - the actual orb UI -->
+                <div id="orb-visualization" class="orb-visualization">
+                    <!-- Orb button is the main clickable element -->
+                    <div id="orb-button" class="orb-button"></div>
+                    
+                    <!-- Decorative rings -->
+                    <div class="orb-ring"></div>
+                    <div class="orb-ring"></div>
+                    
+                    <!-- Radial menu -->
+                    <div id="orb-menu" class="orb-menu">
+                        <div class="orb-menu-item" data-action="dashboard">
+                            <i class="fas fa-home"></i>
+                            <span>Dashboard</span>
+                        </div>
+                        <div class="orb-menu-item" data-action="chat">
+                            <i class="fas fa-comment-alt"></i>
+                            <span>Chat</span>
+                        </div>
+                        <div class="orb-menu-item" data-action="memory">
+                            <i class="fas fa-brain"></i>
+                            <span>Memory</span>
+                        </div>
+                        <div class="orb-menu-item" data-action="projects">
+                            <i class="fas fa-folder"></i>
+                            <span>Projects</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="minerva-header">
+                <h1>Minerva Central Interface</h1>
+            </div>
+            
             <nav>
                 <button class="orb-nav-btn active" data-target="dashboard"><i class="fas fa-chart-network"></i> Dashboard</button>
                 <button class="orb-nav-btn" data-target="chat"><i class="fas fa-comments"></i> Chat</button>
@@ -3971,8 +4052,32 @@
     <!-- Add our robust API client for proper API connections -->
     <script src="/static/js/api/minerva-api.js" type="module"></script>
     
-    <!-- Include the enhanced orb UI implementation after DOM is loaded -->    
-    <script src="/static/js/orb/orb-enhanced.js"></script>
+    <!-- Add conversation persistence for chat history -->
+    <script src="/static/js/chat/conversation-persistence.js"></script>
+    
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <!-- Use the guaranteed working orb implementation -->
+    <link rel="stylesheet" href="/static/css/clean-orb.css">
+    <link rel="stylesheet" href="/static/css/project-modal.css">
+    <link rel="stylesheet" href="/static/css/floating-chat.css">
+    <link rel="stylesheet" href="/static/css/api-chat.css">
+    <link rel="stylesheet" href="/static/css/scene-transitions.css">
+    <!-- DIRECT FUNCTIONAL FIX - This script fixes navigation immediately -->
+    <script src="/static/js/direct-fix.js"></script>
+    
+    <!-- Previous implementations - keeping for reference but these may be removed -->
+    <script src="/static/js/core/scene-manager.js"></script>
+    <script src="/static/js/core/orb-menu-handler.js"></script>
+    <script src="/static/js/core/api-status.js"></script>
+    
+    <!-- Real API Implementation - No Fallbacks -->
+    <script src="/static/js/orb/working-orb.js"></script>
+    <script src="/static/js/projects/project-creator.js"></script>
+    <script src="/static/js/chat/draggable-chat.js"></script>
+    <!-- Real API Chat Handler with direct 127.0.0.1:5505 connection -->
+    <script src="/static/js/chat/real-chat-handler.js"></script>
     
     <!-- Initialize components with proper DOM checks -->
     <script>
@@ -3994,5 +4099,59 @@
         });
     });
     </script>
+    
+    <!-- Project Creation Modal -->
+    <div id="project-modal-overlay" class="modal-overlay">
+        <div class="project-modal">
+            <div class="modal-header">
+                <h2>Create New Project</h2>
+                <button class="modal-close" id="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="create-project-form">
+                    <div class="form-group">
+                        <label for="project-name">Project Name</label>
+                        <input type="text" id="project-name" placeholder="Enter a name for your project" required>
+                        <p class="form-hint">Choose a clear, descriptive name</p>
+                        
+                        <div class="name-suggestions">
+                            <p class="form-hint">Suggestions:</p>
+                            <div id="name-suggestions-container"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="project-description">Description</label>
+                        <textarea id="project-description" placeholder="Describe what this project is about" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Project Objectives</label>
+                        <div id="objectives-container">
+                            <div class="objective-row">
+                                <input type="text" class="objective-input" placeholder="Enter an objective">
+                                <button type="button" class="remove-objective"><i class="fas fa-times"></i></button>
+                            </div>
+                        </div>
+                        <button type="button" class="add-objective" id="add-objective-btn">
+                            <i class="fas fa-plus"></i> Add Objective
+                        </button>
+                    </div>
+                    
+                    <div class="context-toggle">
+                        <input type="checkbox" id="use-memory-context" checked>
+                        <label for="use-memory-context">Use current memory context</label>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn-cancel" id="cancel-project">Cancel</button>
+                        <button type="submit" class="btn-create" id="create-project">
+                            <span>Create Project</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

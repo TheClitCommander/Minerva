@@ -1,0 +1,336 @@
+{
+  "timestamp": "2025-03-09 14:21:24",
+  "overall": {
+    "total_tests": 14,
+    "successful_tests": 14,
+    "success_rate": 100.0,
+    "avg_response_time": 0.954936044556754,
+    "avg_structure_score": 0.0,
+    "model_selection_accuracy": 57.14285714285714,
+    "blending_rate": 7.142857142857142
+  },
+  "categories": {
+    "factual": [
+      {
+        "category": "factual",
+        "query": "What is artificial intelligence?",
+        "response_time": 0.8116750717163086,
+        "structure_score": 0,
+        "best_model": "llama",
+        "expected_model": "gpt-3.5-turbo",
+        "model_match": false,
+        "is_blended": false,
+        "detected_task_type": "fact_simple"
+      },
+      {
+        "category": "factual",
+        "query": "What are the planets in our solar system?",
+        "response_time": 1.0942308902740479,
+        "structure_score": 0,
+        "best_model": "llama",
+        "expected_model": "gpt-3.5-turbo",
+        "model_match": false,
+        "is_blended": false,
+        "detected_task_type": "general"
+      }
+    ],
+    "code": [
+      {
+        "category": "code",
+        "query": "Write a Python function to find the longest palindromic substring in a given string.",
+        "response_time": 1.1078910827636719,
+        "structure_score": 0,
+        "best_model": "llama",
+        "expected_model": "gpt-4",
+        "model_match": true,
+        "is_blended": false,
+        "detected_task_type": "technical"
+      },
+      {
+        "category": "code",
+        "query": "Create a React component for a responsive image gallery with lazy loading.",
+        "response_time": 0.9761459827423096,
+        "structure_score": 0,
+        "best_model": "llama",
+        "expected_model": "gpt-4",
+        "model_match": true,
+        "is_blended": false,
+        "detected_task_type": "creative"
+      }
+    ],
+    "multi-perspective": [
+      {
+        "category": "multi-perspective",
+        "query": "What are arguments for and against Universal Basic Income?",
+        "response_time": 0.8752071857452393,
+        "structure_score": 0,
+        "best_model": "llama",
+        "expected_model": "claude-3",
+        "model_match": false,
+        "is_blended": false,
+        "detected_task_type": "general"
+      },
+      {
+        "category": "multi-perspective",
+        "query": "Analyze the ethical implications of AI in healthcare from multiple stakeholder perspectives.",
+        "response_time": 1.2131330966949463,
+        "structure_score": 0,
+        "best_model": "llama",
+        "expected_model": "claude-3",
+        "model_match": false,
+        "is_blended": false,
+        "detected_task_type": "reasoning"
+      }
+    ],
+    "creative": [
+      {
+        "category": "creative",
+        "query": "How might cities evolve in the next 50 years due to climate change, technology and demographic shifts?",
+        "response_time": 1.0860378742218018,
+        "structure_score": 0,
+        "best_model": "llama",
+        "expected_model": "claude-3",
+        "model_match": false,
+        "is_blended": false,
+        "detected_task_type": "general"
+      },
+      {
+        "category": "creative",
+        "query": "Imagine new transportation technologies that could emerge by 2050.",
+        "response_time": 0.7238359451293945,
+        "structure_score": 0,
+        "best_model": "llama",
+        "expected_model": "claude-3",
+        "model_match": false,
+        "is_blended": false,
+        "detected_task_type": "general"
+      }
+    ],
+    "technical": [
+      {
+        "category": "technical",
+        "query": "Compare Python and JavaScript for web development, including strengths, weaknesses, and use cases.",
+        "response_time": 0.8539040088653564,
+        "structure_score": 0,
+        "best_model": "llama",
+        "expected_model": "gpt-4",
+        "model_match": true,
+        "is_blended": true,
+        "detected_task_type": "comparison"
+      },
+      {
+        "category": "technical",
+        "query": "Explain the concept of recursion in programming with three different examples.",
+        "response_time": 0.9682731628417969,
+        "structure_score": 0,
+        "best_model": "llama",
+        "expected_model": "gpt-4",
+        "model_match": true,
+        "is_blended": false,
+        "detected_task_type": "explanation"
+      },
+      {
+        "category": "technical",
+        "query": "How do blockchain consensus mechanisms work?",
+        "response_time": 0.9264922142028809,
+        "structure_score": 0,
+        "best_model": "llama",
+        "expected_model": "gpt-4",
+        "model_match": true,
+        "is_blended": false,
+        "detected_task_type": "general"
+      }
+    ],
+    "reasoning": [
+      {
+        "category": "reasoning",
+        "query": "What are the key differences between classical physics and quantum physics?",
+        "response_time": 0.6911280155181885,
+        "structure_score": 0,
+        "best_model": "llama",
+        "expected_model": "gpt-4",
+        "model_match": true,
+        "is_blended": false,
+        "detected_task_type": "technical"
+      },
+      {
+        "category": "reasoning",
+        "query": "Analyze the tradeoffs between microservices and monolithic architectures.",
+        "response_time": 1.0160629749298096,
+        "structure_score": 0,
+        "best_model": "llama",
+        "expected_model": "gpt-4",
+        "model_match": true,
+        "is_blended": false,
+        "detected_task_type": "reasoning"
+      },
+      {
+        "category": "reasoning",
+        "query": "How might autonomous vehicles impact urban planning?",
+        "response_time": 1.0250871181488037,
+        "structure_score": 0,
+        "best_model": "llama",
+        "expected_model": "gpt-4",
+        "model_match": true,
+        "is_blended": false,
+        "detected_task_type": "general"
+      }
+    ]
+  },
+  "individual_results": [
+    {
+      "category": "factual",
+      "query": "What is artificial intelligence?",
+      "response_time": 0.8116750717163086,
+      "structure_score": 0,
+      "best_model": "llama",
+      "expected_model": "gpt-3.5-turbo",
+      "model_match": false,
+      "is_blended": false,
+      "detected_task_type": "fact_simple"
+    },
+    {
+      "category": "factual",
+      "query": "What are the planets in our solar system?",
+      "response_time": 1.0942308902740479,
+      "structure_score": 0,
+      "best_model": "llama",
+      "expected_model": "gpt-3.5-turbo",
+      "model_match": false,
+      "is_blended": false,
+      "detected_task_type": "general"
+    },
+    {
+      "category": "technical",
+      "query": "Compare Python and JavaScript for web development, including strengths, weaknesses, and use cases.",
+      "response_time": 0.8539040088653564,
+      "structure_score": 0,
+      "best_model": "llama",
+      "expected_model": "gpt-4",
+      "model_match": true,
+      "is_blended": true,
+      "detected_task_type": "comparison"
+    },
+    {
+      "category": "technical",
+      "query": "Explain the concept of recursion in programming with three different examples.",
+      "response_time": 0.9682731628417969,
+      "structure_score": 0,
+      "best_model": "llama",
+      "expected_model": "gpt-4",
+      "model_match": true,
+      "is_blended": false,
+      "detected_task_type": "explanation"
+    },
+    {
+      "category": "technical",
+      "query": "How do blockchain consensus mechanisms work?",
+      "response_time": 0.9264922142028809,
+      "structure_score": 0,
+      "best_model": "llama",
+      "expected_model": "gpt-4",
+      "model_match": true,
+      "is_blended": false,
+      "detected_task_type": "general"
+    },
+    {
+      "category": "reasoning",
+      "query": "What are the key differences between classical physics and quantum physics?",
+      "response_time": 0.6911280155181885,
+      "structure_score": 0,
+      "best_model": "llama",
+      "expected_model": "gpt-4",
+      "model_match": true,
+      "is_blended": false,
+      "detected_task_type": "technical"
+    },
+    {
+      "category": "reasoning",
+      "query": "Analyze the tradeoffs between microservices and monolithic architectures.",
+      "response_time": 1.0160629749298096,
+      "structure_score": 0,
+      "best_model": "llama",
+      "expected_model": "gpt-4",
+      "model_match": true,
+      "is_blended": false,
+      "detected_task_type": "reasoning"
+    },
+    {
+      "category": "reasoning",
+      "query": "How might autonomous vehicles impact urban planning?",
+      "response_time": 1.0250871181488037,
+      "structure_score": 0,
+      "best_model": "llama",
+      "expected_model": "gpt-4",
+      "model_match": true,
+      "is_blended": false,
+      "detected_task_type": "general"
+    },
+    {
+      "category": "creative",
+      "query": "How might cities evolve in the next 50 years due to climate change, technology and demographic shifts?",
+      "response_time": 1.0860378742218018,
+      "structure_score": 0,
+      "best_model": "llama",
+      "expected_model": "claude-3",
+      "model_match": false,
+      "is_blended": false,
+      "detected_task_type": "general"
+    },
+    {
+      "category": "creative",
+      "query": "Imagine new transportation technologies that could emerge by 2050.",
+      "response_time": 0.7238359451293945,
+      "structure_score": 0,
+      "best_model": "llama",
+      "expected_model": "claude-3",
+      "model_match": false,
+      "is_blended": false,
+      "detected_task_type": "general"
+    },
+    {
+      "category": "multi-perspective",
+      "query": "What are arguments for and against Universal Basic Income?",
+      "response_time": 0.8752071857452393,
+      "structure_score": 0,
+      "best_model": "llama",
+      "expected_model": "claude-3",
+      "model_match": false,
+      "is_blended": false,
+      "detected_task_type": "general"
+    },
+    {
+      "category": "multi-perspective",
+      "query": "Analyze the ethical implications of AI in healthcare from multiple stakeholder perspectives.",
+      "response_time": 1.2131330966949463,
+      "structure_score": 0,
+      "best_model": "llama",
+      "expected_model": "claude-3",
+      "model_match": false,
+      "is_blended": false,
+      "detected_task_type": "reasoning"
+    },
+    {
+      "category": "code",
+      "query": "Write a Python function to find the longest palindromic substring in a given string.",
+      "response_time": 1.1078910827636719,
+      "structure_score": 0,
+      "best_model": "llama",
+      "expected_model": "gpt-4",
+      "model_match": true,
+      "is_blended": false,
+      "detected_task_type": "technical"
+    },
+    {
+      "category": "code",
+      "query": "Create a React component for a responsive image gallery with lazy loading.",
+      "response_time": 0.9761459827423096,
+      "structure_score": 0,
+      "best_model": "llama",
+      "expected_model": "gpt-4",
+      "model_match": true,
+      "is_blended": false,
+      "detected_task_type": "creative"
+    }
+  ]
+}

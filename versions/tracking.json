@@ -1,0 +1,49 @@
+{
+  "last_update": "2025-03-15T19:39:02-0400",
+  "versions": [
+    {
+      "date": "2025-03-15",
+      "description": "Unified chat and zoom system implementation",
+      "files": [
+        {
+          "path": "/web/static/js/chat/chat-core.js",
+          "backup": "/versions/backups/chat-core_2025-03-15.js",
+          "status": "created"
+        },
+        {
+          "path": "/web/static/js/core/zoom-manager.js",
+          "backup": "/versions/backups/zoom-manager_2025-03-15.js",
+          "status": "created"
+        },
+        {
+          "path": "/web/static/js/core/minerva-app.js",
+          "backup": "/versions/backups/minerva-app_2025-03-15.js",
+          "status": "created"
+        }
+      ],
+      "changes": [
+        "Created centralized chat system with memory support",
+        "Implemented unified zoom manager with precise 0.1 increments",
+        "Added core application coordinator"
+      ]
+    }
+  ],
+  "active_files": {
+    "chat": "/web/static/js/chat/chat-core.js",
+    "zoom": "/web/static/js/core/zoom-manager.js",
+    "app": "/web/static/js/core/minerva-app.js"
+  }
+}
+,
+  "versions": [
+    {
+      "date": "2025-03-15",
+      "description": "File system reorganization and clean-up",
+      "changes": [
+        "Reorganized all JavaScript files into structured directories",
+        "Created stable builds with read-only protection",
+        "Archived test HTML files",
+        "Unified chat system into a single source of truth"
+      ]
+    }
+  ]

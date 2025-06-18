@@ -1,0 +1,19 @@
+{
+  "document_id": "test_document.txt_185d94d97a_20250227172401",
+  "embeddings": [
+    [
+      0.1,
+      0.2,
+      0.3
+    ],
+    [
+      0.4,
+      0.5,
+      0.6
+    ]
+  ],
+  "embedding_model": "None",
+  "embedding_count": 2,
+  "embedding_dimensions": 3,
+  "generated_at": "2025-02-27T17:24:01.985074"
+}
