@@ -1,0 +1,257 @@
+{
+  "version": "2.0.0",
+  "last_updated": "2024-01-01T00:00:00Z",
+  "frameworks": {
+    "autogpt": {
+      "name": "AutoGPT",
+      "type": "autonomous_agent",
+      "enabled": true,
+      "paths": [
+        "/Users/bendickinson/Desktop/Gpt ai codes/Auto-GPT",
+        "/Users/bendickinson/Desktop/Gpt ai codes/autogpt",
+        "/Users/bendickinson/Desktop/Gpt ai codes/Auto-GPT-Turbo",
+        "/Users/bendickinson/Desktop/Gpt ai codes/autogpt-server-api"
+      ],
+      "primary_path": "/Users/bendickinson/Desktop/Gpt ai codes/Auto-GPT",
+      "capabilities": [
+        "task_execution",
+        "code_generation", 
+        "web_search",
+        "file_management",
+        "autonomous_planning"
+      ],
+      "integration_module": "autogpt_integration",
+      "requirements": ["openai", "requests", "beautifulsoup4"],
+      "health_check_enabled": true
+    },
+    "agentgpt": {
+      "name": "AgentGPT",
+      "type": "autonomous_agent",
+      "enabled": true,
+      "paths": [
+        "/Users/bendickinson/Desktop/Gpt ai codes/AgentGPT"
+      ],
+      "primary_path": "/Users/bendickinson/Desktop/Gpt ai codes/AgentGPT",
+      "capabilities": [
+        "task_execution",
+        "web_interface",
+        "goal_planning"
+      ],
+      "integration_module": "agentgpt_integration",
+      "requirements": ["openai", "fastapi"],
+      "health_check_enabled": true
+    },
+    "superagi": {
+      "name": "SuperAGI",
+      "type": "autonomous_agent",
+      "enabled": true,
+      "paths": [
+        "/Users/bendickinson/Desktop/Gpt ai codes/SuperAGI"
+      ],
+      "primary_path": "/Users/bendickinson/Desktop/Gpt ai codes/SuperAGI",
+      "capabilities": [
+        "task_execution",
+        "tool_integration",
+        "multi_agent"
+      ],
+      "integration_module": "superagi_integration",
+      "requirements": ["openai", "sqlalchemy"],
+      "health_check_enabled": true
+    },
+    "babyagi": {
+      "name": "BabyAGI",
+      "type": "autonomous_agent",
+      "enabled": true,
+      "paths": [
+        "/Users/bendickinson/Desktop/Gpt ai codes/babyagi"
+      ],
+      "primary_path": "/Users/bendickinson/Desktop/Gpt ai codes/babyagi",
+      "capabilities": [
+        "task_execution",
+        "task_prioritization",
+        "memory_management"
+      ],
+      "integration_module": "babyagi_integration",
+      "requirements": ["openai", "pinecone-client", "chromadb"],
+      "health_check_enabled": true
+    },
+    "miniagi": {
+      "name": "MiniAGI",
+      "type": "autonomous_agent",
+      "enabled": true,
+      "paths": [
+        "/Users/bendickinson/Desktop/Gpt ai codes/mini-agi"
+      ],
+      "primary_path": "/Users/bendickinson/Desktop/Gpt ai codes/mini-agi",
+      "capabilities": [
+        "task_execution",
+        "simple_planning"
+      ],
+      "integration_module": "miniagi_integration",
+      "requirements": ["openai"],
+      "health_check_enabled": true
+    },
+    "huggingface": {
+      "name": "HuggingFace",
+      "type": "model_hub",
+      "enabled": true,
+      "paths": [],
+      "primary_path": null,
+      "capabilities": [
+        "text_generation",
+        "text_classification",
+        "question_answering",
+        "summarization",
+        "translation",
+        "embedding_generation"
+      ],
+      "integration_module": "huggingface_integration",
+      "requirements": ["transformers", "torch", "datasets"],
+      "health_check_enabled": true,
+      "api_based": true
+    },
+    "starcoder": {
+      "name": "StarCoder",
+      "type": "code_model",
+      "enabled": true,
+      "paths": [
+        "/Users/bendickinson/Desktop/Gpt ai codes/starcoder",
+        "/Users/bendickinson/Desktop/Gpt ai codes/starcoder2"
+      ],
+      "primary_path": "/Users/bendickinson/Desktop/Gpt ai codes/starcoder",
+      "capabilities": [
+        "code_generation",
+        "code_completion",
+        "code_explanation"
+      ],
+      "integration_module": "starcoder_integration",
+      "requirements": ["transformers", "torch"],
+      "health_check_enabled": true
+    },
+    "mlc_llm": {
+      "name": "MLC-LLM",
+      "type": "inference_engine",
+      "enabled": true,
+      "paths": [
+        "/Users/bendickinson/Desktop/Gpt ai codes/mlc-llm"
+      ],
+      "primary_path": "/Users/bendickinson/Desktop/Gpt ai codes/mlc-llm",
+      "capabilities": [
+        "text_generation",
+        "local_inference",
+        "model_optimization"
+      ],
+      "integration_module": "mlc_llm_integration",
+      "requirements": ["mlc-ai-nightly", "torch"],
+      "health_check_enabled": true
+    },
+    "gpt4all": {
+      "name": "GPT4All",
+      "type": "local_model",
+      "enabled": true,
+      "paths": [
+        "/Users/bendickinson/Desktop/Gpt ai codes/gpt4all",
+        "/Users/bendickinson/Desktop/Gpt ai codes/gpt4all-chat",
+        "/Users/bendickinson/Desktop/Gpt ai codes/gpt4all-bindings",
+        "/Users/bendickinson/Desktop/Gpt ai codes/gpt4all_python",
+        "/Users/bendickinson/Desktop/Gpt ai codes/gpt4all-backend",
+        "/Users/bendickinson/Desktop/Gpt ai codes/gpt4all-training",
+        "/Users/bendickinson/Desktop/Gpt ai codes/gpt4all_api_server"
+      ],
+      "primary_path": "/Users/bendickinson/Desktop/Gpt ai codes/gpt4all",
+      "capabilities": [
+        "text_generation",
+        "local_inference",
+        "offline_operation",
+        "chat_interface"
+      ],
+      "integration_module": "gpt4all_integration",
+      "requirements": ["gpt4all"],
+      "health_check_enabled": true
+    },
+    "langchain": {
+      "name": "LangChain",
+      "type": "framework",
+      "enabled": true,
+      "paths": [
+        "/Users/bendickinson/Desktop/Gpt ai codes/localGPT",
+        "/Users/bendickinson/Desktop/Gpt ai codes/pdfGPT",
+        "/Users/bendickinson/Desktop/Gpt ai codes/localGPTUI"
+      ],
+      "primary_path": "/Users/bendickinson/Desktop/Gpt ai codes/localGPT",
+      "capabilities": [
+        "document_processing",
+        "question_answering",
+        "chain_of_thought",
+        "vector_search",
+        "pdf_processing"
+      ],
+      "integration_module": "langchain_integration",
+      "requirements": ["langchain", "chromadb", "PyPDF2"],
+      "health_check_enabled": true
+    },
+    "chroma": {
+      "name": "ChromaDB",
+      "type": "vector_database",
+      "enabled": true,
+      "paths": [
+        "/Users/bendickinson/Desktop/Gpt ai codes/chroma",
+        "/Users/bendickinson/Desktop/Gpt ai codes/run-chroma", 
+        "/Users/bendickinson/Desktop/Gpt ai codes/chroma-server",
+        "/Users/bendickinson/Desktop/Gpt ai codes/chromadb",
+        "/Users/bendickinson/Desktop/Gpt ai codes/distributed-chroma"
+      ],
+      "primary_path": "/Users/bendickinson/Desktop/Gpt ai codes/chroma",
+      "capabilities": [
+        "vector_storage",
+        "similarity_search",
+        "embedding_management",
+        "document_indexing"
+      ],
+      "integration_module": "chroma_integration",
+      "requirements": ["chromadb", "sentence-transformers"],
+      "health_check_enabled": true
+    }
+  },
+  "capability_scores": {
+    "task_execution": {
+      "autogpt": 9.0,
+      "superagi": 8.5,
+      "agentgpt": 8.0,
+      "babyagi": 7.5,
+      "miniagi": 6.0
+    },
+    "code_generation": {
+      "starcoder": 9.5,
+      "autogpt": 8.0,
+      "huggingface": 7.5
+    },
+    "text_generation": {
+      "huggingface": 9.0,
+      "gpt4all": 8.5,
+      "mlc_llm": 8.0
+    },
+    "document_processing": {
+      "langchain": 9.0,
+      "chroma": 8.5
+    },
+    "vector_search": {
+      "chroma": 9.5,
+      "langchain": 8.0
+    },
+    "local_inference": {
+      "gpt4all": 9.0,
+      "mlc_llm": 8.5
+    }
+  },
+  "configuration": {
+    "auto_discovery_enabled": true,
+    "health_check_interval": 300,
+    "max_concurrent_frameworks": 5,
+    "fallback_framework": "huggingface",
+    "logging": {
+      "level": "INFO",
+      "file": "frameworks.log"
+    }
+  }
+} 
